@@ -66,9 +66,12 @@ Thanks to the power of the regex, you can use ES6's string interpolation in Japt
 
 Need to return one of two different strings, using `a?b:c` syntax? No problem! You can omit the two middle quotation marks. E.g. `U==1?"abc":"xyz"` can be shortened to `U==1?"abc:xyz"`. But what's that? One of the strings already contains a colon? Well, there's a remedy for that, too! Just precede the colon with a backslash. `U==1?"abc\:123:xyz"` compiles to `U==1?"abc:123":"xyz"`.
 
-Other features: (more detail soon)
+Oh, and one more thing: if you have a string literal at the end of a program, you can leave out the final quotation mark, and the interpreter will automatically insert it for you.
 
-- `A{...}`: anonymous function with parameter `A` (not working yet)
-- `$...$`: insert pure JavaScript (inspired by the same feature in Pyth)
-- `@`: compiles to `(X,Y,Z)=>`
-- Missing quote at end of program: automatically inserted
+### Anonymous functions
+
+With ES6, we got the new fat arrow operator `=>`, which quickly and concisely defines a function. In Japt, the equivalent will be `{`, with any number of uppercase letters preceding it as arguments. For example, `XY{X+Y}` defines a function that takes in two arguments, and returns the result of adding them (or concatenating them, if one is a string). But this is not working yet; instead, you can use fat arrows; just make sure you have an ES6-compliant browser. Even better, you can use the `@` operator, which stands in for `(X,Y,Z)=>`. `Ur(X,Y =>X+Y` can be reduced to `Ur@X+Y`.
+
+### Pure JS
+
+Have a task that Japt just can't handle yet on its own? Well, the good news is, you can call pure JavaScript code inside a Japt program! Anything between dollar signs `$...$` will be preserved through the compilation process. For example, Japt doesn't actually have `for` loops yet, so you could use something similar to `$for(Z=0;Z<A;Z++)$` instead.

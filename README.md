@@ -8,7 +8,7 @@
 
     "Hello, World!
 
-In Japt, the last expression is automatically outputted. Also, when you have a string literal at the end of the program, you can leave it out and it will be automatically inserted.
+In Japt, the last expression is automatically outputted. Also, when you have a string literal at the end of the program, you can leave out the ending quotation mark and it will be automatically inserted.
 
 ### Greeting
 

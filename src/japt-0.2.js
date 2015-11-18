@@ -326,7 +326,7 @@ function evalJapt(code) {
         outp = "";      // Temporary output
     
     // Some helpful functions
-    function isChar (str, char) { return RegExp('^['+char']$').test(str); }
+    function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
     
     // NOT PRODUCTION READY
     for (i = 0; i < code.length; i++) {

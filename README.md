@@ -18,6 +18,24 @@ Let's move on to input: the first few inputs (up to six) are stored in the varia
 
 Also shown here: curly braces inside the string tell the interpreter to evaluate the innards as Japt code. For example, `"abc{U}xyz"` compiles to `"abc"+(U)+"xyz"`.
 
+### `cat`
+
+    N
+
+Since all input is stored in `N`, and output is implicit, all we have to do is call `N` to output all of the input.
+
+### Quine
+
+    1
+
+Taking advantage of Japt's automatic output, any single number is trivially a quine. But what fun is that? Let's try a better one:
+
+    "+Q p3 sA,J"+Q p3 sA,J
+    "+Q p3 sA,J"            // Take this string,
+                +Q          // add a quotation mark,
+                   p3       // repeat it 3 times,
+                      sA,J  // and slice off the first 10 chars and last 1 char. (A = 10, J = -1)
+
 ## New Syntax
 
 The syntax of Japt is much the same as JavaScript; in fact, after making some regex replacements, it is evaluated as normal JS. Here's the specialties:

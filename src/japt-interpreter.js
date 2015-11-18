@@ -317,6 +317,48 @@ function fixParens(code) {
 function evalJapt(code) {
     var codes = [], strings = [], i = 0, j = 0;
     
+    /* For Lexer */
+    var expr = [], // Expression data
+        lo = {i:0,j:0}, // A place for our loop variables
+        st = 0,         // Current state. 0 - nothing. 1 - within a string
+        
+        out = [],       // The resulting tokens (NOT USED). currently dumped in next string
+        outp = "";      // Temporary output
+    
+    // Some helpful functions
+    function isChar (str, char) { return RegExp('^['+char']$').test(str); }
+    
+    for (i = 0; i < code.length; i++) {
+        var char = code[i];
+        if (st === 0) { // If new token
+            if (isChar(char, '"\'')) { // Is a quote " or '
+                st = 1; // set state to 1, signifying we're in a quote
+            }
+            outp += char; // Add this charcater to the output
+            
+            continue; // Jump to next iteration
+        } else if (st === 1) { // If we're in a string
+            var quote = outp.slice(-1); // Get last char, or the current quote being used.
+            
+            for (; !isChar(code[i], quote); i++) {
+                if (code[i] === "\\") { // If we encounter a backslash
+                    i++; // Go to next character and store
+                    outp += code[i];
+                } else if (code[i] === "{") { // If it is a { - This is for the "{2+1}" stuff
+                    // In order to do this, we're going to need to revaluate the whole thing as Japt code but for this to work
+                    // There will need to be someway to pass the current scope into Japt for input, so right now it's being eval() by JavaScript
+                    // Strings will also have to function properly so the 
+                    var code = "";
+                } else {
+                    outp += code[i];
+                }
+            }
+            
+            st = 0;  // Set the state back to 0
+        }
+    }
+    
+    // RegExp Replacements
     code = code
       .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
       .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})

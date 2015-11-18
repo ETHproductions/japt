@@ -97,10 +97,10 @@ Number.prototype.o = function(x,y){
   var r=[], i=0;
   if(y>0)
     for(;z<x;z+=y)
-	  r.push(z);
+      r.push(z);
   else if(y<0)
     for(;z<x;x+=y)
-	  r.push(x);
+      r.push(x);
   return r;
 }
 Number.prototype.p = function(x){return Math.pow(this,x)}
@@ -113,25 +113,25 @@ Number.prototype.v = function(){return this%2===0?1:0}
 Number.prototype.w = function(x){return Math.max(this,x)}
 
 function clear_output() {
-	document.getElementById("output").value = "";
-	document.getElementById("stderr").innerHTML = "";
+    document.getElementById("output").value = "";
+    document.getElementById("stderr").innerHTML = "";
 }
 
 function stop() {
-	running = false;
-	document.getElementById("run").disabled = false;
-	document.getElementById("stop").disabled = true;
-	document.getElementById("clear").disabled = false;
-	document.getElementById("timeout").disabled = false;
+    running = false;
+    document.getElementById("run").disabled = false;
+    document.getElementById("stop").disabled = true;
+    document.getElementById("clear").disabled = false;
+    document.getElementById("timeout").disabled = false;
 }
 
 function interrupt() {
-	error(ERROR_INTERRUPT);
+    error(ERROR_INTERRUPT);
 }
 
 function error(msg) {
-	document.getElementById("stderr").innerHTML = msg;
-	stop();
+    document.getElementById("stderr").innerHTML = msg;
+    stop();
 }
 
 function evalInput(input) {
@@ -197,16 +197,16 @@ function evalInput(input) {
 }
 
 function run() {
-	clear_output();
-	document.getElementById("run").disabled = true;
-	document.getElementById("stop").disabled = false;
-	document.getElementById("clear").disabled = true;
-	document.getElementById("input").disabled = false;
-	document.getElementById("timeout").disabled = false;
-	
-	code = document.getElementById("code").value;
-	input = document.getElementById("input").value;
-	timeout = document.getElementById("timeout").checked;
+    clear_output();
+    document.getElementById("run").disabled = true;
+    document.getElementById("stop").disabled = false;
+    document.getElementById("clear").disabled = true;
+    document.getElementById("input").disabled = false;
+    document.getElementById("timeout").disabled = false;
+    
+    code = document.getElementById("code").value;
+    input = document.getElementById("input").value;
+    timeout = document.getElementById("timeout").checked;
   
     A = 10,
     B = 11,
@@ -221,27 +221,27 @@ function run() {
     K = .5,
     L = 100,
     M = Math,
-	N = evalInput(input),
+    N = evalInput(input),
     O = undefined,
     P = "",
     Q = "\"",
     R = "\n",
     S = " ",
-	T = 0,
-	U = N[0],
-	V = N[1],
-	W = N[2],
-	X = N[3],
-	Y = N[4],
-	Z = N[5];
-	
-	evalJapt(code);
+    T = 0,
+    U = N[0],
+    V = N[1],
+    W = N[2],
+    X = N[3],
+    Y = N[4],
+    Z = N[5];
+    
+    evalJapt(code);
   
-  	document.getElementById("run").disabled = false;
-	document.getElementById("stop").disabled = true;
-	document.getElementById("clear").disabled = false;
-	document.getElementById("input").disabled = false;
-	document.getElementById("timeout").disabled = false;
+      document.getElementById("run").disabled = false;
+    document.getElementById("stop").disabled = true;
+    document.getElementById("clear").disabled = false;
+    document.getElementById("input").disabled = false;
+    document.getElementById("timeout").disabled = false;
 }
 
 function subparen(code) {
@@ -299,23 +299,23 @@ function evalJapt(code) {
     code = code
       .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
       .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
-	  .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-	  .replace(/#./g,function(x){return x.charCodeAt(1)})
-	  .replace(/\)/g,"))")
-	  .replace(/ /g,")")
+      .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
+      .replace(/#./g,function(x){return x.charCodeAt(1)})
+      .replace(/\)/g,"))")
+      .replace(/ /g,")")
       .replace(/@/g,"(X,Y,Z)=>")
-	  .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+      .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
     code = fixParens(code);
-	code = code
+    code = code
       .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
-	  .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
-	
+      .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
+    
     alert("JS code: "+code);
-	try {
+    try {
       var result=eval(code);
-	  alert("Result: "+result);
+      alert("Result: "+result);
       document.getElementById("output").value = result;
-	} catch (e) {
-	  alert(e);
-	}
+    } catch (e) {
+      alert(e);
+    }
 }

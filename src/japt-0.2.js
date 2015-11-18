@@ -314,29 +314,81 @@ function fixParens(code) {
   return cade;
 }
 
-function evalJapt(code) {
-    var codes = [], strings = [], i = 0, j = 0;
+function transpile(code) {
+  var codes = [], strings = [], i = 0, j = 0;
+  /* For Lexer */
+  var expr = [], // Expression data
+    lo = {i:0,j:0}, // A place for our loop variables
+    level = 0,      // Current number of parentheses or curly braces that we're inside
+    temp = '',
     
-    code = code
-      .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
-      .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
-      .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-      .replace(/#./g,function(x){return x.charCodeAt(1)})
-      .replace(/\)/g,"))")
-      .replace(/ /g,")")
-      .replace(/@/g,"(X,Y,Z)=>")
-      .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
-    code = fixParens(code);
-    code = code
-      .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
-      .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
+    out = [],       // The resulting tokens (NOT USED). currently dumped in next string
+    outp = "";      // Temporary output
     
-    alert("JS code: "+code);
-    try {
-      var result=eval(code);
-      alert("Result: "+result);
-      document.getElementById("output").value = result;
-    } catch (e) {
-      alert(e);
+    // Some helpful functions
+  function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
+    
+    // NOT PRODUCTION READY
+  for (i = 0; i < code.length; i++) {
+    var char = code[i];
+    if (isChar(char, "\"")) { // If new token is a quotation mark "
+      var qm = code.slice(-1) === "?";
+      for (; code[i] !== "\""; i++) {
+        if (code[i] === "\\" && isChar(code[i], "{:\"")) { // If we encounter a backslash
+          i++; // Go to next character and store
+          outp += code[i];
+        } else if (code[i] === "{") { // If it is a { - This is for the "{2+1}" stuff
+          temp = "";
+          for (level = 1; level > 0; i++) {
+            if (isChar(code[i], "}")) {
+              level--;
+            } else if (isChar(code[i]), "{") {
+              level++;
+            }
+            temp += code[i];
+          }
+          outp += "{" + transpile(temp.slice(0,-1)) + "}";
+        } else if (code[i] === ":" && qm) {
+          outp += "\":\"";
+        } else {
+          outp += code[i];
+        }
+      }
+      outp += char; // Add this character to the output
+      
+      continue; // Jump to next iteration
+    } else if (isChar(char, "$")) {
+      for (; code[i] !== "$"; i++) {
+        if (code[i] === "\\" && code[i+1] === "$") { // If we encounter a backslash
+          i++; // Go to next character and store
+          outp += "$";
+        } else {
+          outp += code[i];
+        }
+      }
     }
+  }
+    
+  // RegExp Replacements
+  code = code
+    .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
+    .replace(/#./g,function(x){return x.charCodeAt(1)})
+    .replace(/\)/g,"))")
+    .replace(/ /g,")")
+    .replace(/@/g,"(X,Y,Z)=>")
+    .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+  code = fixParens(code);
+}
+
+function evalJapt(code) {
+  var codes = [], strings = [], i = 0, j = 0;
+  
+  alert("JS code: "+code);
+  try {
+    var result=eval(code);
+    alert("Result: "+result);
+    document.getElementById("output").value = result;
+  } catch (e) {
+    alert(e);
+  }
 }

@@ -1,4 +1,4 @@
-var code, input, timeout;
+var code, input, timeout, safe_unicode = false; // When safe_unicode is true, shorthand() won't be called so unicode characters can be used safely
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 var defFuncs = {
@@ -112,6 +112,12 @@ Number.prototype.u = function(){return this%2===1?1:0}
 Number.prototype.v = function(){return this%2===0?1:0}
 Number.prototype.w = function(x){return Math.max(this,x)}
 
+// Shorter Math Properties
+Math.r = Math.random;
+Math.P = Math.PI;
+
+void(0); // Completely optional
+
 function clear_output() {
     document.getElementById("output").value = "";
     document.getElementById("stderr").innerHTML = "";
@@ -196,6 +202,20 @@ function evalInput(input) {
   return processed;
 }
 
+function shorthand (code) {
+    // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
+    var pairs = {
+        // Using \u<hex> to avoid encoding incompatibilities
+        // Feel free to change these
+        "\u00A1": "Um@", // ¡ - 161
+        "\u00A2": "Us2", // ¢ - 162
+    };
+    
+    return Object.keys(pairs).reduce(function (code, char) {
+        return code.replace(new RegExp(char, 'g'), pairs[ char ]);
+    }, code);
+}
+
 function run() {
     clear_output();
     document.getElementById("run").disabled = true;
@@ -235,9 +255,10 @@ function run() {
     Y = N[4],
     Z = N[5];
     
+    if (!safe_unicode) code = shorthand(code) || "";
     evalJapt(code);
   
-      document.getElementById("run").disabled = false;
+    document.getElementById("run").disabled = false;
     document.getElementById("stop").disabled = true;
     document.getElementById("clear").disabled = false;
     document.getElementById("input").disabled = false;

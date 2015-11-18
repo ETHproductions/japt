@@ -2,30 +2,30 @@ var code, input, timeout, safe_unicode = false; // When safe_unicode is true, sh
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 var defFuncs = {
-  a: "alert(",
-  b: "break;",
-  c: "continue;",
-  d: "",
-  e: "",
-  f: "for(",
-  g: "for(",
-  h: "",
-  i: "if(",
-  j: "else if(",
-  k: "else",
-  l: "console.log(",
-  m: "",
-  n: "",
-  o: "output(",
-  p: "",
-  q: "",
-  r: "",
-  s: "switch(",
-  t: "typeof(",
-  u: "while(!",
-  v: "evalJapt(",
-  w: "while("};
-  
+    a: "alert(",
+    b: "break;",
+    c: "continue;",
+    d: "",
+    e: "",
+    f: "for(",
+    g: "for(",
+    h: "",
+    i: "if(",
+    j: "else if(",
+    k: "else",
+    l: "console.log(",
+    m: "",
+    n: "",
+    o: "output(",
+    p: "",
+    q: "",
+    r: "",
+    s: "switch(",
+    t: "typeof(",
+    u: "while(!",
+    v: "evalJapt(",
+    w: "while("};
+
 String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';for(var y='',i=x|0;i--;)y+=this;return y}
 String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
@@ -50,7 +50,7 @@ String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;retu
 String.prototype.u = function(){return this.toUpperCase()}
 String.prototype.v = function(){return this.toLowerCase()}
 String.prototype.w = function(){return this.split('').reverse().join('')}
-  
+
 Array.prototype.a = function(){return this.join('');}
 Array.prototype.b = function(x){return this.indexOf(x)}
 Array.prototype.c = function(x){return this.lastIndexOf(x)}
@@ -90,18 +90,18 @@ Number.prototype.l = function(){noFunc('Nl')}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
 Number.prototype.o = function(x,y){
-  var z=this;
-  if(typeof(y)==="undefined")y=1;
-  if(typeof(x)==="undefined")x=z,z=0;
-  if(x<z)_=x,x=z,z=_;
-  var r=[], i=0;
-  if(y>0)
-    for(;z<x;z+=y)
-      r.push(z);
-  else if(y<0)
-    for(;z<x;x+=y)
-      r.push(x);
-  return r;
+    var z=this;
+    if(typeof(y)==="undefined")y=1;
+    if(typeof(x)==="undefined")x=z,z=0;
+    if(x<z)_=x,x=z,z=_;
+    var r=[], i=0;
+    if(y>0)
+        for(;z<x;z+=y)
+            r.push(z);
+    else if(y<0)
+        for(;z<x;x+=y)
+            r.push(x);
+    return r;
 }
 Number.prototype.p = function(x){return Math.pow(this,x)}
 Number.prototype.q = function(){return Math.sqrt(this)}
@@ -141,65 +141,65 @@ function error(msg) {
 }
 
 function evalInput(input) {
-  var input_mode = "next", current, processed = [], level = 0;
-  (input+" ").split("").forEach(function(char){
-    switch (input_mode) {
-      case "next":
-        if (/[0-9.-]/.test(char)) {
-          input_mode = "number";
-          current = char;
-        } else if (/["']/.test(char)) {
-          input_mode = "string "+char;
-          current = "";
-        } else if (char == "[") {
-          input_mode = "array";
-          current = "";
-          level = 1;
+    var input_mode = "next", current, processed = [], level = 0;
+    (input+" ").split("").forEach(function(char){
+        switch (input_mode) {
+            case "next":
+                if (/[0-9.-]/.test(char)) {
+                    input_mode = "number";
+                    current = char;
+                } else if (/["']/.test(char)) {
+                    input_mode = "string "+char;
+                    current = "";
+                } else if (char == "[") {
+                    input_mode = "array";
+                    current = "";
+                    level = 1;
+                }
+                break;
+            case "number":
+                if (/[0-9.-]/.test(char)) {
+                    current += char;
+                } else {
+                    processed.push(+current);
+                    current = undefined;
+                    input_mode = "next";
+                }
+                break;
+            case "string \"":
+                if (char == "\"") {
+                    processed.push(current);
+                    current = undefined;
+                    input_mode = "next";
+                } else {
+                    current += char;
+                }
+                break;
+            case "string '":
+                if (char == "'") {
+                    processed.push(current);
+                    current = undefined;
+                    input_mode = "next";
+                } else {
+                    current += char;
+                }
+                break;
+            case "array":
+                if (char == "[")
+                    level++;
+                if (char == "]")
+                    level--;
+                if (level === 0) {
+                    processed.push(evalInput(current));
+                    current = undefined;
+                    input_mode = "next";
+                } else {
+                    current += char;
+                }
+                break;
         }
-        break;
-      case "number":
-        if (/[0-9.-]/.test(char)) {
-          current += char;
-        } else {
-          processed.push(+current);
-          current = undefined;
-          input_mode = "next";
-        }
-        break;
-      case "string \"":
-        if (char == "\"") {
-          processed.push(current);
-          current = undefined;
-          input_mode = "next";
-        } else {
-          current += char;
-        }
-        break;
-      case "string '":
-        if (char == "'") {
-          processed.push(current);
-          current = undefined;
-          input_mode = "next";
-        } else {
-          current += char;
-        }
-        break;
-      case "array":
-        if (char == "[")
-          level++;
-        if (char == "]")
-          level--;
-        if (level === 0) {
-          processed.push(evalInput(current));
-          current = undefined;
-          input_mode = "next";
-        } else {
-          current += char;
-        }
-        break;
-    }
-  });
-  return processed;
+    });
+    return processed;
 }
 
 function shorthand (code) {
@@ -210,7 +210,7 @@ function shorthand (code) {
         "\u00A1": "Um@", // ¡ - 161
         "\u00A2": "Us2", // ¢ - 162
     };
-    
+
     return Object.keys(pairs).reduce(function (code, char) {
         return code.replace(new RegExp(char, 'g'), pairs[ char ]);
     }, code);
@@ -223,41 +223,41 @@ function run() {
     document.getElementById("clear").disabled = true;
     document.getElementById("input").disabled = false;
     document.getElementById("timeout").disabled = false;
-    
+
     code = document.getElementById("code").value;
     input = document.getElementById("input").value;
     timeout = document.getElementById("timeout").checked;
-  
+
     A = 10,
-    B = 11,
-    C = 12,
-    D = 13,
-    E = 14,
-    F = 15,
-    G = 16,
-    H = 32,
-    I = 64,
-    J = -1,
-    K = .5,
-    L = 100,
-    M = Math,
-    N = evalInput(input),
-    O = undefined,
-    P = "",
-    Q = "\"",
-    R = "\n",
-    S = " ",
-    T = 0,
-    U = N[0],
-    V = N[1],
-    W = N[2],
-    X = N[3],
-    Y = N[4],
-    Z = N[5];
-    
+        B = 11,
+        C = 12,
+        D = 13,
+        E = 14,
+        F = 15,
+        G = 16,
+        H = 32,
+        I = 64,
+        J = -1,
+        K = .5,
+        L = 100,
+        M = Math,
+        N = evalInput(input),
+        O = undefined,
+        P = "",
+        Q = "\"",
+        R = "\n",
+        S = " ",
+        T = 0,
+        U = N[0],
+        V = N[1],
+        W = N[2],
+        X = N[3],
+        Y = N[4],
+        Z = N[5];
+
     if (!safe_unicode) code = shorthand(code) || "";
     evalJapt(code);
-  
+
     document.getElementById("run").disabled = false;
     document.getElementById("stop").disabled = true;
     document.getElementById("clear").disabled = false;
@@ -266,68 +266,68 @@ function run() {
 }
 
 function subparen(code) {
-  var level = 0, min = 0;
-  for(var i in code) {
-    if(code[i]=='(')
-      level++;
-    if(code[i]==')')
-      level--, min = Math.min(min, level);
-  }
-  if(min < 0) code = '('.repeat(-min) + code, level-=min;
-  if(level > 0) code += ')'.repeat(level);
-  return code;
+    var level = 0, min = 0;
+    for(var i in code) {
+        if(code[i]=='(')
+            level++;
+        if(code[i]==')')
+            level--, min = Math.min(min, level);
+    }
+    if(min < 0) code = '('.repeat(-min) + code, level-=min;
+    if(level > 0) code += ')'.repeat(level);
+    return code;
 }
 
 function fixParens(code) {
-  var cade = "", mode = "next", char = "", curr = "", array = "", level = 0;
-  for(var i=0;i<code.length;i++) {
-    char = code[i];
-    switch(mode) {
-      case "next":
-        if (char == ";") {
-          cade += subparen(curr) + char;
-          curr = "";
-        } else if (char == "[") {
-          mode = "array";
-          level = 0;
-        } else {
-          curr += char;
+    var cade = "", mode = "next", char = "", curr = "", array = "", level = 0;
+    for(var i=0;i<code.length;i++) {
+        char = code[i];
+        switch(mode) {
+            case "next":
+                if (char == ";") {
+                    cade += subparen(curr) + char;
+                    curr = "";
+                } else if (char == "[") {
+                    mode = "array";
+                    level = 0;
+                } else {
+                    curr += char;
+                }
+                break;
+            case "array":
+                if (char == "[") {
+                    level++;
+                } else if (char == "]") {
+                    level--;
+                    if (level < 0) {
+                        curr += "[" + fixParens(array) + "]";
+                        array = "";
+                        mode = "next";
+                    }
+                } else {
+                    array += char;
+                }
+                break;
         }
-        break;
-      case "array":
-        if (char == "[") {
-          level++;
-        } else if (char == "]") {
-          level--;
-          if (level < 0) {
-            curr += "[" + fixParens(array) + "]";
-            array = "";
-            mode = "next";
-          }
-        } else {
-          array += char;
-        }
-        break;
     }
-  }
-  cade += subparen(curr);
-  return cade;
+    cade += subparen(curr);
+    return cade;
 }
 
 function evalJapt(code) {
     var codes = [], strings = [], i = 0, j = 0;
-    
+
     /* For Lexer */
     var expr = [], // Expression data
         lo = {i:0,j:0}, // A place for our loop variables
         st = 0,         // Current state. 0 - nothing. 1 - within a string
-        
+
         out = [],       // The resulting tokens (NOT USED). currently dumped in next string
         outp = "";      // Temporary output
-    
+
     // Some helpful functions
     function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
-    
+
     // NOT PRODUCTION READY
     for (i = 0; i < code.length; i++) {
         var char = code[i];
@@ -336,11 +336,11 @@ function evalJapt(code) {
                 st = 1; // set state to 1, signifying we're in a quote
             }
             outp += char; // Add this charcater to the output
-            
+
             continue; // Jump to next iteration
         } else if (st === 1) { // If we're in a string
             var quote = outp.slice(-1); // Get last char, or the current quote being used.
-            
+
             for (; !isChar(code[i], quote); i++) {
                 if (code[i] === "\\") { // If we encounter a backslash
                     i++; // Go to next character and store
@@ -351,37 +351,37 @@ function evalJapt(code) {
                     // Strings will also have to function properly so the 
                     var code = "";
                     //
-                    
+
                 } else {
                     outp += code[i];
                 }
             }
-            
+
             st = 0;  // Set the state back to 0
         }
     }
-    
+
     // RegExp Replacements
     code = code
-      .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
-      .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
-      .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-      .replace(/#./g,function(x){return x.charCodeAt(1)})
-      .replace(/\)/g,"))")
-      .replace(/ /g,")")
-      .replace(/@/g,"(X,Y,Z)=>")
-      .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+        .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
+        .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
+        .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
+        .replace(/#./g,function(x){return x.charCodeAt(1)})
+        .replace(/\)/g,"))")
+        .replace(/ /g,")")
+        .replace(/@/g,"(X,Y,Z)=>")
+        .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
     code = fixParens(code);
     code = code
-      .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
-      .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
-    
+        .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
+        .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
+
     alert("JS code: "+code);
     try {
-      var result=eval(code);
-      alert("Result: "+result);
-      document.getElementById("output").value = result;
+        var result=eval(code);
+        alert("Result: "+result);
+        document.getElementById("output").value = result;
     } catch (e) {
-      alert(e);
+        alert(e);
     }
 }

@@ -371,8 +371,6 @@ function transpile(code) {
     
   // RegExp Replacements
   code = code
-    .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
-    .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
     .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
     .replace(/#./g,function(x){return x.charCodeAt(1)})
     .replace(/\)/g,"))")
@@ -380,10 +378,6 @@ function transpile(code) {
     .replace(/@/g,"(X,Y,Z)=>")
     .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
   code = fixParens(code);
-  code = code
-    .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
-    .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
-  
 }
 
 function evalJapt(code) {

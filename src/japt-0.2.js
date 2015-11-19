@@ -75,7 +75,7 @@ Array.prototype.u = function(){noFunc('Au')}
 Array.prototype.v = function(){noFunc('Av')}
 Array.prototype.w = function(){return this.reverse()}
 
-Number.prototype.a = function(){noFunc('Na')}
+Number.prototype.a = function(){return Math.abs(this)}
 Number.prototype.b = function(x,y){return this<x?x:this>y?y:this}
 Number.prototype.c = function(){return Math.ceil(this)}
 Number.prototype.d = function(){return String.fromCharCode(this)}
@@ -86,7 +86,7 @@ Number.prototype.h = function(){noFunc('Nh')}
 Number.prototype.i = function(){noFunc('Ni')}
 Number.prototype.j = function(){noFunc('Nj')}
 Number.prototype.k = function(){noFunc('Nk')}
-Number.prototype.l = function(){noFunc('Nl')}
+Number.prototype.l = function(x){return Math.factorial(this);}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
 Number.prototype.o = function(x,y){
@@ -113,8 +113,21 @@ Number.prototype.v = function(){return this%2===0?1:0}
 Number.prototype.w = function(x){return Math.max(this,x)}
 
 // Shorter Math Properties
-Math.r = Math.random;
+Math.t = Math.atan2;
+Math.f = Math.factorial;
+/* Fibbonacci*/ Math.F = function F (n) { return n <= 1 ? n : Math.F(n-1) + Math.F(n-2); };
+/* Math.r = */ Object.defineProperty(Math, 'r', {get:function(){return Math.random()},configurable:true}); // Math.r is a getter so we don't need ()
+
 Math.P = Math.PI;
+
+Math.p = function(n, prime) { // Prime Factorization, if 2nd arg is trusey, will return if num is prime
+    var r, f = [], x, d = 1 < n;
+    while( d ){ r = Math.sqrt(n); x = 2;
+        if (n % x) { x = 3; while ((n % x) && ((x += 2) < r)); }
+        f.push(x = x > r ? n : x); d = ( x != n ); n /= x;
+    }
+    return prime ? f.length === 1 : f;
+}
 
 void(0); // Completely optional
 

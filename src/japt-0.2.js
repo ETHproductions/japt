@@ -25,13 +25,13 @@ var defFuncs = {
   u: "while(!",
   v: "evalJapt(",
   w: "while("};
-  
+
 String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';for(var y='',i=x|0;i--;)y+=this;return y}
 String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
 String.prototype.c = function(x){return this.charCodeAt(x)}
 String.prototype.d = function(){noFunc('Sd')}
-String.prototype.e = function(){noFunc('Se')}
+String.prototype.e = function(x,y,z){var t=this.replace(x instanceof RegExp?x:RegExp(x,z||"g"),y||"");return t===this?this:this.e(x,y,z)} // "Recursive" replaces
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)}
@@ -39,7 +39,7 @@ String.prototype.i = function(x,y){return this.substring(0,x)+y+this.substring(x
 String.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.substring(0,x)+this.substring(x+y)}
 String.prototype.k = function(x){return this.replace(RegExp(x),"")}
 String.prototype.l = function(){return this.length}
-String.prototype.m = function(x){return this.split('').map(x).join('')}
+String.prototype.m = function(x,y){return this.split(y||'').map(x).join(y||'')}
 String.prototype.n = function(x){return parseInt(this,x||10)}
 String.prototype.o = function(){noFunc('So')}
 String.prototype.p = function(x){return this.repeat(x)}
@@ -50,7 +50,7 @@ String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;retu
 String.prototype.u = function(){return this.toUpperCase()}
 String.prototype.v = function(){return this.toLowerCase()}
 String.prototype.w = function(){return this.split('').reverse().join('')}
-  
+
 Array.prototype.a = function(){return this.join('');}
 Array.prototype.b = function(x){return this.indexOf(x)}
 Array.prototype.c = function(x){return this.lastIndexOf(x)}
@@ -75,7 +75,7 @@ Array.prototype.u = function(){noFunc('Au')}
 Array.prototype.v = function(){noFunc('Av')}
 Array.prototype.w = function(){return this.reverse()}
 
-Number.prototype.a = function(){noFunc('Na')}
+Number.prototype.a = function(){return Math.abs(this)}
 Number.prototype.b = function(x,y){return this<x?x:this>y?y:this}
 Number.prototype.c = function(){return Math.ceil(this)}
 Number.prototype.d = function(){return String.fromCharCode(this)}
@@ -86,7 +86,7 @@ Number.prototype.h = function(){noFunc('Nh')}
 Number.prototype.i = function(){noFunc('Ni')}
 Number.prototype.j = function(){noFunc('Nj')}
 Number.prototype.k = function(){noFunc('Nk')}
-Number.prototype.l = function(){noFunc('Nl')}
+Number.prototype.l = function(x){return Math.factorial(this);}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
 Number.prototype.o = function(x,y){
@@ -113,31 +113,44 @@ Number.prototype.v = function(){return this%2===0?1:0}
 Number.prototype.w = function(x){return Math.max(this,x)}
 
 // Shorter Math Properties
-Math.r = Math.random;
+Math.t = Math.atan2;
+Math.f = Math.factorial;
+/* Fibbonacci*/ Math.F = function F (n) { return n <= 1 ? n : Math.F(n-1) + Math.F(n-2); };
+/* Math.r = */ Object.defineProperty(Math, 'r', {get:function(){return Math.random()},configurable:true}); // Math.r is a getter so we don't need ()
+
 Math.P = Math.PI;
+
+Math.p = function(n, prime) { // Prime Factorization, if 2nd arg is trusey, will return if num is prime
+    var r, f = [], x, d = 1 < n;
+    while( d ){ r = Math.sqrt(n); x = 2;
+        if (n % x) { x = 3; while ((n % x) && ((x += 2) < r)); }
+        f.push(x = x > r ? n : x); d = ( x != n ); n /= x;
+    }
+    return prime ? f.length === 1 : f;
+}
 
 void(0); // Completely optional
 
 function clear_output() {
-    document.getElementById("output").value = "";
-    document.getElementById("stderr").innerHTML = "";
+  document.getElementById("output").value = "";
+  document.getElementById("stderr").innerHTML = "";
 }
 
 function stop() {
-    running = false;
-    document.getElementById("run").disabled = false;
-    document.getElementById("stop").disabled = true;
-    document.getElementById("clear").disabled = false;
-    document.getElementById("timeout").disabled = false;
+  running = false;
+  document.getElementById("run").disabled = false;
+  document.getElementById("stop").disabled = true;
+  document.getElementById("clear").disabled = false;
+  document.getElementById("timeout").disabled = false;
 }
 
 function interrupt() {
-    error(ERROR_INTERRUPT);
+  error(ERROR_INTERRUPT);
 }
 
 function error(msg) {
-    document.getElementById("stderr").innerHTML = msg;
-    stop();
+  document.getElementById("stderr").innerHTML = msg;
+  stop();
 }
 
 function evalInput(input) {
@@ -203,32 +216,32 @@ function evalInput(input) {
 }
 
 function shorthand (code) {
-    // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
-    var pairs = {
-        // Using \u<hex> to avoid encoding incompatibilities
-        // Feel free to change these
-        "\u00A1": "Um@", // ¡ - 161
-        "\u00A2": "Us2", // ¢ - 162
-    };
-    
-    return Object.keys(pairs).reduce(function (code, char) {
-        return code.replace(new RegExp(char, 'g'), pairs[ char ]);
-    }, code);
+  // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
+  var pairs = {
+    // Using \u<hex> to avoid encoding incompatibilities
+    // Feel free to change these
+    "\u00A1": "Um@", // ¡ - 161
+    "\u00A2": "Us2", // ¢ - 162
+  };
+
+  return Object.keys(pairs).reduce(function (code, char) {
+    return code.replace(new RegExp(char, 'g'), pairs[ char ]);
+  }, code);
 }
 
 function run() {
-    clear_output();
-    document.getElementById("run").disabled = true;
-    document.getElementById("stop").disabled = false;
-    document.getElementById("clear").disabled = true;
-    document.getElementById("input").disabled = false;
-    document.getElementById("timeout").disabled = false;
-    
-    code = document.getElementById("code").value;
-    input = document.getElementById("input").value;
-    timeout = document.getElementById("timeout").checked;
-  
-    A = 10,
+  clear_output();
+  document.getElementById("run").disabled = true;
+  document.getElementById("stop").disabled = false;
+  document.getElementById("clear").disabled = true;
+  document.getElementById("input").disabled = false;
+  document.getElementById("timeout").disabled = false;
+
+  code = document.getElementById("code").value;
+  input = document.getElementById("input").value;
+  timeout = document.getElementById("timeout").checked;
+
+  A = 10,
     B = 11,
     C = 12,
     D = 13,
@@ -254,15 +267,15 @@ function run() {
     X = N[3],
     Y = N[4],
     Z = N[5];
-    
-    if (!safe_unicode) code = shorthand(code) || "";
-    evalJapt(code);
-  
-    document.getElementById("run").disabled = false;
-    document.getElementById("stop").disabled = true;
-    document.getElementById("clear").disabled = false;
-    document.getElementById("input").disabled = false;
-    document.getElementById("timeout").disabled = false;
+
+  if (!safe_unicode) code = shorthand(code) || "";
+  evalJapt(code);
+
+  document.getElementById("run").disabled = false;
+  document.getElementById("stop").disabled = true;
+  document.getElementById("clear").disabled = false;
+  document.getElementById("input").disabled = false;
+  document.getElementById("timeout").disabled = false;
 }
 
 function subparen(code) {
@@ -318,17 +331,17 @@ function transpile(code) {
   var codes = [], strings = [], i = 0, j = 0;
   /* For Lexer */
   var expr = [], // Expression data
-    lo = {i:0,j:0}, // A place for our loop variables
-    level = 0,      // Current number of parentheses or curly braces that we're inside
-    temp = '',
-    
-    out = [],       // The resulting tokens (NOT USED). currently dumped in next string
-    outp = "";      // Temporary output
-    
-    // Some helpful functions
+      lo = {i:0,j:0}, // A place for our loop variables
+      level = 0,      // Current number of parentheses or curly braces that we're inside
+      temp = '',
+
+      out = [],       // The resulting tokens (NOT USED). currently dumped in next string
+      outp = "";      // Temporary output
+
+  // Some helpful functions
   function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
-    
-    // NOT PRODUCTION READY
+
+  // NOT PRODUCTION READY
   for (i = 0; i < code.length; i++) {
     var char = code[i];
     if (isChar(char, "\"")) { // If new token is a quotation mark "
@@ -355,7 +368,7 @@ function transpile(code) {
         }
       }
       outp += char; // Add this character to the output
-      
+
       continue; // Jump to next iteration
     } else if (isChar(char, "$")) {
       for (; code[i] !== "$"; i++) {
@@ -368,7 +381,7 @@ function transpile(code) {
       }
     }
   }
-    
+
   // RegExp Replacements
   code = code
     .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
@@ -382,7 +395,7 @@ function transpile(code) {
 
 function evalJapt(code) {
   var codes = [], strings = [], i = 0, j = 0;
-  
+
   alert("JS code: "+code);
   try {
     var result=eval(code);

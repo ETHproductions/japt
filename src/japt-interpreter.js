@@ -31,7 +31,7 @@ String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
 String.prototype.c = function(x){return this.charCodeAt(x)}
 String.prototype.d = function(){noFunc('Sd')}
-String.prototype.e = function(x,y,z){var t=this.replace(RegExp(x,z||"g"),y||"");return t===this?t:t.e(x,y,z)} // "Recursive" replaces
+String.prototype.e = function(x,y,z){var t=this.replace(RegExp(x,z||"g"),y||"");alert(t);}//return t===this?t:t.e(x,y,z)} // "Recursive" replaces
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)}

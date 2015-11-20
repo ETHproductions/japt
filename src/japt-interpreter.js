@@ -134,14 +134,10 @@ void(0); // Completely optional
 // Be sure to make sure shoco is loaded. 
 // JS File - http://ed-von-schleck.github.io/shoco/shoco.js
 
-/*
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
 
 shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {
         return char.charCodeAt(0) }))) };
-
-window.L = shoco; // You can change L to any variable you want
-*/
 
 function clear_output() {
   document.getElementById("output").value = "";
@@ -270,7 +266,7 @@ function run() {
     L = 100,
     M = Math,
     N = evalInput(input),
-    O = undefined,
+    O = shoco,
     P = "",
     Q = "\"",
     R = "\n",

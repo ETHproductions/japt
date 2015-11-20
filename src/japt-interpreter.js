@@ -31,7 +31,7 @@ String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
 String.prototype.c = function(x){return this.charCodeAt(x)}
 String.prototype.d = function(){noFunc('Sd')}
-String.prototype.e = function(){noFunc('Se')}
+String.prototype.e = function(x,y,z){var t=this.replace(x instanceof RegExp?x:RegExp(x,z||"g"),y||"");return t===this?this:this.e(x,y,z)} // "Recursive" replaces
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)}
@@ -72,10 +72,10 @@ Array.prototype.r = function(x){return this.reduce(x)}
 Array.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,y)}
 Array.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,x+y)}
 Array.prototype.u = function(){noFunc('Au')}
-Array.prototype.v = function(){noFunc('Av')}
+Array.prototype.v = function(){return this.reduce(function(x,y){return x+y})}
 Array.prototype.w = function(){return this.reverse()}
 
-Number.prototype.a = function(){noFunc('Na')}
+Number.prototype.a = function(){return Math.abs(this)}
 Number.prototype.b = function(x,y){return this<x?x:this>y?y:this}
 Number.prototype.c = function(){return Math.ceil(this)}
 Number.prototype.d = function(){return String.fromCharCode(this)}
@@ -115,6 +115,11 @@ Number.prototype.w = function(x){return Math.max(this,x)}
 // Shorter Math Properties
 Math.r = Math.random;
 Math.P = Math.PI;
+Math.a = Math.atan2;
+Math.s = Math.sin;
+Math.c = Math.cos;
+Math.t = Math.tan;
+Math.l = Math.log;
 
 void(0); // Completely optional
 

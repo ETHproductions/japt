@@ -113,7 +113,19 @@ Number.prototype.v = function(){return this%2===0?1:0}
 Number.prototype.w = function(x){return Math.max(this,x)}
 
 // Shorter Math Properties
+Math.t = Math.atan2;
+Math.f = Math.factorial;
+Math.g = function g (n) { return n <= 1 ? n : Math.g(n-1) + Math.g(n-2); };
 Math.r = Math.random;
+Math.p = function(n, prime) { // Prime Factorization, if 2nd arg is trusey, will return if num is prime
+    var r, f = [], x, d = 1 < n;
+    while( d ){ r = Math.sqrt(n); x = 2;
+        if (n % x) { x = 3; while ((n % x) && ((x += 2) < r)); }
+        f.push(x = x > r ? n : x); d = ( x != n ); n /= x;
+    }
+    return prime ? f.length === 1 : f;
+}
+
 Math.P = Math.PI;
 
 void(0); // Completely optional

@@ -41,10 +41,10 @@ String.prototype.k = function(x){return this.replace(RegExp(x),"")}
 String.prototype.l = function(){return this.length}
 String.prototype.m = function(x){return this.split('').map(x).join('')}
 String.prototype.n = function(x){return parseInt(this,x||10)}
-String.prototype.o = function(){noFunc('So')}
+String.prototype.o = function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")} // Removes all but specified characters. Similar to TeaScript's O function
 String.prototype.p = function(x){return this.repeat(x)}
 String.prototype.q = function(x){return this.split(x)}
-String.prototype.r = function(x,y){return this.replace(RegExp(x,"g"),y)}
+String.prototype.r = function(x,y,z){return this.replace(RegExp(x,(z||"")+"g"),y)}
 String.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;if(y<0)y+=this.length;return this.substring(x,y)}
 String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.substr(x,y)}
 String.prototype.u = function(){return this.toUpperCase()}
@@ -117,6 +117,19 @@ Math.r = Math.random;
 Math.P = Math.PI;
 
 void(0); // Completely optional
+
+// String compression
+// Be sure to make sure shoco is loaded. 
+// JS File - http://ed-von-schleck.github.io/shoco/shoco.js
+
+/*
+shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
+
+shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {
+        return char.charCodeAt(0) }))) };
+        
+window.L = shoco; // You can change L to any variable you want
+*/
 
 function clear_output() {
     document.getElementById("output").value = "";
@@ -202,17 +215,20 @@ function evalInput(input) {
   return processed;
 }
 
-function shorthand (code) {
+// Call this function with a second argument. If second arg is trusey
+function shorthand (code, autogolf) {
     // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
     var pairs = {
         // Using \u<hex> to avoid encoding incompatibilities
         // Feel free to change these
         "\u00A1": "Um@", // ¡ - 161
         "\u00A2": "Us2", // ¢ - 162
+        "\u00A3": "m@",  // £ - 163
+        "\u00A4": "=="   // ¤ - 164
     };
     
     return Object.keys(pairs).reduce(function (code, char) {
-        return code.replace(new RegExp(char, 'g'), pairs[ char ]);
+        return code.replace(new RegExp(autogolf ? pairs[char] : char, 'g'), autogolf ? char : pairs[ char ]);
     }, code);
 }
 

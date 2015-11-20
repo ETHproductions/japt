@@ -25,7 +25,7 @@ var defFuncs = {
   u: "while(!",
   v: "evalJapt(",
   w: "while("};
-  
+
 String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';for(var y='',i=x|0;i--;)y+=this;return y}
 String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
@@ -50,7 +50,7 @@ String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;retu
 String.prototype.u = function(){return this.toUpperCase()}
 String.prototype.v = function(){return this.toLowerCase()}
 String.prototype.w = function(){return this.split('').reverse().join('')}
-  
+
 Array.prototype.a = function(){return this.join('');}
 Array.prototype.b = function(x){return this.indexOf(x)}
 Array.prototype.c = function(x){return this.lastIndexOf(x)}
@@ -127,30 +127,30 @@ shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), 
 
 shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {
         return char.charCodeAt(0) }))) };
-        
+
 window.L = shoco; // You can change L to any variable you want
 */
 
 function clear_output() {
-    document.getElementById("output").value = "";
-    document.getElementById("stderr").innerHTML = "";
+  document.getElementById("output").value = "";
+  document.getElementById("stderr").innerHTML = "";
 }
 
 function stop() {
-    running = false;
-    document.getElementById("run").disabled = false;
-    document.getElementById("stop").disabled = true;
-    document.getElementById("clear").disabled = false;
-    document.getElementById("timeout").disabled = false;
+  running = false;
+  document.getElementById("run").disabled = false;
+  document.getElementById("stop").disabled = true;
+  document.getElementById("clear").disabled = false;
+  document.getElementById("timeout").disabled = false;
 }
 
 function interrupt() {
-    error(ERROR_INTERRUPT);
+  error(ERROR_INTERRUPT);
 }
 
 function error(msg) {
-    document.getElementById("stderr").innerHTML = msg;
-    stop();
+  document.getElementById("stderr").innerHTML = msg;
+  stop();
 }
 
 function evalInput(input) {
@@ -217,34 +217,34 @@ function evalInput(input) {
 
 // Call this function with a second argument. If second arg is trusey
 function shorthand (code, autogolf) {
-    // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
-    var pairs = {
-        // Using \u<hex> to avoid encoding incompatibilities
-        // Feel free to change these
-        "\u00A1": "Um@", // ¡ - 161
-        "\u00A2": "Us2", // ¢ - 162
-        "\u00A3": "m@",  // £ - 163
-        "\u00A4": "=="   // ¤ - 164
-    };
-    
-    return Object.keys(pairs).reduce(function (code, char) {
-        return code.replace(new RegExp(autogolf ? pairs[char] : char, 'g'), autogolf ? char : pairs[ char ]);
-    }, code);
+  // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
+  var pairs = {
+    // Using \u<hex> to avoid encoding incompatibilities
+    // Feel free to change these
+    "\u00A1": "Um@", // ¡ - 161
+    "\u00A2": "Us2", // ¢ - 162
+    "\u00A3": "m@",  // £ - 163
+    "\u00A4": "=="   // ¤ - 164
+  };
+
+  return Object.keys(pairs).reduce(function (code, char) {
+    return code.replace(new RegExp(autogolf ? pairs[char] : char, 'g'), autogolf ? char : pairs[ char ]);
+  }, code);
 }
 
 function run() {
-    clear_output();
-    document.getElementById("run").disabled = true;
-    document.getElementById("stop").disabled = false;
-    document.getElementById("clear").disabled = true;
-    document.getElementById("input").disabled = false;
-    document.getElementById("timeout").disabled = false;
-    
-    code = document.getElementById("code").value;
-    input = document.getElementById("input").value;
-    timeout = document.getElementById("timeout").checked;
-  
-    A = 10,
+  clear_output();
+  document.getElementById("run").disabled = true;
+  document.getElementById("stop").disabled = false;
+  document.getElementById("clear").disabled = true;
+  document.getElementById("input").disabled = false;
+  document.getElementById("timeout").disabled = false;
+
+  code = document.getElementById("code").value;
+  input = document.getElementById("input").value;
+  timeout = document.getElementById("timeout").checked;
+
+  A = 10,
     B = 11,
     C = 12,
     D = 13,
@@ -270,15 +270,15 @@ function run() {
     X = N[3],
     Y = N[4],
     Z = N[5];
-    
-    if (!safe_unicode) code = shorthand(code) || "";
-    evalJapt(code);
-  
-    document.getElementById("run").disabled = false;
-    document.getElementById("stop").disabled = true;
-    document.getElementById("clear").disabled = false;
-    document.getElementById("input").disabled = false;
-    document.getElementById("timeout").disabled = false;
+
+  if (!safe_unicode) code = shorthand(code) || "";
+  evalJapt(code);
+
+  document.getElementById("run").disabled = false;
+  document.getElementById("stop").disabled = true;
+  document.getElementById("clear").disabled = false;
+  document.getElementById("input").disabled = false;
+  document.getElementById("timeout").disabled = false;
 }
 
 function subparen(code) {
@@ -331,28 +331,28 @@ function fixParens(code) {
 }
 
 function evalJapt(code) {
-    var codes = [], strings = [], i = 0, j = 0;
-    
-    code = code
-      .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
-      .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
-      .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-      .replace(/#./g,function(x){return x.charCodeAt(1)})
-      .replace(/\)/g,"))")
-      .replace(/ /g,")")
-      .replace(/@/g,"(X,Y,Z)=>")
-      .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
-    code = fixParens(code);
-    code = code
-      .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
-      .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
-    
-    alert("JS code: "+code);
-    try {
-      var result=eval(code);
-      alert("Result: "+result);
-      document.getElementById("output").value = result;
-    } catch (e) {
-      alert(e);
-    }
+  var codes = [], strings = [], i = 0, j = 0;
+
+  code = code
+    .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
+    .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
+    .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
+    .replace(/#./g,function(x){return x.charCodeAt(1)})
+    .replace(/\)/g,"))")
+    .replace(/ /g,")")
+    .replace(/@/g,"(X,Y,Z)=>")
+    .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+  code = fixParens(code);
+  code = code
+    .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
+    .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
+
+  alert("JS code: "+code);
+  try {
+    var result=eval(code);
+    alert("Result: "+result);
+    document.getElementById("output").value = result;
+  } catch (e) {
+    alert(e);
+  }
 }

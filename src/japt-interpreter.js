@@ -25,32 +25,32 @@ var defFuncs = {
   u: "while(!",
   v: "evalJapt(",
   w: "while("};
-  
+
 String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';for(var y='',i=x|0;i--;)y+=this;return y}
 String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
 String.prototype.c = function(x){return this.charCodeAt(x)}
 String.prototype.d = function(){noFunc('Sd')}
-String.prototype.e = function(){noFunc('Se')}
+String.prototype.e = function(x,y,z){var t=this.replace(x instanceof RegExp?x:RegExp(x,z||"g"),y||"");return t===this?this:this.e(x,y,z)} // "Recursive" replaces
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)}
 String.prototype.i = function(x,y){return this.substring(0,x)+y+this.substring(x)}
 String.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.substring(0,x)+this.substring(x+y)}
-String.prototype.k = function(x){return this.replace(RegExp(x),"")}
+String.prototype.k = function(x,y){return this.replace(RegExp(x,y),"")}
 String.prototype.l = function(){return this.length}
-String.prototype.m = function(x){return this.split('').map(x).join('')}
+String.prototype.m = function(x,y){return this.split(y||'').map(x).join(y||'')}
 String.prototype.n = function(x){return parseInt(this,x||10)}
-String.prototype.o = function(){noFunc('So')}
+String.prototype.o = function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")} // Removes all but specified characters. Similar to TeaScript's O function
 String.prototype.p = function(x){return this.repeat(x)}
 String.prototype.q = function(x){return this.split(x)}
-String.prototype.r = function(x,y){return this.replace(RegExp(x,"g"),y)}
+String.prototype.r = function(x,y,z){return this.replace(RegExp(x,(z||"")+"g"),y)}
 String.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;if(y<0)y+=this.length;return this.substring(x,y)}
 String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.substr(x,y)}
 String.prototype.u = function(){return this.toUpperCase()}
 String.prototype.v = function(){return this.toLowerCase()}
 String.prototype.w = function(){return this.split('').reverse().join('')}
-  
+
 Array.prototype.a = function(){return this.join('');}
 Array.prototype.b = function(x){return this.indexOf(x)}
 Array.prototype.c = function(x){return this.lastIndexOf(x)}
@@ -68,14 +68,14 @@ Array.prototype.n = function(x){return this.sort(x)}
 Array.prototype.o = function(){return this.pop()}
 Array.prototype.p = function(x){return this.push(x)}
 Array.prototype.q = function(x){return this.join(x)}
-Array.prototype.r = function(x){return this.reduce(x)}
+Array.prototype.r = function(x,y){return this.reduce(x,y)}
 Array.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,y)}
 Array.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,x+y)}
-Array.prototype.u = function(){noFunc('Au')}
-Array.prototype.v = function(){noFunc('Av')}
+Array.prototype.u = function(x){return this.unshift(x)}
+Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
 
-Number.prototype.a = function(){noFunc('Na')}
+Number.prototype.a = function(){return Math.abs(this)}
 Number.prototype.b = function(x,y){return this<x?x:this>y?y:this}
 Number.prototype.c = function(){return Math.ceil(this)}
 Number.prototype.d = function(){return String.fromCharCode(this)}
@@ -86,7 +86,7 @@ Number.prototype.h = function(){noFunc('Nh')}
 Number.prototype.i = function(){noFunc('Ni')}
 Number.prototype.j = function(){noFunc('Nj')}
 Number.prototype.k = function(){noFunc('Nk')}
-Number.prototype.l = function(){noFunc('Nl')}
+Number.prototype.l = function(x){return Math.factorial(this);}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
 Number.prototype.o = function(x,y){
@@ -113,31 +113,56 @@ Number.prototype.v = function(){return this%2===0?1:0}
 Number.prototype.w = function(x){return Math.max(this,x)}
 
 // Shorter Math Properties
+Math.t = Math.atan2;
+Math.f = Math.factorial;
+Math.g = function g (n) { return n <= 1 ? n : Math.g(n-1) + Math.g(n-2); };
 Math.r = Math.random;
+Math.p = function(n, prime) { // Prime Factorization, if 2nd arg is trusey, will return if num is prime
+    var r, f = [], x, d = 1 < n;
+    while( d ){ r = Math.sqrt(n); x = 2;
+        if (n % x) { x = 3; while ((n % x) && ((x += 2) < r)); }
+        f.push(x = x > r ? n : x); d = ( x != n ); n /= x;
+    }
+    return prime ? f.length === 1 : f;
+}
+
 Math.P = Math.PI;
 
 void(0); // Completely optional
 
+// String compression
+// Be sure to make sure shoco is loaded. 
+// JS File - http://ed-von-schleck.github.io/shoco/shoco.js
+
+/*
+shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
+
+shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {
+        return char.charCodeAt(0) }))) };
+
+window.L = shoco; // You can change L to any variable you want
+*/
+
 function clear_output() {
-    document.getElementById("output").value = "";
-    document.getElementById("stderr").innerHTML = "";
+  document.getElementById("output").value = "";
+  document.getElementById("stderr").innerHTML = "";
 }
 
 function stop() {
-    running = false;
-    document.getElementById("run").disabled = false;
-    document.getElementById("stop").disabled = true;
-    document.getElementById("clear").disabled = false;
-    document.getElementById("timeout").disabled = false;
+  running = false;
+  document.getElementById("run").disabled = false;
+  document.getElementById("stop").disabled = true;
+  document.getElementById("clear").disabled = false;
+  document.getElementById("timeout").disabled = false;
 }
 
 function interrupt() {
-    error(ERROR_INTERRUPT);
+  error(ERROR_INTERRUPT);
 }
 
 function error(msg) {
-    document.getElementById("stderr").innerHTML = msg;
-    stop();
+  document.getElementById("stderr").innerHTML = msg;
+  stop();
 }
 
 function evalInput(input) {
@@ -202,33 +227,36 @@ function evalInput(input) {
   return processed;
 }
 
-function shorthand (code) {
-    // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
-    var pairs = {
-        // Using \u<hex> to avoid encoding incompatibilities
-        // Feel free to change these
-        "\u00A1": "Um@", // ¡ - 161
-        "\u00A2": "Us2", // ¢ - 162
-    };
-    
-    return Object.keys(pairs).reduce(function (code, char) {
-        return code.replace(new RegExp(char, 'g'), pairs[ char ]);
-    }, code);
+// Call this function with a second argument. If second arg is trusey
+function shorthand (code, autogolf) {
+  // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
+  var pairs = {
+    // Using \u<hex> to avoid encoding incompatibilities
+    // Feel free to change these
+    "\u00A1": "Um@", // ¡ - 161
+    "\u00A2": "Us2", // ¢ - 162
+    "\u00A3": "m@",  // £ - 163
+    "\u00A4": "=="   // ¤ - 164
+  };
+
+  return Object.keys(pairs).reduce(function (code, char) {
+    return code.replace(new RegExp(autogolf ? pairs[char] : char, 'g'), autogolf ? char : pairs[ char ]);
+  }, code);
 }
 
 function run() {
-    clear_output();
-    document.getElementById("run").disabled = true;
-    document.getElementById("stop").disabled = false;
-    document.getElementById("clear").disabled = true;
-    document.getElementById("input").disabled = false;
-    document.getElementById("timeout").disabled = false;
-    
-    code = document.getElementById("code").value;
-    input = document.getElementById("input").value;
-    timeout = document.getElementById("timeout").checked;
-  
-    A = 10,
+  clear_output();
+  document.getElementById("run").disabled = true;
+  document.getElementById("stop").disabled = false;
+  document.getElementById("clear").disabled = true;
+  document.getElementById("input").disabled = false;
+  document.getElementById("timeout").disabled = false;
+
+  code = document.getElementById("code").value;
+  input = document.getElementById("input").value;
+  timeout = document.getElementById("timeout").checked;
+
+  A = 10,
     B = 11,
     C = 12,
     D = 13,
@@ -254,15 +282,15 @@ function run() {
     X = N[3],
     Y = N[4],
     Z = N[5];
-    
-    if (!safe_unicode) code = shorthand(code) || "";
-    evalJapt(code);
-  
-    document.getElementById("run").disabled = false;
-    document.getElementById("stop").disabled = true;
-    document.getElementById("clear").disabled = false;
-    document.getElementById("input").disabled = false;
-    document.getElementById("timeout").disabled = false;
+
+  if (!safe_unicode) code = shorthand(code) || "";
+  evalJapt(code);
+
+  document.getElementById("run").disabled = false;
+  document.getElementById("stop").disabled = true;
+  document.getElementById("clear").disabled = false;
+  document.getElementById("input").disabled = false;
+  document.getElementById("timeout").disabled = false;
 }
 
 function subparen(code) {
@@ -315,28 +343,28 @@ function fixParens(code) {
 }
 
 function evalJapt(code) {
-    var codes = [], strings = [], i = 0, j = 0;
-    
-    code = code
-      .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
-      .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
-      .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-      .replace(/#./g,function(x){return x.charCodeAt(1)})
-      .replace(/\)/g,"))")
-      .replace(/ /g,")")
-      .replace(/@/g,"(X,Y,Z)=>")
-      .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
-    code = fixParens(code);
-    code = code
-      .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
-      .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
-    
-    alert("JS code: "+code);
-    try {
-      var result=eval(code);
-      alert("Result: "+result);
-      document.getElementById("output").value = result;
-    } catch (e) {
-      alert(e);
-    }
+  var codes = [], strings = [], i = 0, j = 0;
+
+  code = code
+    .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
+    .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
+    .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
+    .replace(/#./g,function(x){return x.charCodeAt(1)})
+    .replace(/\)/g,"))")
+    .replace(/ /g,")")
+    .replace(/@/g,"(X,Y,Z)=>")
+    .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+  code = fixParens(code);
+  code = code
+    .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
+    .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
+
+  alert("JS code: "+code);
+  try {
+    var result=eval(code);
+    alert("Result: "+result);
+    document.getElementById("output").value = result;
+  } catch (e) {
+    alert(e);
+  }
 }

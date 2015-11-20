@@ -115,11 +115,8 @@ Number.prototype.w = function(x){return Math.max(this,x)}
 // Shorter Math Properties
 Math.t = Math.atan2;
 Math.f = Math.factorial;
-/* Fibbonacci*/ Math.F = function F (n) { return n <= 1 ? n : Math.F(n-1) + Math.F(n-2); };
-/* Math.r = */ Object.defineProperty(Math, 'r', {get:function(){return Math.random()},configurable:true}); // Math.r is a getter so we don't need ()
-
-Math.P = Math.PI;
-
+Math.g = function g (n) { return n <= 1 ? n : Math.g(n-1) + Math.g(n-2); };
+Math.r = Math.random;
 Math.p = function(n, prime) { // Prime Factorization, if 2nd arg is trusey, will return if num is prime
     var r, f = [], x, d = 1 < n;
     while( d ){ r = Math.sqrt(n); x = 2;
@@ -128,6 +125,8 @@ Math.p = function(n, prime) { // Prime Factorization, if 2nd arg is trusey, will
     }
     return prime ? f.length === 1 : f;
 }
+
+Math.P = Math.PI;
 
 void(0); // Completely optional
 

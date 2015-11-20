@@ -39,7 +39,7 @@ String.prototype.i = function(x,y){return this.substring(0,x)+y+this.substring(x
 String.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.substring(0,x)+this.substring(x+y)}
 String.prototype.k = function(x){return this.replace(RegExp(x),"")}
 String.prototype.l = function(){return this.length}
-String.prototype.m = function(x){return this.split('').map(x).join('')}
+String.prototype.m = function(x,y){return this.split(y||'').map(x).join(y||'')}
 String.prototype.n = function(x){return parseInt(this,x||10)}
 String.prototype.o = function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")} // Removes all but specified characters. Similar to TeaScript's O function
 String.prototype.p = function(x){return this.repeat(x)}

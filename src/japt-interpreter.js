@@ -31,7 +31,7 @@ String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
 String.prototype.c = function(x){return this.charCodeAt(x)}
 String.prototype.d = function(){noFunc('Sd')}
-String.prototype.e = function(){noFunc('Se')}
+String.prototype.e = function(x,y,z){var t=this.replace(x instanceof RegExp?x:RegExp(x,z||"g"),y||"");return t===this?this:this.e(x,y,z)} // "Recursive" replaces
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)}
@@ -75,7 +75,7 @@ Array.prototype.u = function(){noFunc('Au')}
 Array.prototype.v = function(){noFunc('Av')}
 Array.prototype.w = function(){return this.reverse()}
 
-Number.prototype.a = function(){noFunc('Na')}
+Number.prototype.a = function(){return Math.abs(this)}
 Number.prototype.b = function(x,y){return this<x?x:this>y?y:this}
 Number.prototype.c = function(){return Math.ceil(this)}
 Number.prototype.d = function(){return String.fromCharCode(this)}
@@ -86,7 +86,7 @@ Number.prototype.h = function(){noFunc('Nh')}
 Number.prototype.i = function(){noFunc('Ni')}
 Number.prototype.j = function(){noFunc('Nj')}
 Number.prototype.k = function(){noFunc('Nk')}
-Number.prototype.l = function(){noFunc('Nl')}
+Number.prototype.l = function(x){return Math.factorial(this);}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
 Number.prototype.o = function(x,y){

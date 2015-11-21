@@ -79,7 +79,7 @@ Array.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;retur
 Array.prototype.u = function(x){return this.unshift(x)}
 Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
-Array.prototype.x = function(){noFunc('Sx')}
+Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})}
 Array.prototype.y = function(){noFunc('Sy')}
 Array.prototype.z = function(){noFunc('Sz')}
 

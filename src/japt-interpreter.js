@@ -240,7 +240,6 @@ function shorthand (code) {
       n += l = code[i++];
       while (!(code[i] == l && code[i - 1] != "\\") && i < code.length) n += code[i++]; n += code[i];
     } else {
-      console.log( code[i] );
       if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
         n += pairs[ code[i] ];
       } else {

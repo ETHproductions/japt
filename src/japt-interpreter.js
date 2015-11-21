@@ -118,12 +118,12 @@ Math.f = Math.factorial;
 Math.g = function g (n) { return n <= 1 ? n : Math.g(n-1) + Math.g(n-2); };
 Math.r = Math.random;
 Math.p = function(n, prime) { // Prime Factorization, if 2nd arg is trusey, will return if num is prime
-    var r, f = [], x, d = 1 < n;
-    while( d ){ r = Math.sqrt(n); x = 2;
-        if (n % x) { x = 3; while ((n % x) && ((x += 2) < r)); }
-        f.push(x = x > r ? n : x); d = ( x != n ); n /= x;
-    }
-    return prime ? f.length === 1 : f;
+  var r, f = [], x, d = 1 < n;
+  while( d ){ r = Math.sqrt(n); x = 2;
+             if (n % x) { x = 3; while ((n % x) && ((x += 2) < r)); }
+             f.push(x = x > r ? n : x); d = ( x != n ); n /= x;
+            }
+  return prime ? f.length === 1 : f;
 }
 
 Math.P = Math.PI;
@@ -237,11 +237,23 @@ function shorthand (code, autogolf) {
     "\u00A2": "Us2", // ¢ - 162
     "\u00A3": "m@",  // £ - 163
     "\u00A4": "=="   // ¤ - 164
-  };
+  }, i = 0, l = "", n = "";
 
-  return Object.keys(pairs).reduce(function (code, char) {
-    return code.replace(new RegExp(autogolf ? pairs[char] : char, 'g'), autogolf ? char : pairs[ char ]);
-  }, code);
+  for (var i = 0; i < code.length; i++) {
+    if (['"',"'"].indexOf(code[i]) > -1) { // Quote
+      n += l = code[i++];
+      while (!(code[i] == l && code[i - 1] != "\\") && i < code.length) n += code[i++]; n += code[i];
+    } else {
+      console.log( code[i] );
+      if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
+        n += pairs[ code[i] ];
+      } else {
+        n += code[i];
+      }
+    }
+  }
+
+  return n;
 }
 
 function run() {

@@ -1,4 +1,4 @@
-var code, input, timeout, safe_unicode = false; // When safe_unicode is true, shorthand() won't be called so unicode characters can be used safely
+var code, input, timeout;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 var defFuncs = {
@@ -30,8 +30,10 @@ String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';f
 String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
 String.prototype.c = function(x){return this.charCodeAt(x)}
-String.prototype.d = function(){noFunc('Sd')}
-String.prototype.e = function(x,y,z){var t=this,u;while(t!==u)u=t,t=t.replace(RegExp(x,z||"g"),y||"");return t} // "Recursive" replaces
+String.prototype.d = function(x){
+  if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
+  else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}}
+String.prototype.e = function(x,y,z){var t=this.replace(x instanceof RegExp?x:RegExp(x,z||"g"),y||"");return t===this?this:t.e(x,y,z)} // "Recursive" replaces
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)}
@@ -117,27 +119,16 @@ Math.t = Math.atan2;
 Math.f = Math.factorial;
 Math.g = function g (n) { return n <= 1 ? n : Math.g(n-1) + Math.g(n-2); };
 Math.r = Math.random;
-Math.p = function(n, prime) { // Prime Factorization, if 2nd arg is trusey, will return if num is prime
-    var r, f = [], x, d = 1 < n;
-    while( d ){ r = Math.sqrt(n); x = 2;
-        if (n % x) { x = 3; while ((n % x) && ((x += 2) < r)); }
-        f.push(x = x > r ? n : x); d = ( x != n ); n /= x;
-    }
-    return prime ? f.length === 1 : f;
-}
-
+Math.p = function(n,p) {var r,f=[],x,d=1<n; // Prime Factorization, if 2nd arg is trusey, will return if num is prime.
+  while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x += 2) < r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return p?f.length==1:f;}
 Math.P = Math.PI;
-
-void(0); // Completely optional
-
 // String compression
-// Be sure to make sure shoco is loaded. 
-// JS File - http://ed-von-schleck.github.io/shoco/shoco.js
-
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
 
 shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {
-        return char.charCodeAt(0) }))) };
+        return char.charCodeAt(0)})))};
+
+void(0);
 
 function clear_output() {
   document.getElementById("output").value = "";
@@ -224,7 +215,7 @@ function evalInput(input) {
 }
 
 // Call this function with a second argument. If second arg is trusey
-function shorthand (code, autogolf) {
+function shorthand (code) {
   // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
   var pairs = {
     // Using \u<hex> to avoid encoding incompatibilities
@@ -233,11 +224,23 @@ function shorthand (code, autogolf) {
     "\u00A2": "Us2", // ¢ - 162
     "\u00A3": "m@",  // £ - 163
     "\u00A4": "=="   // ¤ - 164
-  };
+  }, i = 0, l = "", n = "";
 
-  return Object.keys(pairs).reduce(function (code, char) {
-    return code.replace(new RegExp(autogolf ? pairs[char] : char, 'g'), autogolf ? char : pairs[ char ]);
-  }, code);
+  for (var i = 0; i < code.length; i++) {
+    if (['"',"'"].indexOf(code[i]) > -1) { // Quote
+      n += l = code[i++];
+      while (!(code[i] == l && code[i - 1] != "\\") && i < code.length) n += code[i++]; n += code[i];
+    } else {
+      console.log( code[i] );
+      if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
+        n += pairs[ code[i] ];
+      } else {
+        n += code[i];
+      }
+    }
+  }
+
+  return n;
 }
 
 function run() {
@@ -278,8 +281,7 @@ function run() {
     X = N[3],
     Y = N[4],
     Z = N[5];
-
-  if (!safe_unicode) code = shorthand(code) || "";
+  
   evalJapt(code);
 
   document.getElementById("run").disabled = false;
@@ -341,6 +343,7 @@ function fixParens(code) {
 function evalJapt(code) {
   var codes = [], strings = [], i = 0, j = 0;
 
+  code = shorthand(code);
   code = code
     .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
     .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})

@@ -31,9 +31,8 @@ String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
 String.prototype.c = function(x){return this.charCodeAt(x)}
 String.prototype.d = function(x){
-  if (arguments.length < 2) { return (typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
-  else {return [].reduce.call(arguments,function(o,f,i,a) {return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}
-}
+  if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
+  else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}}
 String.prototype.e = function(x,y,z){var t=this.replace(x instanceof RegExp?x:RegExp(x,z||"g"),y||"");return t===this?this:t.e(x,y,z)} // "Recursive" replaces
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
@@ -120,27 +119,16 @@ Math.t = Math.atan2;
 Math.f = Math.factorial;
 Math.g = function g (n) { return n <= 1 ? n : Math.g(n-1) + Math.g(n-2); };
 Math.r = Math.random;
-Math.p = function(n, prime) { // Prime Factorization, if 2nd arg is trusey, will return if num is prime
-  var r, f = [], x, d = 1 < n;
-  while( d ){ r = Math.sqrt(n); x = 2;
-             if (n % x) { x = 3; while ((n % x) && ((x += 2) < r)); }
-             f.push(x = x > r ? n : x); d = ( x != n ); n /= x;
-            }
-  return prime ? f.length === 1 : f;
-}
-
+Math.p = function(n,p) {var r,f=[],x,d=1<n; // Prime Factorization, if 2nd arg is trusey, will return if num is prime.
+  while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x += 2) < r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return p?f.length==1:f;}
 Math.P = Math.PI;
-
-void(0); // Completely optional
-
 // String compression
-// Be sure to make sure shoco is loaded. 
-// JS File - http://ed-von-schleck.github.io/shoco/shoco.js
-
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
 
 shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {
-        return char.charCodeAt(0) }))) };
+        return char.charCodeAt(0)})))};
+
+void(0);
 
 function clear_output() {
   document.getElementById("output").value = "";

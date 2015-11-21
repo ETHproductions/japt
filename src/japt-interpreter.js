@@ -351,7 +351,6 @@ function fixParens(code) {
 function evalJapt(code) {
   var codes = [], strings = [], i = 0, j = 0;
 
-  code = shorthand(code);
   code = code
     .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
     .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
@@ -361,6 +360,7 @@ function evalJapt(code) {
     .replace(/ /g,")")
     .replace(/@/g,"(X,Y,Z)=>")
     .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+  code = shorthand(code);
   code = fixParens(code);
   code = code
     .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})

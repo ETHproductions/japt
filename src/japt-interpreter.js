@@ -91,10 +91,10 @@ Number.prototype.e = function(x){return this*Math.pow(10,x)}
 Number.prototype.f = function(x){return this|0}
 Number.prototype.g = function(x){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0}
 Number.prototype.h = function(){noFunc('Nh')}
-Number.prototype.i = function(){noFunc('Ni')}
-Number.prototype.j = function(){var n=this|0,x=this|0;while(--n)x*=n;return n}
-Number.prototype.k = function(p){var n=this,r,f=[],x,d=1<n; // Prime factorization; if 2nd arg is truthy, will return if num is prime.
-  while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return p?f.length==1:f;}
+Number.prototype.i = function(){var n=this|0,x=this|0;while(--n)x*=n;return n}
+Number.prototype.j = function(){return this.k().length===1}
+Number.prototype.k = function(){var n=this,r,f=[],x,d=1<n; // Prime factorization; if 2nd arg is truthy, will return if num is prime.
+  while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f}
 Number.prototype.l = function(x){return Math.factorial(this);}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
@@ -240,6 +240,8 @@ function shorthand (code) {
     "\u00AB": "&&!",  // « - 171
     
     // default replacements
+    ")": "))",
+    " ": ")",
     "@": "(X,Y,Z)=>",
     "_": "z=>z"
   }, i = 0, l = "", n = "";
@@ -366,8 +368,6 @@ function evalJapt(code) {
     .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
     .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
     .replace(/#./g,function(x){return x.charCodeAt(1)})
-    .replace(/\)/g,"))")
-    .replace(/ /g,")")
     .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
   code = shorthand(code);
   code = fixParens(code);

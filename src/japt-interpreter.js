@@ -229,10 +229,17 @@ function shorthand (code) {
   var pairs = {
     // Using \u<hex> to avoid encoding incompatibilities
     // Feel free to change these
-    "\u00A1": "Um@", // ¡ - 161
-    "\u00A2": "Us2", // ¢ - 162
-    "\u00A3": "m@",  // £ - 163
-    "\u00A4": "=="   // ¤ - 164
+    "\u00A1": "Um@",  // ¡ - 161
+    "\u00A2": "Us2 ", // ¢ - 162
+    "\u00A3": "m@",   // £ - 163
+    "\u00A4": "s2 ",  // ¤ - 164
+    "\u00A5": "==",   // ¥ - 165
+    "\u00A6": "!=",   // ¦ - 166
+    "\u00A7": "<=",   // § - 167
+    "\u00A8": ">=",   // ¨ - 168
+    "\u00A9": "&&",   // © - 169
+    "\u00AA": "||",   // ª - 170
+    "\u00AB": "&&!"   // « - 171
   }, i = 0, l = "", n = "";
 
   for (var i = 0; i < code.length; i++) {
@@ -353,6 +360,7 @@ function evalJapt(code) {
 
   code = code
     .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
+    .replace(/`[^`]*(`|.$)/g,function(x){strings[i]="\""+shoco.d(x.slice(1))+(x.slice(-1)=="`"?"":"\"");return"\""+i+++"\""})
     .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
     .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
     .replace(/#./g,function(x){return x.charCodeAt(1)})

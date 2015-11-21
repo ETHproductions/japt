@@ -30,7 +30,10 @@ String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';f
 String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
 String.prototype.c = function(x){return this.charCodeAt(x)}
-String.prototype.d = function(){noFunc('Sd')}
+String.prototype.d = function(x){
+  if (arguments.length < 2) { return (typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
+  else {return [].reduce.call(arguments,function(o,f,i,a) {return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}
+}
 String.prototype.e = function(x,y,z){var t=this.replace(x instanceof RegExp?x:RegExp(x,z||"g"),y||"");return t===this?this:t.e(x,y,z)} // "Recursive" replaces
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}

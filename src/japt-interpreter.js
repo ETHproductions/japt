@@ -360,7 +360,7 @@ function evalJapt(code) {
 
   code = code
     .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
-    .replace(/`[^`]*(`|.$)/g,function(x){strings[i]="\""+shoco.d(x.slice(1,x.slice(-1)=="`"?-1:-0))+"\"";return"\""+i+++"\""})
+    .replace(/`[^`]*(`|.$)/g,function(x){if(x.slice(-1)=="`")x=x.slice(0,-1);strings[i]="\""+shoco.d(x.slice(1))+"\"";return"\""+i+++"\""})
     .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
     .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
     .replace(/#./g,function(x){return x.charCodeAt(1)})

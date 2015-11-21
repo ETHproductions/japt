@@ -52,6 +52,9 @@ String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;retu
 String.prototype.u = function(){return this.toUpperCase()}
 String.prototype.v = function(){return this.toLowerCase()}
 String.prototype.w = function(){return this.split('').reverse().join('')}
+String.prototype.x = function(){noFunc('Sx')}
+String.prototype.y = function(){noFunc('Sy')}
+String.prototype.z = function(){noFunc('Sz')}
 
 Array.prototype.a = function(){return this.join('');}
 Array.prototype.b = function(x){return this.indexOf(x)}
@@ -76,6 +79,9 @@ Array.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;retur
 Array.prototype.u = function(x){return this.unshift(x)}
 Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
+Array.prototype.x = function(){noFunc('Sx')}
+Array.prototype.y = function(){noFunc('Sy')}
+Array.prototype.z = function(){noFunc('Sz')}
 
 Number.prototype.a = function(){return Math.abs(this)}
 Number.prototype.b = function(x,y){return this<x?x:this>y?y:this}
@@ -113,6 +119,9 @@ Number.prototype.t = function(){noFunc('Nt')}
 Number.prototype.u = function(){return this%2===1?1:0}
 Number.prototype.v = function(){return this%2===0?1:0}
 Number.prototype.w = function(x){return Math.max(this,x)}
+Number.prototype.x = function(){noFunc('Nx')}
+Number.prototype.y = function(){noFunc('Ny')}
+Number.prototype.z = function(){noFunc('Nz')}
 
 // Shorter Math Properties
 Math.t = Math.atan2;

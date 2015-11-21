@@ -1,4 +1,4 @@
-var code, input, timeout, safe_unicode = false; // When safe_unicode is true, shorthand() won't be called so unicode characters can be used safely
+var code, input, timeout;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 var defFuncs = {
@@ -227,7 +227,7 @@ function evalInput(input) {
 }
 
 // Call this function with a second argument. If second arg is trusey
-function shorthand (code, autogolf) {
+function shorthand (code) {
   // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
   var pairs = {
     // Using \u<hex> to avoid encoding incompatibilities
@@ -293,8 +293,7 @@ function run() {
     X = N[3],
     Y = N[4],
     Z = N[5];
-
-  if (!safe_unicode) code = shorthand(code) || "";
+  
   evalJapt(code);
 
   document.getElementById("run").disabled = false;
@@ -356,6 +355,7 @@ function fixParens(code) {
 function evalJapt(code) {
   var codes = [], strings = [], i = 0, j = 0;
 
+  code = shorthand(code);
   code = code
     .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
     .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})

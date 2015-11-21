@@ -91,11 +91,11 @@ Number.prototype.e = function(x){return this*Math.pow(10,x)}
 Number.prototype.f = function(x){return this|0}
 Number.prototype.g = function(x){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0}
 Number.prototype.h = function(){noFunc('Nh')}
-Number.prototype.i = function(){var n=this|0,x=this|0;while(--n)x*=n;return n}
+Number.prototype.i = function(){noFunc('Ni')}
 Number.prototype.j = function(){return this.k().length===1}
 Number.prototype.k = function(){var n=this,r,f=[],x,d=1<n; // Prime factorization; if 2nd arg is truthy, will return if num is prime.
   while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f}
-Number.prototype.l = function(x){return Math.factorial(this);}
+Number.prototype.l = function(x){var n=this|0,x=this|0;while(--n)x*=n;return n}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
 Number.prototype.o = function(x,y){

@@ -92,8 +92,9 @@ Number.prototype.f = function(x){return this|0}
 Number.prototype.g = function(x){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0}
 Number.prototype.h = function(){noFunc('Nh')}
 Number.prototype.i = function(){noFunc('Ni')}
-Number.prototype.j = function(){noFunc('Nj')}
-Number.prototype.k = function(){noFunc('Nk')}
+Number.prototype.j = function(){var n=this|0,x=this|0;while(--n)x*=n;return n}
+Number.prototype.k = function(p){var n=this,r,f=[],x,d=1<n; // Prime factorization; if 2nd arg is truthy, will return if num is prime.
+  while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return p?f.length==1:f;}
 Number.prototype.l = function(x){return Math.factorial(this);}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
@@ -125,17 +126,13 @@ Number.prototype.z = function(){noFunc('Nz')}
 
 // Shorter Math Properties
 Math.t = Math.atan2;
-Math.f = Math.factorial;
 Math.g = function g (n) { return n <= 1 ? n : Math.g(n-1) + Math.g(n-2); };
 Math.r = Math.random;
-Math.p = function(n,p) {var r,f=[],x,d=1<n; // Prime Factorization, if 2nd arg is trusey, will return if num is prime.
-  while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x += 2) < r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return p?f.length==1:f;}
 Math.P = Math.PI;
+
 // String compression
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
-
-shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {
-        return char.charCodeAt(0)})))};
+shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {return char.charCodeAt(0)})))};
 
 void(0);
 
@@ -158,6 +155,7 @@ function interrupt() {
 
 function error(msg) {
   document.getElementById("stderr").innerHTML = msg;
+  alert(msg);
   stop();
 }
 
@@ -239,7 +237,11 @@ function shorthand (code) {
     "\u00A8": ">=",   // ¨ - 168
     "\u00A9": "&&",   // © - 169
     "\u00AA": "||",   // ª - 170
-    "\u00AB": "&&!"   // « - 171
+    "\u00AB": "&&!",  // « - 171
+    
+    // default replacements
+    "@": "(X,Y,Z)=>",
+    "_": "z=>z"
   }, i = 0, l = "", n = "";
 
   for (var i = 0; i < code.length; i++) {
@@ -366,8 +368,7 @@ function evalJapt(code) {
     .replace(/#./g,function(x){return x.charCodeAt(1)})
     .replace(/\)/g,"))")
     .replace(/ /g,")")
-    .replace(/@/g,"(X,Y,Z)=>")
-    .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+    .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
   code = shorthand(code);
   code = fixParens(code);
   code = code
@@ -380,6 +381,6 @@ function evalJapt(code) {
     alert("Result: "+result);
     document.getElementById("output").value = result;
   } catch (e) {
-    alert(e);
+    error(e);
   }
 }

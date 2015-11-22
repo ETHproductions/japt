@@ -33,7 +33,7 @@ String.prototype.c = function(x){return this.charCodeAt(x)}
 String.prototype.d = function(x){
   if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
   else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}}
-String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t} // "Recursive" replaces
+String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t}
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)}
@@ -45,7 +45,7 @@ String.prototype.m = function(x,y){return this.split(y||'').map(x).join(y||'')}
 String.prototype.n = function(x){return parseInt(this,x||10)}
 String.prototype.o = function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")} // Removes all but specified characters. Similar to TeaScript's O function
 String.prototype.p = function(x){return this.repeat(x)}
-String.prototype.q = function(x){return this.split(x)}
+String.prototype.q = function(x){return this.split(x||"")}
 String.prototype.r = function(x,y,z){return this.replace(RegExp(x,(z||"")+"g"),y)}
 String.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;if(y<0)y+=this.length;return this.substring(x,y)}
 String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.substr(x,y)}
@@ -72,16 +72,18 @@ Array.prototype.m = function(x){return this.map(x)}
 Array.prototype.n = function(x){return this.sort(x)}
 Array.prototype.o = function(){return this.pop()}
 Array.prototype.p = function(x){return this.push(x)}
-Array.prototype.q = function(x){return this.join(x)}
+Array.prototype.q = function(x){return this.join(x||"")}
 Array.prototype.r = function(x,y){return this.reduce(x,y)}
 Array.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,y)}
 Array.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,x+y)}
 Array.prototype.u = function(x){return this.unshift(x)}
 Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
-Array.prototype.x = function(){noFunc('Sx')}
-Array.prototype.y = function(){noFunc('Sy')}
-Array.prototype.z = function(){noFunc('Sz')}
+Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})}
+Array.prototype.y = function(){var self=this.map(function(n){return (n.split||n.valueOf)('')});return self[0].map(function(a,b){return self.map(function(c){return c[b]})})}
+Array.prototype.z = function(){noFunc('Az')}
+Array.prototype.à = function(){noFunc('Aà')}
+Array.prototype.á = function(){noFunc('Aá')}
 
 Number.prototype.a = function(){return Math.abs(this)}
 Number.prototype.b = function(x,y){return this<x?x:this>y?y:this}
@@ -93,8 +95,7 @@ Number.prototype.g = function(x){return this.toString()=="NaN"?"NaN":this<0?-1:t
 Number.prototype.h = function(){noFunc('Nh')}
 Number.prototype.i = function(){noFunc('Ni')}
 Number.prototype.j = function(){return this.k().length===1}
-Number.prototype.k = function(){var n=this,r,f=[],x,d=1<n; // Prime factorization; if 2nd arg is truthy, will return if num is prime.
-  while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f}
+Number.prototype.k = function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f}
 Number.prototype.l = function(x){var n=this|0,x=this|0;while(--n)x*=n;return n}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
@@ -129,6 +130,7 @@ Math.t = Math.atan2;
 Math.g = function g (n) { return n <= 1 ? n : Math.g(n-1) + Math.g(n-2); };
 Math.r = Math.random;
 Math.P = Math.PI;
+Math.h = Math.hypot || function hypot () {return Math.sqrt(arguments.reduce(function(a,b){return a+b*b}))};
 
 // String compression
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
@@ -238,7 +240,7 @@ function shorthand (code) {
     "\u00A9": "&&",   // © - 169
     "\u00AA": "||",   // ª - 170
     "\u00AB": "&&!",  // « - 171
-    
+
     // default replacements
     ")": "))",
     " ": ")",
@@ -249,7 +251,9 @@ function shorthand (code) {
   for (var i = 0; i < code.length; i++) {
     if (['"',"'"].indexOf(code[i]) > -1) { // Quote
       n += l = code[i++];
-      while (!(code[i] == l && code[i - 1] != "\\") && i < code.length) n += code[i++]; n += code[i];
+      // i < 1e9 sets an upper limit of 1,000,000,000 (1 billion) to code length. 
+      // For reference, JavaScript's max string length is 9,007,199,254,740,991 characters / bytes
+      while (!(code[i] == l && code[i - 1] != "\\") && i < code.length && i < 1e9) n += code[i++]; n += code[i];
     } else {
       if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
         n += pairs[ code[i] ];
@@ -300,7 +304,7 @@ function run() {
     X = N[3],
     Y = N[4],
     Z = N[5];
-  
+
   evalJapt(code);
 
   document.getElementById("run").disabled = false;

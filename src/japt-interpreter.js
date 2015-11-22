@@ -33,7 +33,7 @@ String.prototype.c = function(x){return this.charCodeAt(x)}
 String.prototype.d = function(x){
   if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
   else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}}
-String.prototype.e = function(x,y,z){var t=this.replace(x instanceof RegExp?x:RegExp(x,z||"g"),y||"");return t===this?this:t.e(x,y,z)} // "Recursive" replaces
+String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t} // "Recursive" replaces
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)}
@@ -92,9 +92,10 @@ Number.prototype.f = function(x){return this|0}
 Number.prototype.g = function(x){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0}
 Number.prototype.h = function(){noFunc('Nh')}
 Number.prototype.i = function(){noFunc('Ni')}
-Number.prototype.j = function(){noFunc('Nj')}
-Number.prototype.k = function(){noFunc('Nk')}
-Number.prototype.l = function(x){return Math.factorial(this);}
+Number.prototype.j = function(){return this.k().length===1}
+Number.prototype.k = function(){var n=this,r,f=[],x,d=1<n; // Prime factorization; if 2nd arg is truthy, will return if num is prime.
+  while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f}
+Number.prototype.l = function(x){var n=this|0,x=this|0;while(--n)x*=n;return n}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
 Number.prototype.o = function(x,y){
@@ -125,17 +126,13 @@ Number.prototype.z = function(){noFunc('Nz')}
 
 // Shorter Math Properties
 Math.t = Math.atan2;
-Math.f = Math.factorial;
 Math.g = function g (n) { return n <= 1 ? n : Math.g(n-1) + Math.g(n-2); };
 Math.r = Math.random;
-Math.p = function(n,p) {var r,f=[],x,d=1<n; // Prime Factorization, if 2nd arg is trusey, will return if num is prime.
-  while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x += 2) < r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return p?f.length==1:f;}
 Math.P = Math.PI;
+
 // String compression
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
-
-shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {
-        return char.charCodeAt(0)})))};
+shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {return char.charCodeAt(0)})))};
 
 void(0);
 
@@ -158,6 +155,7 @@ function interrupt() {
 
 function error(msg) {
   document.getElementById("stderr").innerHTML = msg;
+  alert(msg);
   stop();
 }
 
@@ -229,10 +227,23 @@ function shorthand (code) {
   var pairs = {
     // Using \u<hex> to avoid encoding incompatibilities
     // Feel free to change these
-    "\u00A1": "Um@", // ¡ - 161
-    "\u00A2": "Us2", // ¢ - 162
-    "\u00A3": "m@",  // £ - 163
-    "\u00A4": "=="   // ¤ - 164
+    "\u00A1": "Um@",  // ¡ - 161
+    "\u00A2": "Us2 ", // ¢ - 162
+    "\u00A3": "m@",   // £ - 163
+    "\u00A4": "s2 ",  // ¤ - 164
+    "\u00A5": "==",   // ¥ - 165
+    "\u00A6": "!=",   // ¦ - 166
+    "\u00A7": "<=",   // § - 167
+    "\u00A8": ">=",   // ¨ - 168
+    "\u00A9": "&&",   // © - 169
+    "\u00AA": "||",   // ª - 170
+    "\u00AB": "&&!",  // « - 171
+    
+    // default replacements
+    ")": "))",
+    " ": ")",
+    "@": "(X,Y,Z)=>",
+    "_": "z=>z"
   }, i = 0, l = "", n = "";
 
   for (var i = 0; i < code.length; i++) {
@@ -240,7 +251,6 @@ function shorthand (code) {
       n += l = code[i++];
       while (!(code[i] == l && code[i - 1] != "\\") && i < code.length) n += code[i++]; n += code[i];
     } else {
-      console.log( code[i] );
       if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
         n += pairs[ code[i] ];
       } else {
@@ -352,16 +362,14 @@ function fixParens(code) {
 function evalJapt(code) {
   var codes = [], strings = [], i = 0, j = 0;
 
-  code = shorthand(code);
   code = code
     .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
+    .replace(/`[^`]*(`|.$)/g,function(x){if(x.slice(-1)=="`")x=x.slice(0,-1);strings[i]="\""+shoco.d(x.slice(1))+"\"";return"\""+i+++"\""})
     .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
     .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
     .replace(/#./g,function(x){return x.charCodeAt(1)})
-    .replace(/\)/g,"))")
-    .replace(/ /g,")")
-    .replace(/@/g,"(X,Y,Z)=>")
-    .replace(/(.)([a-w])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+    .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+  code = shorthand(code);
   code = fixParens(code);
   code = code
     .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
@@ -373,6 +381,6 @@ function evalJapt(code) {
     alert("Result: "+result);
     document.getElementById("output").value = result;
   } catch (e) {
-    alert(e);
+    error(e);
   }
 }

@@ -10,6 +10,14 @@
 
 In Japt, the last expression is automatically outputted. Also, when you have a string literal at the end of the program, you can leave out the ending quotation mark and it will be automatically inserted.
 
+Even shorter:
+
+    `HÁM, Wld!
+
+(Note that the `` should be code point U+008E.)
+
+Japt uses the [shoco library](http://ed-von-schleck.github.io/shoco/) for string compression. Wrapping your text in backticks `` ` `` instead of quotation marks `"` tells the interpreter to automatically decompress the string. And like quotes, if you have a backtick at the end of a program, you can leave it off.
+
 ### Greeting
 
     "Greetings, {U}!
@@ -17,6 +25,12 @@ In Japt, the last expression is automatically outputted. Also, when you have a s
 Let's move on to input: the first few inputs (up to six) are stored in the variables `U`, `V`, `W`, `X`, `Y`, and `Z`. In case that's not enough, the entire input is stored as an array in `N`.
 
 Also shown here: curly braces inside the string tell the interpreter to evaluate the innards as Japt code. For example, `"abc{U}xyz"` compiles to `"abc"+(U)+"xyz"`.
+
+Again, with compression:
+
+    `GÎ>Ä, {U}!
+    
+(Note that this time, the `` should be code point U+000F.)
 
 ### `cat`
 
@@ -68,9 +82,24 @@ Need to return one of two different strings, using `a?b:c` syntax? No problem! Y
 
 Oh, and one more thing: if you have a string literal at the end of a program, you can leave out the final quotation mark, and the interpreter will automatically insert it for you.
 
+### String compression
+
+Japt uses the [shoco library](http://ed-von-schleck.github.io/shoco/) for string compression. You can access this in a few ways:
+
+- Using `Oc"text to compress"`, you can compress the text to save bytes.
+- Using `Od"text to decompress"`, you can decompress the pre-compressed text.
+- Wrapping your text in backticks `` ` `` instead of quotation marks `"` tells the interpreter to automatically decompress the string.
+
+### Unicode shortcuts
+
+Japt code can be compressed, similarly to its strings. The most commonly used runs of characters are mapped to Unicode points, starting at `¡`. A full list of these is coming soon, but for now, you could look inside [src/japt-interpreter.js](https://github.com/ETHproductions/Japt/blob/master/src/japt-interpreter.js#L224).
+
 ### Anonymous functions
 
-With ES6, we got the new fat arrow operator `=>`, which quickly and concisely defines a function. In Japt, the equivalent will be `{`, with any number of uppercase letters preceding it as arguments. For example, `XY{X+Y}` defines a function that takes in two arguments, and returns the result of adding them (or concatenating them, if one is a string). But this is not working yet; instead, you can use fat arrows; just make sure you have an ES6-compliant browser. Even better, you can use the `@` operator, which stands in for `(X,Y,Z)=>`. `Ur(X,Y =>X+Y` can be reduced to `Ur@X+Y`.
+With ES6, we got the new fat arrow operator `=>`, which quickly and concisely defines a function. In Japt, the equivalent will be `{`, with any number of uppercase letters preceding it as arguments. For example, `XY{X+Y}` defines a function that takes in two arguments, and returns the result of adding them (or concatenating them, if one is a string). But this is not working yet; instead, you can use fat arrows; just make sure you have an ES6-compliant browser. Even better, you can use one of these:
+
+- `@` operator, which stands in for `(X,Y,Z)=>`. `Ur(X,Y =>X+Y` can be reduced to `Ur@X+Y`.
+- `_` operator, which stands in for `z=>z`. `UmX=>Xc` can be reduced to `Um_c`.
 
 ### Pure JS
 

@@ -45,7 +45,7 @@ String.prototype.m = function(x,y){return this.split(y||'').map(x).join(y||'')}
 String.prototype.n = function(x){return parseInt(this,x||10)}
 String.prototype.o = function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")} // Removes all but specified characters. Similar to TeaScript's O function
 String.prototype.p = function(x){return this.repeat(x)}
-String.prototype.q = function(x){return this.split(x)}
+String.prototype.q = function(x){return this.split(x||"")}
 String.prototype.r = function(x,y,z){return this.replace(RegExp(x,(z||"")+"g"),y)}
 String.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;if(y<0)y+=this.length;return this.substring(x,y)}
 String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.substr(x,y)}
@@ -80,7 +80,7 @@ Array.prototype.u = function(x){return this.unshift(x)}
 Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
 Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})}
-Array.prototype.y = function(){noFunc('Sy')}
+Array.prototype.y = function(){var self=this;return this[0].map(function(a,b){return self.map(function(c){return c[b]})})}
 Array.prototype.z = function(){noFunc('Sz')}
 
 Number.prototype.a = function(){return Math.abs(this)}

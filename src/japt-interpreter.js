@@ -128,6 +128,7 @@ Math.t = Math.atan2;
 Math.g = function g (n) { return n <= 1 ? n : Math.g(n-1) + Math.g(n-2); };
 Math.r = Math.random;
 Math.P = Math.PI;
+Math.h = Math.hypot || function hypot () {return Math.sqrt(arguments.reduce(function(a,b){return a+b*b}))};
 
 // String compression
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };

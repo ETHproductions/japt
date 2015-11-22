@@ -80,7 +80,7 @@ Array.prototype.u = function(x){return this.unshift(x)}
 Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
 Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})}
-Array.prototype.y = function(){var self=this;return this[0].map(function(a,b){return self.map(function(c){return c[b]})})}
+Array.prototype.y = function(){var self=this;return (this[0].map||this[0].split('').map)(function(a,b){return self.map(function(c){return c[b]})})}
 Array.prototype.z = function(){noFunc('Sz')}
 
 Number.prototype.a = function(){return Math.abs(this)}

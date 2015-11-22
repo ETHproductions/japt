@@ -72,7 +72,7 @@ Array.prototype.m = function(x){return this.map(x)}
 Array.prototype.n = function(x){return this.sort(x)}
 Array.prototype.o = function(){return this.pop()}
 Array.prototype.p = function(x){return this.push(x)}
-Array.prototype.q = function(x){return this.join(x)}
+Array.prototype.q = function(x){return this.join(x||"")}
 Array.prototype.r = function(x,y){return this.reduce(x,y)}
 Array.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,y)}
 Array.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,x+y)}
@@ -80,7 +80,7 @@ Array.prototype.u = function(x){return this.unshift(x)}
 Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
 Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})}
-Array.prototype.y = function(){var self=this;return (this[0].map||this[0].split('').map)(function(a,b){return self.map(function(c){return c[b]})})}
+Array.prototype.y = function(){var self=this[0].map?this:this.map(function(n){return n.split('')});return self[0].map(function(a,b){return self.map(function(c){return c[b]})})}
 Array.prototype.z = function(){noFunc('Sz')}
 
 Number.prototype.a = function(){return Math.abs(this)}

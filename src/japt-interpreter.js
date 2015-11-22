@@ -33,7 +33,7 @@ String.prototype.c = function(x){return this.charCodeAt(x)}
 String.prototype.d = function(x){
   if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
   else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}}
-String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t} // "Recursive" replaces
+String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t}
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)}
@@ -93,8 +93,7 @@ Number.prototype.g = function(x){return this.toString()=="NaN"?"NaN":this<0?-1:t
 Number.prototype.h = function(){noFunc('Nh')}
 Number.prototype.i = function(){noFunc('Ni')}
 Number.prototype.j = function(){return this.k().length===1}
-Number.prototype.k = function(){var n=this,r,f=[],x,d=1<n; // Prime factorization; if 2nd arg is truthy, will return if num is prime.
-  while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f}
+Number.prototype.k = function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f}
 Number.prototype.l = function(x){var n=this|0,x=this|0;while(--n)x*=n;return n}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
@@ -238,7 +237,7 @@ function shorthand (code) {
     "\u00A9": "&&",   // © - 169
     "\u00AA": "||",   // ª - 170
     "\u00AB": "&&!",  // « - 171
-    
+
     // default replacements
     ")": "))",
     " ": ")",
@@ -249,7 +248,9 @@ function shorthand (code) {
   for (var i = 0; i < code.length; i++) {
     if (['"',"'"].indexOf(code[i]) > -1) { // Quote
       n += l = code[i++];
-      while (!(code[i] == l && code[i - 1] != "\\") && i < code.length) n += code[i++]; n += code[i];
+      // i < 1e9 sets an upper limit of 1,000,000,000 (1 billion) to code length. 
+      // For reference, JavaScript's max string length is 9,007,199,254,740,991 characters / bytes
+      while (!(code[i] == l && code[i - 1] != "\\") && i < code.length && i < 1e9) n += code[i++]; n += code[i];
     } else {
       if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
         n += pairs[ code[i] ];
@@ -300,7 +301,7 @@ function run() {
     X = N[3],
     Y = N[4],
     Z = N[5];
-  
+
   evalJapt(code);
 
   document.getElementById("run").disabled = false;

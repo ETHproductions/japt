@@ -81,7 +81,9 @@ Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
 Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})}
 Array.prototype.y = function(){var self=this.map(function(n){return (n.split||n.valueOf)('')});return self[0].map(function(a,b){return self.map(function(c){return c[b]})})}
-Array.prototype.z = function(){noFunc('Sz')}
+Array.prototype.z = function(){noFunc('Az')}
+Array.prototype.à = function(){noFunc('Aà')}
+Array.prototype.á = function(){noFunc('Aá')}
 
 Number.prototype.a = function(){return Math.abs(this)}
 Number.prototype.b = function(x,y){return this<x?x:this>y?y:this}

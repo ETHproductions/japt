@@ -240,7 +240,7 @@ function shorthand (code) {
         "\u00A9": "&&",   // © - 169
         "\u00AA": "||",   // ª - 170
         "\u00AB": "&&!",  // « - 171
-        "\u00AC": "q "    // ¬ - 172
+        "\u00AC": "q ",   // ¬ - 172
 
         // default replacements
         ")": "))",

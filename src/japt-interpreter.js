@@ -127,8 +127,7 @@ Number.prototype.z = function(){noFunc('Nz')}
 
 // Shorter Math Properties
 Math.t = Math.atan2;
-Math.fib = Math.fib || [];
-Math.g = function g (n) { return n <= 1 ? n : Math.fib[n]? Math.fib[n] : Math.fib[n] = Math.g(n-1) + Math.g(n-2); };
+Math.g = function (n) { var f=Math.sqrt(5), g=.5*(1+f); return (1/f)*(Math.pow(g,n)-Math.pow(-g,-n)) };
 Math.r = Math.random;
 Math.P = Math.PI;
 Math.h = Math.hypot || function hypot () {return Math.sqrt(arguments.reduce(function(a,b){return a+b*b}))};

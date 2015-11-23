@@ -80,7 +80,7 @@ Array.prototype.u = function(x){return this.unshift(x)}
 Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
 Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})}
-Array.prototype.y = function(){var self=this.map(function(n){return (n.split||n.valueOf)('')});return self[0].map(function(a,b){return self.map(function(c){return c[b]})})}
+Array.prototype.y = function(){var t="string"==typeof this[0][0],n=t?this.map(function(t){return t.split("")}):this;return n[0].map(function(r,i){return n.map(function(t){return t[i]})[t?"join":"valueOf"]("")})};
 Array.prototype.z = function(){noFunc('Az')}
 Array.prototype.à = function(){noFunc('Aà')}
 Array.prototype.á = function(){noFunc('Aá')}
@@ -127,8 +127,8 @@ Number.prototype.z = function(){noFunc('Nz')}
 
 // Shorter Math Properties
 Math.t = Math.atan2;
-Math.fib = Math.fib || [];
-Math.g = function g (n) { return n <= 1 ? n : Math.fib[n]? Math.fib[n] : Math.fib[n] = Math.g(n-1) + Math.g(n-2); };
+Math.g = function g (n) { return n <= 1 ? n : Math.g[n]? Math.g[n] : Math.g[n] = Math.g(n-1) + Math.g(n-2); };
+//                        var f=Math.sqrt(5),g=.5*(1+f);return (1/f)*(Math.pow(g,n)-Math.pow(-g,-n))
 Math.r = Math.random;
 Math.P = Math.PI;
 Math.h = Math.hypot || function hypot () {return Math.sqrt(arguments.reduce(function(a,b){return a+b*b}))};

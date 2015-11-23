@@ -2,37 +2,37 @@ var code, input, timeout;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 var defFuncs = {
-  a: "alert(",
-  b: "break;",
-  c: "continue;",
-  d: "",
-  e: "",
-  f: "for(",
-  g: "for(",
-  h: "",
-  i: "if(",
-  j: "else if(",
-  k: "else",
-  l: "console.log(",
-  m: "",
-  n: "",
-  o: "output(",
-  p: "",
-  q: "",
-  r: "",
-  s: "switch(",
-  t: "typeof(",
-  u: "while(!",
-  v: "evalJapt(",
-  w: "while("};
+    a: "alert(",
+    b: "break;",
+    c: "continue;",
+    d: "",
+    e: "",
+    f: "for(",
+    g: "for(",
+    h: "",
+    i: "if(",
+    j: "else if(",
+    k: "else",
+    l: "console.log(",
+    m: "",
+    n: "",
+    o: "output(",
+    p: "",
+    q: "",
+    r: "",
+    s: "switch(",
+    t: "typeof(",
+    u: "while(!",
+    v: "evalJapt(",
+    w: "while("};
 
 String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';for(var y='',i=x|0;i--;)y+=this;return y}
 String.prototype.a = function(){return this.split('');}
 String.prototype.b = function(x){return this.indexOf(x)}
 String.prototype.c = function(x){return this.charCodeAt(x)}
 String.prototype.d = function(x){
-  if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
-  else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}}
+    if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
+    else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}}
 String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t}
 String.prototype.f = function(){noFunc('Sf')}
 String.prototype.g = function(x){return this.charAt(x)}
@@ -80,8 +80,8 @@ Array.prototype.u = function(x){return this.unshift(x)}
 Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
 Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})}
-Array.prototype.y = function(){var self=this.map(function(n){return (n.split||n.valueOf)('')});return self[0].map(function(a,b){return self.map(function(c){return c[b]})})}
-Array.prototype.z = function(){noFunc('Az')}
+Array.prototype.y = function(){var t="string"==typeof this[0][0],n=t?this.map(function(t){return t.split("")}):this;return n[0].map(function(r,i){return n.map(function(t){return t[i]})[t?"join":"valueOf"]("")})};
+Array.prototype.z = function(n){return n==1||n==undefined?this.y().map(f=function(l){return l.reverse()}):n==2?this.reverse().map(f):n==3?this.map(f).y()} // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
 Array.prototype.à = function(){noFunc('Aà')}
 Array.prototype.á = function(){noFunc('Aá')}
 
@@ -100,18 +100,18 @@ Number.prototype.l = function(x){var n=this|0,x=this|0;while(--n)x*=n;return n}
 Number.prototype.m = function(x){return Math.min(this,x)}
 Number.prototype.n = function(){return-this}
 Number.prototype.o = function(x,y){
-  var z=this;
-  if(typeof(y)==="undefined")y=1;
-  if(typeof(x)==="undefined")x=z,z=0;
-  if(x<z)_=x,x=z,z=_;
-  var r=[], i=0;
-  if(y>0)
-    for(;z<x;z+=y)
-      r.push(z);
-  else if(y<0)
-    for(;z<x;x+=y)
-      r.push(x);
-  return r;
+    var z=this;
+    if(typeof(y)==="undefined")y=1;
+    if(typeof(x)==="undefined")x=z,z=0;
+    if(x<z)_=x,x=z,z=_;
+    var r=[], i=0;
+    if(y>0)
+        for(;z<x;z+=y)
+            r.push(z);
+    else if(y<0)
+        for(;z<x;x+=y)
+            r.push(x);
+    return r;
 }
 Number.prototype.p = function(x){return Math.pow(this,x)}
 Number.prototype.q = function(){return Math.sqrt(this)}
@@ -139,252 +139,253 @@ shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constru
 void(0);
 
 function clear_output() {
-  document.getElementById("output").value = "";
-  document.getElementById("stderr").innerHTML = "";
+    document.getElementById("output").value = "";
+    document.getElementById("stderr").innerHTML = "";
 }
 
 function stop() {
-  running = false;
-  document.getElementById("run").disabled = false;
-  document.getElementById("stop").disabled = true;
-  document.getElementById("clear").disabled = false;
-  document.getElementById("timeout").disabled = false;
+    running = false;
+    document.getElementById("run").disabled = false;
+    document.getElementById("stop").disabled = true;
+    document.getElementById("clear").disabled = false;
+    document.getElementById("timeout").disabled = false;
 }
 
 function interrupt() {
-  error(ERROR_INTERRUPT);
+    error(ERROR_INTERRUPT);
 }
 
 function error(msg) {
-  document.getElementById("stderr").innerHTML = msg;
-  alert(msg);
-  stop();
+    document.getElementById("stderr").innerHTML = msg;
+    alert(msg);
+    stop();
 }
 
 function evalInput(input) {
-  var input_mode = "next", current, processed = [], level = 0;
-  (input+" ").split("").forEach(function(char){
-    switch (input_mode) {
-      case "next":
-        if (/[0-9.-]/.test(char)) {
-          input_mode = "number";
-          current = char;
-        } else if (/["']/.test(char)) {
-          input_mode = "string "+char;
-          current = "";
-        } else if (char == "[") {
-          input_mode = "array";
-          current = "";
-          level = 1;
+    var input_mode = "next", current, processed = [], level = 0;
+    (input+" ").split("").forEach(function(char){
+        switch (input_mode) {
+            case "next":
+                if (/[0-9.-]/.test(char)) {
+                    input_mode = "number";
+                    current = char;
+                } else if (/["']/.test(char)) {
+                    input_mode = "string "+char;
+                    current = "";
+                } else if (char == "[") {
+                    input_mode = "array";
+                    current = "";
+                    level = 1;
+                }
+                break;
+            case "number":
+                if (/[0-9.-]/.test(char)) {
+                    current += char;
+                } else {
+                    processed.push(+current);
+                    current = undefined;
+                    input_mode = "next";
+                }
+                break;
+            case "string \"":
+                if (char == "\"") {
+                    processed.push(current);
+                    current = undefined;
+                    input_mode = "next";
+                } else {
+                    current += char;
+                }
+                break;
+            case "string '":
+                if (char == "'") {
+                    processed.push(current);
+                    current = undefined;
+                    input_mode = "next";
+                } else {
+                    current += char;
+                }
+                break;
+            case "array":
+                if (char == "[")
+                    level++;
+                if (char == "]")
+                    level--;
+                if (level === 0) {
+                    processed.push(evalInput(current));
+                    current = undefined;
+                    input_mode = "next";
+                } else {
+                    current += char;
+                }
+                break;
         }
-        break;
-      case "number":
-        if (/[0-9.-]/.test(char)) {
-          current += char;
-        } else {
-          processed.push(+current);
-          current = undefined;
-          input_mode = "next";
-        }
-        break;
-      case "string \"":
-        if (char == "\"") {
-          processed.push(current);
-          current = undefined;
-          input_mode = "next";
-        } else {
-          current += char;
-        }
-        break;
-      case "string '":
-        if (char == "'") {
-          processed.push(current);
-          current = undefined;
-          input_mode = "next";
-        } else {
-          current += char;
-        }
-        break;
-      case "array":
-        if (char == "[")
-          level++;
-        if (char == "]")
-          level--;
-        if (level === 0) {
-          processed.push(evalInput(current));
-          current = undefined;
-          input_mode = "next";
-        } else {
-          current += char;
-        }
-        break;
-    }
-  });
-  return processed;
+    });
+    return processed;
 }
 
 // Call this function with a second argument. If second arg is trusey
 function shorthand (code) {
-  // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
-  var pairs = {
-    // Using \u<hex> to avoid encoding incompatibilities
-    // Feel free to change these
-    "\u00A1": "Um@",  // ¡ - 161
-    "\u00A2": "Us2 ", // ¢ - 162
-    "\u00A3": "m@",   // £ - 163
-    "\u00A4": "s2 ",  // ¤ - 164
-    "\u00A5": "==",   // ¥ - 165
-    "\u00A6": "!=",   // ¦ - 166
-    "\u00A7": "<=",   // § - 167
-    "\u00A8": ">=",   // ¨ - 168
-    "\u00A9": "&&",   // © - 169
-    "\u00AA": "||",   // ª - 170
-    "\u00AB": "&&!",  // « - 171
+    // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
+    var pairs = {
+        // Using \u<hex> to avoid encoding incompatibilities
+        // Feel free to change these
+        "\u00A1": "Um@",  // ¡ - 161
+        "\u00A2": "Us2 ", // ¢ - 162
+        "\u00A3": "m@",   // £ - 163
+        "\u00A4": "s2 ",  // ¤ - 164
+        "\u00A5": "==",   // ¥ - 165
+        "\u00A6": "!=",   // ¦ - 166
+        "\u00A7": "<=",   // § - 167
+        "\u00A8": ">=",   // ¨ - 168
+        "\u00A9": "&&",   // © - 169
+        "\u00AA": "||",   // ª - 170
+        "\u00AB": "&&!",  // « - 171
+        "\u00AC": "q "    // ¬ - 172
 
-    // default replacements
-    ")": "))",
-    " ": ")",
-    "@": "(X,Y,Z)=>",
-    "_": "z=>z"
-  }, i = 0, l = "", n = "";
+        // default replacements
+        ")": "))",
+        " ": ")",
+        "@": "(X,Y,Z)=>",
+        "_": "z=>z"
+    }, i = 0, l = "", n = "";
 
-  for (var i = 0; i < code.length; i++) {
-    if (['"',"'"].indexOf(code[i]) > -1) { // Quote
-      n += l = code[i++];
-      // i < 1e9 sets an upper limit of 1,000,000,000 (1 billion) to code length. 
-      // For reference, JavaScript's max string length is 9,007,199,254,740,991 characters / bytes
-      while (!(code[i] == l && code[i - 1] != "\\") && i < code.length && i < 1e9) n += code[i++]; n += code[i];
-    } else {
-      if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
-        n += pairs[ code[i] ];
-      } else {
-        n += code[i];
-      }
+    for (var i = 0; i < code.length; i++) {
+        if (['"',"'"].indexOf(code[i]) > -1) { // Quote
+            n += l = code[i++];
+            // i < 1e9 sets an upper limit of 1,000,000,000 (1 billion) to code length. 
+            // For reference, JavaScript's max string length is 9,007,199,254,740,991 characters / bytes
+            while (!(code[i] == l && code[i - 1] != "\\") && i < code.length && i < 1e9) n += code[i++]; n += code[i];
+        } else {
+            if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
+                n += pairs[ code[i] ];
+            } else {
+                n += code[i];
+            }
+        }
     }
-  }
 
-  return n;
+    return n;
 }
 
 function run() {
-  clear_output();
-  document.getElementById("run").disabled = true;
-  document.getElementById("stop").disabled = false;
-  document.getElementById("clear").disabled = true;
-  document.getElementById("input").disabled = false;
-  document.getElementById("timeout").disabled = false;
+    clear_output();
+    document.getElementById("run").disabled = true;
+    document.getElementById("stop").disabled = false;
+    document.getElementById("clear").disabled = true;
+    document.getElementById("input").disabled = false;
+    document.getElementById("timeout").disabled = false;
 
-  code = document.getElementById("code").value;
-  input = document.getElementById("input").value;
-  timeout = document.getElementById("timeout").checked;
+    code = document.getElementById("code").value;
+    input = document.getElementById("input").value;
+    timeout = document.getElementById("timeout").checked;
 
-  A = 10,
-    B = 11,
-    C = 12,
-    D = 13,
-    E = 14,
-    F = 15,
-    G = 16,
-    H = 32,
-    I = 64,
-    J = -1,
-    K = .5,
-    L = 100,
-    M = Math,
-    N = evalInput(input),
-    O = shoco,
-    P = "",
-    Q = "\"",
-    R = "\n",
-    S = " ",
-    T = 0,
-    U = N[0],
-    V = N[1],
-    W = N[2],
-    X = N[3],
-    Y = N[4],
-    Z = N[5];
+    A = 10,
+        B = 11,
+        C = 12,
+        D = 13,
+        E = 14,
+        F = 15,
+        G = 16,
+        H = 32,
+        I = 64,
+        J = -1,
+        K = .5,
+        L = 100,
+        M = Math,
+        N = evalInput(input),
+        O = shoco,
+        P = "",
+        Q = "\"",
+        R = "\n",
+        S = " ",
+        T = 0,
+        U = N[0],
+        V = N[1],
+        W = N[2],
+        X = N[3],
+        Y = N[4],
+        Z = N[5];
 
-  evalJapt(code);
+    evalJapt(code);
 
-  document.getElementById("run").disabled = false;
-  document.getElementById("stop").disabled = true;
-  document.getElementById("clear").disabled = false;
-  document.getElementById("input").disabled = false;
-  document.getElementById("timeout").disabled = false;
+    document.getElementById("run").disabled = false;
+    document.getElementById("stop").disabled = true;
+    document.getElementById("clear").disabled = false;
+    document.getElementById("input").disabled = false;
+    document.getElementById("timeout").disabled = false;
 }
 
 function subparen(code) {
-  var level = 0, min = 0;
-  for(var i in code) {
-    if(code[i]=='(')
-      level++;
-    if(code[i]==')')
-      level--, min = Math.min(min, level);
-  }
-  if(min < 0) code = '('.repeat(-min) + code, level-=min;
-  if(level > 0) code += ')'.repeat(level);
-  return code;
+    var level = 0, min = 0;
+    for(var i in code) {
+        if(code[i]=='(')
+            level++;≈
+            if(code[i]==')')
+                level--, min = Math.min(min, level);
+    }
+    if(min < 0) code = '('.repeat(-min) + code, level-=min;
+    if(level > 0) code += ')'.repeat(level);
+    return code;
 }
 
 function fixParens(code) {
-  var cade = "", mode = "next", char = "", curr = "", array = "", level = 0;
-  for(var i=0;i<code.length;i++) {
-    char = code[i];
-    switch(mode) {
-      case "next":
-        if (char == ";") {
-          cade += subparen(curr) + char;
-          curr = "";
-        } else if (char == "[") {
-          mode = "array";
-          level = 0;
-        } else {
-          curr += char;
+    var cade = "", mode = "next", char = "", curr = "", array = "", level = 0;
+    for(var i=0;i<code.length;i++) {
+        char = code[i];
+        switch(mode) {
+            case "next":
+                if (char == ";") {
+                    cade += subparen(curr) + char;
+                    curr = "";
+                } else if (char == "[") {
+                    mode = "array";
+                    level = 0;
+                } else {
+                    curr += char;
+                }
+                break;
+            case "array":
+                if (char == "[") {
+                    level++;
+                } else if (char == "]") {
+                    level--;
+                    if (level < 0) {
+                        curr += "[" + fixParens(array) + "]";
+                        array = "";
+                        mode = "next";
+                    }
+                } else {
+                    array += char;
+                }
+                break;
         }
-        break;
-      case "array":
-        if (char == "[") {
-          level++;
-        } else if (char == "]") {
-          level--;
-          if (level < 0) {
-            curr += "[" + fixParens(array) + "]";
-            array = "";
-            mode = "next";
-          }
-        } else {
-          array += char;
-        }
-        break;
     }
-  }
-  cade += subparen(curr);
-  return cade;
+    cade += subparen(curr);
+    return cade;
 }
 
 function evalJapt(code) {
-  var codes = [], strings = [], i = 0, j = 0;
+    var codes = [], strings = [], i = 0, j = 0;
 
-  code = code
-    .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
-    .replace(/`[^`]*(`|.$)/g,function(x){if(x.slice(-1)=="`")x=x.slice(0,-1);strings[i]="\""+shoco.d(x.slice(1))+"\"";return"\""+i+++"\""})
-    .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
-    .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-    .replace(/#./g,function(x){return x.charCodeAt(1)})
-    .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
-  code = shorthand(code);
-  code = fixParens(code);
-  code = code
-    .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
-    .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
+    code = code
+        .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
+        .replace(/`[^`]*(`|.$)/g,function(x){if(x.slice(-1)=="`")x=x.slice(0,-1);strings[i]="\""+shoco.d(x.slice(1))+"\"";return"\""+i+++"\""})
+        .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
+        .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
+        .replace(/#./g,function(x){return x.charCodeAt(1)})
+        .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+    code = shorthand(code);
+    code = fixParens(code);
+    code = code
+        .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
+        .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
 
-  alert("JS code: "+code);
-  try {
-    var result=eval(code);
-    alert("Result: "+result);
-    document.getElementById("output").value = result;
-  } catch (e) {
-    error(e);
-  }
+    alert("JS code: "+code);
+    try {
+        var result=eval(code);
+        alert("Result: "+result);
+        document.getElementById("output").value = result;
+    } catch (e) {
+        error(e);
+    }
 }

@@ -319,7 +319,7 @@ function subparen(code) {
     var level = 0, min = 0;
     for(var i in code) {
         if(code[i]=='(')
-            level++;≈
+            level++;
             if(code[i]==')')
                 level--, min = Math.min(min, level);
     }

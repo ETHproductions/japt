@@ -369,10 +369,10 @@ function evalJapt(code) {
         .replace(/#./g,function(x){return x.charCodeAt(1)});
     code = shorthand(code);
     code = code
-        .replace(/\)/,"))")
-        .replace(/ /,")")
-        .replace(/@/,"(X,Y,Z)=>")
-        .replace(/_/,"Z=>Z")
+        .replace(/\)/g,"))")
+        .replace(/ /g,")")
+        .replace(/@/g,"(X,Y,Z)=>")
+        .replace(/_/g,"Z=>Z")
         .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
     code = fixParens(code);
     code = code

@@ -367,7 +367,7 @@ function evalJapt(code) {
         .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
         .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
         .replace(/#./g,function(x){return x.charCodeAt(1)})
-        .replace(/)/,"))")
+        .replace(/\)/,"))")
         .replace(/ /,")")
         .replace(/@/,"(X,Y,Z)=>")
         .replace(/_/,"Z=>Z")

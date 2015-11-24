@@ -81,7 +81,7 @@ Array.prototype.v = function(){return this.shift()}
 Array.prototype.w = function(){return this.reverse()}
 Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})}
 Array.prototype.y = function(){var t="string"==typeof this[0][0],n=t?this.map(function(t){return t.split("")}):this;return n[0].map(function(r,i){return n.map(function(t){return t[i]})[t?"join":"valueOf"]("")})};
-Array.prototype.z = function(n){return n==1?this.y().map(f=function(l){return l.reverse()}):n==2?this.reverse().map(f):n==3?this.map(f).y():this.z(1)} // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
+Array.prototype.z = function(n){return n==1?this.y().map(f=function(l){return l.w()}):n==2?this.w().map(f):n==3?this.map(f).y():this.z(1)} // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
 Array.prototype.à = function(){noFunc('Aà')}
 Array.prototype.á = function(){noFunc('Aá')}
 

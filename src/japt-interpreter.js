@@ -366,13 +366,14 @@ function evalJapt(code) {
         .replace(/`[^`]*(`|.$)/g,function(x){if(x.slice(-1)=="`")x=x.slice(0,-1);strings[i]="\""+shoco.d(x.slice(1))+"\"";return"\""+i+++"\""})
         .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
         .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-        .replace(/#./g,function(x){return x.charCodeAt(1)})
+        .replace(/#./g,function(x){return x.charCodeAt(1)});
+    code = shorthand(code);
+    code = code
         .replace(/\)/,"))")
         .replace(/ /,")")
         .replace(/@/,"(X,Y,Z)=>")
         .replace(/_/,"Z=>Z")
         .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
-    code = shorthand(code);
     code = fixParens(code);
     code = code
         .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})

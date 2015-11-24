@@ -242,7 +242,7 @@ function shorthand (code) {
         "\u00AB": "&&!",  // « - 171
         "\u00AC": "q ",   // ¬ - 172
         //                //     173 is an unprintable
-        "\u00AE": "m_"    // ® - 174
+        "\u00AE": "m_",   // ® - 174
 
         // default replacements
         ")": "))",

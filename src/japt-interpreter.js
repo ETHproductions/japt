@@ -240,13 +240,7 @@ function shorthand (code) {
         "\u00A9": "&&",   // © - 169
         "\u00AA": "||",   // ª - 170
         "\u00AB": "&&!",  // « - 171
-        "\u00AC": "q ",   // ¬ - 172
-
-        // default replacements
-        ")": "))",
-        " ": ")",
-        "@": "(X,Y,Z)=>",
-        "_": "z=>z"
+        "\u00AC": "q "    // ¬ - 172
     }, i = 0, l = "", n = "";
 
     for (var i = 0; i < code.length; i++) {
@@ -373,6 +367,10 @@ function evalJapt(code) {
         .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
         .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
         .replace(/#./g,function(x){return x.charCodeAt(1)})
+        .replace(/)/,"))")
+        .replace(/ /,")")
+        .replace(/@/,"(X,Y,Z)=>")
+        .replace(/_/,"Z=>Z")
         .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
     code = shorthand(code);
     code = fixParens(code);

@@ -241,14 +241,8 @@ function shorthand (code) {
         "\u00AA": "||",   // ª - 170
         "\u00AB": "&&!",  // « - 171
         "\u00AC": "q ",   // ¬ - 172
-        //                //     173 is an unprintable
+//      "\u00AD": "",     //     173 is an unprintable
         "\u00AE": "m_",   // ® - 174
-
-        // default replacements
-        ")": "))",
-        " ": ")",
-        "@": "(X,Y,Z)=>",
-        "_": "z=>z"
     }, i = 0, l = "", n = "";
 
     for (var i = 0; i < code.length; i++) {
@@ -322,8 +316,8 @@ function subparen(code) {
     for(var i in code) {
         if(code[i]=='(')
             level++;
-            if(code[i]==')')
-                level--, min = Math.min(min, level);
+        if(code[i]==')')
+            level--, min = Math.min(min, level);
     }
     if(min < 0) code = '('.repeat(-min) + code, level-=min;
     if(level > 0) code += ')'.repeat(level);
@@ -374,9 +368,14 @@ function evalJapt(code) {
         .replace(/`[^`]*(`|.$)/g,function(x){if(x.slice(-1)=="`")x=x.slice(0,-1);strings[i]="\""+shoco.d(x.slice(1))+"\"";return"\""+i+++"\""})
         .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
         .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-        .replace(/#./g,function(x){return x.charCodeAt(1)})
-        .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+        .replace(/#./g,function(x){return x.charCodeAt(1)});
     code = shorthand(code);
+    code = code
+        .replace(/\)/g,"))")
+        .replace(/ /g,")")
+        .replace(/@/g,"(X,Y,Z)=>")
+        .replace(/_/g,"Z=>Z")
+        .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
     code = fixParens(code);
     code = code
         .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})

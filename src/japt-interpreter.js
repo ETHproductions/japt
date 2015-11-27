@@ -31,10 +31,10 @@ String.prototype.a = function(){return this.split('')};
 String.prototype.b = function(x){return this.indexOf(x)};
 String.prototype.c = function(x){return this.charCodeAt(x)};
 String.prototype.d = function(x){
-    if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)};
+    if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
     else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}};
 String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t};
-String.prototype.f = function(x,y){return this.match(x insteanceof RegExp?x:RegExp(x,y||"g"))};
+String.prototype.f = function(x,y){return this.match(x instanceof RegExp?x:RegExp(x,y||"g"))};
 String.prototype.g = function(x){return this.charAt(x)};
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)};
 String.prototype.i = function(x,y){return this.substring(0,x)+y+this.substring(x)};
@@ -90,13 +90,13 @@ Number.prototype.b = function(x,y){return this<x?x:this>y?y:this};
 Number.prototype.c = function(){return Math.ceil(this)};
 Number.prototype.d = function(){return String.fromCharCode(this)};
 Number.prototype.e = function(x){return this*Math.pow(10,x)};
-Number.prototype.f = function(x){return this|0};
-Number.prototype.g = function(x){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0};
+Number.prototype.f = function(){return this|0};
+Number.prototype.g = function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0};
 Number.prototype.h = function(){noFunc('Nh')};
 Number.prototype.i = function(){noFunc('Ni')};
 Number.prototype.j = function(){return this.k().length===1};
 Number.prototype.k = function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f};
-Number.prototype.l = function(x){var n=this|0,x=this|0;while(--n)x*=n;return n};
+Number.prototype.l = function(){var n=this|0,x=this|0;while(--n)x*=n;return n};
 Number.prototype.m = function(x){return Math.min(this,x)};
 Number.prototype.n = function(){return-this};
 Number.prototype.o = function(x,y){

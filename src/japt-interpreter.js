@@ -27,78 +27,78 @@ var defFuncs = {
     w: "while("};
 
 String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';for(var y='',i=x|0;i--;)y+=this;return y}
-String.prototype.a = function(){return this.split('');}
-String.prototype.b = function(x){return this.indexOf(x)}
-String.prototype.c = function(x){return this.charCodeAt(x)}
+String.prototype.a = function(){return this.split('')};
+String.prototype.b = function(x){return this.indexOf(x)};
+String.prototype.c = function(x){return this.charCodeAt(x)};
 String.prototype.d = function(x){
-    if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
-    else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}}
-String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t}
-String.prototype.f = function(){noFunc('Sf')}
-String.prototype.g = function(x){return this.charAt(x)}
-String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)}
-String.prototype.i = function(x,y){return this.substring(0,x)+y+this.substring(x)}
-String.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.substring(0,x)+this.substring(x+y)}
-String.prototype.k = function(x,y){return this.replace(RegExp(x,y),"")}
-String.prototype.l = function(){return this.length}
-String.prototype.m = function(x,y){return this.split(y||'').map(x).join(y||'')}
-String.prototype.n = function(x){return parseInt(this,x||10)}
-String.prototype.o = function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")} // Removes all but specified characters. Similar to TeaScript's O function
-String.prototype.p = function(x){return this.repeat(x)}
-String.prototype.q = function(x){return this.split(x||"")}
-String.prototype.r = function(x,y,z){return this.replace(RegExp(x,(z||"")+"g"),y)}
-String.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;if(y<0)y+=this.length;return this.substring(x,y)}
-String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.substr(x,y)}
-String.prototype.u = function(){return this.toUpperCase()}
-String.prototype.v = function(){return this.toLowerCase()}
-String.prototype.w = function(){return this.split('').reverse().join('')}
-String.prototype.x = function(){noFunc('Sx')}
-String.prototype.y = function(){noFunc('Sy')}
-String.prototype.z = function(){noFunc('Sz')}
+    if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)};
+    else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}};
+String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t};
+String.prototype.f = function(){noFunc('Sf')};
+String.prototype.g = function(x){return this.charAt(x)};
+String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)};
+String.prototype.i = function(x,y){return this.substring(0,x)+y+this.substring(x)};
+String.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.substring(0,x)+this.substring(x+y)};
+String.prototype.k = function(x,y){return this.replace(RegExp(x,y),"")};
+String.prototype.l = function(){return this.length};
+String.prototype.m = function(x,y){return this.split(y||'').map(x).join(y||'')};
+String.prototype.n = function(x){return parseInt(this,x||10)};
+String.prototype.o = function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")}; // Removes all but specified characters. Similar to TeaScript's O function
+String.prototype.p = function(x){return this.repeat(x)};
+String.prototype.q = function(x){return this.split(x||"")};
+String.prototype.r = function(x,y,z){return this.replace(RegExp(x,(z||"")+"g"),y)};
+String.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;if(y<0)y+=this.length;return this.substring(x,y)};
+String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.substr(x,y)};
+String.prototype.u = function(){return this.toUpperCase()};
+String.prototype.v = function(){return this.toLowerCase()};
+String.prototype.w = function(){return this.split('').reverse().join('')};
+String.prototype.x = function(){noFunc('Sx')};
+String.prototype.y = function(){noFunc('Sy')};
+String.prototype.z = function(){noFunc('Sz')};
 
-Array.prototype.a = function(){return this.join('');}
-Array.prototype.b = function(x){return this.indexOf(x)}
-Array.prototype.c = function(x){return this.lastIndexOf(x)}
-Array.prototype.d = function(x){return this.some(x)}
-Array.prototype.e = function(x){return this.every(x)}
-Array.prototype.f = function(x){return this.filter(x)}
-Array.prototype.g = function(x){return this[x]}
-Array.prototype.h = function(x,y){this[x]=y;return this}
-Array.prototype.i = function(x,y){this.splice(x,0,y);return this}
-Array.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.splice(x,y)}
-Array.prototype.k = function(x){this.splice(this.indexOf(x),1);return this}
-Array.prototype.l = function(){return this.length}
-Array.prototype.m = function(x){return this.map(x)}
-Array.prototype.n = function(x){return this.sort(x)}
-Array.prototype.o = function(){return this.pop()}
-Array.prototype.p = function(x){return this.push(x)}
-Array.prototype.q = function(x){return this.join(x||"")}
-Array.prototype.r = function(x,y){return this.reduce(x,y)}
-Array.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,y)}
-Array.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,x+y)}
-Array.prototype.u = function(x){return this.unshift(x)}
-Array.prototype.v = function(){return this.shift()}
-Array.prototype.w = function(){return this.reverse()}
-Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})}
+Array.prototype.a = function(){return this.join('')};
+Array.prototype.b = function(x){return this.indexOf(x)};
+Array.prototype.c = function(x){return this.lastIndexOf(x)};
+Array.prototype.d = function(x){return this.some(x)};
+Array.prototype.e = function(x){return this.every(x)};
+Array.prototype.f = function(x){return this.filter(x)};
+Array.prototype.g = function(x){return this[x]};
+Array.prototype.h = function(x,y){this[x]=y;return this};
+Array.prototype.i = function(x,y){this.splice(x,0,y);return this};
+Array.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.splice(x,y)};
+Array.prototype.k = function(x){this.splice(this.indexOf(x),1);return this};
+Array.prototype.l = function(){return this.length};
+Array.prototype.m = function(x){return this.map(x)};
+Array.prototype.n = function(x){return this.sort(x)};
+Array.prototype.o = function(){return this.pop()};
+Array.prototype.p = function(x){return this.push(x)};
+Array.prototype.q = function(x){return this.join(x||"")};
+Array.prototype.r = function(x,y){return this.reduce(x,y)};
+Array.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,y)};
+Array.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,x+y)};
+Array.prototype.u = function(x){return this.unshift(x)};
+Array.prototype.v = function(){return this.shift()};
+Array.prototype.w = function(){return this.reverse()};
+Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})};
 Array.prototype.y = function(){var t="string"==typeof this[0][0],n=t?this.map(function(t){return t.split("")}):this;return n[0].map(function(r,i){return n.map(function(t){return t[i]})[t?"join":"valueOf"]("")})};
-Array.prototype.z = function(n){return n==1?this.y().map(f=function(l){return l.w()}):n==2?this.w().map(f):n==3?this.map(f).y():this.z(1)} // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
-Array.prototype.à = function(){noFunc('Aà')}
-Array.prototype.á = function(){noFunc('Aá')}
+Array.prototype.z = function(n){return n==1?this.y().map(f=function(l){return l.w()}):n==2?this.w().map(f):n==3?this.map(f).y():this.z(1)}; // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
+Array.prototype.à = function(){noFunc('Aà')};
+Array.prototype.á = function(){noFunc('Aá')};
 
-Number.prototype.a = function(){return Math.abs(this)}
-Number.prototype.b = function(x,y){return this<x?x:this>y?y:this}
-Number.prototype.c = function(){return Math.ceil(this)}
-Number.prototype.d = function(){return String.fromCharCode(this)}
-Number.prototype.e = function(x){return this*Math.pow(10,x)}
-Number.prototype.f = function(x){return this|0}
-Number.prototype.g = function(x){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0}
-Number.prototype.h = function(){noFunc('Nh')}
-Number.prototype.i = function(){noFunc('Ni')}
-Number.prototype.j = function(){return this.k().length===1}
-Number.prototype.k = function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f}
-Number.prototype.l = function(x){var n=this|0,x=this|0;while(--n)x*=n;return n}
-Number.prototype.m = function(x){return Math.min(this,x)}
-Number.prototype.n = function(){return-this}
+Number.prototype.a = function(){return Math.abs(this)};
+Number.prototype.b = function(x,y){return this<x?x:this>y?y:this};
+Number.prototype.c = function(){return Math.ceil(this)};
+Number.prototype.d = function(){return String.fromCharCode(this)};
+Number.prototype.e = function(x){return this*Math.pow(10,x)};
+Number.prototype.f = function(x){return this|0};
+Number.prototype.g = function(x){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0};
+Number.prototype.h = function(){noFunc('Nh')};
+Number.prototype.i = function(){noFunc('Ni')};
+Number.prototype.j = function(){return this.k().length===1};
+Number.prototype.k = function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f};
+Number.prototype.l = function(x){var n=this|0,x=this|0;while(--n)x*=n;return n};
+Number.prototype.m = function(x){return Math.min(this,x)};
+Number.prototype.n = function(){return-this};
 Number.prototype.o = function(x,y){
     var z=this;
     if(typeof(y)==="undefined")y=1;
@@ -112,20 +112,43 @@ Number.prototype.o = function(x,y){
         for(;z<x;x+=y)
             r.push(x);
     return r;
-}
-Number.prototype.p = function(x){return Math.pow(this,x)}
-Number.prototype.q = function(){return Math.sqrt(this)}
-Number.prototype.r = function(){return Math.round(this)}
-Number.prototype.s = function(x){if(typeof(x)==="undefined")x=10;return this.toString(x)}
-Number.prototype.t = function(){noFunc('Nt')}
-Number.prototype.u = function(){return this%2===1?1:0}
-Number.prototype.v = function(){return this%2===0?1:0}
-Number.prototype.w = function(x){return Math.max(this,x)}
-Number.prototype.x = function(){noFunc('Nx')}
-Number.prototype.y = function(){noFunc('Ny')}
-Number.prototype.z = function(){noFunc('Nz')}
+};
+Number.prototype.p = function(x){return Math.pow(this,x)};
+Number.prototype.q = function(){return Math.sqrt(this)};
+Number.prototype.r = function(){return Math.round(this)};
+Number.prototype.s = function(x){if(typeof(x)==="undefined")x=10;return this.toString(x)};
+Number.prototype.t = function(){noFunc('Nt')};
+Number.prototype.u = function(){return this%2===1?1:0};
+Number.prototype.v = function(){return this%2===0?1:0};
+Number.prototype.w = function(x){return Math.max(this,x)};
+Number.prototype.x = function(){noFunc('Nx')};
+Number.prototype.y = function(){noFunc('Ny')};
+Number.prototype.z = function(){noFunc('Nz')};
 
-// Shorter Math Properties
+// Shorter Date properties. All accept an argument; 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
+function ts(x){return["get","set","getUTC","setUTC"][x||0]
+Date.prototype.a = function(x,y){return this[ts(x||0)+"Milliseconds"](y||0)};
+Date.prototype.b = function(x,y){return this[ts(x||0)+"Seconds"](y||0)};
+Date.prototype.c = function(x,y){return this[ts(x||0)+"Minutes"](y||0)};
+Date.prototype.d = function(x,y){return this[ts(x||0)+"Hours"](y||0)};
+Date.prototype.e = function(x,y){return this[ts(x||0)+"Day"](y||0)};
+Date.prototype.f = function(x,y){return this[ts(x||0)+"Date"](y||0)};
+Date.prototype.g = function(x,y){return this[ts(x||0)+"Month"](y||0)};
+Date.prototype.h = function(x,y){return this[ts(x||0)+"Year"](y||0)};
+Date.prototype.i = function(x,y){return this[ts(x||0)+"FullYear"](y||0)};
+Date.prototype.j = function(x,y){return this[ts(x||0)+"Time"](y||0)};
+Date.prototype.k = function(x,y){return this[ts(x||0)+"TimezoneOffset"](y||0)};
+
+Date.prototype.l = function(){noFunc('Dl')};
+Date.prototype.l = function(){noFunc('Dl')};
+Date.prototype.l = function(){noFunc('Dl')};
+Date.prototype.l = function(){noFunc('Dl')};
+Date.prototype.l = function(){noFunc('Dl')};
+
+// Ds accepts one argument that controls how the string is formatted. Some formats may not work on some browsers.
+Date.prototype.s = function(x){return this["to"+["","Date","Time","ISO","GMT","UTC","Locale","LocaleDate","LocaleTime"][x||0]+"String"]()}
+
+// Shorter Math properties
 Math.t = Math.atan2;
 Math.g = function (n) { var f=Math.sqrt(5), g=.5*(1+f); return (1/f)*(Math.pow(g,n)-Math.pow(-g,-n)) };
 Math.r = Math.random;
@@ -240,7 +263,20 @@ function shorthand (code) {
         "\u00A9": "&&",   // © - 169
         "\u00AA": "||",   // ª - 170
         "\u00AB": "&&!",  // « - 171
-        "\u00AC": "q "    // ¬ - 172
+        "\u00AC": "q ",   // ¬ - 172
+//      "\u00AD": "",     //     173 is an unprintable
+        "\u00AE": "m_",   // ® - 174
+        "\u00AF": "s0,",  // ¯ - 175
+        "\u00B0": "++",   // ° - 176
+        "\u00B1": "+=",   // ± - 177
+        "\u00B2": "--",   // ² - 178
+        "\u00B3": "-=",   // ³ - 179
+        "\u00B4": "*=",   // ´ - 180
+        "\u00B5": "/=",   // µ - 181
+        "\u00B6": "===",  // ¶ - 182
+        "\u00B7": "qR ",  // · - 183
+        "\u00B8": "qS ",  // ¸ - 184
+        "\u00D0": "new Date(" // Ð - 208
     }, i = 0, l = "", n = "";
 
     for (var i = 0; i < code.length; i++) {

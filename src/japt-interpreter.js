@@ -126,7 +126,7 @@ Number.prototype.y = function(){noFunc('Ny')};
 Number.prototype.z = function(){noFunc('Nz')};
 
 // Shorter Date properties. All accept an argument; 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
-function ts(x){return["get","set","getUTC","setUTC"][x||0]
+function ts(x){return["get","set","getUTC","setUTC"][x||0]}
 Date.prototype.a = function(x,y){return this[ts(x||0)+"Milliseconds"](y||0)};
 Date.prototype.b = function(x,y){return this[ts(x||0)+"Seconds"](y||0)};
 Date.prototype.c = function(x,y){return this[ts(x||0)+"Minutes"](y||0)};

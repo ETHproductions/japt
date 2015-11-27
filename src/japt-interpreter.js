@@ -34,7 +34,7 @@ String.prototype.d = function(x){
     if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)};
     else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}};
 String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t};
-String.prototype.f = function(){noFunc('Sf')};
+String.prototype.f = function(x,y){return this.match(x insteanceof RegExp?x:RegExp(x,y||"g"))};
 String.prototype.g = function(x){return this.charAt(x)};
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)};
 String.prototype.i = function(x,y){return this.substring(0,x)+y+this.substring(x)};
@@ -139,14 +139,23 @@ Date.prototype.i = function(x,y){return this[ts(x||0)+"FullYear"](y||0)};
 Date.prototype.j = function(x,y){return this[ts(x||0)+"Time"](y||0)};
 Date.prototype.k = function(x,y){return this[ts(x||0)+"TimezoneOffset"](y||0)};
 
-Date.prototype.l = function(){noFunc('Dl')};
-Date.prototype.l = function(){noFunc('Dl')};
-Date.prototype.l = function(){noFunc('Dl')};
-Date.prototype.l = function(){noFunc('Dl')};
-Date.prototype.l = function(){noFunc('Dl')};
-
 // Ds accepts one argument that controls how the string is formatted. Some formats may not work on some browsers.
 Date.prototype.s = function(x){return this["to"+["","Date","Time","ISO","GMT","UTC","Locale","LocaleDate","LocaleTime"][x||0]+"String"]()}
+
+Date.prototype.l = function(){noFunc('Dl')};
+Date.prototype.m = function(){noFunc('Dm')};
+Date.prototype.n = function(){noFunc('Dn')};
+Date.prototype.o = function(){noFunc('Do')};
+Date.prototype.p = function(){noFunc('Dp')};
+Date.prototype.q = function(){noFunc('Dq')};
+Date.prototype.r = function(){noFunc('Dr')};
+Date.prototype.t = function(){noFunc('Dt')};
+Date.prototype.u = function(){noFunc('Du')};
+Date.prototype.v = function(){noFunc('Dv')};
+Date.prototype.w = function(){noFunc('Dw')};
+Date.prototype.x = function(){noFunc('Dx')};
+Date.prototype.y = function(){noFunc('Dy')};
+Date.prototype.z = function(){noFunc('Dz')};
 
 // Shorter Math properties
 Math.t = Math.atan2;
@@ -402,14 +411,14 @@ function evalJapt(code) {
         .replace(/`[^`]*(`|.$)/g,function(x){if(x.slice(-1)=="`")x=x.slice(0,-1);strings[i]="\""+shoco.d(x.slice(1))+"\"";return"\""+i+++"\""})
         .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
         .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-        .replace(/#./g,function(x){return x.charCodeAt(1)});
+        .replace(/#./g,function(x){return x.charCodeAt(1)})
+        .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
     code = shorthand(code);
     code = code
         .replace(/\)/g,"))")
         .replace(/ /g,")")
         .replace(/@/g,"(X,Y,Z)=>")
-        .replace(/_/g,"Z=>Z")
-        .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('});
+        .replace(/_/g,"Z=>Z");
     code = fixParens(code);
     code = code
         .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})

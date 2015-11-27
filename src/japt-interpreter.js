@@ -285,7 +285,12 @@ function shorthand (code) {
         "\u00B6": "===",  // ¶ - 182
         "\u00B7": "qR ",  // · - 183
         "\u00B8": "qS ",  // ¸ - 184
-        "\u00D0": "new Date(" // Ð - 208
+        "\u00B9": ") ",   // ¹ - 185
+        "\u00BA": "((",   // º - 186
+        "\u00BB": "(((",  // » - 187
+        "\u00BC": ".25",  // ¼ - 188
+        "\u00BD": ".5",   // ½ - 189
+        "\u00BE": ".75"   // ¾ - 190
     }, i = 0, l = "", n = "";
 
     for (var i = 0; i < code.length; i++) {
@@ -418,7 +423,8 @@ function evalJapt(code) {
         .replace(/\)/g,"))")
         .replace(/ /g,")")
         .replace(/@/g,"(X,Y,Z)=>")
-        .replace(/_/g,"Z=>Z");
+        .replace(/_/g,"Z=>Z")
+        .replace(/\xD0/g,"new Date(") // Ð
     code = fixParens(code);
     code = code
         .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})

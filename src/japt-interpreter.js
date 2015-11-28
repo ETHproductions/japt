@@ -463,6 +463,7 @@ function transpile(code) {
                     }
                     tmp += code[i];
                 }
+                alert("tmp: "+tmp);
                 if (tmp.slice(-1) !== "}")
                     tmp += "}";
                 var tr = transpile(tmp.slice(0,-1));
@@ -488,7 +489,7 @@ function transpile(code) {
             outp += "))";
         }
         else if (isChar(char, "a-z")) {
-            outp += "." + char;
+            outp += "." + char + "(";
         }
         else if (pairs.hasOwnProperty(char)) {
             code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
@@ -499,7 +500,9 @@ function transpile(code) {
     }
 
     // RegExp Replacements
-    outp = outp.replace(/(\d)\.([a-df-z])/g,function(_,x,y){return x+" ."+y});
+    outp = outp
+        .replace(/(\d)\.([a-df-z])/g,function(_,x,y){return x+" ."+y})
+        .replace(/(\d)\.e\((\d)/g,function(_,x,y){return x+"e"+y});
     outp = fixParens(outp);
     return outp;
 }

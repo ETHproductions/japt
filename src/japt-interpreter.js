@@ -7,8 +7,8 @@ var defFuncs = {
     c: "continue;",
     d: "",
     e: "",
-    f: "for(",
-    g: "for(",
+    f: "",
+    g: "",
     h: "",
     i: "if(",
     j: "else if(",
@@ -24,7 +24,11 @@ var defFuncs = {
     t: "typeof(",
     u: "while(!",
     v: "evalJapt(",
-    w: "while("};
+    w: "while(",
+    x: "",
+    y: "",
+    z: ""
+};
 
 String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';for(var y='',i=x|0;i--;)y+=this;return y}
 String.prototype.a = function(){return this.split('')};
@@ -35,7 +39,7 @@ String.prototype.d = function(x){
     else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}};
 String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t};
 String.prototype.f = function(x,y){return this.match(x instanceof RegExp?x:RegExp(x,y||"g"))};
-String.prototype.g = function(x){return this.charAt(x)};
+String.prototype.g = function(x){return this.charAt(x||0)};
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)};
 String.prototype.i = function(x,y){return this.substring(0,x)+y+this.substring(x)};
 String.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.substring(0,x)+this.substring(x+y)};
@@ -62,7 +66,7 @@ Array.prototype.c = function(x){return this.lastIndexOf(x)};
 Array.prototype.d = function(x){return this.some(x)};
 Array.prototype.e = function(x){return this.every(x)};
 Array.prototype.f = function(x){return this.filter(x)};
-Array.prototype.g = function(x){return this[x]};
+Array.prototype.g = function(x){return this[x||0]};
 Array.prototype.h = function(x,y){this[x]=y;return this};
 Array.prototype.i = function(x,y){this.splice(x,0,y);return this};
 Array.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.splice(x,y)};
@@ -255,12 +259,136 @@ function evalInput(input) {
     return processed;
 }
 
-// Call this function with a second argument. If second arg is trusey
-function shorthand (code) {
-    // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
-    var pairs = {
+function run() {
+    clear_output();
+    document.getElementById("run").disabled = true;
+    document.getElementById("stop").disabled = false;
+    document.getElementById("clear").disabled = true;
+    document.getElementById("input").disabled = false;
+    document.getElementById("timeout").disabled = false;
+
+    code = document.getElementById("code").value;
+    input = document.getElementById("input").value;
+    timeout = document.getElementById("timeout").checked;
+
+    A = 10,
+    B = 11,
+    C = 12,
+    D = 13,
+    E = 14,
+    F = 15,
+    G = 16,
+    H = 32,
+    I = 64,
+    J = -1,
+    K = Date,
+    L = 100,
+    M = Math,
+    N = evalInput(input),
+    O = shoco,
+    P = "",
+    Q = "\"",
+    R = "\n",
+    S = " ",
+    T = 0,
+    U = N.length <= 0? 0 : N[0],
+    V = N.length <= 1? 0 : N[1],
+    W = N.length <= 2? 0 : N[2],
+    X = N.length <= 3? 0 : N[3],
+    Y = N.length <= 4? 0 : N[4],
+    Z = N.length <= 5? 0 : N[5];
+
+    evalJapt(code);
+
+    document.getElementById("run").disabled = false;
+    document.getElementById("stop").disabled = true;
+    document.getElementById("clear").disabled = false;
+    document.getElementById("input").disabled = false;
+    document.getElementById("timeout").disabled = false;
+}
+
+function subparen(code) {
+    var level = 0, min = 0;
+    for(var i in code) {
+        if(code[i]=='(')
+            level++;
+        if(code[i]==')')
+            level--, min = Math.min(min, level);
+    }
+    if(min < 0) code = '('.repeat(-min) + code, level-=min;
+    if(level > 0) code += ')'.repeat(level);
+    return code;
+}
+
+function fixParens(code) {
+    var cade = "", mode = "next", char = "", curr = "", temp = "", level = 0;
+    for(var i=0;i<code.length;i++) {
+        char = code[i];
+        switch(mode) {
+            case "next":
+                if (char == ";") {
+                    cade += subparen(curr) + char;
+                    curr = "";
+                } else if (char == "[") {
+                    mode = "array";
+                    level = 0;
+                } else if (char == "{") {
+                    mode = "brackets";
+                    level = 0;
+                } else {
+                    curr += char;
+                }
+                break;
+            case "array":
+                if (char == "[") {
+                    level++;
+                } else if (char == "]") {
+                    level--;
+                }
+                if (level < 0) {
+                    curr += "[" + fixParens(temp) + "]";
+                    temp = "";
+                    mode = "next";
+                } else {
+                    temp += char;
+                }
+                break;
+            case "brackets":
+                if (char == "{") {
+                    level++;
+                } else if (char == "}") {
+                    level--;
+                }
+                if (level < 0) {
+                    curr += "{" + fixParens(temp) + "}";
+                    temp = "";
+                    mode = "next";
+                } else {
+                    temp += char;
+                }
+                break;
+        }
+    }
+    cade += subparen(curr);
+    return cade;
+}
+
+function transpile(code) {
+    /* For Lexer */
+    var level = 0,      // Current number of parentheses or curly braces that we're inside
+        temp = "",
+      
+        i = 0,
+        j = 0,
+
+        strings = [],   // Stores the {...} inside strings
+        outp = "";      // Temporary output
+        
+    var pairs = { 
+        // Unicode shortcuts
         // Using \u<hex> to avoid encoding incompatibilities
-        // Feel free to change these
+        "@":      "XYZ{",
+        "_":      "Z{Z",
         "\u00A1": "Um@",  // ¡ - 161
         "\u00A2": "Us2 ", // ¢ - 162
         "\u00A3": "m@",   // £ - 163
@@ -278,10 +406,10 @@ function shorthand (code) {
         "\u00AF": "s0,",  // ¯ - 175
         "\u00B0": "++",   // ° - 176
         "\u00B1": "+=",   // ± - 177
-        "\u00B2": "--",   // ² - 178
-        "\u00B3": "-=",   // ³ - 179
-        "\u00B4": "*=",   // ´ - 180
-        "\u00B5": "/=",   // µ - 181
+        "\u00B2": "p2 ",  // ² - 178
+        "\u00B3": "p3 ",  // ³ - 179
+        "\u00B4": "--",   // ´ - 180
+        "\u00B5": "-=",   // µ - 181
         "\u00B6": "===",  // ¶ - 182
         "\u00B7": "qR ",  // · - 183
         "\u00B8": "qS ",  // ¸ - 184
@@ -291,150 +419,126 @@ function shorthand (code) {
         "\u00BC": ".25",  // ¼ - 188
         "\u00BD": ".5",   // ½ - 189
         "\u00BE": ".75"   // ¾ - 190
-    }, i = 0, l = "", n = "";
+    }
 
-    for (var i = 0; i < code.length; i++) {
-        if (['"',"'"].indexOf(code[i]) > -1) { // Quote
-            n += l = code[i++];
-            // i < 1e9 sets an upper limit of 1,000,000,000 (1 billion) to code length. 
-            // For reference, JavaScript's max string length is 9,007,199,254,740,991 characters / bytes
-            while (!(code[i] == l && code[i - 1] != "\\") && i < code.length && i < 1e9) n += code[i++]; n += code[i];
-        } else {
-            if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
-                n += pairs[ code[i] ];
-            } else {
-                n += code[i];
+    // Some helpful functions
+    function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
+
+    // NOT PRODUCTION READY
+    for (i = 0; i < code.length; i++) {
+        var char = code[i];
+        if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
+            var qm = outp.slice(-1) === "?"; // Question Mark
+            var str = "";
+            for (i++; code[i] !== char && i < code.length; i++) {
+                if (code[i] === "\\") { // If we encounter a backslash
+                    str += "\\" + code[++i]; // Go to next character and store
+                } else if (code[i] === "{") { // If it is a { - This is for the "{2+1}" stuff
+                    temp = "";
+                    for (level = 1, i++; level > 0 && i < code.length; i++) {
+                        if (code[i] === "}") {
+                            level--;
+                        } else if (code[i] === "{") {
+                            level++;
+                        }
+                        temp += code[i];
+                    }
+                    strings[j] = transpile(temp.slice(0,-1));
+                    str += "{" + j++ + "}";
+                } else if (code[i] === ":" && qm) {
+                    str += "\":\"";
+                    qm = false;
+                } else {
+                    str += code[i];
+                }
+            }
+            if (char === "`") str = shoco.d(str);
+            outp += "\"" + str.replace(/([^\\])\{(\d)}/,function(_,x,y){return x+"\"+("+strings[y]+")+\""}) + "\""; // Add this character to the output
+
+            continue; // Jump to next iteration
+        }
+        else if (char === "$") {
+            for (; code[i] !== "$" && i < code.length; i++) {
+                if (code[i] === "\\" && code[i+1] === "$") { // If we encounter a backslash
+                    i++; // Go to next character and store
+                    outp += "$";
+                } else {
+                    outp += code[i];
+                }
             }
         }
-    }
-
-    return n;
-}
-
-function run() {
-    clear_output();
-    document.getElementById("run").disabled = true;
-    document.getElementById("stop").disabled = false;
-    document.getElementById("clear").disabled = true;
-    document.getElementById("input").disabled = false;
-    document.getElementById("timeout").disabled = false;
-
-    code = document.getElementById("code").value;
-    input = document.getElementById("input").value;
-    timeout = document.getElementById("timeout").checked;
-
-    A = 10,
-        B = 11,
-        C = 12,
-        D = 13,
-        E = 14,
-        F = 15,
-        G = 16,
-        H = 32,
-        I = 64,
-        J = -1,
-        K = .5,
-        L = 100,
-        M = Math,
-        N = evalInput(input),
-        O = shoco,
-        P = "",
-        Q = "\"",
-        R = "\n",
-        S = " ",
-        T = 0,
-        U = N[0],
-        V = N[1],
-        W = N[2],
-        X = N[3],
-        Y = N[4],
-        Z = N[5];
-
-    evalJapt(code);
-
-    document.getElementById("run").disabled = false;
-    document.getElementById("stop").disabled = true;
-    document.getElementById("clear").disabled = false;
-    document.getElementById("input").disabled = false;
-    document.getElementById("timeout").disabled = false;
-}
-
-function subparen(code) {
-    var level = 0, min = 0;
-    for(var i in code) {
-        if(code[i]=='(')
-            level++;
-            if(code[i]==')')
-                level--, min = Math.min(min, level);
-    }
-    if(min < 0) code = '('.repeat(-min) + code, level-=min;
-    if(level > 0) code += ')'.repeat(level);
-    return code;
-}
-
-function fixParens(code) {
-    var cade = "", mode = "next", char = "", curr = "", array = "", level = 0;
-    for(var i=0;i<code.length;i++) {
-        char = code[i];
-        switch(mode) {
-            case "next":
-                if (char == ";") {
-                    cade += subparen(curr) + char;
-                    curr = "";
-                } else if (char == "[") {
-                    mode = "array";
-                    level = 0;
-                } else {
-                    curr += char;
-                }
-                break;
-            case "array":
-                if (char == "[") {
-                    level++;
-                } else if (char == "]") {
-                    level--;
-                    if (level < 0) {
-                        curr += "[" + fixParens(array) + "]";
-                        array = "";
-                        mode = "next";
+        else if (isChar(char, "A-Z{")) {
+            var letters = "";
+            for (; isChar(code[i], "A-Z") && i < code.length; i++) {
+                letters += code[i];
+            }
+            if (code[i] === "{") {
+                outp += "function(" + letters.split("").join(",") + "){";
+                temp = "";
+                for (level = 1, i++; level > 0 && i < code.length; i++) {
+                    if (code[i] === "{") {
+                        level++;
+                    } else if (code[i] === "}") {
+                        level--;
                     }
-                } else {
-                    array += char;
+                    temp += code[i];
                 }
-                break;
+                if (temp.slice(-1) !== "}")
+                    temp += "}";
+                var tr = transpile(temp.slice(0,-1));
+                if (tr.lastIndexOf(";") < 0)
+                    outp += "return " + tr + "}";
+                else
+                    outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
+            }
+            else {
+                outp += letters.split("").join(",");
+                i--;
+            }
+        }
+        else if (char === "'") {
+            outp += "\"" + code[++i] + "\"";
+        }
+        else if (char === "#") {
+            outp += code[++i].charCodeAt(0);
+        }
+        else if (char === " ") {
+            outp += ")";
+        }
+        else if (char === ")") {
+            outp += "))";
+        }
+        else if (isChar(char, "a-z")) {
+            if (isChar(outp.slice(-1),"0-9")) {
+                if (char === "e") {
+                    outp += char;
+                } else {
+                    outp += " ." + char + "(";
+                }
+            } else {
+                outp += "." + char + "(";
+            }
+        }
+        else if (pairs.hasOwnProperty(char)) {
+            code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+        }
+        else {
+            outp += char;
         }
     }
-    cade += subparen(curr);
-    return cade;
+    
+    outp = fixParens(outp);
+    return outp;
 }
 
 function evalJapt(code) {
-    var codes = [], strings = [], i = 0, j = 0;
-
-    code = code
-        .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
-        .replace(/`[^`]*(`|.$)/g,function(x){if(x.slice(-1)=="`")x=x.slice(0,-1);strings[i]="\""+shoco.d(x.slice(1))+"\"";return"\""+i+++"\""})
-        .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
-        .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-        .replace(/#./g,function(x){return x.charCodeAt(1)});
-    code = shorthand(code);
-    code = code
-        .replace(/\)/g,"))")
-        .replace(/ /g,")")
-        .replace(/@/g,"(X,Y,Z)=>")
-        .replace(/_/g,"Z=>Z")
-        .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('})
-        .replace(/\xD0/g,"new Date("); // Ð
-    code = fixParens(code);
-    code = code
-        .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
-        .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
+    code = transpile(code);
 
     alert("JS code: "+code);
     try {
-        var result=eval(code);
+        var result = eval(code);
         alert("Result: "+result);
-        document.getElementById("output").value = result;
+        document.getElementById("output").value = code;
     } catch (e) {
         error(e);
     }

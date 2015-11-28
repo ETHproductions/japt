@@ -467,7 +467,7 @@ function transpile(code) {
                 alert("tmp: "+tmp);
                 if (tmp.slice(-1) !== "}")
                     tmp += "}";
-                var tr = transpile(tmp.slice(0,-1));
+                var tr = fixParens(transpile(tmp.slice(0,-1)));
                 if (tr.lastIndexOf(";") < 0)
                     outp += "return " + tr + "}";
                 else

@@ -92,14 +92,16 @@ Japt uses the [shoco library](http://ed-von-schleck.github.io/shoco/) for string
 
 ### Unicode shortcuts
 
-Japt code can be compressed, similarly to its strings. The most commonly used runs of characters are mapped to Unicode points, starting at `¡`. A full list of these is coming soon, but for now, you could look inside [src/japt-interpreter.js](https://github.com/ETHproductions/Japt/blob/master/src/japt-interpreter.js#L224).
+Japt code can be compressed, similarly to its strings. The most commonly used runs of characters are mapped to Unicode points, starting at `¡`. A full list of these is coming soon, but for now, you could look inside [src/japt-interpreter.js](https://github.com/ETHproductions/Japt/blob/master/src/japt-interpreter.js#L387).
 
 ### Anonymous functions
 
-With ES6, we got the new fat arrow operator `=>`, which quickly and concisely defines a function. In Japt, the equivalent will be `{`, with any number of uppercase letters preceding it as arguments. For example, `XY{X+Y}` defines a function that takes in two arguments, and returns the result of adding them (or concatenating them, if one is a string). But this is not working yet; instead, you can use fat arrows; just make sure you have an ES6-compliant browser. Even better, you can use one of these:
+With ES6, we got the new fat arrow operator `=>`, which quickly and concisely defines a function. In Japt, the equivalent is `{`, with any number of uppercase letters preceding it as arguments. For example, `XY{X+Y}` defines a function that takes in two arguments, and returns the result of adding them (or concatenating them, if one is a string). 
 
-- `@` operator, which stands in for `(X,Y,Z)=>`. `Ur(X,Y =>X+Y` can be reduced to `Ur@X+Y`.
-- `_` operator, which stands in for `z=>z`. `UmX=>Xc` can be reduced to `Um_c`.
+There's also two shortcut operators:
+
+- `@`, which stands in for `XYZ{`. `UrXY{X+Y}` can be reduced to `Ur@X+Y}`.
+- `_`, which stands in for `Z{Z`. `UmX{Xc}` can be reduced to `Um_c}`.
 
 ### Pure JS
 

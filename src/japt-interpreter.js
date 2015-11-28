@@ -277,7 +277,7 @@ function run() {
         H = 32,
         I = 64,
         J = -1,
-        K = .5,
+        K = Date,
         L = 100,
         M = Math,
         N = evalInput(input),
@@ -454,9 +454,8 @@ function transpile(code) {
             }
             if (code[i] === "{") {
                 outp += "function(" + letters.split("").join(",") + "){";
-                level = 1;
                 var tmp = "";
-                for (i++; level > 0 && i < code.length; i++) {
+                for (level = 1, i++; level > 0 && i < code.length; i++) {
                     if (code[i] === "{") {
                         level++;
                     } else if (code[i] === "}") {
@@ -466,7 +465,7 @@ function transpile(code) {
                 }
                 if (tmp.slice(-1) !== "}")
                     tmp += "}";
-                var tr = transpile(tmp.slice(-1));
+                var tr = transpile(tmp.slice(0,-1));
                 if (tr.lastIndexOf(";") < 0)
                     outp += "return " + tr + "}";
                 else

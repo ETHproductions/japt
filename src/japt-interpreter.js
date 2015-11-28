@@ -317,7 +317,7 @@ function subparen(code) {
 }
 
 function fixParens(code) {
-    var cade = "", mode = "next", char = "", curr = "", array = "", level = 0;
+    var cade = "", mode = "next", char = "", curr = "", temp = "", level = 0;
     for(var i=0;i<code.length;i++) {
         char = code[i];
         switch(mode) {
@@ -327,6 +327,9 @@ function fixParens(code) {
                     curr = "";
                 } else if (char == "[") {
                     mode = "array";
+                    level = 0;
+                } else if (char == "{") {
+                    mode = "brackets";
                     level = 0;
                 } else {
                     curr += char;
@@ -338,12 +341,26 @@ function fixParens(code) {
                 } else if (char == "]") {
                     level--;
                     if (level < 0) {
-                        curr += "[" + fixParens(array) + "]";
-                        array = "";
+                        curr += "[" + fixParens(temp) + "]";
+                        temp = "";
                         mode = "next";
                     }
                 } else {
-                    array += char;
+                    temp += char;
+                }
+                break;
+            case "brackets":
+                if (char == "{") {
+                    level++;
+                } else if (char == "}") {
+                    level--;
+                    if (level < 0) {
+                        curr += "{" + fixParens(temp) + "}";
+                        temp = "";
+                        mode = "next";
+                    }
+                } else {
+                    temp += char;
                 }
                 break;
         }
@@ -478,13 +495,6 @@ function transpile(code) {
                 i--;
             }
         }
-        else if (char === ";") {
-            if (outp.lastIndexOf(";") < 0)
-                outp = fixParens(outp);
-            else
-                outp = outp.slice(0,outp.lastIndexOf(";")+1) + fixParens(outp.slice(outp.lastIndexOf(";")+1));
-            outp += ";";
-        }
         else if (char === "'") {
             outp += "\"" + code[++i] + "\"";
         }
@@ -512,7 +522,7 @@ function transpile(code) {
     outp = outp
         .replace(/(\d)\.([a-df-z])/g,function(_,x,y){return x+" ."+y})
         .replace(/(\d)\.e\((\d)/g,function(_,x,y){return x+"e"+y});
-//    outp = fixParens(outp);
+    outp = fixParens(outp);
     return outp;
 }
 

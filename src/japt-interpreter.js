@@ -538,7 +538,7 @@ function evalJapt(code) {
     try {
         var result = eval(code);
         alert("Result: "+result);
-        document.getElementById("output").value = code;
+        document.getElementById("output").value = result;
     } catch (e) {
         error(e);
     }

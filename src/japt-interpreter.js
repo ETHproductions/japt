@@ -505,7 +505,15 @@ function transpile(code) {
             outp += "))";
         }
         else if (isChar(char, "a-z")) {
-            outp += "." + char + "(";
+            if (isChar(outp.slice(-1),"0-9")) {
+                if (char === "e") {
+                    outp += char;
+                } else {
+                    outp += " ." + char + "(";
+                }
+            } else {
+                outp += "." + char + "(";
+            }
         }
         else if (pairs.hasOwnProperty(char)) {
             code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
@@ -514,11 +522,7 @@ function transpile(code) {
             outp += char;
         }
     }
-
-    // RegExp Replacements
-    outp = outp
-        .replace(/(\d)\.([a-df-z])/g,function(_,x,y){return x+" ."+y})
-        .replace(/(\d)\.e\((\d)/g,function(_,x,y){return x+"e"+y});
+    
     outp = fixParens(outp);
     return outp;
 }

@@ -475,7 +475,7 @@ function transpile(code) {
             }
             else {
                 outp += letters.split("").join(",");
-                outp += code[i];
+                outp += code[i] || "";
             }
         }
         else if (char === "'") {

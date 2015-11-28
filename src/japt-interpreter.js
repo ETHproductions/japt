@@ -255,7 +255,6 @@ function evalInput(input) {
     return processed;
 }
 
-// Call this function with a second argument. If second arg is trusey
 function shorthand (code) {
     // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
     var pairs = {
@@ -278,10 +277,10 @@ function shorthand (code) {
         "\u00AF": "s0,",  // ¯ - 175
         "\u00B0": "++",   // ° - 176
         "\u00B1": "+=",   // ± - 177
-        "\u00B2": "--",   // ² - 178
-        "\u00B3": "-=",   // ³ - 179
-        "\u00B4": "*=",   // ´ - 180
-        "\u00B5": "/=",   // µ - 181
+        "\u00B2": "p2 ",  // ² - 178
+        "\u00B3": "p3 ",  // ³ - 179
+        "\u00B4": "--",   // ´ - 180
+        "\u00B5": "-=",   // µ - 181
         "\u00B6": "===",  // ¶ - 182
         "\u00B7": "qR ",  // · - 183
         "\u00B8": "qS ",  // ¸ - 184
@@ -291,7 +290,7 @@ function shorthand (code) {
         "\u00BC": ".25",  // ¼ - 188
         "\u00BD": ".5",   // ½ - 189
         "\u00BE": ".75"   // ¾ - 190
-    }, i = 0, l = "", n = "";
+    }, l = "", n = "";
 
     for (var i = 0; i < code.length; i++) {
         if (['"',"'"].indexOf(code[i]) > -1) { // Quote
@@ -408,33 +407,165 @@ function fixParens(code) {
     return cade;
 }
 
-function evalJapt(code) {
-    var codes = [], strings = [], i = 0, j = 0;
+function transpile(code) {
+  /* For Lexer */
+    var expr = [], // Expression data
+        level = 0,      // Current number of parentheses or curly braces that we're inside
+        temp = "",
+      
+        i = 0,
+        j = 0,
 
-    code = code
-        .replace(/"[^"]*("|.$)/g,function(x){strings[i]=x+(x.slice(-1)=="\""?"":"\"");return"\""+i+++"\""})
-        .replace(/`[^`]*(`|.$)/g,function(x){if(x.slice(-1)=="`")x=x.slice(0,-1);strings[i]="\""+shoco.d(x.slice(1))+"\"";return"\""+i+++"\""})
-        .replace(/\$([^\$]*)\$/g,function(x,y){codes[i]=y;return"$"+i+++"$"})
-        .replace(/'./g,function(x){strings[i]=x+"'";return"\""+i+++"\""})
-        .replace(/#./g,function(x){return x.charCodeAt(1)});
-    code = shorthand(code);
-    code = code
-        .replace(/\)/g,"))")
-        .replace(/ /g,")")
-        .replace(/@/g,"(X,Y,Z)=>")
-        .replace(/_/g,"Z=>Z")
-        .replace(/(.)([a-z])/g,function(x,y,z){return y+(/[0-9]/.test(y)?' .':'.')+z+'('})
-        .replace(/\xD0/g,"new Date("); // Ð
-    code = fixParens(code);
-    code = code
-        .replace(/\$(\d+)\$/g,function(_,x){return codes[x]})
-        .replace(/(\??)"(\d+)"/g,function(_,y,x){return y+strings[x].replace(/([^\\]):/,function(x,z){return y=="?"?z+"\":\"":x}).replace(/([^\\]){([^}]+)}/g,"$1\"+($2)+\"")});
+        strings = [],   // The resulting tokens from inside strings.
+        outp = "";      // Temporary output
+        
+    var pairs = { 
+        // Unicode shortcuts
+        // Using \u<hex> to avoid encoding incompatibilities
+        "@":      "XYZ{",
+        "_":      "Z{Z",
+        "\u00A1": "Um@",  // ¡ - 161
+        "\u00A2": "Us2 ", // ¢ - 162
+        "\u00A3": "m@",   // £ - 163
+        "\u00A4": "s2 ",  // ¤ - 164
+        "\u00A5": "==",   // ¥ - 165
+        "\u00A6": "!=",   // ¦ - 166
+        "\u00A7": "<=",   // § - 167
+        "\u00A8": ">=",   // ¨ - 168
+        "\u00A9": "&&",   // © - 169
+        "\u00AA": "||",   // ª - 170
+        "\u00AB": "&&!",  // « - 171
+        "\u00AC": "q ",   // ¬ - 172
+//      "\u00AD": "",     //     173 is an unprintable
+        "\u00AE": "m_",   // ® - 174
+        "\u00AF": "s0,",  // ¯ - 175
+        "\u00B0": "++",   // ° - 176
+        "\u00B1": "+=",   // ± - 177
+        "\u00B2": "p2 ",  // ² - 178
+        "\u00B3": "p3 ",  // ³ - 179
+        "\u00B4": "--",   // ´ - 180
+        "\u00B5": "-=",   // µ - 181
+        "\u00B6": "===",  // ¶ - 182
+        "\u00B7": "qR ",  // · - 183
+        "\u00B8": "qS ",  // ¸ - 184
+        "\u00B9": ") ",   // ¹ - 185
+        "\u00BA": "((",   // º - 186
+        "\u00BB": "(((",  // » - 187
+        "\u00BC": ".25",  // ¼ - 188
+        "\u00BD": ".5",   // ½ - 189
+        "\u00BE": ".75"   // ¾ - 190
+    }
+
+    // Some helpful functions
+    function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
+
+    // NOT PRODUCTION READY
+    for (i = 0; i < code.length; i++) {
+        var char = code[i];
+        if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
+            var qm = outp.slice(-1) === "?"; // Question Mark
+            var str = "";
+            for (; code[i] !== char; i++) {
+                if (code[i] === "\\") { // If we encounter a backslash
+                    str += "\\" + code[++i]; // Go to next character and store
+                } else if (code[i] === "{") { // If it is a { - This is for the "{2+1}" stuff
+                    temp = "";
+                    for (level = 1; level > 0; i++) {
+                        if (code[i] === "}") {
+                            level--;
+                        } else if (code[i] === "{") {
+                            level++;
+                        }
+                        temp += code[i];
+                    }
+                    strings[j] = temp;
+                    str += "{" + j++ + "}";
+                } else if (code[i] === ":" && qm) {
+                    str += "\":\"";
+                    qm = false;
+                } else {
+                    str += code[i];
+                }
+            }
+            outp += "\""; // Add this character to the output
+
+            continue; // Jump to next iteration
+        }
+        else if (char === "$") {
+            for (; code[i] !== "$"; i++) {
+                if (code[i] === "\\" && code[i+1] === "$") { // If we encounter a backslash
+                    i++; // Go to next character and store
+                    outp += "$";
+                } else {
+                    outp += code[i];
+                }
+            }
+        }
+        else if (isChar(char, "A-Z{")) {
+            var letters = "";
+            for (; isChar(code[i], "A-Z"); i++) {
+                letters += code[i];
+            }
+            if (code[i] === "{") {
+                outp += "function(" + letters.split("").join(",") + "){";
+                level = 1;
+                var tmp = "";
+                for (i++; level > 0; i++) {
+                    if (code[i] === "{") {
+                        level++;
+                    } else if (code[i] === "}") {
+                        level--;
+                    }
+                    tmp += code[i];
+                }
+                if (tmp.slice(-1) !== "}")
+                    tmp += "}";
+                var tr = transpile(tmp.slice(-1));
+                if (tr.lastIndexOf(";") < 0)
+                    outp += "return " + tr + "}";
+                else
+                    outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
+            }
+            else {
+                outp += letters.split("").join(",");
+            }
+        }
+        else if (char === "'") {
+            outp += "\"" + code[++i] + "\"";
+        }
+        else if (char === "#") {
+            outp += code[++i].charCodeAt(0);
+        }
+        else if (char === " ") {
+            outp += ")";
+        }
+        else if (char === ")") {
+            outp += "))";
+        }
+        else if (pairs.hasOwnProperty(char)) {
+            code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+        }
+        else {
+            code += char;
+        }
+    }
+
+  // RegExp Replacements
+  code = code
+    .replace(/@/g,"(X,Y,Z)=>")
+    .replace(/[a-z]/g,function(x){return"."+x})
+    .replace(/(\d)\.([a-df-z])/g,function(_,x,y){return x+" ."+y});
+  code = fixParens(code);
+}
+
+function evalJapt(code) {
+    code = transpile(code);
 
     alert("JS code: "+code);
     try {
-        var result=eval(code);
-        alert("Result: "+result);
-        document.getElementById("output").value = result;
+        //var result=eval(code);
+        //alert("Result: "+result);
+        document.getElementById("output").value = code;
     } catch (e) {
         error(e);
     }

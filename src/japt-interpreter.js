@@ -496,11 +496,12 @@ function transpile(code) {
         }
     }
 
-  // RegExp Replacements
-  code = code
-    .replace(/[a-z]/g,function(x){return"."+x})
-    .replace(/(\d)\.([a-df-z])/g,function(_,x,y){return x+" ."+y});
-  code = fixParens(code);
+    // RegExp Replacements
+    outp = outp
+        .replace(/[a-z]/g,function(x){return"."+x})
+        .replace(/(\d)\.([a-df-z])/g,function(_,x,y){return x+" ."+y});
+    outp = fixParens(outp);
+    return outp;
 }
 
 function evalJapt(code) {

@@ -353,6 +353,7 @@ function fixParens(code) {
 }
 
 function transpile(code) {
+    alert("code: "+code);
   /* For Lexer */
     var expr = [], // Expression data
         level = 0,      // Current number of parentheses or curly braces that we're inside

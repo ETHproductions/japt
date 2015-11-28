@@ -491,7 +491,7 @@ function transpile(code) {
             code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
         }
         else {
-            code += char;
+            outp += char;
         }
     }
 

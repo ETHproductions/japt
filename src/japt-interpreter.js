@@ -340,11 +340,11 @@ function fixParens(code) {
                     level++;
                 } else if (char == "]") {
                     level--;
-                    if (level < 0) {
-                        curr += "[" + fixParens(temp) + "]";
-                        temp = "";
-                        mode = "next";
-                    }
+                }
+                if (level < 0) {
+                    curr += "[" + fixParens(temp) + "]";
+                    temp = "";
+                    mode = "next";
                 } else {
                     temp += char;
                 }
@@ -354,11 +354,11 @@ function fixParens(code) {
                     level++;
                 } else if (char == "}") {
                     level--;
-                    if (level < 0) {
-                        curr += "{" + fixParens(temp) + "}";
-                        temp = "";
-                        mode = "next";
-                    }
+                }
+                if (level < 0) {
+                    curr += "{" + fixParens(temp) + "}";
+                    temp = "";
+                    mode = "next";
                 } else {
                     temp += char;
                 }

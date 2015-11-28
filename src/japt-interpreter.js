@@ -483,6 +483,7 @@ function transpile(code) {
                 outp = fixParens(outp);
             else
                 outp = outp.slice(0,outp.lastIndexOf(";")+1) + fixParens(outp.slice(outp.lastIndexOf(";")+1));
+            outp += ";";
         }
         else if (char === "'") {
             outp += "\"" + code[++i] + "\"";

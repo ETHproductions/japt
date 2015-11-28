@@ -449,7 +449,8 @@ function transpile(code) {
                     str += code[i];
                 }
             }
-            outp += "\""; // Add this character to the output
+            if (char === "`") str = shoco.d(str);
+            outp += "\"" + str.replace(/([^\\])"(\d)"/,function(_x,y){return x+"\"+("+strings[y]+")+\""}) + "\""; // Add this character to the output
 
             continue; // Jump to next iteration
         }

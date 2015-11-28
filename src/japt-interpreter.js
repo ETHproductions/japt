@@ -512,7 +512,7 @@ function transpile(code) {
     outp = outp
         .replace(/(\d)\.([a-df-z])/g,function(_,x,y){return x+" ."+y})
         .replace(/(\d)\.e\((\d)/g,function(_,x,y){return x+"e"+y});
-    outp = fixParens(outp);
+//    outp = fixParens(outp);
     return outp;
 }
 

@@ -255,61 +255,6 @@ function evalInput(input) {
     return processed;
 }
 
-function shorthand (code) {
-    // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
-    var pairs = {
-        // Using \u<hex> to avoid encoding incompatibilities
-        // Feel free to change these
-        "\u00A1": "Um@",  // ¡ - 161
-        "\u00A2": "Us2 ", // ¢ - 162
-        "\u00A3": "m@",   // £ - 163
-        "\u00A4": "s2 ",  // ¤ - 164
-        "\u00A5": "==",   // ¥ - 165
-        "\u00A6": "!=",   // ¦ - 166
-        "\u00A7": "<=",   // § - 167
-        "\u00A8": ">=",   // ¨ - 168
-        "\u00A9": "&&",   // © - 169
-        "\u00AA": "||",   // ª - 170
-        "\u00AB": "&&!",  // « - 171
-        "\u00AC": "q ",   // ¬ - 172
-//      "\u00AD": "",     //     173 is an unprintable
-        "\u00AE": "m_",   // ® - 174
-        "\u00AF": "s0,",  // ¯ - 175
-        "\u00B0": "++",   // ° - 176
-        "\u00B1": "+=",   // ± - 177
-        "\u00B2": "p2 ",  // ² - 178
-        "\u00B3": "p3 ",  // ³ - 179
-        "\u00B4": "--",   // ´ - 180
-        "\u00B5": "-=",   // µ - 181
-        "\u00B6": "===",  // ¶ - 182
-        "\u00B7": "qR ",  // · - 183
-        "\u00B8": "qS ",  // ¸ - 184
-        "\u00B9": ") ",   // ¹ - 185
-        "\u00BA": "((",   // º - 186
-        "\u00BB": "(((",  // » - 187
-        "\u00BC": ".25",  // ¼ - 188
-        "\u00BD": ".5",   // ½ - 189
-        "\u00BE": ".75"   // ¾ - 190
-    }, l = "", n = "";
-
-    for (var i = 0; i < code.length; i++) {
-        if (['"',"'"].indexOf(code[i]) > -1) { // Quote
-            n += l = code[i++];
-            // i < 1e9 sets an upper limit of 1,000,000,000 (1 billion) to code length. 
-            // For reference, JavaScript's max string length is 9,007,199,254,740,991 characters / bytes
-            while (!(code[i] == l && code[i - 1] != "\\") && i < code.length && i < 1e9) n += code[i++]; n += code[i];
-        } else {
-            if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
-                n += pairs[ code[i] ];
-            } else {
-                n += code[i];
-            }
-        }
-    }
-
-    return n;
-}
-
 function run() {
     clear_output();
     document.getElementById("run").disabled = true;
@@ -465,12 +410,12 @@ function transpile(code) {
         if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
             var qm = outp.slice(-1) === "?"; // Question Mark
             var str = "";
-            for (; code[i] !== char; i++) {
+            for (; code[i] !== char && i < code.length; i++) {
                 if (code[i] === "\\") { // If we encounter a backslash
                     str += "\\" + code[++i]; // Go to next character and store
                 } else if (code[i] === "{") { // If it is a { - This is for the "{2+1}" stuff
                     temp = "";
-                    for (level = 1; level > 0; i++) {
+                    for (level = 1; level > 0 && i < code.length; i++) {
                         if (code[i] === "}") {
                             level--;
                         } else if (code[i] === "{") {
@@ -492,7 +437,7 @@ function transpile(code) {
             continue; // Jump to next iteration
         }
         else if (char === "$") {
-            for (; code[i] !== "$"; i++) {
+            for (; code[i] !== "$" && i < code.length; i++) {
                 if (code[i] === "\\" && code[i+1] === "$") { // If we encounter a backslash
                     i++; // Go to next character and store
                     outp += "$";
@@ -503,14 +448,14 @@ function transpile(code) {
         }
         else if (isChar(char, "A-Z{")) {
             var letters = "";
-            for (; isChar(code[i], "A-Z"); i++) {
+            for (; isChar(code[i], "A-Z") && i < code.length; i++) {
                 letters += code[i];
             }
             if (code[i] === "{") {
                 outp += "function(" + letters.split("").join(",") + "){";
                 level = 1;
                 var tmp = "";
-                for (i++; level > 0; i++) {
+                for (i++; level > 0 && i < code.length; i++) {
                     if (code[i] === "{") {
                         level++;
                     } else if (code[i] === "}") {
@@ -552,7 +497,6 @@ function transpile(code) {
 
   // RegExp Replacements
   code = code
-    .replace(/@/g,"(X,Y,Z)=>")
     .replace(/[a-z]/g,function(x){return"."+x})
     .replace(/(\d)\.([a-df-z])/g,function(_,x,y){return x+" ."+y});
   code = fixParens(code);

@@ -407,6 +407,7 @@ function transpile(code) {
     // NOT PRODUCTION READY
     for (i = 0; i < code.length; i++) {
         var char = code[i];
+        alert("char: "+char);
         if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
             var qm = outp.slice(-1) === "?"; // Question Mark
             var str = "";

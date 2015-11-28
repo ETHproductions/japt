@@ -423,13 +423,11 @@ function transpile(code) {
 
     // NOT PRODUCTION READY
     for (i = 0; i < code.length; i++) {
-        alert("char: "+char);
         var char = code[i];
         if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
-            alert("We have a quote!");
             var qm = outp.slice(-1) === "?"; // Question Mark
             var str = "";
-            for (; code[i] !== char && i < code.length; i++) {
+            for (i++; code[i] !== char && i < code.length; i++) {
                 if (code[i] === "\\") { // If we encounter a backslash
                     str += "\\" + code[++i]; // Go to next character and store
                 } else if (code[i] === "{") { // If it is a { - This is for the "{2+1}" stuff

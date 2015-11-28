@@ -432,7 +432,7 @@ function transpile(code) {
                     str += "\\" + code[++i]; // Go to next character and store
                 } else if (code[i] === "{") { // If it is a { - This is for the "{2+1}" stuff
                     temp = "";
-                    for (level = 1; level > 0 && i < code.length; i++) {
+                    for (level = 1, i++; level > 0 && i < code.length; i++) {
                         if (code[i] === "}") {
                             level--;
                         } else if (code[i] === "{") {
@@ -440,7 +440,7 @@ function transpile(code) {
                         }
                         temp += code[i];
                     }
-                    strings[j] = temp;
+                    strings[j] = transpile(temp.slice(0,-1));
                     str += "{" + j++ + "}";
                 } else if (code[i] === ":" && qm) {
                     str += "\":\"";

@@ -467,7 +467,7 @@ function transpile(code) {
                 alert("tmp: "+tmp);
                 if (tmp.slice(-1) !== "}")
                     tmp += "}";
-                var tr = fixParens(transpile(tmp.slice(0,-1)));
+                var tr = transpile(tmp.slice(0,-1));
                 if (tr.lastIndexOf(";") < 0)
                     outp += "return " + tr + "}";
                 else
@@ -477,6 +477,12 @@ function transpile(code) {
                 outp += letters.split("").join(",");
                 i--;
             }
+        }
+        else if (char === ";") {
+            if (outp.lastIndexOf(";") < 0)
+                outp = fixParens(outp);
+            else
+                outp = outp.slice(0,outp.lastIndexOf(";")+1) + fixParens(outp.slice(outp.lastIndexOf(";")+1));
         }
         else if (char === "'") {
             outp += "\"" + code[++i] + "\"";

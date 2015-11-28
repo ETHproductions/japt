@@ -7,8 +7,8 @@ var defFuncs = {
     c: "continue;",
     d: "",
     e: "",
-    f: "for(",
-    g: "for(",
+    f: "",
+    g: "",
     h: "",
     i: "if(",
     j: "else if(",
@@ -24,7 +24,11 @@ var defFuncs = {
     t: "typeof(",
     u: "while(!",
     v: "evalJapt(",
-    w: "while("};
+    w: "while(",
+    x: "",
+    y: "",
+    z: ""
+};
 
 String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';for(var y='',i=x|0;i--;)y+=this;return y}
 String.prototype.a = function(){return this.split('')};
@@ -35,7 +39,7 @@ String.prototype.d = function(x){
     else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}};
 String.prototype.e = function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t};
 String.prototype.f = function(x,y){return this.match(x instanceof RegExp?x:RegExp(x,y||"g"))};
-String.prototype.g = function(x){return this.charAt(x)};
+String.prototype.g = function(x){return this.charAt(x||0)};
 String.prototype.h = function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)};
 String.prototype.i = function(x,y){return this.substring(0,x)+y+this.substring(x)};
 String.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.substring(0,x)+this.substring(x+y)};
@@ -62,7 +66,7 @@ Array.prototype.c = function(x){return this.lastIndexOf(x)};
 Array.prototype.d = function(x){return this.some(x)};
 Array.prototype.e = function(x){return this.every(x)};
 Array.prototype.f = function(x){return this.filter(x)};
-Array.prototype.g = function(x){return this[x]};
+Array.prototype.g = function(x){return this[x||0]};
 Array.prototype.h = function(x,y){this[x]=y;return this};
 Array.prototype.i = function(x,y){this.splice(x,0,y);return this};
 Array.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.splice(x,y)};
@@ -268,31 +272,31 @@ function run() {
     timeout = document.getElementById("timeout").checked;
 
     A = 10,
-        B = 11,
-        C = 12,
-        D = 13,
-        E = 14,
-        F = 15,
-        G = 16,
-        H = 32,
-        I = 64,
-        J = -1,
-        K = Date,
-        L = 100,
-        M = Math,
-        N = evalInput(input),
-        O = shoco,
-        P = "",
-        Q = "\"",
-        R = "\n",
-        S = " ",
-        T = 0,
-        U = N[0],
-        V = N[1],
-        W = N[2],
-        X = N[3],
-        Y = N[4],
-        Z = N[5];
+    B = 11,
+    C = 12,
+    D = 13,
+    E = 14,
+    F = 15,
+    G = 16,
+    H = 32,
+    I = 64,
+    J = -1,
+    K = Date,
+    L = 100,
+    M = Math,
+    N = evalInput(input),
+    O = shoco,
+    P = "",
+    Q = "\"",
+    R = "\n",
+    S = " ",
+    T = 0,
+    U = N.length <= 0? 0 : N[0],
+    V = N.length <= 1? 0 : N[1],
+    W = N.length <= 2? 0 : N[2],
+    X = N.length <= 3? 0 : N[3],
+    Y = N.length <= 4? 0 : N[4],
+    Z = N.length <= 5? 0 : N[5];
 
     evalJapt(code);
 
@@ -308,8 +312,8 @@ function subparen(code) {
     for(var i in code) {
         if(code[i]=='(')
             level++;
-            if(code[i]==')')
-                level--, min = Math.min(min, level);
+        if(code[i]==')')
+            level--, min = Math.min(min, level);
     }
     if(min < 0) code = '('.repeat(-min) + code, level-=min;
     if(level > 0) code += ')'.repeat(level);
@@ -371,14 +375,13 @@ function fixParens(code) {
 
 function transpile(code) {
     /* For Lexer */
-    var expr = [], // Expression data
-        level = 0,      // Current number of parentheses or curly braces that we're inside
+    var level = 0,      // Current number of parentheses or curly braces that we're inside
         temp = "",
       
         i = 0,
         j = 0,
 
-        strings = [],   // The resulting tokens from inside strings.
+        strings = [],   // Stores the {...} inside strings
         outp = "";      // Temporary output
         
     var pairs = { 
@@ -471,18 +474,18 @@ function transpile(code) {
             }
             if (code[i] === "{") {
                 outp += "function(" + letters.split("").join(",") + "){";
-                var tmp = "";
+                temp = "";
                 for (level = 1, i++; level > 0 && i < code.length; i++) {
                     if (code[i] === "{") {
                         level++;
                     } else if (code[i] === "}") {
                         level--;
                     }
-                    tmp += code[i];
+                    temp += code[i];
                 }
-                if (tmp.slice(-1) !== "}")
-                    tmp += "}";
-                var tr = transpile(tmp.slice(0,-1));
+                if (temp.slice(-1) !== "}")
+                    temp += "}";
+                var tr = transpile(temp.slice(0,-1));
                 if (tr.lastIndexOf(";") < 0)
                     outp += "return " + tr + "}";
                 else
@@ -533,8 +536,8 @@ function evalJapt(code) {
 
     alert("JS code: "+code);
     try {
-        //var result=eval(code);
-        //alert("Result: "+result);
+        var result = eval(code);
+        alert("Result: "+result);
         document.getElementById("output").value = code;
     } catch (e) {
         error(e);

@@ -424,7 +424,6 @@ function transpile(code) {
     // Some helpful functions
     function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
 
-    // NOT PRODUCTION READY
     for (i = 0; i < code.length; i++) {
         var char = code[i];
         if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
@@ -458,7 +457,7 @@ function transpile(code) {
             continue; // Jump to next iteration
         }
         else if (char === "$") {
-            for (; code[i] !== "$" && i < code.length; i++) {
+            for (i++; code[i] !== "$" && i < code.length; i++) {
                 if (code[i] === "\\" && code[i+1] === "$") { // If we encounter a backslash
                     i++; // Go to next character and store
                     outp += "$";

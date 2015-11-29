@@ -325,21 +325,14 @@ function subparen(code) {
 
 function fixParens(code) {
     alert("fixParens input: "+code);
-    var cade = "", mode = "next", char = "", curr = "", temp = "", level = 0, parens = 0;
+    var cade = "", mode = "next", char = "", curr = "", temp = "", level = 0;
     for(var i=0;i<code.length;i++) {
         char = code[i];
         switch(mode) {
             case "next":
                 if (char == ";") {
-                    if (parens < 0)
-                        cade += "(".repeat(-parens) + curr;
-                    else if (parens > 0)
-                        cade += curr + ")".repeat(+parens);
-                    else
-                        cade += curr;
-                    cade += char;
+                    cade += subparen(curr) + char;
                     curr = "";
-                    parens = 0;
                 } else if (char == "[") {
                     mode = "array";
                     level = 0;
@@ -347,10 +340,6 @@ function fixParens(code) {
                     mode = "brackets";
                     level = 0;
                 } else {
-                    if (char == "(")
-                        parens++;
-                    if (char == ")")
-                        parens--;
                     curr += char;
                 }
                 break;
@@ -375,7 +364,7 @@ function fixParens(code) {
                     level--;
                 }
                 if (level < 0) {
-                    curr += "{" + fixParens(temp) + "}";
+                    curr += "{" + temp + "}";
                     temp = "";
                     mode = "next";
                 } else {

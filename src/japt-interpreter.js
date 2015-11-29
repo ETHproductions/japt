@@ -179,6 +179,10 @@ function clear_output() {
     document.getElementById("stderr").innerHTML = "";
 }
 
+function output(x) {
+    document.getElementById("output").value += x;
+}
+
 function stop() {
     running = false;
     document.getElementById("run").disabled = false;
@@ -188,13 +192,18 @@ function stop() {
 }
 
 function interrupt() {
-    error(ERROR_INTERRUPT);
+    error("Interrupted");
 }
 
 function error(msg) {
     document.getElementById("stderr").innerHTML = msg;
     alert(msg);
     stop();
+}
+
+function success(result) {
+    output(result);
+    alert("Result: "+result);
 }
 
 function evalInput(input) {
@@ -298,7 +307,7 @@ function run() {
     Y = N.length <= 4? 0 : N[4],
     Z = N.length <= 5? 0 : N[5];
 
-    evalJapt(code);
+    evalJapt(code, function(code){alert("JS code: "+code)}, success, error);
 
     document.getElementById("run").disabled = false;
     document.getElementById("stop").disabled = true;
@@ -532,15 +541,13 @@ function transpile(code) {
     return outp;
 }
 
-function evalJapt(code) {
+function evalJapt(code, before, onsuccess, onerror) {
     code = transpile(code);
-
-    alert("JS code: "+code);
+    if (before) before(code);
     try {
         var result = eval(code);
-        alert("Result: "+result);
-        document.getElementById("output").value = result;
+        if (onsuccess) onsuccess(result);
     } catch (e) {
-        error(e);
+        if (onerror) onerror(e);
     }
 }

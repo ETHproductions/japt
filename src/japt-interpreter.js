@@ -330,7 +330,9 @@ function fixParens(code) {
                     if (parens < 0)
                         cade += "(".repeat(-parens) + curr;
                     else if (parens > 0)
-                        cade += curr + ")".repeat(parens);
+                        cade += curr + ")".repeat(+parens);
+                    else
+                        cade += curr;
                     cade += char;
                     curr = "";
                     parens = 0;

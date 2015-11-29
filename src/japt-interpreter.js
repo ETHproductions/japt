@@ -321,13 +321,17 @@ function subparen(code) {
 }
 
 function fixParens(code) {
-    var cade = "", mode = "next", char = "", curr = "", temp = "", level = 0;
+    var cade = "", mode = "next", char = "", curr = "", temp = "", level = 0, parens = 0;
     for(var i=0;i<code.length;i++) {
         char = code[i];
         switch(mode) {
             case "next":
                 if (char == ";") {
-                    cade += subparen(curr) + char;
+                    if (parens < 0)
+                        cade += "(".repeat(-parens) + curr;
+                    else if (parens > 0)
+                        cade += curr + ")".repeat(parens);
+                    cade += char;
                     curr = "";
                 } else if (char == "[") {
                     mode = "array";
@@ -336,6 +340,10 @@ function fixParens(code) {
                     mode = "brackets";
                     level = 0;
                 } else {
+                    if (char == "(")
+                        parens++;
+                    if (char == ")")
+                        parens--;
                     curr += char;
                 }
                 break;

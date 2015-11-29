@@ -490,6 +490,7 @@ function transpile(code) {
                 }
                 if (temp.slice(-1) !== "}")
                     temp += "}";
+                else i--;
                 var tr = transpile(temp.slice(0,-1));
                 if (tr.lastIndexOf(";") < 0)
                     outp += "return " + tr + "}";

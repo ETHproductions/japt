@@ -1,4 +1,4 @@
-alert("Note: the interpreter is currently undergoing some changes.");
+
 var code, input, timeout;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
@@ -309,7 +309,6 @@ function run() {
 }
 
 function subparen(code) {
-    alert("subparen input: "+code);
     var level = 0, min = 0;
     for(var i in code) {
         if(code[i]=='(')
@@ -319,12 +318,10 @@ function subparen(code) {
     }
     if(min < 0) code = '('.repeat(-min) + code, level-=min;
     if(level > 0) code += ')'.repeat(level);
-    alert("subparen output: "+code);
     return code;
 }
 
 function fixParens(code) {
-    alert("fixParens input: "+code);
     var cade = "", mode = "next", char = "", curr = "", temp = "", level = 0;
     for(var i=0;i<code.length;i++) {
         char = code[i];
@@ -374,7 +371,6 @@ function fixParens(code) {
         }
     }
     cade += subparen(curr);
-    alert("fixParens output: "+cade);
     return cade;
 }
 

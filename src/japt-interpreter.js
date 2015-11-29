@@ -418,7 +418,8 @@ function transpile(code) {
         "\u00BB": "(((",  // » - 187
         "\u00BC": ".25",  // ¼ - 188
         "\u00BD": ".5",   // ½ - 189
-        "\u00BE": ".75"   // ¾ - 190
+        "\u00BE": ".75",  // ¾ - 190
+        "\u00D0": "new Date(" // Ð - 208
     }
 
     // Some helpful functions

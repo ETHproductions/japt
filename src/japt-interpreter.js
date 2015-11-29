@@ -333,6 +333,7 @@ function fixParens(code) {
                         cade += curr + ")".repeat(parens);
                     cade += char;
                     curr = "";
+                    parens = 0;
                 } else if (char == "[") {
                     mode = "array";
                     level = 0;

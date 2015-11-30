@@ -1,6 +1,6 @@
 # Japt
 
-**Japt** is is a shortened version of **Ja**vaScri**pt**. [Interpreter](http://codegolf.stackexchange.com/a/62685/42545) (this will be moved to its own page soon)
+**Japt** is is a shortened version of **Ja**vaScri**pt**. [WIP interpreter](http://ethproductions.github.io/japt)
 
 ## Basic programs
 

@@ -307,7 +307,7 @@ function run() {
     Y = N.length <= 4? 0 : N[4],
     Z = N.length <= 5? 0 : N[5];
 
-    evalJapt(code, function(code){alert("JS code: "+code)}, success, error);
+    evalJapt(code, function(code){if(location.hostname!=="ethproductions.github.io")alert("JS code: "+code)}, success, error);
 
     document.getElementById("run").disabled = false;
     document.getElementById("stop").disabled = true;

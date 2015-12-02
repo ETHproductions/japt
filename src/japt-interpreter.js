@@ -521,7 +521,7 @@ function transpile(code) {
             if (code[++i] === "\n")
                 outp += '"\\n"';
             else
-                outp += "\"" + code[++i] + "\"";
+                outp += "\"" + code[i] + "\"";
         }
         else if (char === "#") {
             outp += code[++i].charCodeAt(0);

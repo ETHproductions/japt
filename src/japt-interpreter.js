@@ -432,7 +432,7 @@ function transpile(code) {
     }
 
     // Some helpful functions
-    function isChar (str, char) { alert(char); return RegExp('^['+char+']$').test(str); }
+    function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
 
     for (i = 0; i < code.length; i++) {
         var char = code[i];

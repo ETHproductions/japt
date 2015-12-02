@@ -551,11 +551,6 @@ function transpile(code) {
         else if (isChar(char, "+\\-/*\\^&|") && outp.slice(-1) === "(") {
             outp += "function(a,b){return a"+char+"b}";
         }
-        else if (char === "\n") {
-            var nl = code.slice(i+1);
-            outp += transpile(nl);
-            code = code.slice(0,i+1);
-        }
         else {
             outp += char;
         }

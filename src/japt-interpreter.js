@@ -436,13 +436,13 @@ function transpile(code) {
 
     for (i = 0; i < code.length; i++) {
         var char = code[i];
-        if (isChar(char, "`\"A-Z0-9\(\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\)\]}")
+        if (isChar(char, "`\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
             && !(isChar(char,"0-9") && isChar(outp.slice(-1),"0-9"))) {
             outp += ",";
         }
-        else if (isChar(outp.slice(-1),"+\-&|^") && isChar(char," \)\]};"))
+        else if (isChar(outp.slice(-1),"+\\-&|\\^") && isChar(char," \\)\\]};"))
             code = code.slice(0,i)+'1'+code.slice(i);
-        else if (isChar(outp.slice(-1),"/*") && isChar(char," \)\]};"))
+        else if (isChar(outp.slice(-1),"/*") && isChar(char," \\)\\]};"))
             code = code.slice(0,i)+'2'+code.slice(i);
         
         if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
@@ -548,7 +548,7 @@ function transpile(code) {
         else if (pairs.hasOwnProperty(char)) {
             code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
         }
-        else if (isChar(char, "+\-/*^&|") && outp.slice(-1) === "(") {
+        else if (isChar(char, "+\\-/*\\^&|") && outp.slice(-1) === "(") {
             outp += "function(a,b){return a"+char+"b}";
         }
         else if (char === "\n") {

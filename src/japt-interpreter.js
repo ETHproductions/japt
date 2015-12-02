@@ -318,7 +318,7 @@ function run() {
 
 function subparen(code) {
     var level = 0, min = 0;
-    for(var i in code) {
+    for(var i=0;i<code.length;i++) {
         if(code[i]=='(')
             level++;
         if(code[i]==')')
@@ -436,6 +436,15 @@ function transpile(code) {
 
     for (i = 0; i < code.length; i++) {
         var char = code[i];
+        if (isChar(char, "`\"A-Z0-9(\[{") && isChar(outp.slice(-1), "`\"A-Z0-9)\]}")
+            && !(isChar(char,"0-9") && isChar(outp.slice(-1),"0-9"))) {
+            outp += ",";
+        }
+        else if (isChar(outp.slice(-1),"+\-&|^") && isChar(char," )\]};"))
+            code = code.slice(0,i)+'1'+code.slice(i);
+        else if (isChar(outp.slice(-1),"/*") && isChar(char," )\]};"))
+            code = code.slice(0,i)+'2'+code.slice(i);
+        
         if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
             var qm = outp.slice(-1) === "?"; // Question Mark
             var str = "";
@@ -457,6 +466,8 @@ function transpile(code) {
                 } else if (code[i] === ":" && qm) {
                     str += "\":\"";
                     qm = false;
+                } else if (code[i] === "\n") {
+                    str += "\\n";
                 } else {
                     str += code[i];
                 }
@@ -507,7 +518,10 @@ function transpile(code) {
             }
         }
         else if (char === "'") {
-            outp += "\"" + code[++i] + "\"";
+            if (code[++i] === "\n")
+                outp += '"\\n"';
+            else
+                outp += "\"" + code[++i] + "\"";
         }
         else if (char === "#") {
             outp += code[++i].charCodeAt(0);
@@ -519,7 +533,9 @@ function transpile(code) {
             outp += "))";
         }
         else if (isChar(char, "a-z")) {
-            if (isChar(outp.slice(-1),"0-9")) {
+            if (outp.slice(-1) === "(") {
+                outp += "function(c){return c."+char+"()}";
+            } else if (isChar(outp.slice(-1),"0-9")) {
                 if (char === "e") {
                     outp += char;
                 } else {
@@ -531,6 +547,14 @@ function transpile(code) {
         }
         else if (pairs.hasOwnProperty(char)) {
             code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+        }
+        else if (isChar(char, "+\-/*^&|") && outp.slice(-1) === "(") {
+            outp += "function(a,b){return a"+char+"b}";
+        }
+        else if (char === "\n") {
+            var nl = code.slice(i+1);
+            outp += transpile(nl);
+            code = code.slice(0,i+1);
         }
         else {
             outp += char;

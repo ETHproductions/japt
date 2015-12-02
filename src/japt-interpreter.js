@@ -436,7 +436,7 @@ function transpile(code) {
 
     for (i = 0; i < code.length; i++) {
         var char = code[i];
-        if (isChar(char, "`\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
+        if (isChar(char, "`'\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
             && !(isChar(char,"0-9") && isChar(outp.slice(-1),"0-9"))) {
             outp += ",";
         }

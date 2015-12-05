@@ -621,7 +621,7 @@ function transpile(code) {
 			outp += "function(a,b){return a"+code.slice(i,i+2)+"b}";
 			i++;
 		}
-		else if (outp.slice(-1) === "(" && char == "!" && isChar(code[i+1], "+\\-*%\\^&|<>") && !isChar(code[i+2],"+\\-=")) > -1) {
+		else if (outp.slice(-1) === "(" && char == "!" && isChar(code[i+1], "+\\-*%\\^&|<>") && !isChar(code[i+2],"+\\-=")) {
 			outp += "function(a,b){return b"+code[i+1]+"a}";
 			i++;
 		}

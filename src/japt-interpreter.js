@@ -553,6 +553,7 @@ function transpile(code) {
             }
         }
         else if (isChar(char, "\\u00E0-\\u00F6\\u00F8-\\u00FF")) {
+            alert("Yes!!!");
             if (outp.slice(-1) === "(") {
                 outp += "function(c){return c[\"\\u00" + char.charCodeAt(0).toUpperCase() + "\"]()}";
             } else {

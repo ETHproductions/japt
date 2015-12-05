@@ -605,12 +605,24 @@ function transpile(code) {
 		else if (pairs.hasOwnProperty(char)) {
 			code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
 		}
+		else if (outp.slice(-1) === "(" && char == "!" && [">>>","===","!=="].indexOf(code.slice(i+1,i+4)) > -1) {
+			outp += "function(a,b){return b"+code.slice(i+1,i+4)+"a}";
+			i+=3;
+		}
 		else if (outp.slice(-1) === "(" && [">>>","===","!=="].indexOf(code.slice(i,i+3)) > -1) {
+			outp += "function(a,b){return a"+code.slice(i,i+3)+"b}";
+			i+=2;
+		}
+		else if (outp.slice(-1) === "(" && char == "!" && ["<<",">>","==","!=","<=",">=","||","&&"].indexOf(code.slice(i+1,i+3)) > -1) {
+			outp += "function(a,b){return b"+code.slice(i+1,i+3)+"a}";
+			i+=2;
+		}
+		else if (outp.slice(-1) === "(" && ["<<",">>","==","!=","<=",">=","||","&&"].indexOf(code.slice(i,i+2)) > -1) {
 			outp += "function(a,b){return a"+code.slice(i,i+2)+"b}";
 			i++;
 		}
-		else if (outp.slice(-1) === "(" && ["<<",">>","==","!=","<=",">="].indexOf(code.slice(i,i+2)) > -1) {
-			outp += "function(a,b){return a"+code.slice(i,i+2)+"b}";
+		else if (outp.slice(-1) === "(" && char == "!" && isChar(code[i+1], "+\\-*%\\^&|<>") && !isChar(code[i+2],"+\\-=")) > -1) {
+			outp += "function(a,b){return b"+code[i+1]+"a}";
 			i++;
 		}
 		else if (outp.slice(-1) === "(" && isChar(char, "+\\-*%\\^&|<>") && !isChar(code[i+1],"+\\-=")) {

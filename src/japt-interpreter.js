@@ -31,7 +31,7 @@ var defFuncs = {
 };
 
 String.prototype.repeat = String.prototype.repeat||function(x){if(x<0)return'';for(var y='',i=x|0;i--;)y+=this;return y}
-String.prototype.a = function(){return this.split('')};
+String.prototype.a = function(x){return this.lastIndexOf(x)};
 String.prototype.b = function(x){return this.indexOf(x)};
 String.prototype.c = function(x){return this.charCodeAt(x)};
 String.prototype.d = function(x){
@@ -46,11 +46,11 @@ String.prototype.j = function(x,y){if(typeof(y)==="undefined")y=1;return this.su
 String.prototype.k = function(x,y){return this.replace(RegExp(x,y),"")};
 String.prototype.l = function(){return this.length};
 String.prototype.m = function(x,y){return this.split(y||'').map(x).join(y||'')};
-String.prototype.n = function(x){return parseInt(this,x||10)};
+String.prototype.n = function(x){x=x||10;if(x==10)return parseFloat(this);else return parseInt(this,x)};
 String.prototype.o = function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")}; // Removes all but specified characters. Similar to TeaScript's O function
 String.prototype.p = function(x){return this.repeat(x)};
 String.prototype.q = function(x){return this.split(x||"")};
-String.prototype.r = function(x,y,z){return this.replace(RegExp(x,(z||"")+"g"),y)};
+String.prototype.r = function(x,y,z){return this.replace(x instanceof RegExp?x:RegExp(x,(z||"")+"g"),y||"")};
 String.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;if(y<0)y+=this.length;return this.substring(x,y)};
 String.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.substr(x,y)};
 String.prototype.u = function(){return this.toUpperCase()};
@@ -60,9 +60,9 @@ String.prototype.x = function(){noFunc('Sx')};
 String.prototype.y = function(){noFunc('Sy')};
 String.prototype.z = function(){noFunc('Sz')};
 
-Array.prototype.a = function(){return this.join('')};
+Array.prototype.a = function(x){return this.lastIndexOf(x)};
 Array.prototype.b = function(x){return this.indexOf(x)};
-Array.prototype.c = function(x){return this.lastIndexOf(x)};
+Array.prototype.c = function(){var f=[];for(var i of this){if(i instanceof Array)for(var j of i.c())f.push(j);else f.push(i);}return f};
 Array.prototype.d = function(x){return this.some(x)};
 Array.prototype.e = function(x){return this.every(x)};
 Array.prototype.f = function(x){return this.filter(x)};
@@ -74,20 +74,21 @@ Array.prototype.k = function(x){this.splice(this.indexOf(x),1);return this};
 Array.prototype.l = function(){return this.length};
 Array.prototype.m = function(x){return this.map(x)};
 Array.prototype.n = function(x){return this.sort(x)};
-Array.prototype.o = function(){return this.pop()};
-Array.prototype.p = function(x){return this.push(x)};
+Array.prototype.o = function(x){x=x||1;if(x>1){for(var a=[];x--;)a.push(this.pop());return a}else return this.pop()};
+Array.prototype.p = function(){for(var i of [].slice.call(arguments))this.push(i);return this};
 Array.prototype.q = function(x){return this.join(x||"")};
-Array.prototype.r = function(x,y){return this.reduce(x,y)};
+Array.prototype.r = function(x,y){return this.reduce(x,y||(typeof x=="number"?0:""))};
 Array.prototype.s = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,y)};
 Array.prototype.t = function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,x+y)};
 Array.prototype.u = function(x){return this.unshift(x)};
 Array.prototype.v = function(){return this.shift()};
 Array.prototype.w = function(){return this.reverse()};
-Array.prototype.x = function(){return this.reduce(function(a,b){return a+b})};
+Array.prototype.x = function(){return this.reduce(function(a,b){return a+parseFloat(b)},0)};
 Array.prototype.y = function(){var t="string"==typeof this[0][0],n=t?this.map(function(t){return t.split("")}):this;return n[0].map(function(r,i){return n.map(function(t){return t[i]})[t?"join":"valueOf"]("")})};
 Array.prototype.z = function(n){return n==1?this.y().map(f=function(l){return l.w()}):n==2?this.w().map(f):n==3?this.map(f).y():this.z(1)}; // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
-Array.prototype.à = function(){noFunc('Aà')};
-Array.prototype.á = function(){noFunc('Aá')};
+Array.prototype["\u00E0"] = function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)return;if(z.length===0){a.push(y)}else{var n=y.slice(0);n.push(z[0]);f(n,z.slice(1),a);f(y,z.slice(1),a)}return a};return f([],this,[]).filter(function(z){return x?z.length===x:1})};
+Array.prototype["\u00E1"] = function(x){var p=[],u=[],f=function(z){var c,i;for(i=0;i<z.length;i++){c=z.splice(i,1)[0];u.push(c);if(z.length===0)p.push(u.slice());f(z);z.splice(i,0,c);u.pop()}return p};var l;return f(this).map(function(z){return z.slice(0,x||z.length)})["\u00E2"]()};
+Array.prototype["\u00E2"] = function(){var u={},a=[];for(var i of this)if(!u.hasOwnProperty(i))u[i]=1,a.push(i);return a};
 
 Number.prototype.a = function(){return Math.abs(this)};
 Number.prototype.b = function(x,y){return this<x?x:this>y?y:this};
@@ -129,7 +130,7 @@ Number.prototype.x = function(){noFunc('Nx')};
 Number.prototype.y = function(){noFunc('Ny')};
 Number.prototype.z = function(){noFunc('Nz')};
 
-// Shorter Date properties. All accept an argument; 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
+// Shorter Date properties. All but k accept an argument: 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
 function ts(x){return["get","set","getUTC","setUTC"][x||0]}
 Date.prototype.a = function(x,y){return this[ts(x||0)+"Milliseconds"](y||0)};
 Date.prototype.b = function(x,y){return this[ts(x||0)+"Seconds"](y||0)};
@@ -138,10 +139,10 @@ Date.prototype.d = function(x,y){return this[ts(x||0)+"Hours"](y||0)};
 Date.prototype.e = function(x,y){return this[ts(x||0)+"Day"](y||0)};
 Date.prototype.f = function(x,y){return this[ts(x||0)+"Date"](y||0)};
 Date.prototype.g = function(x,y){return this[ts(x||0)+"Month"](y||0)};
-Date.prototype.h = function(x,y){return this[ts(x||0)+"Year"](y||0)};
+Date.prototype.h = function(x,y){return this[ts(x||0)+"Year"](y||0)}; // Note: getYear() and setYear() do not have UTC partners
 Date.prototype.i = function(x,y){return this[ts(x||0)+"FullYear"](y||0)};
-Date.prototype.j = function(x,y){return this[ts(x||0)+"Time"](y||0)};
-Date.prototype.k = function(x,y){return this[ts(x||0)+"TimezoneOffset"](y||0)};
+Date.prototype.j = function(x,y){return this[ts(x||0)+"Time"](y||0)}; // Note: getTime() and setTime() do not have UTC partners
+Date.prototype.k = function(){return this.TimezoneOffset()};
 
 // Ds accepts one argument that controls how the string is formatted. Some formats may not work on some browsers.
 Date.prototype.s = function(x){return this["to"+["","Date","Time","ISO","GMT","UTC","Locale","LocaleDate","LocaleTime"][x||0]+"String"]()}
@@ -428,6 +429,11 @@ function transpile(code) {
         "\u00BC": ".25",  // ¼ - 188
         "\u00BD": ".5",   // ½ - 189
         "\u00BE": ".75",  // ¾ - 190
+//      "\u00BF": "",     // ¿ - 191 - reserved for future use
+        "\u00C0": "!==",  // À - 192
+        "\u00C1": ">>>",  // Á - 193
+        "\u00C2": "~~",   // Â - 194
+        "\u00C3": "} ",   // Ã - 195
         "\u00D0": "$new Date$(" // Ð - 208
     }
 
@@ -442,7 +448,7 @@ function transpile(code) {
         }
         else if (isChar(outp.slice(-1),"+\\-&|\\^") && isChar(char," \\)\\]};"))
             code = code.slice(0,i)+'1'+code.slice(i);
-        else if (isChar(outp.slice(-1),"/*") && isChar(char," \\)\\]};"))
+        else if (isChar(outp.slice(-1),"*%") && isChar(char," \\)\\]};"))
             code = code.slice(0,i)+'2'+code.slice(i);
         
         if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
@@ -463,6 +469,7 @@ function transpile(code) {
                     }
                     strings[j] = transpile(temp.slice(0,-1));
                     str += "{" + j++ + "}";
+                    i--;
                 } else if (code[i] === ":" && qm) {
                     str += "\":\"";
                     qm = false;
@@ -473,7 +480,7 @@ function transpile(code) {
                 }
             }
             if (char === "`") str = shoco.d(str);
-            outp += "\"" + str.replace(/([^\\])\{(\d)}/,function(_,x,y){return x+"\"+("+strings[y]+")+\""}) + "\""; // Add this character to the output
+            outp += "\"" + str.replace(/([^\\])\{(\d)}/g,function(_,x,y){return x+"\"+("+strings[y]+")+\""}) + "\""; // Add this character to the output
 
             continue; // Jump to next iteration
         }
@@ -545,10 +552,25 @@ function transpile(code) {
                 outp += "." + char + "(";
             }
         }
+        else if (isChar(char, "\u00E0-\u00F6\u00F8-\u00FF")) {
+            if (outp.slice(-1) === "(") {
+                outp += "function(c){return c[\"\\u00" + char.charCodeAt(0).toUpperCase() + "\"]()}";
+            } else {
+                outp += "[\"\\u00" + char.charCodeAt(0).toUpperCase() + "\"](";
+            }
+        }
         else if (pairs.hasOwnProperty(char)) {
             code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
         }
-        else if (isChar(char, "+\\-/*\\^&|") && outp.slice(-1) === "(") {
+        else if (outp.slice(-1) === "(" && [">>>","===","!=="].indexOf(code.slice(i,i+3)) > -1) {
+            outp += "function(a,b){return a"+code.slice(i,i+2)+"b}";
+            i++;
+        }
+        else if (outp.slice(-1) === "(" && ["<<",">>","==","!=","<=",">="].indexOf(code.slice(i,i+2)) > -1) {
+            outp += "function(a,b){return a"+code.slice(i,i+2)+"b}";
+            i++;
+        }
+        else if (outp.slice(-1) === "(" && isChar(char, "+\\-*%\\^&|<>") && !isChar(code[i+1],"+\\-=")) {
             outp += "function(a,b){return a"+char+"b}";
         }
         else {

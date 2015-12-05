@@ -224,13 +224,13 @@ df(Date,'d',function(x,y){return this[ts(x||0)+"Hours"](y||0)});
 df(Date,'e',function(x,y){return this[ts(x||0)+"Day"](y||0)});
 df(Date,'f',function(x,y){return this[ts(x||0)+"Date"](y||0)});
 df(Date,'g',function(x,y){return this[ts(x||0)+"Month"](y||0)});
-df(Date,'h',function(x,y){return this[ts(x||0)+"Year"](y||0)}; // Note: getYear() and setYear() do not have UTC partners
+df(Date,'h',function(x,y){return this[ts(x||0)+"Year"](y||0)}); // Note: getYear() and setYear() do not have UTC partners
 df(Date,'i',function(x,y){return this[ts(x||0)+"FullYear"](y||0)});
-df(Date,'j',function(x,y){return this[ts(x||0)+"Time"](y||0)}; // Note: getTime() and setTime() do not have UTC partners
+df(Date,'j',function(x,y){return this[ts(x||0)+"Time"](y||0)}); // Note: getTime() and setTime() do not have UTC partners
 df(Date,'k',function(){return this.getTimezoneOffset()});
 
 // Ds accepts one argument that controls how the string is formatted. Some formats may not work on some browsers.
-df(Date,'s',function(x){return this["to"+["","Date","Time","ISO","GMT","UTC","Locale","LocaleDate","LocaleTime"][x||0]+"String"]()};
+df(Date,'s',function(x){return this["to"+["","Date","Time","ISO","GMT","UTC","Locale","LocaleDate","LocaleTime"][x||0]+"String"]()});
 
 df(Date,'l',function(){noFunc('Dl')});
 df(Date,'m',function(){noFunc('Dm')});

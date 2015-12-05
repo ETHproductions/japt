@@ -552,7 +552,7 @@ function transpile(code) {
                 outp += "." + char + "(";
             }
         }
-        else if (isChar(char, "\u00E0-\u00F6\u00F8-\u00FF")) {
+        else if (isChar(char, "\\u00E0-\\u00F6\\u00F8-\\u00FF")) {
             if (outp.slice(-1) === "(") {
                 outp += "function(c){return c[\"\\u00" + char.charCodeAt(0).toUpperCase() + "\"]()}";
             } else {

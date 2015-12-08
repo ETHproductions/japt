@@ -354,49 +354,6 @@ function evalInput(input) {
 	return processed;
 }
 
-<<<<<<< HEAD
-// Call this function with a second argument. If second arg is trusey
-function shorthand (code) {
-    // 0xA1 (161) is the first printable non-ASCII, so we'll start from there
-    var pairs = {
-        // Using \u<hex> to avoid encoding incompatibilities
-        // Feel free to change these
-        "\u00A1": "Um@",  // ¡ - 161
-        "\u00A2": "Us2 ", // ¢ - 162
-        "\u00A3": "m@",   // £ - 163
-        "\u00A4": "s2 ",  // ¤ - 164
-        "\u00A5": "==",   // ¥ - 165
-        "\u00A6": "!=",   // ¦ - 166
-        "\u00A7": "<=",   // § - 167
-        "\u00A8": ">=",   // ¨ - 168
-        "\u00A9": "&&",   // © - 169
-        "\u00AA": "||",   // ª - 170
-        "\u00AB": "&&!",  // « - 171
-        "\u00AC": "q ",   // ¬ - 172
-//      "\u00AD": "",     //     173 is an unprintable
-        "\u00AE": "m_",   // ® - 174
-    }, i = 0, l = "", n = "";
-
-    for (var i = 0; i < code.length; i++) {
-        if (['"',"'"].indexOf(code[i]) > -1) { // Quote
-            n += l = code[i++];
-            // i < 1e9 sets an upper limit of 1,000,000,000 (1 billion) to code length. 
-            // For reference, JavaScript's max string length is 9,007,199,254,740,991 characters / bytes
-            while (!(code[i] == l && code[i - 1] != "\\") && i < code.length && i < 1e9) n += code[i++]; n += code[i];
-        } else {
-            if ( Object.keys(pairs).indexOf(code[i]) > -1 ) {
-                n += pairs[ code[i] ];
-            } else {
-                n += code[i];
-            }
-        }
-    }
-
-    return n;
-}
-
-=======
->>>>>>> ETHproductions/master
 function run() {
 	clear_output();
 	document.getElementById("run").disabled = true;
@@ -625,7 +582,7 @@ function transpile(code) {
 		else if (char === ")") {
 			outp += "))";
 		}
-		else if (isChar(char, "a-z") && (isChar(code[i + 1], "^a-z") || isChar(code[i - 1], "^a-z") )) {
+		else if (isChar(char, "a-z")) {
 			if (outp.slice(-1) === "(") {
 				outp += "function(c){return c."+char+"()}";
 			} else if (isChar(outp.slice(-1),"0-9")) {

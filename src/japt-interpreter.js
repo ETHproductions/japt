@@ -120,6 +120,8 @@ var pairs_2_0 = {
 	"\u00C8": "|1",   // È - 200
 	"\u00C9": "^1",	  // É - 201
 	"\u00CA": "|0",   // Ê - 202
+    "\u00CB": "$new ",// Ë - 203
+    "\u00CD": "))",   // Ì - 204
 	"\u00D0": "$new Date$(" // Ð - 208
 };
 
@@ -247,12 +249,15 @@ df(Date,'x',function(){noFunc('Dx')});
 df(Date,'y',function(){noFunc('Dy')});
 df(Date,'z',function(){noFunc('Dz')});
 
+// Shorter Date properties
+Date.p = Date.parse;
+
 // Shorter Math properties
 Math.t = Math.atan2;
-Math.g = function (n) { var f=Math.sqrt(5), g=.5*(1+f); return (1/f)*(Math.pow(g,n)-Math.pow(-g,-n)) };
+Math.g = function(n){var f=Math.sqrt(5),g=.5*(1+f);return(1/f)*(Math.pow(g,n)-Math.pow(-g,-n))}; // Factorial
 Math.r = Math.random;
 Math.P = Math.PI;
-Math.h = Math.hypot || function hypot () {return Math.sqrt(arguments.reduce(function(a,b){return a+b*b}))};
+Math.h = Math.hypot || function hypot(){return Math.sqrt(arguments.reduce(function(a,b){return a+b*b}))};
 
 // String compression
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
@@ -582,7 +587,8 @@ function transpile(code) {
 		else if (char === ")") {
 			outp += "))";
 		}
-		else if (isChar(char, "a-z")) {
+        // This will take some more logic to implement
+		else if (isChar(char, "a-z")/*&& (isChar(code[i + 1], "^a-z") || isChar(code[i - 1], "^a-z"))*/) {
 			if (outp.slice(-1) === "(") {
 				outp += "function(c){return c."+char+"()}";
 			} else if (isChar(outp.slice(-1),"0-9")) {
@@ -602,7 +608,7 @@ function transpile(code) {
 				outp += "[\"\\u00" + char.charCodeAt(0).toString(16).toUpperCase() + "\"](";
 			}
 		}
-		else if (pairs.hasOwnProperty(char)) {
+		else if (pairs.hasOwnProperty(char) /*pairs[char]*/) { // hasOwnProperty really isn't needed, value will never be falsy either
 			code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
 		}
 		else if (outp.slice(-2) === "(!" && [">>>","===","!=="].indexOf(code.slice(i,i+3)) > -1) {

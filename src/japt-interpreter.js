@@ -625,7 +625,7 @@ function transpile(code) {
 		else if (char === ")") {
 			outp += "))";
 		}
-		else if (isChar(char, "a-z")) {
+		else if (isChar(char, "a-z") && (isChar(code[i + 1], "^a-z") || isChar(code[i - 1], "^a-z") )) {
 			if (outp.slice(-1) === "(") {
 				outp += "function(c){return c."+char+"()}";
 			} else if (isChar(outp.slice(-1),"0-9")) {

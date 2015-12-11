@@ -587,8 +587,7 @@ function transpile(code) {
 		else if (char === ")") {
 			outp += "))";
 		}
-        // This will take some more logic to implement
-		else if (isChar(char, "a-z")/*&& (isChar(code[i + 1], "^a-z") || isChar(code[i - 1], "^a-z"))*/) {
+		else if (isChar(char, "a-z")) {
 			if (outp.slice(-1) === "(") {
 				outp += "function(c){return c."+char+"()}";
 			} else if (isChar(outp.slice(-1),"0-9")) {
@@ -608,7 +607,7 @@ function transpile(code) {
 				outp += "[\"\\u00" + char.charCodeAt(0).toString(16).toUpperCase() + "\"](";
 			}
 		}
-		else if (pairs.hasOwnProperty(char) /*pairs[char]*/) { // hasOwnProperty really isn't needed, value will never be falsy either
+		else if (pairs[char]) {
 			code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
 		}
 		else if (outp.slice(-2) === "(!" && [">>>","===","!=="].indexOf(code.slice(i,i+3)) > -1) {

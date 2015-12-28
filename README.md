@@ -1,6 +1,6 @@
 # Japt
 
-**Japt** is is a shortened version of **Ja**vaScri**pt**. [WIP interpreter](http://ethproductions.github.io/japt)
+**Japt** is is a shortened version of **Ja**vaScri**pt**. [Online interpreter](http://ethproductions.github.io/japt)
 
 ## Basic programs
 
@@ -92,7 +92,7 @@ Japt uses the [shoco library](http://ed-von-schleck.github.io/shoco/) for string
 
 ### Unicode shortcuts
 
-Japt code can be compressed, similarly to its strings. The most commonly used runs of characters are mapped to Unicode points, starting at `¡`. A full list of these is coming soon, but for now, you could look inside [src/japt-interpreter.js](https://github.com/ETHproductions/Japt/blob/master/src/japt-interpreter.js#L387).
+Japt code can be compressed, similarly to its strings. The most commonly used runs of characters are mapped to Unicode points, starting at `¡`. An (almost) full list of these can be found at [the online interpreter](http://ethproductions.github.io/japt).
 
 ### Anonymous functions
 
@@ -102,6 +102,12 @@ There's also two shortcut operators:
 
 - `@`, which stands in for `XYZ{`. `UrXY{X+Y}` can be reduced to `Ur@X+Y}`.
 - `_`, which stands in for `Z{Z`. `UmX{Xc}` can be reduced to `Um_c}`.
+
+Also, when performing a single-char operation as a function, you can usually just reduce the function to one or two chars:
+
+- When doing something like `UrXY{X+Y}`, you can simply use the operator: `Ur+`
+- When the arguments are reversed, like with `UrXY{Y-X}`, just prefix the operator with an exclamation point: `Ur!-`
+- When using a single prototype function, e.g. `UmX{Xc}`, just use the letter: `Umc`
 
 ### Pure JS
 

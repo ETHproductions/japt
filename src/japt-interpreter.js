@@ -183,7 +183,7 @@ df(Array,'u',function(x){return this.unshift(x)});
 df(Array,'v',function(){return this.shift()});
 df(Array,'w',function(){return this.reverse()});
 df(Array,'x',function(){return this.reduce(function(a,b){return a+parseFloat(b)},0)});
-df(Array,'y',function(){var t="string"==typeof this[0][0],n=t?this.map(function(t){return t.split("")}):this;return n[0].map(function(r,i){return n.map(function(t){return t[i]})[t?"join":"valueOf"]("")})});
+df(Array,'y',function(){var self=this.map(function(l,i,a){return l.concat(Array(a.reduce(function(i,l){return l.length>i?l.length:i},0)-l.length).fill(typeof l[0]==="string"?"":undefined)) }),t="string"==typeof self[0][0],n=t?self.map(function(t){return t.split("")}):self;return n[0].map(function(r,i){return n.map(function(t){return t[i]})[t?"join":"valueOf"]("")})});
 df(Array,'z',function(n){return n==1?this.y().map(f=function(l){return l.w()}):n==2?this.w().map(f):n==3?this.map(f).y():this.z(1)}); // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
 df(Array,'\u00E0',function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)return;if(z.length===0){a.push(y)}else{var n=y.slice(0);n.push(z[0]);f(n,z.slice(1),a);f(y,z.slice(1),a)}return a};return f([],this,[]).filter(function(z){return x?z.length===x:1})});
 df(Array,'\u00E1',function(x){var p=[],u=[],f=function(z){var c,i;for(i=0;i<z.length;i++){c=z.splice(i,1)[0];u.push(c);if(z.length===0)p.push(u.slice());f(z);z.splice(i,0,c);u.pop()}return p};var l;return f(this).map(function(z){return z.slice(0,x||z.length)})["\u00E2"]()});

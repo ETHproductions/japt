@@ -1,34 +1,7 @@
 var code, input, timeout;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
-var defFuncs = {
-	a: "alert(",
-	b: "break;",
-	c: "continue;",
-	d: "",
-	e: "",
-	f: "",
-	g: "",
-	h: "",
-	i: "if(",
-	j: "else if(",
-	k: "else",
-	l: "console.log(",
-	m: "",
-	n: "",
-	o: "output(",
-	p: "",
-	q: "",
-	r: "",
-	s: "switch(",
-	t: "typeof(",
-	u: "while(!",
-	v: "evalJapt(",
-	w: "while(",
-	x: "",
-	y: "",
-	z: ""
-};
+function fb(x,y){return(typeof x)=="undefined"?y:x}
 
 var pairs_1_3 = { 
 	// Unicode shortcuts
@@ -120,10 +93,10 @@ var pairs_2_0 = {
 	"\u00C8": "|1",   // È - 200
 	"\u00C9": "^1",	  // É - 201
 	"\u00CA": "|0",   // Ê - 202
-    "\u00CB": "$new ",// Ë - 203
-    "\u00CD": "))",   // Ì - 204
-    "\u00CE": "$while(",//Í- 205
-    "\u00CF": "$for(",// Î - 206
+	"\u00CB": "$new ",// Ë - 203
+	"\u00CD": "))",   // Ì - 204
+	"\u00CE": "$while(",//Í- 205
+	"\u00CF": "$for(",// Î - 206
 	"\u00D0": "$new Date$(" // Ð - 208
 };
 
@@ -141,7 +114,7 @@ df(String,'f',function(x,y){return this.match(x instanceof RegExp?x:RegExp(x,y||
 df(String,'g',function(x){return this.charAt(x||0)});
 df(String,'h',function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)});
 df(String,'i',function(x,y){return this.substring(0,x)+y+this.substring(x)});
-df(String,'j',function(x,y){if(typeof(y)==="undefined")y=1;return this.substring(0,x)+this.substring(x+y)});
+df(String,'j',function(x,y){y=fb(y,1);return this.substring(0,x)+this.substring(x+y)});
 df(String,'k',function(x,y){return this.replace(RegExp(x,y),"")});
 df(String,'l',function(){return this.length});
 df(String,'m',function(x,y){return this.split(y||'').map(x).join(y||'')});
@@ -150,14 +123,14 @@ df(String,'o',function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")});
 df(String,'p',function(x){return this.repeat(x)});
 df(String,'q',function(x){return this.split(x||"")});
 df(String,'r',function(x,y,z){return this.replace(x instanceof RegExp?x:RegExp(x,(z||"")+"g"),y||"")});
-df(String,'s',function(x,y){if(typeof(y)==="undefined")y=this.length;if(y<0)y+=this.length;return this.substring(x,y)});
-df(String,'t',function(x,y){if(typeof(y)==="undefined")y=this.length;return this.substr(x,y)});
+df(String,'s',function(x,y){y=fb(y,this.length);if(y<0)y+=this.length;return this.substring(x,y)});
+df(String,'t',function(x,y){y=fb(y,this.length);return this.substr(x,y)});
 df(String,'u',function(){return this.toUpperCase()});
 df(String,'v',function(){return this.toLowerCase()});
 df(String,'w',function(){return this.split('').reverse().join('')});
-df(String,'x',function(){noFunc('Sx')});
-df(String,'y',function(){noFunc('Sy')});
-df(String,'z',function(){noFunc('Sz')});
+df(String,'x',function(x){return x==1?this.trimRight():x==2?this.trimLeft():this.trim()});
+df(String,'y',function(){return this.split("\n").y().join("\n")});
+df(String,'z',function(n){return this.split("\n").z(n).join("\n")});
 
 df(Array,'a',function(x){return this.lastIndexOf(x)});
 df(Array,'b',function(x){return this.indexOf(x)});
@@ -168,7 +141,7 @@ df(Array,'f',function(x){return this.filter(x)});
 df(Array,'g',function(x){return this[x||0]});
 df(Array,'h',function(x,y){this[x]=y;return this});
 df(Array,'i',function(x,y){this.splice(x,0,y);return this});
-df(Array,'j',function(x,y){if(typeof(y)==="undefined")y=1;return this.splice(x,y)});
+df(Array,'j',function(x,y){y=fb(y,1);return this.splice(x,y)});
 df(Array,'k',function(x){this.splice(this.indexOf(x),1);return this});
 df(Array,'l',function(){return this.length});
 df(Array,'m',function(x){return this.map(x)});
@@ -177,8 +150,8 @@ df(Array,'o',function(x){x=x||1;if(x>1){for(var a=[];x--;)a.push(this.pop());ret
 df(Array,'p',function(){for(var i of [].slice.call(arguments))this.push(i);return this});
 df(Array,'q',function(x){return this.join(x||"")});
 df(Array,'r',function(x,y){return this.reduce(x,y||(typeof this[0]=="number"?0:""))});
-df(Array,'s',function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,y)});
-df(Array,'t',function(x,y){if(typeof(y)==="undefined")y=this.length;return this.slice(x,x+y)});
+df(Array,'s',function(x,y){y=fb(y,this.length);return this.slice(x,y)});
+df(Array,'t',function(x,y){y=fb(y,this.length);return this.slice(x,x+y)});
 df(Array,'u',function(x){return this.unshift(x)});
 df(Array,'v',function(){return this.shift()});
 df(Array,'w',function(){return this.reverse()});
@@ -206,11 +179,11 @@ df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;i
 df(Number,'l',function(){var n=this|0,x=this|0;while(--n)x*=n;return n});
 df(Number,'m',function(x){return Math.min(this,x)});
 df(Number,'n',function(){return-this});
-df(Number,'o',function(x,y){var z=this;if(typeof(y)==="undefined")y=1;if(typeof(x)==="undefined")x=z,z=0;if(x<z)_=x,x=z,z=_;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);return r});
-df(Number,'p',function(x){return Math.pow(this,x)});
-df(Number,'q',function(){return Math.sqrt(this)});
+df(Number,'o',function(x,y){var z=this;y=fb(y,1);if(typeof(x)==="undefined")x=z,z=0;if(x<z)_=x,x=z,z=_;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);return r});
+df(Number,'p',function(x){return Math.pow(this,x||2)});
+df(Number,'q',function(x){return Math.pow(this,1/(x||2))});
 df(Number,'r',function(){return Math.round(this)});
-df(Number,'s',function(x){if(typeof(x)==="undefined")x=10;return this.toString(x)});
+df(Number,'s',function(x){x=fb(x,10);return this.toString(x)});
 df(Number,'t',function(){noFunc('Nt')});
 df(Number,'u',function(){return this%2===1?1:0});
 df(Number,'v',function(){return this%2===0?1:0});
@@ -255,11 +228,19 @@ df(Date,'z',function(){noFunc('Dz')});
 Date.p = Date.parse;
 
 // Shorter Math properties
-Math.t = Math.atan2;
-Math.g = function(n){var f=Math.sqrt(5),g=.5*(1+f);return(1/f)*(Math.pow(g,n)-Math.pow(-g,-n))}; // Factorial
-Math.r = Math.random;
-Math.P = Math.PI;
+Math.a = Math.atan2;
+Math.g = function(n){var f=Math.sqrt(5),g=.5*(1+f);return(1/f)*(Math.pow(g,n)-Math.pow(-g,-n))}; // Fibonacci
+Math.r = function(x,y){x=fb(x,0);y=fb(y,1);return Math.random()*y+x};
+Math.q = function(x,y,z){x=fb(x,0);y=fb(y,1);z=fb(z,1);return(Math.random()*z|0)/z*y+x};
+Math.s = Math.sin;
+Math.c = Math.cos;
+Math.t = Math.tan;
 Math.h = Math.hypot || function hypot(){return Math.sqrt(arguments.reduce(function(a,b){return a+b*b}))};
+
+Math.P = Math.PI;
+Math.Q = 1.618033988749894848;
+Math.S = Math.SQRT_2;
+Math.T = Math.SQRT_1_2;
 
 // String compression
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
@@ -301,7 +282,9 @@ function success(result) {
 
 function evalInput(input) {
 	var input_mode = "next", current, processed = [], level = 0;
-	(input+" ").split("").forEach(function(char){
+	input = (input+" ").split("");
+	for(var index = 0; index<input.length; index++) {
+		char = input[index];
 		switch (input_mode) {
 			case "next":
 				if (/[0-9.-]/.test(char)) {
@@ -317,7 +300,7 @@ function evalInput(input) {
 				}
 				break;
 			case "number":
-				if (/[0-9.-]/.test(char)) {
+				if (/[0-9.]/.test(char)) {
 					current += char;
 				} else {
 					processed.push(+current);
@@ -330,6 +313,8 @@ function evalInput(input) {
 					processed.push(current);
 					current = undefined;
 					input_mode = "next";
+				} else if (char == "\\" && /'"\\/.test(input[index+1])) {
+					current += input[++index];
 				} else {
 					current += char;
 				}
@@ -339,6 +324,8 @@ function evalInput(input) {
 					processed.push(current);
 					current = undefined;
 					input_mode = "next";
+				} else if (char == "\\" && /'"\\/.test(input[index+1])) {
+					current += input[++index];
 				} else {
 					current += char;
 				}
@@ -357,7 +344,7 @@ function evalInput(input) {
 				}
 				break;
 		}
-	});
+	}
 	return processed;
 }
 
@@ -387,7 +374,7 @@ function run() {
 	L = 100,
 	M = Math,
 	N = evalInput(input),
-	O = shoco,
+	O = {a:alert,l:console.log,o:output,p:function(x){output(x+"\n")},c:shoco.c,d:shoco.d,v:function(x){var r="";try{r=eval(transpile(x))}catch(e){error(e)}return r},x:function(x){var r="";try{r=eval(x)}catch(e){error(e)}return r}},
 	P = "",
 	Q = "\"",
 	R = "\n",

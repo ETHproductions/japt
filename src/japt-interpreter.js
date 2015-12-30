@@ -443,7 +443,7 @@ function fixParens(code) {
 				}
 				break;
 			case "brackets":
-				if (char == "{") {
+				if (/{@_/.test(char)) {
 					level++;
 				} else if (char == "}") {
 					level--;

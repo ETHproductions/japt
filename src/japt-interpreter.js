@@ -131,6 +131,7 @@ df(String,'w',function(){return this.split('').reverse().join('')});
 df(String,'x',function(x){return x==1?this.trimRight():x==2?this.trimLeft():this.trim()});
 df(String,'y',function(){return this.split("\n").y().join("\n")});
 df(String,'z',function(n){return this.split("\n").z(n).join("\n")});
+df(String,'\u00E0',function(x){return this.search(x)});
 
 df(Array,'a',function(x){return this.lastIndexOf(x)});
 df(Array,'b',function(x){return this.indexOf(x)});
@@ -164,13 +165,14 @@ df(Array,'\u00E2',function(){var u={},a=[];for(var i of this)if(!u.hasOwnPropert
 df(Array,'\u00E3',function(x){x=x||2;var a=[];for(var i=0;i<=this.length-x;i++)a.push(this.slice(i,i+x));return a});
 df(Array,'\u00E4',function(x){return this['\u00E3']().map(function(z){return z.reduce(x)})});
 df(Array,'\u00E5',function(x,y){var a=[];this.reduce(function(q,r,s){var t=x(q,r,s);a.push(t);return t},y||(typeof this[0]=="number"?0:""));return a});
+df(Array,'\u00E6',function(x){return this.fill(x)});
 
 df(Number,'a',function(){return Math.abs(this)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
-df(Number,'c',function(){return Math.ceil(this)});
+df(Number,'c',function(){x=fb(x,1);return Math.ceil(this*x)/x});
 df(Number,'d',function(){return String.fromCharCode(this)});
 df(Number,'e',function(x){return this*Math.pow(10,x)});
-df(Number,'f',function(){return this|0});
+df(Number,'f',function(){x=fb(x,1);return(this*x|0)/x});
 df(Number,'g',function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});
 df(Number,'h',function(){noFunc('Nh')});
 df(Number,'i',function(){noFunc('Ni')});
@@ -180,9 +182,9 @@ df(Number,'l',function(){var n=this|0,x=this|0;while(--n)x*=n;return n});
 df(Number,'m',function(x){return Math.min(this,x)});
 df(Number,'n',function(){return-this});
 df(Number,'o',function(x,y){var z=this;y=fb(y,1);if(typeof(x)==="undefined")x=z,z=0;if(x<z)_=x,x=z,z=_;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);return r});
-df(Number,'p',function(x){return Math.pow(this,x||2)});
-df(Number,'q',function(x){return Math.pow(this,1/(x||2))});
-df(Number,'r',function(){return Math.round(this)});
+df(Number,'p',function(x){x=fb(x,2);return Math.pow(this,x)});
+df(Number,'q',function(x){x=fb(x,2);return Math.pow(this,1/x)});
+df(Number,'r',function(x){x=fb(x,1);return Math.round(this*r)/r});
 df(Number,'s',function(x){x=fb(x,10);return this.toString(x)});
 df(Number,'t',function(){noFunc('Nt')});
 df(Number,'u',function(){return this%2===1?1:0});

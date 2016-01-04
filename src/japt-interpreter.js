@@ -184,7 +184,7 @@ df(Number,'n',function(){return-this});
 df(Number,'o',function(x,y){var z=this;y=fb(y,1);if(typeof(x)==="undefined")x=z,z=0;if(x<z)_=x,x=z,z=_;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);return r});
 df(Number,'p',function(x){x=fb(x,2);return Math.pow(this,x)});
 df(Number,'q',function(x){x=fb(x,2);return Math.pow(this,1/x)});
-df(Number,'r',function(x){x=fb(x,1);return Math.round(this*r)/r});
+df(Number,'r',function(x){x=fb(x,1);return Math.round(this*x)/x});
 df(Number,'s',function(x){x=fb(x,10);return this.toString(x)});
 df(Number,'t',function(){noFunc('Nt')});
 df(Number,'u',function(){return this%2===1?1:0});

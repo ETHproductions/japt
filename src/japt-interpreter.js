@@ -169,10 +169,10 @@ df(Array,'\u00E6',function(x){return this.fill(x)});
 
 df(Number,'a',function(){return Math.abs(this)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
-df(Number,'c',function(){x=fb(x,1);return Math.ceil(this/x)*x});
+df(Number,'c',function(x){x=fb(x,1);return Math.ceil(this/x)*x});
 df(Number,'d',function(){return String.fromCharCode(this)});
 df(Number,'e',function(x){return this*Math.pow(10,x)});
-df(Number,'f',function(){x=fb(x,1);return(this/x|0)*x});
+df(Number,'f',function(x){x=fb(x,1);return(this/x|0)*x});
 df(Number,'g',function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});
 df(Number,'h',function(){noFunc('Nh')});
 df(Number,'i',function(){noFunc('Ni')});

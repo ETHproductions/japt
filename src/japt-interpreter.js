@@ -47,7 +47,7 @@ var pairs_1_3 = {
 };
 
 var pairs_2_0 = { 
-	// Unicode shortcuts
+	// A new list of Unicode shortcuts
 	// Using \u<hex> to avoid encoding incompatibilities
 	"@":	  "XYZ{",
 	"_":	  "Z{Z",

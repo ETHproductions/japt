@@ -156,7 +156,7 @@ df(Array,'q',function(x){return this.join(x||"")});
 df(Array,'r',function(x,y){return this.reduce(x,y||(typeof this[0]=="number"?0:""))});
 df(Array,'s',function(x,y){y=fb(y,this.length);return this.slice(x,y)});
 df(Array,'t',function(x,y){y=fb(y,this.length);return this.slice(x,x+y)});
-df(Array,'u',function(x){return this.unshift(x)});
+df(Array,'u',function(){for(var i of [].slice.call(arguments))this.unshift(i);return this});
 df(Array,'v',function(){return this.shift()});
 df(Array,'w',function(){return this.reverse()});
 df(Array,'x',function(){return this.reduce(function(a,b){return a+parseFloat(b)},0)});

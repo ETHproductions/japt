@@ -2,6 +2,7 @@ var code, input, timeout;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 function fb(x,y){return(typeof x)=="undefined"?y:x}
+function regexify(x,y){if(x instanceof RegExp)return x;var z="",i=0,a=!1;for(;i<x.length;i++)z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"")+"g")}
 
 var pairs_1_3 = { 
 	// Unicode shortcuts
@@ -109,20 +110,20 @@ df(String,'c',function(x){return this.charCodeAt(x)});
 df(String,'d',function(x){
 	if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
 	else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}});
-df(String,'e',function(x,y,z){x=x instanceof RegExp?x:RegExp(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t});
-df(String,'f',function(x,y){return this.match(x instanceof RegExp?x:RegExp(x,y||"g"))});
+df(String,'e',function(x,y,z){x=regexify(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t});
+df(String,'f',function(x,y){return this.match(regexify(x,y))});
 df(String,'g',function(x){return this.charAt(x||0)});
 df(String,'h',function(x,y){return this.substring(0,x)+y+this.substring(x+y.length)});
 df(String,'i',function(x,y){return this.substring(0,x)+y+this.substring(x)});
 df(String,'j',function(x,y){y=fb(y,1);return this.substring(0,x)+this.substring(x+y)});
-df(String,'k',function(x,y){return this.replace(RegExp(x,y),"")});
+df(String,'k',function(x,y){y=fb(y,"");return this.replace(regexify(x,y),"")});
 df(String,'l',function(){return this.length});
 df(String,'m',function(x,y){return this.split(y||'').map(x).join(y||'')});
 df(String,'n',function(x){x=x||10;if(x==10)return parseFloat(this);else return parseInt(this,x)});
-df(String,'o',function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
+df(String,'o',function(x){return this.replace(regexify('[^'+x+']','gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
 df(String,'p',function(x){return this.repeat(x)});
-df(String,'q',function(x){return this.split(x||"")});
-df(String,'r',function(x,y,z){return this.replace(x instanceof RegExp?x:RegExp(x,z==""?"":(z||"")+"g"),y||"")});
+df(String,'q',function(x){x=fb(x,"");return this.split(x)});
+df(String,'r',function(x,y,z){y=fb(y,"");return this.replace(regexify(x,z),y)});
 df(String,'s',function(x,y){y=fb(y,this.length);if(y<0)y+=this.length;return this.substring(x,y)});
 df(String,'t',function(x,y){y=fb(y,this.length);return this.substr(x,y)});
 df(String,'u',function(){return this.toUpperCase()});

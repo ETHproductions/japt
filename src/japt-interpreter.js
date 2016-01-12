@@ -141,7 +141,7 @@ df(Array,'b',function(x){return(typeof x)=="function"?this.map(function(a,b,c){r
 df(Array,'c',function(){var f=[];for(var i of this){if(i instanceof Array)for(var j of i.c())f.push(j);else f.push(i);}return f});
 df(Array,'d',function(x){return this.some(x)});
 df(Array,'e',function(x){return this.every(x)});
-df(Array,'f',function(x){return this.filter((typeof x)=="function"?x:function(y){return x==y})});
+df(Array,'f',function(x){x=fb(x,function(y){return!!y});return this.filter((typeof x)=="function"?x:function(y){return x==y})});
 df(Array,'g',function(x){return this[x||0]});
 df(Array,'h',function(x,y){this[x]=y;return this});
 df(Array,'i',function(x,y){this.splice(x,0,y);return this});
@@ -177,13 +177,13 @@ df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
 df(Number,'c',function(x){x=fb(x,1);return Math.ceil(this/x)*x});
 df(Number,'d',function(){return String.fromCharCode(this)});
 df(Number,'e',function(x){return this*Math.pow(10,x)});
-df(Number,'f',function(x){x=fb(x,1);return(this/x|0)*x});
+df(Number,'f',function(x){x=fb(x,1);return Math.floor(this/x)*x});
 df(Number,'g',function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});
 df(Number,'h',function(){noFunc('Nh')});
-df(Number,'i',function(){noFunc('Ni')});
+df(Number,'i',function(x){return setInterval(x,this)});
 df(Number,'j',function(){return this.k().length===1});
 df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f});
-df(Number,'l',function(){var n=this|0,x=this|0;while(--n)x*=n;return n});
+df(Number,'l',function(){var n=this|0,x=this|0;if(n<1)return 1;while(--n)x*=n;return n});
 df(Number,'m',function(x){return Math.min(this,x)});
 df(Number,'n',function(){return-this});
 df(Number,'o',function(x,y){var z=this;y=fb(y,1);if(typeof(x)==="undefined")x=z,z=0;if(x<z)_=x,x=z,z=_;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);return r});
@@ -191,7 +191,7 @@ df(Number,'p',function(x){x=fb(x,2);return Math.pow(this,x)});
 df(Number,'q',function(x){x=fb(x,2);return Math.pow(this,1/x)});
 df(Number,'r',function(x){x=fb(x,1);return Math.round(this/x)*x});
 df(Number,'s',function(x){x=fb(x,10);return this.toString(x)});
-df(Number,'t',function(){noFunc('Nt')});
+df(Number,'t',function(x){return setTimeout(x,this)});
 df(Number,'u',function(){return this%2===1?1:0});
 df(Number,'v',function(){return this%2===0?1:0});
 df(Number,'w',function(x){return Math.max(this,x)});
@@ -237,8 +237,8 @@ Date.p = Date.parse;
 // Shorter Math properties
 Math.a = Math.atan2;
 Math.g = function(n){var f=Math.sqrt(5),g=.5*(1+f);return(1/f)*(Math.pow(g,n)-Math.pow(-g,-n))}; // Fibonacci
-Math.r = function(x,y){x=fb(x,0);y=fb(y,1);return Math.random()*y+x};
-Math.q = function(x,y,z){x=fb(x,0);y=fb(y,1);z=fb(z,1);return(Math.random()*z|0)/z*y+x};
+Math.r = function(x,y){x=fb(x,1);y=fb(y,0);return Math.random()*x+y};
+Math.q = function(x,y,z){x=fb(x,1);y=fb(y,0);z=fb(z,1);return Math.floor(Math.random()*z)/z*x+y};
 Math.s = Math.sin;
 Math.c = Math.cos;
 Math.t = Math.tan;
@@ -381,7 +381,17 @@ function run() {
 	L = 100,
 	M = Math,
 	N = evalInput(input),
-	O = {a:alert,l:console.log,o:output,p:function(x){output(x+"\n")},c:shoco.c,d:shoco.d,v:function(x){var r="";try{r=eval(transpile(x))}catch(e){error(e)}return r},x:function(x){var r="";try{r=eval(x)}catch(e){error(e)}return r}},
+	O = {
+		a:alert.apply(window,arguments)},
+		l:console.log.apply(console,arguments),
+		r:clearInterval,
+		o:output,
+		p:function(x){output(x+"\n")},
+		c:shoco.c,
+		d:shoco.d,
+		v:function(x){var r="";try{r=eval(transpile(x))}catch(e){error(e)}return r},
+		x:function(x){var r="";try{r=eval(x)}catch(e){error(e)}return r}
+	},
 	P = "",
 	Q = "\"",
 	R = "\n",
@@ -500,7 +510,7 @@ function transpile(code) {
 
 	for (i = 0; i < code.length; i++) {
 		var char = code[i];
-		if (char === ";" && i === 0) { outp += "newvars();"; }
+		if (char === ";" && i === 0) { outp += "newvars()"; }
 		else if (isChar(char, "`'\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
 			&& !(isChar(char,"0-9") && isChar(outp.slice(-1),"0-9"))) {
 			outp += ",";

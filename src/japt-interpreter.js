@@ -122,7 +122,7 @@ df(String,'n',function(x){x=x||10;if(x==10)return parseFloat(this);else return p
 df(String,'o',function(x){return this.replace(new RegExp('[^'+x+']','gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
 df(String,'p',function(x){return this.repeat(x)});
 df(String,'q',function(x){return this.split(x||"")});
-df(String,'r',function(x,y,z){return this.replace(x instanceof RegExp?x:RegExp(x,(z||"")+"g"),y||"")});
+df(String,'r',function(x,y,z){return this.replace(x instanceof RegExp?x:RegExp(x,z==""?"":(z||"")+"g"),y||"")});
 df(String,'s',function(x,y){y=fb(y,this.length);if(y<0)y+=this.length;return this.substring(x,y)});
 df(String,'t',function(x,y){y=fb(y,this.length);return this.substr(x,y)});
 df(String,'u',function(){return this.toUpperCase()});
@@ -403,6 +403,20 @@ function run() {
 	document.getElementById("timeout").disabled = false;
 }
 
+function newvars() {
+	A = [],
+	B = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+	C = "abcdefghijklmnopqrstuvwxyz",
+	D = "QWERTYUIOP\nASDFGHJKL\nZXCVBNM",
+	E = "[a-z]",
+	F = "[A-Za-z]",
+	G = 36,
+	H = 65,
+	I = 91,
+	J = ",",
+	L = ".";
+}
+
 function subparen(code) {
 	var level = 0, min = 0;
 	for(var i=0;i<code.length;i++) {
@@ -486,7 +500,8 @@ function transpile(code) {
 
 	for (i = 0; i < code.length; i++) {
 		var char = code[i];
-		if (isChar(char, "`'\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
+		if (char === ";" && i === 0) { outp += "newvars();"; }
+		else if (isChar(char, "`'\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
 			&& !(isChar(char,"0-9") && isChar(outp.slice(-1),"0-9"))) {
 			outp += ",";
 		}

@@ -382,8 +382,8 @@ function run() {
 	M = Math,
 	N = evalInput(input),
 	O = {
-		a:alert.apply(window,arguments)},
-		l:console.log.apply(console,arguments),
+		a:function(){alert.apply(window,arguments)},
+		l:function(){console.log.apply(console,arguments)},
 		r:clearInterval,
 		o:output,
 		p:function(x){output(x+"\n")},

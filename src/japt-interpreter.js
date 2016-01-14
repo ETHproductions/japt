@@ -2,7 +2,7 @@ var code, input, timeout;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 function fb(x,y){return(typeof x)=="undefined"?y:x}
-function regexify(x,y){if(x instanceof RegExp)return x;var z="",i=0,a=!1;for(;i<x.length;i++)z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"")+"g")}
+function regexify(x,y){if(x instanceof RegExp)return x;var z="",i=0,a=!1;for(;i<x.length;i++)z+=(x[i]=="%"?"\\\\":x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="V"?a?" -?B-DF-HJ-NP-TV-`b-df-hj-np-tv-\uFFFF":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"")+"g")}
 
 var pairs_1_3 = { 
 	// Unicode shortcuts
@@ -109,7 +109,7 @@ df(String,'b',function(x){return this.indexOf(x)});
 df(String,'c',function(x){return this.charCodeAt(x)});
 df(String,'d',function(x){
 	if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
-	else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(RegExp(f,'g'),a[i+1]);},this)}});
+	else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(regexify(f,'g'),a[i+1]);},this)}});
 df(String,'e',function(x,y,z){x=regexify(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t});
 df(String,'f',function(x,y){return this.match(regexify(x,y))});
 df(String,'g',function(x){return this.charAt(x||0)});
@@ -132,7 +132,9 @@ df(String,'w',function(){return this.split('').reverse().join('')});
 df(String,'x',function(x){return x==1?this.trimRight():x==2?this.trimLeft():this.trim()});
 df(String,'y',function(){return this.split("\n").y().join("\n")});
 df(String,'z',function(n){return this.split("\n").z(n).join("\n")});
-df(String,'\u00E0',function(x){return this.search(x)});
+df(String,'\u00E0',function(x){return this.q()['\u00E0']().map(function(y){return y.q()})});
+df(String,'\u00E1',function(x){return this.q()['\u00E1']().map(function(y){return y.q()})});
+df(String,'\u00E2',function(x){return this.search(x)});
 df(String,'\u00E3',function(x){return this.q()['\u00E3'](x).map(function(a){return a.q()})});
 df(String,'\u00E4',function(x){return this.q()['\u00E3']().map(function(a){return x(a[0],a[1],a.q())})});
 df(String,'\u00E8',function(x){return this.f(x).length});
@@ -184,7 +186,7 @@ df(Number,'h',function(){noFunc('Nh')});
 df(Number,'i',function(x){return setInterval(x,this)});
 df(Number,'j',function(){return this.k().length===1});
 df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f});
-df(Number,'l',function(){var n=this|0,x=this|0;if(n<1)return 1;while(--n)x*=n;return n});
+df(Number,'l',function(){var n=this|0,x=this|0;if(n<1)return 1;while(--n)x*=n;return x});
 df(Number,'m',function(x){return Math.min(this,x)});
 df(Number,'n',function(){return-this});
 df(Number,'o',function(x,y){var z=this;y=fb(y,1);if(typeof(x)==="undefined")x=z,z=0;if(x<z)_=x,x=z,z=_;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);return r});
@@ -199,6 +201,8 @@ df(Number,'w',function(x){return Math.max(this,x)});
 df(Number,'x',function(){noFunc('Nx')});
 df(Number,'y',function(){noFunc('Ny')});
 df(Number,'z',function(){noFunc('Nz')});
+df(Number,'\u00E0',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
+df(Number,'\u00E1',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return n.l();return n["\u00E0"]()*x.l()});
 
 // Shorter Date properties. All but k accept an argument: 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
 function ts(x){return["get","set","getUTC","setUTC"][x||0]}

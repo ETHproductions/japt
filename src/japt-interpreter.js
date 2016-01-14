@@ -189,7 +189,7 @@ df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;i
 df(Number,'l',function(){var n=this|0,x=this|0;if(n<1)return 1;while(--n)x*=n;return x});
 df(Number,'m',function(x){return Math.min(this,x)});
 df(Number,'n',function(){return-this});
-df(Number,'o',function(x,y){var z=this;y=fb(y,1);if(typeof(x)==="undefined")x=z,z=0;if(x<z)_=x,x=z,z=_;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);return r});
+df(Number,'o',function(x,y){var z=this;y=y||1;if(typeof(x)==="undefined")x=z,z=0;if(x<z)_=x,x=z,z=_;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);return r});
 df(Number,'p',function(x){x=fb(x,2);return Math.pow(this,x)});
 df(Number,'q',function(x){x=fb(x,2);return Math.pow(this,1/x)});
 df(Number,'r',function(x){x=fb(x,1);return Math.round(this/x)*x});
@@ -203,6 +203,9 @@ df(Number,'y',function(){noFunc('Ny')});
 df(Number,'z',function(){noFunc('Nz')});
 df(Number,'\u00E0',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
 df(Number,'\u00E1',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return n.l();return n["\u00E0"]()*x.l()});
+df(Number,'\u00F2',function(x,y){x=fb(x,0);y=y||0;return this<x?this.o(x+y,y):x.o(this+y,y)});
+df(Number,'\u00F3',function(x,y){x=fb(x,0);y=y||0;return this.o(this+x*y,y)});
+df(Number,'\u00F4',function(x,y){x=fb(x,0);y=y||0;return this['\u00F2'](this+x*y,y)});
 
 // Shorter Date properties. All but k accept an argument: 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
 function ts(x){return["get","set","getUTC","setUTC"][x||0]}
@@ -243,7 +246,7 @@ Date.p = Date.parse;
 Math.a = Math.atan2;
 Math.g = function(n){var f=Math.sqrt(5),g=.5*(1+f);return(1/f)*(Math.pow(g,n)-Math.pow(-g,-n))}; // Fibonacci
 Math.r = function(x,y){x=fb(x,1);y=fb(y,0);return Math.random()*x+y};
-Math.q = function(x,y,z){x=fb(x,1);y=fb(y,0);z=fb(z,1);return Math.floor(Math.random()*z)/z*x+y};
+Math.q = function(x,y,z){x=fb(x,1);y=fb(y,0);z=fb(z,1);return Math.floor(Math.random()*x*z)/z+y};
 Math.s = Math.sin;
 Math.c = Math.cos;
 Math.t = Math.tan;

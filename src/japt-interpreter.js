@@ -139,7 +139,7 @@ df(String,'\u00E2',function(x){return this.search(x)});
 df(String,'\u00E3',function(x,y){return this.q()['\u00E3'](x,y).map(function(a){return a.q()})});
 df(String,'\u00E4',function(x,y){x=functify(x);return this.q()['\u00E3'](2,y).map(function(a){return x(a[0],a[1],a.q())})});
 df(String,'\u00E5',function(x,y){return this.q()['\u00E5'](x,y)});
-df(String,'\u00E8',function(x){return this.f(x).length});
+df(String,'\u00E8',function(x){return (this.f(x)||[]).length});
 
 df(Array,'a',function(x){return(typeof x)=="function"?this.map(function(a,b,c){return!!x(a,b,c)}).lastIndexOf(true):this.lastIndexOf(x)});
 df(Array,'b',function(x){return(typeof x)=="function"?this.map(function(a,b,c){return!!x(a,b,c)}).indexOf(true):this.indexOf(x)});

@@ -171,7 +171,7 @@ df(Array,'\u00E0',function(x){var f=function(y,z,a){if(y.length===0&&z.length===
 df(Array,'\u00E1',function(x){var p=[],u=[],f=function(z){var c,i;for(i=0;i<z.length;i++){c=z.splice(i,1)[0];u.push(c);if(z.length===0)p.push(u.slice());f(z);z.splice(i,0,c);u.pop()}return p};var l;return f(this).map(function(z){return z.slice(0,x||z.length)})["\u00E2"]()});
 df(Array,'\u00E2',function(){var u={},a=[];for(var i of this)if(!u.hasOwnProperty(i))u[i]=1,a.push(i);return a});
 df(Array,'\u00E3',function(x,y){x=fb(x,2);var a=[];if(id(y))a[0]=this.slice(0,x-1),a[0].unshift(y);for(var i=0;i<=this.length-x;i++)a.push(this.slice(i,i+x));return a});
-df(Array,'\u00E4',function(x,y){return this['\u00E3'](2,y).map(function(z){return z.reduce(x)})});
+df(Array,'\u00E4',function(x,y){x=functify(x);return this['\u00E3'](2,y).map(function(z){return z.reduce(x)})});
 df(Array,'\u00E5',function(x,y){x=functify(x);var a=[];this.reduce(function(q,r,s){var t=x(q,r,s);a.push(t);return t},y||(typeof this[0]=="number"?0:""));return a});
 df(Array,'\u00E6',function(x){return this.f(x)[0]});
 df(Array,'\u00E7',function(x){return this.fill(x)});

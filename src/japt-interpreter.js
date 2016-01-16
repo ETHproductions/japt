@@ -153,7 +153,7 @@ df(Array,'i',function(x,y){this.splice(x,0,y);return this});
 df(Array,'j',function(x,y){y=fb(y,1);return this.splice(x,y)});
 df(Array,'k',function(x){this.splice(this.indexOf(x),1);return this});
 df(Array,'l',function(){return this.length});
-df(Array,'m',function(x,y){return this.map(function(a,b){return functify(x,y)(a,b)})});
+df(Array,'m',function(x,y){x=functify(x,y);return this.map(function(a,b,c){return x(a,fb(y,b),c)})});
 df(Array,'n',function(x){return this.sort(x)});
 df(Array,'o',function(x){x=x||1;if(x>1){for(var a=[];x--;)a.push(this.pop());return a}else return this.pop()});
 df(Array,'p',function(){for(var i of [].slice.call(arguments))this.push(i);return this});

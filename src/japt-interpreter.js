@@ -2,7 +2,7 @@ var code, input, timeout;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 function id(x){return(typeof x)!=="undefined"}
-function fb(x,y){id(x)?x:y}
+function fb(x,y){return id(x)?x:y}
 function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configurable:false,writable:true,value:f})}
 function regexify(x,y){if(x instanceof RegExp)return x;var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="V"?a?" -?B-DF-HJ-NP-TV-`b-df-hj-np-tv-\uFFFF":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"")+"g")}
 function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/[a-z]/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
@@ -153,12 +153,12 @@ df(Array,'i',function(x,y){this.splice(x,0,y);return this});
 df(Array,'j',function(x,y){y=fb(y,1);return this.splice(x,y)});
 df(Array,'k',function(x){this.splice(this.indexOf(x),1);return this});
 df(Array,'l',function(){return this.length});
-df(Array,'m',function(x,y){x=functify(x,y);return this.map(function(a,b,c){return x(a,fb(y,b),c)})});
+df(Array,'m',function(x,y){x=functify(x,y);return this.map(function(q,r,s){return x(q,fb(y,r),s)})});
 df(Array,'n',function(x){return this.sort(x)});
 df(Array,'o',function(x){x=x||1;if(x>1){for(var a=[];x--;)a.push(this.pop());return a}else return this.pop()});
 df(Array,'p',function(){for(var i of [].slice.call(arguments))this.push(i);return this});
 df(Array,'q',function(x){return this.join(x||"")});
-df(Array,'r',function(x,y){return this.reduce(x,y||(typeof this[0]=="number"?0:""))});
+df(Array,'r',function(x,y){x=functify(x,y);return this.reduce(function(q,r,s){return x(q,r,s)},y||(typeof this[0]=="number"?0:""))});
 df(Array,'s',function(x,y){y=fb(y,this.length);return this.slice(x,y)});
 df(Array,'t',function(x,y){y=fb(y,this.length);return this.slice(x,x+y)});
 df(Array,'u',function(){for(var i of [].slice.call(arguments))this.unshift(i);return this});

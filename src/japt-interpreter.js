@@ -205,9 +205,9 @@ df(Number,'y',function(){noFunc('Ny')});
 df(Number,'z',function(){noFunc('Nz')});
 df(Number,'\u00E0',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
 df(Number,'\u00E1',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return n.l();return n["\u00E0"]()*x.l()});
-df(Number,'\u00F2',function(x,y){x=fb(x,0);y=y||0;return this<x?this.o(x+y,y):x.o(this+y,y)});
-df(Number,'\u00F3',function(x,y){x=fb(x,0);y=y||0;return this.o(this+x*y,y)});
-df(Number,'\u00F4',function(x,y){x=fb(x,0);y=y||0;return this['\u00F2'](this+x*y,y)});
+df(Number,'\u00F2',function(x,y){x=fb(x,0);y=y||1;return this<x?this.o(x+y,y):x.o(this+y,y)});
+df(Number,'\u00F3',function(x,y){x=fb(x,0);y=y||1;return this.o(this+x*y,y)});
+df(Number,'\u00F4',function(x,y){x=fb(x,0);y=y||1;return this['\u00F2'](this+x*y,y)});
 
 // Shorter Date properties. All but k accept an argument: 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
 function ts(x){return["get","set","getUTC","setUTC"][x||0]}

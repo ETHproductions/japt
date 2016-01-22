@@ -199,7 +199,7 @@ df(Number,'s',function(x){x=fb(x,10);return this.toString(x)});
 df(Number,'t',function(x){return setTimeout(x,this)});
 df(Number,'u',function(){return this%2===1?1:0});
 df(Number,'v',function(){return this%2===0?1:0});
-df(Number,'m',function(){return[].reduce.call(arguments,function(x,y){return Math.max(x,y)},this)});
+df(Number,'w',function(){return[].reduce.call(arguments,function(x,y){return Math.max(x,y)},this)});
 df(Number,'x',function(){noFunc('Nx')});
 df(Number,'y',function(){noFunc('Ny')});
 df(Number,'z',function(){noFunc('Nz')});

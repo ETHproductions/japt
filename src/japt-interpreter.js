@@ -1,4 +1,4 @@
-var code, input, timeout, transpiler;
+var code, input, timeout;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 function id(x){return(typeof x)!=="undefined"}
@@ -6,31 +6,6 @@ function fb(x,y){return id(x)?x:y}
 function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configurable:false,writable:true,value:f})}
 function regexify(x,y){if(x instanceof RegExp)return x;var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="V"?a?" -?B-DF-HJ-NP-TV-`b-df-hj-np-tv-\uFFFF":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"")+"g")}
 function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/[a-z]/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
-function workerify(){if(Window.worker){
-// URL.createObjectURL
-window.URL = window.URL || window.webkitURL;
-
-// "Server response", used in all examples
-var response = "self.onmessage=function(e){postMessage('Worker: '+e.data);}";
-
-var blob;
-try {
-    blob = new Blob([response], {type: 'application/javascript'});
-} catch (e) { // Backwards-compatibility
-    window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
-    blob = new BlobBuilder();
-    blob.append(response);
-    blob = blob.getBlob();
-}
-var worker = new Worker(URL.createObjectURL(blob));
-
-// Test, used in all examples:
-worker.onmessage = function(e) {
-    alert('Response: ' + e.data);
-};
-worker.postMessage('Test');
-return worker;
-}}
 
 var pairs_1_3 = { 
 	// Unicode shortcuts
@@ -300,7 +275,7 @@ function output(x) {
 }
 
 function stop() {
-	cancelWorker();
+	running = false;
 	document.getElementById("run").disabled = false;
 	document.getElementById("stop").disabled = true;
 	document.getElementById("clear").disabled = false;
@@ -313,11 +288,13 @@ function interrupt() {
 
 function error(msg) {
 	document.getElementById("stderr").innerHTML = msg;
+	alert(msg);
 	stop();
 }
 
 function success(result) {
 	output(result);
+	alert("Result: "+result);
 }
 
 function evalInput(input) {
@@ -697,51 +674,13 @@ function transpile(code) {
 	return outp;
 }
 
-function transpileWorker(c,f) {
-	if (window.Worker) {
-		try{
-		alert(9);
-		transpiler = workerify();
-		alert(transpiler)
-		transpiler.postMessage(["transpile",c]);
-		alert(transpiler.postMessage)
-		transpiler.onmessage = function(e) {
-			var data = e.data;
-			alert("Hey, here's your stuff: "+data)
-			f(data[1]);
-		}
-		alert(12)
-		} catch(e) {alert("Error during transpile: "+e)}
-	} else {
-		f(transpile(c));
-	}
-}
-
-function evalWorker(c,s,e) {
-	if (window.Worker) {
-		transpiler = workerify();
-		transpiler.postMessage(["eval",c]);
-		transpiler.onmessage = function(e) {
-			var data = e.data;
-			if(data[0]) s&&s(data[1]);
-			else e&&e(data[1]);
-		}
-	} else {
-		f(eval(c));
-	}
-}
-
-function cancelWorker() {
-	if (window.Worker) {
-		try{transpiler.terminate();}catch(e){}
-	}
-}
-
 function evalJapt(code, before, onsuccess, onerror) {
-	alert(1)
-	transpileWorker(code,function(e){
-		alert(2)
-		if (before) before(code);
-		evalWorker(e,function(){alert(3);onsuccess()},function(){alert(4);onerror()});
-	});
+	code = transpile(code);
+	if (before) before(code);
+	try {
+		var result = eval(code);
+		if (onsuccess) onsuccess(result);
+	} catch (e) {
+		if (onerror) onerror(e);
+	}
 }

@@ -706,8 +706,10 @@ function cancelWorker() {
 }
 
 function evalJapt(code, before, onsuccess, onerror) {
+	alert(1)
 	transpileWorker(code,function(e){
+		alert(2)
 		if (before) before(code);
-		evalWorker(e,onsuccess,onerror);
+		evalWorker(e,function(){alert(3);onsuccess()},function(){alert(4);onerror()});
 	});
 }

@@ -10,7 +10,6 @@ function workerify(){
 	if (window.Worker) {
 		var s = document.createElement("script");
 		s.type = "text/js-worker";
-		s.innerHTML = 'console.log("i ran!");';
 		document.body.appendChild(s);
 
 		var blob = new Blob(Array.prototype.map.call(document.querySelectorAll("script[type=\"text\/js-worker\"]"), function (oScript) {
@@ -20,6 +19,7 @@ function workerify(){
 		var worker = new Worker(window.URL.createObjectURL(blob));
        
 		worker.onmessage = function(e) {
+			alert("hey!")
 			var data = e.data, value, success = !0;
 			alert("data: "+data);
 			if(data[0]==="transpile") value = transpile(data[1]);
@@ -703,11 +703,12 @@ function transpileWorker(c,f) {
 		try{
 		alert(9);
 		transpiler = workerify();
-		alert(10)
+		alert(transpiler)
 		transpiler.postMessage(["transpile",c]);
-		alert(11)
+		alert(transpiler.postMessage)
 		transpiler.onmessage = function(e) {
 			var data = e.data;
+			alert("Hey, here's your stuff: "+data)
 			f(data[1]);
 		}
 		alert(12)

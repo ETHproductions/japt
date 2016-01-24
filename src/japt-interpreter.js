@@ -674,12 +674,17 @@ function transpile(code) {
 
 function transpileWorker(c,f) {
 	if (window.Worker) {
+		try{
 		transpiler = new Worker("japt-worker.js");
+		alert(10)
 		transpiler.postMessage(["transpile",c]);
+		alert(11)
 		transpiler.onmessage = function(e) {
 			var data = e.data;
 			f(data[1]);
 		}
+		alert(12)
+		} catch(e) {alert("Error during transpile: "+e)}
 	} else {
 		f(transpile(c));
 	}

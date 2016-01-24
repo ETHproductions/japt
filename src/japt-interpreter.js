@@ -6,6 +6,32 @@ function fb(x,y){return id(x)?x:y}
 function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configurable:false,writable:true,value:f})}
 function regexify(x,y){if(x instanceof RegExp)return x;var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="V"?a?" -?B-DF-HJ-NP-TV-`b-df-hj-np-tv-\uFFFF":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"")+"g")}
 function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/[a-z]/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
+function workerify(){
+	if (window.Worker) {
+		var s = document.createElement("script");
+		s.type = "text/js-worker";
+		s.innerHTML = 'console.log("i ran!");';
+		document.body.appendChild(s);
+
+		var blob = new Blob(Array.prototype.map.call(document.querySelectorAll("script[type=\"text\/js-worker\"]"), function (oScript) {
+			return oScript.textContent;
+		}), { type: "text/javascript" });
+        
+		var worker = new Worker(window.URL.createObjectURL(blob));
+       
+		worker.onmessage = function(e) {
+			var data = e.data, value, success = !0;
+			alert("data: "+data);
+			if(data[0]==="transpile") value = transpile(data[1]);
+			else {
+				try {value = eval(data[1]);} catch(e) {success = !1; value = e;}
+			}
+			postMessage([success,value]);
+			close();
+		}
+		return worker;
+	}
+}
 
 var pairs_1_3 = { 
 	// Unicode shortcuts
@@ -676,7 +702,7 @@ function transpileWorker(c,f) {
 	if (window.Worker) {
 		try{
 		alert(9);
-		transpiler = new Worker("https://rawgit.com/ETHproductions/Japt/master/src/japt-worker.js");
+		transpiler = workerify();
 		alert(10)
 		transpiler.postMessage(["transpile",c]);
 		alert(11)
@@ -693,7 +719,7 @@ function transpileWorker(c,f) {
 
 function evalWorker(c,s,e) {
 	if (window.Worker) {
-		transpiler = new Worker("https://rawgit.com/ETHproductions/Japt/master/src/japt-worker.js");
+		transpiler = workerify();
 		transpiler.postMessage(["eval",c]);
 		transpiler.onmessage = function(e) {
 			var data = e.data;

@@ -10,6 +10,7 @@ function workerify(){
 	if (window.Worker) {
 		var s = document.createElement("script");
 		s.type = "text/js-worker";
+		s.innerHTML = 'alert("hey!");var data = e.data, value, success = !0;alert("data: "+data);if(data[0]==="transpile") value = transpile(data[1]);else {try {value = eval(data[1]);} catch(e) {success = !1; value = e;}}postMessage([success,value]);close();'
 		document.body.appendChild(s);
 
 		var blob = new Blob(Array.prototype.map.call(document.querySelectorAll("script[type=\"text\/js-worker\"]"), function (oScript) {
@@ -17,7 +18,7 @@ function workerify(){
 		}), { type: "text/javascript" });
         
 		var worker = new Worker(window.URL.createObjectURL(blob));
-       
+        /*
 		worker.onmessage = function(e) {
 			alert("hey!")
 			var data = e.data, value, success = !0;
@@ -28,7 +29,7 @@ function workerify(){
 			}
 			postMessage([success,value]);
 			close();
-		}
+		}*/
 		return worker;
 	}
 }

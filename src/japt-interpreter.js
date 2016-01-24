@@ -675,7 +675,8 @@ function transpile(code) {
 function transpileWorker(c,f) {
 	if (window.Worker) {
 		try{
-		transpiler = new Worker("japt-worker.js");
+		alert(9);
+		transpiler = new Worker("//rawgit.com/ETHproductions/Japt/master/src/japt-japt-worker.js");
 		alert(10)
 		transpiler.postMessage(["transpile",c]);
 		alert(11)
@@ -692,7 +693,7 @@ function transpileWorker(c,f) {
 
 function evalWorker(c,s,e) {
 	if (window.Worker) {
-		transpiler = new Worker("japt-worker.js");
+		transpiler = new Worker("//rawgit.com/ETHproductions/Japt/master/src/japt-japt-worker.js");
 		transpiler.postMessage(["eval",c]);
 		transpiler.onmessage = function(e) {
 			var data = e.data;

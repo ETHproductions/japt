@@ -288,13 +288,11 @@ function interrupt() {
 
 function error(msg) {
 	document.getElementById("stderr").innerHTML = msg;
-	alert(msg);
 	stop();
 }
 
 function success(result) {
 	output(result);
-	alert("Result: "+result);
 }
 
 function evalInput(input) {

@@ -1,4 +1,4 @@
-var code, input, timeout;
+var code, input, timeout, transpiler;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 function id(x){return(typeof x)!=="undefined"}
@@ -275,7 +275,7 @@ function output(x) {
 }
 
 function stop() {
-	running = false;
+	cancelWorker();
 	document.getElementById("run").disabled = false;
 	document.getElementById("stop").disabled = true;
 	document.getElementById("clear").disabled = false;
@@ -288,13 +288,11 @@ function interrupt() {
 
 function error(msg) {
 	document.getElementById("stderr").innerHTML = msg;
-	alert(msg);
 	stop();
 }
 
 function success(result) {
 	output(result);
-	alert("Result: "+result);
 }
 
 function evalInput(input) {
@@ -674,13 +672,42 @@ function transpile(code) {
 	return outp;
 }
 
-function evalJapt(code, before, onsuccess, onerror) {
-	code = transpile(code);
-	if (before) before(code);
-	try {
-		var result = eval(code);
-		if (onsuccess) onsuccess(result);
-	} catch (e) {
-		if (onerror) onerror(e);
+function transpileWorker(c,f) {
+	if (window.Worker) {
+		transpiler = new Worker("japt-worker.js");
+		transpiler.postMessage(["transpile",c]);
+		transpiler.onmessage = function(e) {
+			var data = e.data;
+			f(data[1]);
+		}
+	} else {
+		f(transpile(c));
 	}
+}
+
+function evalWorker(c,s,e) {
+	if (window.Worker) {
+		transpiler = new Worker("japt-worker.js");
+		transpiler.postMessage(["eval",c]);
+		transpiler.onmessage = function(e) {
+			var data = e.data;
+			if(data[0]) s&&s(data[1]);
+			else e&&e(data[1]);
+		}
+	} else {
+		f(eval(c));
+	}
+}
+
+function cancelWorker() {
+	if (window.Worker) {
+		try{transpiler.terminate();}catch(e){}
+	}
+}
+
+function evalJapt(code, before, onsuccess, onerror) {
+	transpileWorker(code,function(e){
+		if (before) before(code);
+		evalWorker(e,onsuccess,onerror);
+	});
 }

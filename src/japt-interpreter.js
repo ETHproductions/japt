@@ -533,7 +533,7 @@ function transpile(code) {
 			code = code.slice(0,i)+'2'+code.slice(i);
 		
 		if (code.slice(i).indexOf(polyglot) === 0) {
-        		outp = transpile((code.slice(i + polyglot.length).match(/(?:[\\%]"|[^"])+/)||[""])[0]);
+        		outp = transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2|0)+"\"":"\\".repeat(b.length/2)}));
         		i = code.length;
         	} else if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
 			var qm = outp.slice(-1) === "?"; // Question Mark

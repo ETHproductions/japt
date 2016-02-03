@@ -516,24 +516,26 @@ function transpile(code) {
 	// Some helpful functions
 	function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
 
-    var polyglot = '"(p|';
+	var polyglot = '"(p|';
   
 	for (i = 0; i < code.length; i++) {
 		var char = code[i];
-		if (char === ";" && i === 0) { outp += "newvars()"; }
+		if (char === ";" && i === 0)
+			outp += "newvars()";
+		else if (isChar(char, "A-Z") && outp.slice(-1) === "M")
+			outp += ".";
 		else if (isChar(char, "`'\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
-			&& !(isChar(char,"0-9") && isChar(outp.slice(-1),"0-9"))) {
+			&& !(isChar(char,"0-9") && isChar(outp.slice(-1),"0-9")))
 			outp += ",";
-		}
 		else if (isChar(outp.slice(-1),"+\\-&|\\^") && isChar(char," \\)\\]};"))
 			code = code.slice(0,i)+'1'+code.slice(i);
 		else if (isChar(outp.slice(-1),"*%") && isChar(char," \\)\\]};"))
 			code = code.slice(0,i)+'2'+code.slice(i);
 		
 		if (code.slice(i).indexOf(polyglot) === 0) {
-          outp = code.slice(i + polyglot.length).split('"')[0];
-          i = code.length;
-        } else if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
+        		outp = transpile(code.slice(i + polyglot.length).split('"')[0]);
+        		i = code.length;
+        	} else if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
 			var qm = outp.slice(-1) === "?"; // Question Mark
 			var str = "";
 			for (i++; code[i] !== char && i < code.length; i++) {

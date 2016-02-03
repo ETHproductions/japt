@@ -516,6 +516,8 @@ function transpile(code) {
 	// Some helpful functions
 	function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
 
+    var polyglot = '"(p|';
+  
 	for (i = 0; i < code.length; i++) {
 		var char = code[i];
 		if (char === ";" && i === 0) { outp += "newvars()"; }
@@ -528,7 +530,10 @@ function transpile(code) {
 		else if (isChar(outp.slice(-1),"*%") && isChar(char," \\)\\]};"))
 			code = code.slice(0,i)+'2'+code.slice(i);
 		
-		if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
+		if (code.slice(i).indexOf(polyglot) === 0) {
+          outp = code.slice(i + polyglot.length).split('"')[0];
+          i = code.length;
+        } else if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
 			var qm = outp.slice(-1) === "?"; // Question Mark
 			var str = "";
 			for (i++; code[i] !== char && i < code.length; i++) {

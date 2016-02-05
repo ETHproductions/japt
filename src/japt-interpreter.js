@@ -502,7 +502,7 @@ function fixParens(code) {
 var strings = [], snippets = [], use_safe = false, is_safe = true;
 function transpile(code, safe, first) {
 	first = fb(first, true);
-	if (first) strings = [], snippets = [], is_safe = true;
+	if (first) strings = [], snippets = [], use_safe = safe, is_safe = true;
 	
 	var level = 0,  // Current number of parentheses or curly braces that we're inside
 		temp = "",

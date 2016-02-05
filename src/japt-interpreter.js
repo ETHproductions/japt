@@ -520,14 +520,14 @@ function transpile(code, first) {
 	function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
 
 	function pretranspile(code) {
-		var i = 0, strchar = "";
+		var i = 0, strchars = Array(20).fill("");
 		var quickie = function () {
 		for (; i < code.length; i++) {
 			var char = code[i];
 			if (level === 0) {
 				if (isChar(char, "\"`")) {
 					level++;
-					strchar = char;
+					strchars[level] = char;
 					currstr = "\"";
 				}
 				else if (char === "'") {
@@ -559,9 +559,9 @@ function transpile(code, first) {
 				if (char === "\\") {
 					currstr += "\\" + code[++i];
 				}
-				else if (char === strchar) {
+				else if (char === strchars[level]) {
 					level--;
-					if (strchar === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					currstr += "\"";
 					newcode += "\"" + strings.length + "\"";
 					strings.push("("+currstr+")");
@@ -583,7 +583,7 @@ function transpile(code, first) {
 			else if (level % 2 === 0) {
 				if (level === 2 && extrabraces[level] === 0 && char === "}") {
 					level--;
-					if (strchar === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					currstr += "\"+("+transpile(currbraces,false)+")+\"";
 				}
 				else {
@@ -622,7 +622,7 @@ function transpile(code, first) {
 			for (; extrabraces[level] > 0; extrabraces[level]--) {
 				code += "}";
 			}
-			code += (level % 2? "\"" : "}");
+			code += (level % 2? strchars[level]: "}");
 		}
 		level = templevel;
 		extrabraces = tempbraces;

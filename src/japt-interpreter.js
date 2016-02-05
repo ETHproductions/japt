@@ -501,20 +501,137 @@ function fixParens(code) {
 	return cade;
 }
 
-function transpile(code) {
-	/* For Lexer */
-	var level = 0,	  // Current number of parentheses or curly braces that we're inside
+var strings = [];
+function transpile(code, first) {
+	if (first) strings = [];
+	
+    var level = 0,  // Current number of parentheses or curly braces that we're inside
 		temp = "",
-		pairs = pairs_1_3,  // Version of Unicode shortcuts to use
-	  
+		extrabraces = Array(20).fill(0),
+		currstr = "",
+		currbraces = "",
+		newcode = "",
+		pairs = {"@":"XYZ{"},  // Version of Unicode shortcuts to use
 		i = 0,
 		j = 0,
-
-		strings = [],   // Stores the {...} inside strings
-		outp = "";	  // Temporary output
-
+		outp = "";  // Temporary output
+		
 	// Some helpful functions
 	function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
+
+	function pretranspile(code) {
+		var i = 0, strchar = "";
+		var quickie = function () {
+		for (; i < code.length; i++) {
+			var char = code[i];
+			if (level === 0) {
+				if (isChar(char, "\"`")) {
+					level++;
+					strchar = char;
+					currstr = "\"";
+				}
+				else if (char === "'") {
+					newcode += "\"" + strings.length + "\"";
+					if (code[++i] === "\\") {
+						strings.push("\"\\\\\"");
+					}
+					else if (code[i] === "\n") {
+						strings.push("\"\\n\"");
+					}
+					else if (code[i] === "\"") {
+						strings.push("\"\\\"\"");
+					}
+					else {
+						strings.push("\""+code[i]+"\"");
+					}
+				}
+				else if (char === "#") {
+                    newcode += code[++i].charCodeAt(0);
+				}
+				else if (pairs.hasOwnProperty(char)) {
+					code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+				}
+				else {
+					newcode += char;
+				}
+			}
+			else if (level === 1) {
+				if (char === "\\") {
+					currstr += "\\" + code[++i];
+				}
+				else if (char === strchar) {
+					level--;
+					if (strchar === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					currstr += "\"";
+					newcode += "\"" + strings.length + "\"";
+					strings.push("("+currstr+")");
+				}
+				else if (char === "\"") {
+				    currstr += "\\\""
+				}
+				else if (char === "{") {
+					level++;
+					currbraces = "";
+				}
+				else if (char === "\n") {
+                    currstr += "\\n";
+				}
+				else {
+					currstr += char;
+				}
+			}
+			else if (level % 2 === 0) {
+				if (level === 2 && extrabraces[level] === 0 && char === "}") {
+					level--;
+					if (strchar === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					currstr += "\"+("+transpile(currbraces,false)+")+\"";
+				}
+				else {
+					currbraces+=char;
+					if (char === "\"") {
+						level++;
+					}
+					else if (isChar(char,"'#")) {
+						currbraces += code[++i];
+					}
+					else if (char === "{") {
+						extrabraces[level]++;
+					}
+					else if (char === "}") {
+						if (extrabraces[level] === 0) level--;
+						else extrabraces[level]--;
+					}
+				}
+			}
+			else {
+				currbraces += char;
+				if (char === "\\") {
+					currbraces += code[++i];
+				}
+				else if (char === "\"") {
+					level--;
+				}
+				else if (char === "{") {
+					level++;
+				}
+			}
+		}
+		};
+		quickie();
+		for (var templevel = level, tempbraces = extrabraces.slice(); level > 0; level--) {
+			for (; extrabraces[level] > 0; extrabraces[level]--) {
+				code += "}";
+			}
+			code += (level % 2? "\"" : "}");
+		}
+		level = templevel;
+		extrabraces = tempbraces;
+		quickie();
+		return newcode;
+	}
+	
+	code = pretranspile(code);
+	outp = "";
 
 	var polyglot = '"(p|';
   
@@ -533,40 +650,13 @@ function transpile(code) {
 			code = code.slice(0,i)+'2'+code.slice(i);
 		
 		if (code.slice(i).indexOf(polyglot) === 0) {
-        		outp = transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2|0)+"\"":"\\".repeat(b.length/2)}));
-        		i = code.length;
-        	} else if (isChar(char, "`\"")) { // If new token is a quotation mark " or backtick `
-			var qm = outp.slice(-1) === "?"; // Question Mark
-			var str = "";
-			for (i++; code[i] !== char && i < code.length; i++) {
-				if (code[i] === "\\") { // If we encounter a backslash
-					str += "\\" + code[++i]; // Go to next character and store
-				} else if (code[i] === "{") { // If it is a { - This is for the "{2+1}" stuff
-					temp = "";
-					for (level = 1, i++; level > 0 && i < code.length; i++) {
-						if (code[i] === "}") {
-							level--;
-						} else if (code[i] === "{") {
-							level++;
-						}
-						temp += code[i];
-					}
-					strings[j] = transpile(temp.slice(0,-1));
-					str += "{" + j++ + "}";
-					i--;
-				} else if (code[i] === ":" && qm) {
-					str += "\":\"";
-					qm = false;
-				} else if (code[i] === "\n") {
-					str += "\\n";
-				} else {
-					str += code[i];
-				}
-			}
-			if (char === "`") str = shoco.d(str);
-			outp += "\"" + str.replace(/([^\\])\{(\d)}/g,function(_,x,y){return x+"\"+("+strings[y]+")+\""}) + "\""; // Add this character to the output
-
-			continue; // Jump to next iteration
+			outp = transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2|0)+"\"":"\\".repeat(b.length/2)}));
+			i = code.length;
+		}
+		else if (char === "\"") {
+			var tms = code.slice(i).match(/"(\d+)"/)[0];
+			outp += tms;
+			i += tms.length - 1;
 		}
 		else if (char === "$") {
 			for (i++; code[i] !== "$" && i < code.length; i++) {
@@ -607,15 +697,6 @@ function transpile(code) {
 				outp += letters.split("").join(",");
 				i--;
 			}
-		}
-		else if (char === "'") {
-			if (code[++i] === "\n")
-				outp += '"\\n"';
-			else
-				outp += "\"" + code[i] + "\"";
-		}
-		else if (char === "#") {
-			outp += code[++i].charCodeAt(0);
 		}
 		else if (char === " ") {
 			outp += ")";
@@ -676,6 +757,7 @@ function transpile(code) {
 	}
 	
 	outp = fixParens(outp);
+	outp = outp.replace(/"(\d+)"/g,function(_,a){return strings[+a]})
 	return outp;
 }
 

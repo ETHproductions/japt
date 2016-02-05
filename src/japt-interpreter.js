@@ -412,7 +412,7 @@ function run() {
 	Y = N.length <= 4? 0 : N[4],
 	Z = N.length <= 5? 0 : N[5];
 
-	evalJapt(code, true, function(code){if(location.hostname!=="ethproductions.github.io")alert("JS code: "+code)}, success, error);
+	evalJapt(code, false, function(code){if(location.hostname!=="ethproductions.github.io")alert("JS code: "+code)}, success, error);
 
 	document.getElementById("run").disabled = false;
 	document.getElementById("stop").disabled = true;
@@ -519,7 +519,7 @@ function transpile(code, safe, first) {
 	function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
 
 	function pretranspile(code) {
-		var i = 0, strchar = Array(20).fill("");
+		var i = 0, strchars = Array(20).fill("");
 		var quickie = function () {
 		for (; i < code.length; i++) {
 			var char = code[i];
@@ -592,7 +592,7 @@ function transpile(code, safe, first) {
 				if (level === 2 && extrabraces[level] === 0 && char === "}") {
 					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					level--;
-					currstr += "\"+("+transpile(currbraces,safe,false)+")+\"";
+					currstr += "\"+("+transpile(currbraces,safe,false)[0]+")+\"";
 				}
 				else {
 					currbraces+=char;

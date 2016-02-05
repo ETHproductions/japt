@@ -482,9 +482,7 @@ function fixParens(code) {
 				}
 				break;
 			case "brackets":
-				if (/{@_/.test(char)) {
-					level++;
-				} else if (char == "}") {
+				if (char == "}") {
 					level--;
 				}
 				if (level < 0) {
@@ -560,8 +558,8 @@ function transpile(code, first) {
 					currstr += "\\" + code[++i];
 				}
 				else if (char === strchars[level]) {
-					level--;
 					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					level--;
 					currstr += "\"";
 					newcode += "\"" + strings.length + "\"";
 					strings.push("("+currstr+")");
@@ -582,8 +580,8 @@ function transpile(code, first) {
 			}
 			else if (level % 2 === 0) {
 				if (level === 2 && extrabraces[level] === 0 && char === "}") {
-					level--;
 					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					level--;
 					currstr += "\"+("+transpile(currbraces,false)+")+\"";
 				}
 				else {

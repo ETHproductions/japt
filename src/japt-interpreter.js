@@ -398,7 +398,7 @@ function run() {
 		c:shoco.c,
 		d:shoco.d,
 		v:function(x){var r="";try{r=eval(transpile(x))}catch(e){error(e)}return r},
-		x:function(x){var r="";try{r=eval(x)}catch(e){error(e)}return r}
+		x:function(x){if(use_safe)throw new Error("O.x() cannot be used in safe mode");var r="";try{r=eval(x)}catch(e){error(e)}return r}
 	},
 	P = "",
 	Q = "\"",
@@ -412,7 +412,7 @@ function run() {
 	Y = N.length <= 4? 0 : N[4],
 	Z = N.length <= 5? 0 : N[5];
 
-	evalJapt(code, function(code){if(location.hostname!=="ethproductions.github.io")alert("JS code: "+code)}, success, error);
+	evalJapt(code, true, function(code){if(location.hostname!=="ethproductions.github.io")alert("JS code: "+code)}, success, error);
 
 	document.getElementById("run").disabled = false;
 	document.getElementById("stop").disabled = true;
@@ -499,11 +499,12 @@ function fixParens(code) {
 	return cade;
 }
 
-var strings = [], snippets = [];
-function transpile(code, first) {
-	if (first) strings = [], snippets = [];
+var strings = [], snippets = [], use_safe = false, is_safe = true;
+function transpile(code, safe, first) {
+	first = fb(first, true);
+	if (first) strings = [], snippets = [], is_safe = true;
 	
-    var level = 0,  // Current number of parentheses or curly braces that we're inside
+	var level = 0,  // Current number of parentheses or curly braces that we're inside
 		temp = "",
 		extrabraces = Array(20).fill(0),
 		currstr = "",
@@ -524,6 +525,7 @@ function transpile(code, first) {
 			var char = code[i];
 			if (level === 0) {
 				if (char === "$") {
+					if (use_safe) is_safe = false;
 					newcode += "$" + snippets.length + "$";
 					snippets.push("");
 					for (i++; i < code.length; i++) {
@@ -590,7 +592,7 @@ function transpile(code, first) {
 				if (level === 2 && extrabraces[level] === 0 && char === "}") {
 					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					level--;
-					currstr += "\"+("+transpile(currbraces,false)+")+\"";
+					currstr += "\"+("+transpile(currbraces,safe,false)+")+\"";
 				}
 				else {
 					currbraces+=char;
@@ -755,11 +757,13 @@ function transpile(code, first) {
 	outp = outp.replace(/\$(\d+)\$/g,function(_,a){return snippets[+a]});
 	outp = fixParens(outp);
 	outp = outp.replace(/"(\d+)"/g,function(_,a){return strings[+a]});
-	return outp;
+	return [outp, is_safe];
 }
 
-function evalJapt(code, before, onsuccess, onerror) {
-	code = transpile(code);
+function evalJapt(code, safe, before, onsuccess, onerror) {
+	var temp = transpile(code, safe, true);
+	code = temp[0];
+	if (!temp[1]) onerror(new Error("Raw JS cannot be used in safe mode"));
 	if (before) before(code);
 	try {
 		var result = eval(code);

@@ -511,7 +511,7 @@ function transpile(code, first) {
 		currstr = "",
 		currbraces = "",
 		newcode = "",
-		pairs = {"@":"XYZ{"},  // Version of Unicode shortcuts to use
+		pairs = pairs_1_3,  // Version of Unicode shortcuts to use
 		i = 0,
 		j = 0,
 		outp = "";  // Temporary output
@@ -574,7 +574,7 @@ function transpile(code, first) {
 					currbraces = "";
 				}
 				else if (char === "\n") {
-                    currstr += "\\n";
+                			currstr += "\\n";
 				}
 				else {
 					currstr += char;

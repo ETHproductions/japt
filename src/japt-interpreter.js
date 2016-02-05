@@ -499,9 +499,9 @@ function fixParens(code) {
 	return cade;
 }
 
-var strings = [];
+var strings = [], snippets = [];
 function transpile(code, first) {
-	if (first) strings = [];
+	if (first) strings = [], snippets = [];
 	
     var level = 0,  // Current number of parentheses or curly braces that we're inside
 		temp = "",
@@ -509,7 +509,7 @@ function transpile(code, first) {
 		currstr = "",
 		currbraces = "",
 		newcode = "",
-		pairs = pairs_1_3,  // Version of Unicode shortcuts to use
+		pairs = {"@":"XYZ{"},  // Version of Unicode shortcuts to use
 		i = 0,
 		j = 0,
 		outp = "";  // Temporary output
@@ -518,14 +518,22 @@ function transpile(code, first) {
 	function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
 
 	function pretranspile(code) {
-		var i = 0, strchars = Array(20).fill("");
+		var i = 0, strchar = "";
 		var quickie = function () {
 		for (; i < code.length; i++) {
 			var char = code[i];
 			if (level === 0) {
-				if (isChar(char, "\"`")) {
+				if (char === "$") {
+					newcode += "$" + snippets.length + "$";
+					snippets.push("");
+					for (i++; i < code.length; i++) {
+						if (code[i] === "$") break;
+						snippets[snippets.length-1] += code[i]; 
+					}
+				}
+				else if (isChar(char, "\"`")) {
 					level++;
-					strchars[level] = char;
+					strchar = char;
 					currstr = "\"";
 				}
 				else if (char === "'") {
@@ -557,22 +565,22 @@ function transpile(code, first) {
 				if (char === "\\") {
 					currstr += "\\" + code[++i];
 				}
-				else if (char === strchars[level]) {
-					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+				else if (char === strchar) {
 					level--;
+					if (strchar === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					currstr += "\"";
 					newcode += "\"" + strings.length + "\"";
 					strings.push("("+currstr+")");
 				}
 				else if (char === "\"") {
-				    currstr += "\\\""
+                    currstr += "\\\"";
 				}
 				else if (char === "{") {
 					level++;
 					currbraces = "";
 				}
 				else if (char === "\n") {
-                			currstr += "\\n";
+                    currstr += "\\n";
 				}
 				else {
 					currstr += char;
@@ -580,8 +588,8 @@ function transpile(code, first) {
 			}
 			else if (level % 2 === 0) {
 				if (level === 2 && extrabraces[level] === 0 && char === "}") {
-					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					level--;
+					if (strchar === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					currstr += "\"+("+transpile(currbraces,false)+")+\"";
 				}
 				else {
@@ -620,7 +628,7 @@ function transpile(code, first) {
 			for (; extrabraces[level] > 0; extrabraces[level]--) {
 				code += "}";
 			}
-			code += (level % 2? strchars[level]: "}");
+			code += (level % 2? "\"" : "}");
 		}
 		level = templevel;
 		extrabraces = tempbraces;
@@ -655,16 +663,6 @@ function transpile(code, first) {
 			var tms = code.slice(i).match(/"(\d+)"/)[0];
 			outp += tms;
 			i += tms.length - 1;
-		}
-		else if (char === "$") {
-			for (i++; code[i] !== "$" && i < code.length; i++) {
-				if (code[i] === "\\" && code[i+1] === "$") { // If we encounter a backslash
-					i++; // Go to next character and store
-					outp += "$";
-				} else {
-					outp += code[i];
-				}
-			}
 		}
 		else if (isChar(char, "A-Z{")) {
 			var letters = "";
@@ -754,8 +752,9 @@ function transpile(code, first) {
 		}
 	}
 	
+	outp = outp.replace(/\$(\d+)\$/g,function(_,a){return snippets[+a]});
 	outp = fixParens(outp);
-	outp = outp.replace(/"(\d+)"/g,function(_,a){return strings[+a]})
+	outp = outp.replace(/"(\d+)"/g,function(_,a){return strings[+a]});
 	return outp;
 }
 

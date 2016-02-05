@@ -592,7 +592,7 @@ function transpile(code, safe, first) {
 				if (level === 2 && extrabraces[level] === 0 && char === "}") {
 					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					level--;
-					currstr += "\"+("+transpile(currbraces,safe,false)[0]+")+\"";
+					currstr += "\"+("+transpile(currbraces,safe,false)+")+\"";
 				}
 				else {
 					currbraces+=char;
@@ -757,13 +757,15 @@ function transpile(code, safe, first) {
 	outp = outp.replace(/\$(\d+)\$/g,function(_,a){return snippets[+a]});
 	outp = fixParens(outp);
 	outp = outp.replace(/"(\d+)"/g,function(_,a){return strings[+a]});
-	return [outp, is_safe];
+	return outp;
 }
 
 function evalJapt(code, safe, before, onsuccess, onerror) {
-	var temp = transpile(code, safe, true);
-	code = temp[0];
-	if (!temp[1]) onerror(new Error("Raw JS cannot be used in safe mode"));
+	code = transpile(code, safe, true);
+	if (!is_safe) {
+		if (onerror) onerror(new Error("Raw JS cannot be used in safe mode"));
+		return;
+	}
 	if (before) before(code);
 	try {
 		var result = eval(code);

@@ -567,7 +567,7 @@ function transpile(code, safe, first) {
 				if (char === "\\") {
 					currstr += "\\" + code[++i];
 				}
-				else if (char === strchar) {
+				else if (char === strchars[level]) {
 					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					level--;
 					currstr += "\"";

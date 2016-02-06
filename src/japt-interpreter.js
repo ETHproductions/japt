@@ -4,7 +4,7 @@ function noFunc(x){alert("No such function: "+x)}
 function id(x){return(typeof x)!=="undefined"}
 function fb(x,y){return id(x)?x:y}
 function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configurable:false,writable:true,value:f})}
-function regexify(x,y){if(x instanceof RegExp)return x;var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="V"?a?" -?B-DF-HJ-NP-TV-`b-df-hj-np-tv-\uFFFF":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"")+"g")}
+function regexify(x,y){if(x instanceof RegExp)return x;y=fb(y,null);var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="V"?a?" -?B-DF-HJ-NP-TV-`b-df-hj-np-tv-\uFFFF":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"").replace(/g/g,"")+"g")}
 function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/[a-z]/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
 
 var pairs_1_3 = { 
@@ -533,7 +533,7 @@ function transpile(code, safe, first) {
 						snippets[snippets.length-1] += code[i]; 
 					}
 				}
-				else if (isChar(char, "\"`")) {
+				else if (isChar(char, "\"`") && extrabraces[0] === 0) {
 					level++;
 					strchars[level] = char;
 					currstr = "\"";
@@ -555,6 +555,14 @@ function transpile(code, safe, first) {
 				}
 				else if (char === "#") {
                 			newcode += code[++i].charCodeAt(0);
+				}
+				else if (char === "{") {
+					extrabraces[0]++;
+                			newcode += char;
+				}
+				else if (char === "}") {
+					extrabraces[0]--;
+                			newcode += char;
 				}
 				else if (pairs.hasOwnProperty(char)) {
 					code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);

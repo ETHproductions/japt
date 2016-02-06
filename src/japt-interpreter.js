@@ -1,4 +1,3 @@
-var code, input, timeout;
 var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
 function noFunc(x){alert("No such function: "+x)}
 function id(x){return(typeof x)!=="undefined"}
@@ -6,6 +5,7 @@ function fb(x,y){return id(x)?x:y}
 function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configurable:false,writable:true,value:f})}
 function regexify(x,y){if(x instanceof RegExp)return x;y=fb(y,null);var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="V"?a?" -?B-DF-HJ-NP-TV-`b-df-hj-np-tv-\uFFFF":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"").replace(/g/g,"")+"g")}
 function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/[a-z]/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
+function isChar(str,char){return RegExp('^['+char+']$').test(str);}
 
 var pairs_1_3 = { 
 	// Unicode shortcuts
@@ -265,160 +265,8 @@ shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constru
 
 void(0);
 
-function clear_output() {
-	document.getElementById("output").value = "";
-	document.getElementById("stderr").innerHTML = "";
-}
-
-function output(x) {
-	document.getElementById("output").value += x;
-}
-
-function stop() {
-	running = false;
-	document.getElementById("run").disabled = false;
-	document.getElementById("stop").disabled = true;
-	document.getElementById("clear").disabled = false;
-	document.getElementById("timeout").disabled = false;
-}
-
-function interrupt() {
-	error("Interrupted");
-}
-
-function error(msg) {
-	document.getElementById("stderr").innerHTML = msg;
-	stop();
-}
-
 function success(result) {
 	output(result);
-}
-
-function evalInput(input) {
-	var input_mode = "next", current, processed = [], level = 0;
-	input = (input+" ").split("");
-	for(var index = 0; index<input.length; index++) {
-		char = input[index];
-		switch (input_mode) {
-			case "next":
-				if (/[0-9.-]/.test(char)) {
-					input_mode = "number";
-					current = char;
-				} else if (/["']/.test(char)) {
-					input_mode = "string "+char;
-					current = "";
-				} else if (char == "[") {
-					input_mode = "array";
-					current = "";
-					level = 1;
-				}
-				break;
-			case "number":
-				if (/[0-9.]/.test(char)) {
-					current += char;
-				} else {
-					processed.push(+current);
-					current = undefined;
-					input_mode = "next";
-				}
-				break;
-			case "string \"":
-				if (char == "\"") {
-					processed.push(current);
-					current = undefined;
-					input_mode = "next";
-				} else if (char == "\\" && /'"\\/.test(input[index+1])) {
-					current += input[++index];
-				} else {
-					current += char;
-				}
-				break;
-			case "string '":
-				if (char == "'") {
-					processed.push(current);
-					current = undefined;
-					input_mode = "next";
-				} else if (char == "\\" && /'"\\/.test(input[index+1])) {
-					current += input[++index];
-				} else {
-					current += char;
-				}
-				break;
-			case "array":
-				if (char == "[")
-					level++;
-				if (char == "]")
-					level--;
-				if (level === 0) {
-					processed.push(evalInput(current));
-					current = undefined;
-					input_mode = "next";
-				} else {
-					current += char;
-				}
-				break;
-		}
-	}
-	return processed;
-}
-
-function run() {
-	clear_output();
-	document.getElementById("run").disabled = true;
-	document.getElementById("stop").disabled = false;
-	document.getElementById("clear").disabled = true;
-	document.getElementById("input").disabled = false;
-	document.getElementById("timeout").disabled = false;
-
-	code = document.getElementById("code").value;
-	input = document.getElementById("input").value;
-	timeout = document.getElementById("timeout").checked;
-
-	A = 10,
-	B = 11,
-	C = 12,
-	D = 13,
-	E = 14,
-	F = 15,
-	G = 16,
-	H = 32,
-	I = 64,
-	J = -1,
-	K = Date,
-	L = 100,
-	M = Math,
-	N = evalInput(input),
-	O = {
-		a:function(){alert.apply(window,arguments)},
-		l:function(){console.log.apply(console,arguments)},
-		r:clearInterval,
-		o:output,
-		p:function(x){output(x+"\n")},
-		c:shoco.c,
-		d:shoco.d,
-		v:function(x){var r="";try{r=eval(transpile(x))}catch(e){error(e)}return r},
-		x:function(x){if(use_safe)throw new Error("O.x() cannot be used in safe mode");var r="";try{r=eval(x)}catch(e){error(e)}return r}
-	},
-	P = "",
-	Q = "\"",
-	R = "\n",
-	S = " ",
-	T = 0,
-	U = N.length <= 0? 0 : N[0],
-	V = N.length <= 1? 0 : N[1],
-	W = N.length <= 2? 0 : N[2],
-	X = N.length <= 3? 0 : N[3],
-	Y = N.length <= 4? 0 : N[4],
-	Z = N.length <= 5? 0 : N[5];
-
-	evalJapt(code, false, function(code){if(location.hostname!=="ethproductions.github.io")alert("JS code: "+code)}, success, error);
-
-	document.getElementById("run").disabled = false;
-	document.getElementById("stop").disabled = true;
-	document.getElementById("clear").disabled = false;
-	document.getElementById("input").disabled = false;
-	document.getElementById("timeout").disabled = false;
 }
 
 function newvars() {
@@ -499,11 +347,159 @@ function fixParens(code) {
 	return cade;
 }
 
-var strings = [], snippets = [], use_safe = false, is_safe = true;
-function transpile(code, safe, first) {
-	first = fb(first, true);
-	if (first) strings = [], snippets = [], use_safe = safe, is_safe = true;
+var Japt = {
+
+stdout: null,
+stderr: null,
+
+clear_output: function() {
+	try { Japt.stdout.value = ""; } catch (e) { alert ("Error: Japt.stdout must be sent to an HTMLElement"); }
+	try { Japt.stderr.innerHTML = ""; } catch (e) { alert ("Error: Japt.stderr must be sent to an HTMLElement"); }
+},
+
+output: function(x) {
+    try { Japt.stdout.value += x; } catch (e) { alert ("Error: Japt.stdout must be sent to an HTMLElement"); }
+},
+
+interrupt: function() {
+	Japt.error("Interrupted");
+},
+
+error: function(msg) {
+	try { Japt.stderr.innerHTML = msg; } catch (e) { alert ("Error: Japt.stderr must be sent to an HTMLElement"); }
+},
+
+evalInput:function(input) {
+	var input_mode = "next", current, processed = [], level = 0;
+	input = (input+" ").split("");
+	for(var index = 0; index<input.length; index++) {
+		char = input[index];
+		switch (input_mode) {
+			case "next":
+				if (/[0-9.-]/.test(char)) {
+					input_mode = "number";
+					current = char;
+				} else if (/["']/.test(char)) {
+					input_mode = "string "+char;
+					current = "";
+				} else if (char == "[") {
+					input_mode = "array";
+					current = "";
+					level = 1;
+				}
+				break;
+			case "number":
+				if (/[0-9.]/.test(char)) {
+					current += char;
+				} else {
+					processed.push(+current);
+					current = undefined;
+					input_mode = "next";
+				}
+				break;
+			case "string \"":
+				if (char == "\"") {
+					processed.push(current);
+					current = undefined;
+					input_mode = "next";
+				} else if (char == "\\" && /'"\\/.test(input[index+1])) {
+					current += input[++index];
+				} else {
+					current += char;
+				}
+				break;
+			case "string '":
+				if (char == "'") {
+					processed.push(current);
+					current = undefined;
+					input_mode = "next";
+				} else if (char == "\\" && /'"\\/.test(input[index+1])) {
+					current += input[++index];
+				} else {
+					current += char;
+				}
+				break;
+			case "array":
+				if (char == "[")
+					level++;
+				if (char == "]")
+					level--;
+				if (level === 0) {
+					processed.push(Japt.evalInput(current));
+					current = undefined;
+					input_mode = "next";
+				} else {
+					current += char;
+				}
+				break;
+		}
+	}
+	return processed;
+},
+
+strings: [],
+snippets: [],
+use_safe: false,
+is_safe: false,
+
+run:function(code, input, safe, before, onsuccess, onerror) {
+    Japt.clear_output();
+    
+	A = 10,
+	B = 11,
+	C = 12,
+	D = 13,
+	E = 14,
+	F = 15,
+	G = 16,
+	H = 32,
+	I = 64,
+	J = -1,
+	K = Date,
+	L = 100,
+	M = Math,
+	N = Japt.evalInput(input),
+	O = {
+		a:function(){alert.apply(window,arguments)},
+		l:function(){console.log.apply(console,arguments)},
+		r:clearInterval,
+		o:Japt.output,
+		p:function(x){Japt.output(x+"\n")},
+		q:Japt.clear_output,
+		c:shoco.c,
+		d:shoco.d,
+		v:function(x){var r="";try{r=eval(Japt.transpile(x))}catch(e){Japt.error(e)}return r},
+		x:function(x){if(Japt.use_safe)throw"O.x() cannot be used in safe mode";var r="";try{r=eval(x)}catch(e){Japt.error(e)}return r}
+	},
+	P = "",
+	Q = "\"",
+	R = "\n",
+	S = " ",
+	T = 0,
+	U = N.length <= 0? 0 : N[0],
+	V = N.length <= 1? 0 : N[1],
+	W = N.length <= 2? 0 : N[2],
+	X = N.length <= 3? 0 : N[3],
+	Y = N.length <= 4? 0 : N[4],
+	Z = N.length <= 5? 0 : N[5];
 	
+    Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe,false), Japt.is_safe = true;
+	
+    code = Japt.transpile(code);
+	if (!Japt.is_safe) {
+		if (onerror) onerror(new Error("Raw JS cannot be used in safe mode"));
+		return;
+	}
+    if (before) before(code);
+	try {
+	    code = eval(code);
+	    if (onsuccess) onsuccess(code);
+	} catch (e) {
+	    if (onerror) onerror(code);
+	}
+},
+
+transpile: function(code) {
 	var level = 0,  // Current number of parentheses or curly braces that we're inside
 		temp = "",
 		extrabraces = Array(20).fill(0),
@@ -514,23 +510,24 @@ function transpile(code, safe, first) {
 		i = 0,
 		j = 0,
 		outp = "";  // Temporary output
-		
-	// Some helpful functions
-	function isChar (str, char) { return RegExp('^['+char+']$').test(str); }
 
 	function pretranspile(code) {
-		var i = 0, strchars = Array(20).fill("");
+		var i = 0, strchars = Array(20).fill(""), polyglot = '"(p|';
 		var quickie = function () {
 		for (; i < code.length; i++) {
 			var char = code[i];
-			if (level === 0) {
+			if (code.slice(i).indexOf(polyglot) === 0) {
+				outp = transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2|0)+"\"":"\\".repeat(b.length/2)}));
+				i = code.length;
+			}
+			else if (level === 0) {
 				if (char === "$") {
-					if (use_safe) is_safe = false;
-					newcode += "$" + snippets.length + "$";
-					snippets.push("");
+					if (Japt.use_safe) Japt.is_safe = false;
+					newcode += "$" + Japt.snippets.length + "$";
+					Japt.snippets.push("");
 					for (i++; i < code.length; i++) {
 						if (code[i] === "$") break;
-						snippets[snippets.length-1] += code[i]; 
+						Japt.snippets[Japt.snippets.length-1] += code[i]; 
 					}
 				}
 				else if (isChar(char, "\"`") && extrabraces[0] === 0) {
@@ -539,29 +536,29 @@ function transpile(code, safe, first) {
 					currstr = "\"";
 				}
 				else if (char === "'") {
-					newcode += "\"" + strings.length + "\"";
+					newcode += "\"" + Japt.strings.length + "\"";
 					if (code[++i] === "\\") {
-						strings.push("\"\\\\\"");
+						Japt.strings.push("\"\\\\\"");
 					}
 					else if (code[i] === "\n") {
-						strings.push("\"\\n\"");
+						Japt.strings.push("\"\\n\"");
 					}
 					else if (code[i] === "\"") {
-						strings.push("\"\\\"\"");
+						Japt.strings.push("\"\\\"\"");
 					}
 					else {
-						strings.push("\""+code[i]+"\"");
+						Japt.strings.push("\""+code[i]+"\"");
 					}
 				}
 				else if (char === "#") {
                 			newcode += code[++i].charCodeAt(0);
 				}
 				else if (char === "{") {
-					extrabraces[0]++;
+				    extrabraces[0]++;
                 			newcode += char;
 				}
 				else if (char === "}") {
-					extrabraces[0]--;
+				    extrabraces[0]--;
                 			newcode += char;
 				}
 				else if (pairs.hasOwnProperty(char)) {
@@ -579,8 +576,8 @@ function transpile(code, safe, first) {
 					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					level--;
 					currstr += "\"";
-					newcode += "\"" + strings.length + "\"";
-					strings.push("("+currstr+")");
+					newcode += "\"" + Japt.strings.length + "\"";
+					Japt.strings.push("("+currstr+")");
 				}
 				else if (char === "\"") {
                 			currstr += "\\\"";
@@ -641,15 +638,13 @@ function transpile(code, safe, first) {
 			code += (level % 2? strchars[level] : "}");
 		}
 		level = templevel;
-		extrabraces = tempbraces;
+		extrabraces = tempbraces.slice();
 		quickie();
 		return newcode;
 	}
 	
 	code = pretranspile(code);
 	outp = "";
-
-	var polyglot = '"(p|';
   
 	for (i = 0; i < code.length; i++) {
 		var char = code[i];
@@ -665,11 +660,7 @@ function transpile(code, safe, first) {
 		else if (isChar(outp.slice(-1),"*%") && isChar(char," \\)\\]};"))
 			code = code.slice(0,i)+'2'+code.slice(i);
 		
-		if (code.slice(i).indexOf(polyglot) === 0) {
-			outp = transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2|0)+"\"":"\\".repeat(b.length/2)}));
-			i = code.length;
-		}
-		else if (char === "\"") {
+		if (char === "\"") {
 			var tms = code.slice(i).match(/"(\d+)"/)[0];
 			outp += tms;
 			i += tms.length - 1;
@@ -693,7 +684,7 @@ function transpile(code, safe, first) {
 				if (temp.slice(-1) !== "}")
 					temp += "}";
 				else i--;
-				var tr = transpile(temp.slice(0,-1));
+				var tr = Japt.transpile(temp.slice(0,-1));
 				if (tr.lastIndexOf(";") < 0)
 					outp += "return " + tr + "}";
 				else
@@ -762,23 +753,13 @@ function transpile(code, safe, first) {
 		}
 	}
 	
-	outp = outp.replace(/\$(\d+)\$/g,function(_,a){return snippets[+a]});
+	outp = outp.replace(/\$(\d+)\$/g,function(_,a){return Japt.snippets[+a]});
 	outp = fixParens(outp);
-	outp = outp.replace(/"(\d+)"/g,function(_,a){return strings[+a]});
+	outp = outp.replace(/"(\d+)"/g,function(_,a){return Japt.strings[+a]});
 	return outp;
-}
+},
 
-function evalJapt(code, safe, before, onsuccess, onerror) {
-	code = transpile(code, safe, true);
-	if (!is_safe) {
-		if (onerror) onerror(new Error("Raw JS cannot be used in safe mode"));
-		return;
-	}
-	if (before) before(code);
-	try {
-		var result = eval(code);
-		if (onsuccess) onsuccess(result);
-	} catch (e) {
-		if (onerror) onerror(e);
-	}
+eval: function(code) {
+	return eval(Japt.transpile(code));
+}
 }

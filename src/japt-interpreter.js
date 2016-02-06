@@ -495,7 +495,7 @@ run:function(code, input, safe, before, onsuccess, onerror) {
 	    code = eval(code);
 	    if (onsuccess) onsuccess(code);
 	} catch (e) {
-	    if (onerror) onerror(code);
+	    if (onerror) onerror(e);
 	}
 },
 

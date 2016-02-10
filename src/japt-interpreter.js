@@ -517,7 +517,7 @@ transpile: function(code) {
 		for (; i < code.length; i++) {
 			var char = code[i];
 			if (code.slice(i).indexOf(polyglot) === 0) {
-				outp = transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2|0)+"\"":"\\".repeat(b.length/2)}));
+				outp = Japt.transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2|0)+"\"":"\\".repeat(b.length/2)}));
 				i = code.length;
 			}
 			else if (level === 0) {
@@ -597,7 +597,7 @@ transpile: function(code) {
 				if (level === 2 && extrabraces[level] === 0 && char === "}") {
 					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					level--;
-					currstr += "\"+("+transpile(currbraces,safe,false)+")+\"";
+					currstr += "\"+("+Japt.transpile(currbraces,safe,false)+")+\"";
 				}
 				else {
 					currbraces+=char;

@@ -597,7 +597,7 @@ transpile: function(code) {
 				if (level === 2 && extrabraces[level] === 0 && char === "}") {
 					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 					level--;
-					currstr += "\"+("+Japt.transpile(currbraces,safe,false)+")+\"";
+					currstr += "\"+("+Japt.transpile(currbraces)+")+\"";
 				}
 				else {
 					currbraces+=char;

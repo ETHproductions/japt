@@ -109,7 +109,7 @@ Also, when performing a single-char operation as a function, you can usually jus
 - When doing something like `UrXY{X+Y}`, you can simply use the operator: `Ur+`
 - When the arguments are reversed, like with `UrXY{Y-X}`, just prefix the operator with an exclamation point: `Ur!-`
 - When using a single prototype function, e.g. `UmX{Xc}`, just use the letter: `Umc`
-- When you need to preform the operator or function with a fixed value or variable, e.g. `UmX{Xp2}`, use the value after the operator" `Ump2`
+- When you need to preform the operator or function with a fixed value or variable, e.g. `UmX{Xp2}`, use the value after the operator: `Ump2`
 - When you need to switch the two values, e.g. `UmX{2pX}`, prefix the function with an exclamation point: `Um!p2`
 
 ### Pure JS

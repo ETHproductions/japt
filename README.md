@@ -44,11 +44,11 @@ Since all input is stored in `N`, and output is implicit, all we have to do is c
 
 Taking advantage of Japt's automatic output, any single number is trivially a quine. But what fun is that? Let's try a better one:
 
-    "+Q ³sA,J"+Q ³sA,J
-    "+Q ³sA,J"            // Take this string,
-              +Q          // add a quotation mark,
-                 ³        // repeat it 3 times,
-                  sA,J    // and slice off the first 10 chars and last 1 char. (A = 10, J = -1)
+    "+Q ³s7J"+Q ³s7J
+    "+Q ³s7J"            // Take this string,
+             +Q          // add a quotation mark,
+                ³        // repeat it 3 times,
+                 s7J     // and slice off the first 7 chars and last 1 char. (J = -1)
 
 ## New Syntax
 

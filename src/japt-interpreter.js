@@ -113,9 +113,9 @@ df(String,'d',function(x){
 	else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(regexify(f,'g'),a[i+1]);},this)}});
 df(String,'e',function(x,y,z){x=regexify(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t});
 df(String,'f',function(x,y){return this.match(regexify(x,y))});
-df(String,'g',function(x){var l=this.length;x=(-fb(x,0)%l+l)%l;return this[x]});
-df(String,'h',function(x,y){var l=this.length;x=(-fb(x,0)%l+l)%l;return this.substring(0,x)+y+this.substring(x+y.length)});
-df(String,'i',function(x,y){var l=this.length;x=(-fb(x,0)%l+l)%l;return this.substring(0,x)+y+this.substring(x)});
+df(String,'g',function(x){var l=this.length;x=(fb(x,0)%l+l)%l;return this[x]});
+df(String,'h',function(x,y){var l=this.length;x=(fb(x,0)%l+l)%l;return this.substring(0,x)+y+this.substring(x+y.length)});
+df(String,'i',function(x,y){var l=this.length;x=(fb(x,0)%l+l)%l;return this.substring(0,x)+y+this.substring(x)});
 df(String,'j',function(x,y){y=fb(y,1);return this.substring(0,x)+this.substring(x+y)});
 df(String,'k',function(x,y){y=fb(y,"");return this.replace(regexify(x,y),"")});
 df(String,'l',function(){return this.length});
@@ -148,9 +148,9 @@ df(Array,'c',function(){var f=[];for(var i of this){if(i instanceof Array)for(va
 df(Array,'d',function(x){x=fb(x,function(y){return!!y});x=functify(x);return this.some(x)});
 df(Array,'e',function(x){x=fb(x,function(y){return!!y});x=functify(x);return this.every(x)});
 df(Array,'f',function(x){x=fb(x,function(y){return!!y});x=functify(x);return this.filter(x)});
-df(Array,'g',function(x){var l=this.length;x=(-fb(x,0)%l+l)%l;return this[x]});
-df(Array,'h',function(x,y){var l=this.length;x=(-fb(x,0)%l+l)%l;this[x]=y;return this});
-df(Array,'i',function(x,y){var l=this.length;x=(-fb(x,0)%l+l)%l;this.splice(x,0,y);return this});
+df(Array,'g',function(x){var l=this.length;x=(fb(x,0)%l+l)%l;return this[x]});
+df(Array,'h',function(x,y){var l=this.length;x=(fb(x,0)%l+l)%l;this[x]=y;return this});
+df(Array,'i',function(x,y){var l=this.length;x=(fb(x,0)%l+l)%l;this.splice(x,0,y);return this});
 df(Array,'j',function(x,y){y=fb(y,1);return this.splice(x,y)});
 df(Array,'k',function(x){this.splice(this.indexOf(x),1);return this});
 df(Array,'l',function(){return this.length});
@@ -531,6 +531,11 @@ transpile: function(code) {
 						if (code[i] === "$") break;
 						Japt.snippets[Japt.snippets.length-1] += code[i]; 
 					}
+				}
+				else if (char === "\\") {
+					if (Japt.use_safe) Japt.is_safe = false;
+					newcode += "$" + Japt.snippets.length + "$";
+					Japt.snippets.push(code[++i]);
 				}
 				else if (isChar(char, "\"`") && extrabraces[0] === 0) {
 					level++;

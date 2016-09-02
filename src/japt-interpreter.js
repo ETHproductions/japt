@@ -424,7 +424,7 @@ var Japt = {
 					break;
 				case "array":
 					if (char == "[")
-						++level+
+						++level;
 					if (char == "]")
 						--level;
 					if (level === 0) {

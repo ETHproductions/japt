@@ -1,7 +1,8 @@
-var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
-function noFunc(x){alert("No such function: "+x)}
-function id(x){return(typeof x)!=="undefined"}
-function fb(x,y){return id(x)?x:y}
+var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z; // Japt variables
+function noFunc(x){alert("No such function: "+x)} // Runs whenever the program contains a non-existant function call
+function id(x){return(typeof x)!=="undefined"} // Detects whether the variable is defined
+function fb(x,y){return id(x)?x:y} // Fallback: returns x if x is defined, y otherwise
+function pm(x,y){return(x%y+y)%y} // Positive modulo
 function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configurable:false,writable:true,value:f})}
 function regexify(x,y){if(x instanceof RegExp)return x;y=fb(y,null);var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="V"?a?" -?B-DF-HJ-NP-TV-`b-df-hj-np-tv-\uFFFF":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"").replace(/g/g,"")+"g")}
 function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/[a-z]/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
@@ -113,9 +114,9 @@ df(String,'d',function(x){
 	else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(regexify(f,'g'),a[i+1]);},this)}});
 df(String,'e',function(x,y,z){x=regexify(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t});
 df(String,'f',function(x,y){return this.match(regexify(x,y))});
-df(String,'g',function(x){var l=this.length;x=(fb(x,0)%l+l)%l;return this[x]});
-df(String,'h',function(x,y){var l=this.length;x=(fb(x,0)%l+l)%l;return this.substring(0,x)+y+this.substring(x+y.length)});
-df(String,'i',function(x,y){var l=this.length;x=(fb(x,0)%l+l)%l;return this.substring(0,x)+y+this.substring(x)});
+df(String,'g',function(x){var l=this.length;x=pm(fb(x,0),l);return this[x]});
+df(String,'h',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x+y.length)});
+df(String,'i',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x)});
 df(String,'j',function(x,y){y=fb(y,1);return this.substring(0,x)+this.substring(x+y)});
 df(String,'k',function(x,y){y=fb(y,"");return this.replace(regexify(x,y),"")});
 df(String,'l',function(){return this.length});
@@ -148,9 +149,9 @@ df(Array,'c',function(){var f=[];for(var i of this){if(i instanceof Array)for(va
 df(Array,'d',function(x){x=fb(x,function(y){return!!y});x=functify(x);return this.some(x)});
 df(Array,'e',function(x){x=fb(x,function(y){return!!y});x=functify(x);return this.every(x)});
 df(Array,'f',function(x){x=fb(x,function(y){return!!y});x=functify(x);return this.filter(x)});
-df(Array,'g',function(x){var l=this.length;x=(fb(x,0)%l+l)%l;return this[x]});
-df(Array,'h',function(x,y){var l=this.length;x=(fb(x,0)%l+l)%l;this[x]=y;return this});
-df(Array,'i',function(x,y){var l=this.length;x=(fb(x,0)%l+l)%l;this.splice(x,0,y);return this});
+df(Array,'g',function(x){var l=this.length;x=pm(fb(x,0),l);return this[x]});
+df(Array,'h',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);this[x]=y;return this});
+df(Array,'i',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);this.splice(x,0,y);return this});
 df(Array,'j',function(x,y){y=fb(y,1);return this.splice(x,y)});
 df(Array,'k',function(x){this.splice(this.indexOf(x),1);return this});
 df(Array,'l',function(){return this.length});
@@ -177,7 +178,7 @@ df(Array,'\u00E5',function(x,y){x=functify(x);var a=[];this.reduce(function(q,r,
 df(Array,'\u00E6',function(x){return this.f(x)[0]});
 df(Array,'\u00E7',function(x){return this.fill(x)});
 df(Array,'\u00E8',function(x){return this.f(x).length});
-df(Array,'\u00E9',function(x){var r=[],l=this.length,i=l;for(x=(-fb(x,1)%l+l)%l;i--;x++)r.push(this[x%l]);return r});
+df(Array,'\u00E9',function(x){var r=[],l=this.length,i=l;for(x=pm(-fb(x,1),l);i--;x++)r.push(this[x%l]);return r});
 
 df(Number,'a',function(){return Math.abs(this)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
@@ -186,7 +187,7 @@ df(Number,'d',function(){return String.fromCharCode(this)});
 df(Number,'e',function(x){return this*Math.pow(10,x)});
 df(Number,'f',function(x){x=fb(x,1);return Math.floor(this/x)*x});
 df(Number,'g',function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});
-df(Number,'h',function(){noFunc('Nh')});
+df(Number,'h',function(x){return pm(this,fb(x,2))});
 df(Number,'i',function(x){return setInterval(x,this)});
 df(Number,'j',function(){return this.k().length===1});
 df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f});
@@ -202,9 +203,9 @@ df(Number,'t',function(x){return setTimeout(x,this)});
 df(Number,'u',function(){return this%2===1?1:0});
 df(Number,'v',function(){return this%2===0?1:0});
 df(Number,'w',function(){return[].reduce.call(arguments,function(x,y){return Math.max(x,y)},this)});
-df(Number,'x',function(){noFunc('Nx')});
-df(Number,'y',function(){noFunc('Ny')});
-df(Number,'z',function(){noFunc('Nz')});
+df(Number,'x',function(){noFunc('N.x')});
+df(Number,'y',function(){noFunc('N.y')});
+df(Number,'z',function(){noFunc('N.z')});
 df(Number,'\u00E0',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
 df(Number,'\u00E1',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return n.l();return n["\u00E0"]()*x.l()});
 df(Number,'\u00F2',function(x,y){x=fb(x,0);y=y||1;return this<x?this.o(x+y,y):x.o(this+y,y)});
@@ -228,20 +229,20 @@ df(Date,'k',function(){return this.getTimezoneOffset()});
 // Ds accepts one argument that controls how the string is formatted. Some formats may not work on some browsers.
 df(Date,'s',function(x){return this["to"+["","Date","Time","ISO","GMT","UTC","Locale","LocaleDate","LocaleTime"][x||0]+"String"]()});
 
-df(Date,'l',function(){noFunc('Dl')});
-df(Date,'m',function(){noFunc('Dm')});
-df(Date,'n',function(){noFunc('Dn')});
-df(Date,'o',function(){noFunc('Do')});
-df(Date,'p',function(){noFunc('Dp')});
-df(Date,'q',function(){noFunc('Dq')});
-df(Date,'r',function(){noFunc('Dr')});
-df(Date,'t',function(){noFunc('Dt')});
-df(Date,'u',function(){noFunc('Du')});
-df(Date,'v',function(){noFunc('Dv')});
-df(Date,'w',function(){noFunc('Dw')});
-df(Date,'x',function(){noFunc('Dx')});
-df(Date,'y',function(){noFunc('Dy')});
-df(Date,'z',function(){noFunc('Dz')});
+df(Date,'l',function(){noFunc('D.l')});
+df(Date,'m',function(){noFunc('D.m')});
+df(Date,'n',function(){noFunc('D.n')});
+df(Date,'o',function(){noFunc('D.o')});
+df(Date,'p',function(){noFunc('D.p')});
+df(Date,'q',function(){noFunc('D.q')});
+df(Date,'r',function(){noFunc('D.r')});
+df(Date,'t',function(){noFunc('D.t')});
+df(Date,'u',function(){noFunc('D.u')});
+df(Date,'v',function(){noFunc('D.v')});
+df(Date,'w',function(){noFunc('D.w')});
+df(Date,'x',function(){noFunc('D.x')});
+df(Date,'y',function(){noFunc('D.y')});
+df(Date,'z',function(){noFunc('D.z')});
 
 // Shorter Date properties
 Date.p = Date.parse;
@@ -287,20 +288,20 @@ function newvars() {
 
 function subparen(code) {
 	var level = 0, min = 0;
-	for(var i=0;i<code.length;i++) {
+	for(var i = 0; i < code.length; ++i) {
 		if(code[i]=='(')
-			level++;
+			++level;
 		if(code[i]==')')
-			level--, min = Math.min(min, level);
+			--level, min = Math.min(min, level);
 	}
-	if(min < 0) code = '('.repeat(-min) + code, level-=min;
+	if(min < 0) code = '('.repeat(-min) + code, level -= min;
 	if(level > 0) code += ')'.repeat(level);
 	return code;
 }
 
 function fixParens(code) {
 	var cade = "", mode = "next", char = "", curr = "", temp = "", level = 0;
-	for(var i=0;i<code.length;i++) {
+	for(var i = 0; i < code.length; ++i) {
 		char = code[i];
 		switch(mode) {
 			case "next":
@@ -319,9 +320,9 @@ function fixParens(code) {
 				break;
 			case "array":
 				if (char == "[") {
-					level++;
+					++level;
 				} else if (char == "]") {
-					level--;
+					--level;
 				}
 				if (level < 0) {
 					curr += "[" + fixParens(temp) + "]";
@@ -333,7 +334,7 @@ function fixParens(code) {
 				break;
 			case "brackets":
 				if (char == "}") {
-					level--;
+					--level;
 				}
 				if (level < 0) {
 					curr += "{" + temp + "}";
@@ -350,423 +351,425 @@ function fixParens(code) {
 }
 
 var Japt = {
-
-stdout: null,
-stderr: null,
-
-clear_output: function() {
-	try { Japt.stdout.value = ""; } catch (e) { alert ("Error: Japt.stdout must be sent to an HTMLElement"); }
-	try { Japt.stderr.innerHTML = ""; } catch (e) { alert ("Error: Japt.stderr must be sent to an HTMLElement"); }
-},
-
-output: function(x) {
-    try { Japt.stdout.value += x; } catch (e) { alert ("Error: Japt.stdout must be sent to an HTMLElement"); }
-},
-
-interrupt: function() {
-	Japt.error("Interrupted");
-},
-
-error: function(msg) {
-	try { Japt.stderr.innerHTML = msg; } catch (e) { alert ("Error: Japt.stderr must be sent to an HTMLElement"); }
-},
-
-evalInput:function(input) {
-	var input_mode = "next", current, processed = [], level = 0;
-	input = (input+" ").split("");
-	for(var index = 0; index<input.length; index++) {
-		char = input[index];
-		switch (input_mode) {
-			case "next":
-				if (/[0-9.-]/.test(char)) {
-					input_mode = "number";
-					current = char;
-				} else if (/["']/.test(char)) {
-					input_mode = "string "+char;
-					current = "";
-				} else if (char == "[") {
-					input_mode = "array";
-					current = "";
-					level = 1;
-				}
-				break;
-			case "number":
-				if (/[0-9.]/.test(char)) {
-					current += char;
-				} else {
-					processed.push(+current);
-					current = undefined;
-					input_mode = "next";
-				}
-				break;
-			case "string \"":
-				if (char == "\"") {
-					processed.push(current);
-					current = undefined;
-					input_mode = "next";
-				} else if (char == "\\" && /'"\\/.test(input[index+1])) {
-					current += input[++index];
-				} else {
-					current += char;
-				}
-				break;
-			case "string '":
-				if (char == "'") {
-					processed.push(current);
-					current = undefined;
-					input_mode = "next";
-				} else if (char == "\\" && /'"\\/.test(input[index+1])) {
-					current += input[++index];
-				} else {
-					current += char;
-				}
-				break;
-			case "array":
-				if (char == "[")
-					level++;
-				if (char == "]")
-					level--;
-				if (level === 0) {
-					processed.push(Japt.evalInput(current));
-					current = undefined;
-					input_mode = "next";
-				} else {
-					current += char;
-				}
-				break;
-		}
-	}
-	return processed;
-},
-
-strings: [],
-snippets: [],
-use_safe: false,
-is_safe: false,
-
-run:function(code, input, safe, before, onsuccess, onerror) {
-    Japt.clear_output();
-    
-	A = 10,
-	B = 11,
-	C = 12,
-	D = 13,
-	E = 14,
-	F = 15,
-	G = 16,
-	H = 32,
-	I = 64,
-	J = -1,
-	K = Date,
-	L = 100,
-	M = Math,
-	N = Japt.evalInput(input),
-	O = {
-		a:function(){alert.apply(window,arguments)},
-		l:function(){console.log.apply(console,arguments)},
-		r:clearInterval,
-		o:Japt.output,
-		p:function(x){Japt.output(x+"\n")},
-		q:Japt.clear_output,
-		c:shoco.c,
-		d:shoco.d,
-		v:function(x){var r="";try{r=eval(Japt.transpile(x))}catch(e){Japt.error(e)}return r},
-		x:function(x){if(Japt.use_safe)throw"O.x() cannot be used in safe mode";var r="";try{r=eval(x)}catch(e){Japt.error(e)}return r}
+	
+	stdout: null,
+	stderr: null,
+	
+	clear_output: function() {
+		try { Japt.stdout.value = ""; } catch (e) { alert ("Error: Japt.stdout must be sent to an HTMLElement"); }
+		try { Japt.stderr.innerHTML = ""; } catch (e) { alert ("Error: Japt.stderr must be sent to an HTMLElement"); }
 	},
-	P = "",
-	Q = "\"",
-	R = "\n",
-	S = " ",
-	T = 0,
-	U = N.length <= 0? 0 : N[0],
-	V = N.length <= 1? 0 : N[1],
-	W = N.length <= 2? 0 : N[2],
-	X = N.length <= 3? 0 : N[3],
-	Y = N.length <= 4? 0 : N[4],
-	Z = N.length <= 5? 0 : N[5];
 	
-    Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe,false), Japt.is_safe = true;
+	output: function(x) {
+		try { Japt.stdout.value += x; } catch (e) { alert ("Error: Japt.stdout must be sent to an HTMLElement"); }
+	},
 	
-    code = Japt.transpile(code);
-	if (!Japt.is_safe) {
-		if (onerror) onerror(new Error("Raw JS cannot be used in safe mode"));
-		return;
-	}
-    if (before) before(code);
-	try {
-	    code = eval(code);
-	    if (onsuccess) onsuccess(code);
-	} catch (e) {
-	    if (onerror) onerror(e);
-	}
-},
-
-transpile: function(code) {
-	var level = 0,  // Current number of parentheses or curly braces that we're inside
-		temp = "",
-		extrabraces = Array(20).fill(0),
-		currstr = "",
-		currbraces = "",
-		newcode = "",
-		pairs = pairs_1_3,  // Version of Unicode shortcuts to use
-		i = 0,
-		j = 0,
-		outp = "";  // Temporary output
-
-	function pretranspile(code) {
-		var i = 0, strchars = Array(20).fill(""), polyglot = '"(p|';
-		var quickie = function () {
-		for (; i < code.length; i++) {
-			var char = code[i];
-			if (code.slice(i).indexOf(polyglot) === 0) {
-				outp = Japt.transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2|0)+"\"":"\\".repeat(b.length/2)}));
-				i = code.length;
+	interrupt: function() {
+		Japt.error("Interrupted");
+	},
+	
+	error: function(msg) {
+		try { Japt.stderr.innerHTML = msg; } catch (e) { alert ("Error: Japt.stderr must be sent to an HTMLElement"); }
+	},
+	
+	evalInput:function(input) {
+		var input_mode = "next", current, processed = [], level = 0;
+		input = (input+" ").split("");
+		for(var index = 0; index < input.length; ++index) {
+			char = input[index];
+			switch (input_mode) {
+				case "next":
+					if (/[0-9.-]/.test(char)) {
+						input_mode = "number";
+						current = char;
+					} else if (/["']/.test(char)) {
+						input_mode = "string "+char;
+						current = "";
+					} else if (char == "[") {
+						input_mode = "array";
+						current = "";
+						level = 1;
+					}
+					break;
+				case "number":
+					if (/[0-9.]/.test(char)) {
+						current += char;
+					} else {
+						processed.push(+current);
+						current = undefined;
+						input_mode = "next";
+					}
+					break;
+				case "string \"":
+					if (char == "\"") {
+						processed.push(current);
+						current = undefined;
+						input_mode = "next";
+					} else if (char == "\\" && /'"\\/.test(input[index+1])) {
+						current += input[++index];
+					} else {
+						current += char;
+					}
+					break;
+				case "string '":
+					if (char == "'") {
+						processed.push(current);
+						current = undefined;
+						input_mode = "next";
+					} else if (char == "\\" && /'"\\/.test(input[index+1])) {
+						current += input[++index];
+					} else {
+						current += char;
+					}
+					break;
+				case "array":
+					if (char == "[")
+						++level+
+					if (char == "]")
+						--level;
+					if (level === 0) {
+						processed.push(Japt.evalInput(current));
+						current = undefined;
+						input_mode = "next";
+					} else {
+						current += char;
+					}
+					break;
 			}
-			else if (level === 0) {
-				if (char === "$") {
-					if (Japt.use_safe) Japt.is_safe = false;
-					newcode += "$" + Japt.snippets.length + "$";
-					Japt.snippets.push("");
-					for (i++; i < code.length; i++) {
-						if (code[i] === "$") break;
-						Japt.snippets[Japt.snippets.length-1] += code[i]; 
+		}
+		return processed;
+	},
+	
+	strings: [],
+	snippets: [],
+	use_safe: false,
+	is_safe: false,
+	
+	run: function(code, input, safe, before, onsuccess, onerror) {
+		Japt.clear_output();
+	
+		A = 10,
+		B = 11,
+		C = 12,
+		D = 13,
+		E = 14,
+		F = 15,
+		G = 16,
+		H = 32,
+		I = 64,
+		J = -1,
+		K = Date,
+		L = 100,
+		M = Math,
+		N = Japt.evalInput(input),
+		O = {
+			a:function(){alert.apply(window,arguments)},
+			l:function(){console.log.apply(console,arguments)},
+			r:clearInterval,
+			o:Japt.output,
+			p:function(x){Japt.output(x+"\n")},
+			q:Japt.clear_output,
+			c:shoco.c,
+			d:shoco.d,
+			v:function(x){var r="";try{r=eval(Japt.transpile(x))}catch(e){Japt.error(e)}return r},
+			x:function(x){if(Japt.use_safe)throw"O.x() cannot be used in safe mode";var r="";try{r=eval(x)}catch(e){Japt.error(e)}return r}
+		},
+		P = "",
+		Q = "\"",
+		R = "\n",
+		S = " ",
+		T = 0,
+		U = 0 in N ? 0 : N[0],
+		V = 1 in N ? 0 : N[1],
+		W = 2 in N ? 0 : N[2],
+		X = 3 in N ? 0 : N[3],
+		Y = 4 in N ? 0 : N[4],
+		Z = 5 in N ? 0 : N[5];
+		
+		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe,false), Japt.is_safe = true;
+		
+		code = Japt.transpile(code);
+		if (!Japt.is_safe) {
+			if (onerror) onerror(new Error("Raw JS cannot be used in safe mode"));
+			return;
+		}
+		if (before) before(code);
+		try {
+		    code = eval(code);
+		    if (onsuccess) onsuccess(code);
+		} catch (e) {
+		    if (onerror) onerror(e);
+		}
+	},
+	
+	transpile: function(code) {
+		var level = 0,  // Current number of parentheses or curly braces that we're inside
+			temp = "",
+			extrabraces = [],
+			currstr = "",
+			currbraces = "",
+			newcode = "",
+			pairs = pairs_1_3,  // Version of Unicode shortcuts to use
+			i = 0,
+			j = 0,
+			outp = "";  // Temporary output
+		
+		for (i = 0; i < 20; ++i) extrabraces.push(0);
+	
+		function pretranspile(code) {
+			var i = 0, strchars = Array(20).fill(""), polyglot = '"(p|';
+			var quickie = function () {
+			for (; i < code.length; ++i) {
+				var char = code[i];
+				if (code.slice(i).indexOf(polyglot) === 0) {
+					outp = Japt.transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2|0)+"\"":"\\".repeat(b.length/2)}));
+					i = code.length;
+				}
+				else if (level === 0) {
+					if (char === "$") {
+						if (Japt.use_safe) Japt.is_safe = false;
+						newcode += "$" + Japt.snippets.length + "$";
+						Japt.snippets.push("");
+						for (++i; i < code.length; ++i) {
+							if (code[i] === "$") break;
+							Japt.snippets[Japt.snippets.length-1] += code[i]; 
+						}
 					}
-				}
-				else if (char === "\\") {
-					if (Japt.use_safe) Japt.is_safe = false;
-					newcode += "$" + Japt.snippets.length + "$";
-					Japt.snippets.push(code[++i]);
-				}
-				else if (isChar(char, "\"`") && extrabraces[0] === 0) {
-					level++;
-					strchars[level] = char;
-					currstr = "\"";
-				}
-				else if (char === "'") {
-					newcode += "\"" + Japt.strings.length + "\"";
-					if (code[++i] === "\\") {
-						Japt.strings.push("\"\\\\\"");
+					else if (char === "\\") {
+						if (Japt.use_safe) Japt.is_safe = false;
+						newcode += "$" + Japt.snippets.length + "$";
+						Japt.snippets.push(code[++i]);
 					}
-					else if (code[i] === "\n") {
-						Japt.strings.push("\"\\n\"");
-					}
-					else if (code[i] === "\"") {
-						Japt.strings.push("\"\\\"\"");
-					}
-					else {
-						Japt.strings.push("\""+code[i]+"\"");
-					}
-				}
-				else if (char === "#") {
-                			newcode += code[++i].charCodeAt(0);
-				}
-				else if (char === "{") {
-				    extrabraces[0]++;
-                			newcode += char;
-				}
-				else if (char === "}") {
-				    extrabraces[0]--;
-                			newcode += char;
-				}
-				else if (pairs.hasOwnProperty(char)) {
-					code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
-				}
-				else {
-					newcode += char;
-				}
-			}
-			else if (level === 1) {
-				if (char === "\\") {
-					currstr += "\\" + code[++i];
-				}
-				else if (char === strchars[level]) {
-					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
-					level--;
-					currstr += "\"";
-					newcode += "\"" + Japt.strings.length + "\"";
-					Japt.strings.push("("+currstr+")");
-				}
-				else if (char === "\"") {
-                			currstr += "\\\"";
-				}
-				else if (char === "{") {
-					level++;
-					currbraces = "";
-				}
-				else if (char === "\n") {
-                			currstr += "\\n";
-				}
-				else {
-					currstr += char;
-				}
-			}
-			else if (level % 2 === 0) {
-				if (level === 2 && extrabraces[level] === 0 && char === "}") {
-					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
-					level--;
-					currstr += "\"+("+Japt.transpile(currbraces)+")+\"";
-				}
-				else {
-					currbraces+=char;
-					if (char === "\"") {
+					else if (isChar(char, "\"`") && extrabraces[0] === 0) {
 						level++;
+						strchars[level] = char;
+						currstr = "\"";
 					}
-					else if (isChar(char,"'#")) {
-						currbraces += code[++i];
+					else if (char === "'") {
+						newcode += "\"" + Japt.strings.length + "\"";
+						if (code[++i] === "\\") {
+							Japt.strings.push("\"\\\\\"");
+						}
+						else if (code[i] === "\n") {
+							Japt.strings.push("\"\\n\"");
+						}
+						else if (code[i] === "\"") {
+							Japt.strings.push("\"\\\"\"");
+						}
+						else {
+							Japt.strings.push("\""+code[i]+"\"");
+						}
+					}
+					else if (char === "#") {
+	                			newcode += code[++i].charCodeAt(0);
 					}
 					else if (char === "{") {
-						extrabraces[level]++;
+						++extrabraces[0];
+	                			newcode += char;
 					}
 					else if (char === "}") {
-						if (extrabraces[level] === 0) level--;
-						else extrabraces[level]--;
+						--extrabraces[0];
+	                			newcode += char;
+					}
+					else if (pairs.hasOwnProperty(char)) {
+						code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+					}
+					else {
+						newcode += char;
 					}
 				}
-			}
-			else {
-				currbraces += char;
-				if (char === "\\") {
-					currbraces += code[++i];
-				}
-				else if (char === "\"") {
-					level--;
-				}
-				else if (char === "{") {
-					level++;
-				}
-			}
-		}
-		};
-		quickie();
-		for (var templevel = level, tempbraces = extrabraces.slice(); level > 0; level--) {
-			for (; extrabraces[level] > 0; extrabraces[level]--) {
-				code += "}";
-			}
-			code += (level % 2? strchars[level] : "}");
-		}
-		level = templevel;
-		extrabraces = tempbraces.slice();
-		quickie();
-		return newcode;
-	}
-	
-	code = pretranspile(code);
-	outp = "";
-  
-	for (i = 0; i < code.length; i++) {
-		var char = code[i];
-		if (char === ";" && i === 0)
-			outp += "newvars()";
-		else if (isChar(char, "A-Z") && outp.slice(-1) === "M")
-			outp += ".";
-		else if (isChar(char, "`'\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
-			&& !(isChar(char,"0-9") && isChar(outp.slice(-1),"0-9")))
-			outp += ",";
-		else if (isChar(outp.slice(-1),"+\\-&|\\^") && isChar(char," \\)\\]};"))
-			code = code.slice(0,i)+'1'+code.slice(i);
-		else if (isChar(outp.slice(-1),"*%") && isChar(char," \\)\\]};"))
-			code = code.slice(0,i)+'2'+code.slice(i);
-		
-		if (char === "\"") {
-			var tms = code.slice(i).match(/"(\d+)"/)[0];
-			outp += tms;
-			i += tms.length - 1;
-		}
-		else if (isChar(char, "A-Z{")) {
-			var letters = "";
-			for (; isChar(code[i], "A-Z") && i < code.length; i++) {
-				letters += code[i];
-			}
-			if (code[i] === "{") {
-				outp += "function(" + letters.split("").join(",") + "){";
-				temp = "";
-				for (level = 1, i++; level > 0 && i < code.length; i++) {
-					if (code[i] === "{") {
+				else if (level === 1) {
+					if (char === "\\") {
+						currstr += "\\" + code[++i];
+					}
+					else if (char === strchars[level]) {
+						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+						level--;
+						currstr += "\"";
+						newcode += "\"" + Japt.strings.length + "\"";
+						Japt.strings.push("("+currstr+")");
+					}
+					else if (char === "\"") {
+	                			currstr += "\\\"";
+					}
+					else if (char === "{") {
 						level++;
-					} else if (code[i] === "}") {
+						currbraces = "";
+					}
+					else if (char === "\n") {
+	                			currstr += "\\n";
+					}
+					else {
+						currstr += char;
+					}
+				}
+				else if (level % 2 === 0) {
+					if (level === 2 && extrabraces[level] === 0 && char === "}") {
+						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+						level--;
+						currstr += "\"+("+Japt.transpile(currbraces)+")+\"";
+					}
+					else {
+						currbraces+=char;
+						if (char === "\"") {
+							level++;
+						}
+						else if (isChar(char,"'#")) {
+							currbraces += code[++i];
+						}
+						else if (char === "{") {
+							extrabraces[level]++;
+						}
+						else if (char === "}") {
+							if (extrabraces[level] === 0) level--;
+							else extrabraces[level]--;
+						}
+					}
+				}
+				else {
+					currbraces += char;
+					if (char === "\\") {
+						currbraces += code[++i];
+					}
+					else if (char === "\"") {
 						level--;
 					}
-					temp += code[i];
+					else if (char === "{") {
+						level++;
+					}
 				}
-				if (temp.slice(-1) !== "}")
-					temp += "}";
-				else i--;
-				var tr = Japt.transpile(temp.slice(0,-1));
-				if (tr.lastIndexOf(";") < 0)
-					outp += "return " + tr + "}";
-				else
-					outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
+			}
+			};
+			quickie();
+			for (var templevel = level, tempbraces = extrabraces.slice(); level > 0; level--) {
+				for (; extrabraces[level] > 0; extrabraces[level]--) {
+					code += "}";
+				}
+				code += (level % 2? strchars[level] : "}");
+			}
+			level = templevel;
+			extrabraces = tempbraces.slice();
+			quickie();
+			return newcode;
+		}
+		
+		code = pretranspile(code);
+		outp = "";
+	  
+		for (i = 0; i < code.length; ++i) {
+			var char = code[i];
+			if (char === ";" && i === 0)
+				outp += "newvars()";
+			else if (isChar(char, "A-Z") && outp.slice(-1) === "M")
+				outp += ".";
+			else if (isChar(char, "`'\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
+				&& !(isChar(char, "0-9") && isChar(outp.slice(-1), "0-9")))
+				outp += ",";
+			else if (isChar(outp.slice(-1), "+\\-&|\\^") && isChar(char, " \\)\\]};"))
+				code = code.slice(0,i)+'1'+code.slice(i);
+			else if (isChar(outp.slice(-1), "*%") && isChar(char, " \\)\\]};"))
+				code = code.slice(0,i)+'2'+code.slice(i);
+			
+			if (char === "\"") {
+				var tms = code.slice(i).match(/"(\d+)"/)[0];
+				outp += tms;
+				i += tms.length - 1;
+			}
+			else if (isChar(char, "A-Z{")) {
+				var letters = "";
+				for (; isChar(code[i], "A-Z") && i < code.length; i++) {
+					letters += code[i];
+				}
+				if (code[i] === "{") {
+					outp += "function(" + letters.split("").join(",") + "){";
+					temp = "";
+					for (level = 1, ++i; level > 0 && i < code.length; i++) {
+						if (code[i] === "{") {
+							++level;
+						} else if (code[i] === "}") {
+							--level;
+						}
+						temp += code[i];
+					}
+					if (temp.slice(-1) !== "}")
+						temp += "}";
+					else i--;
+					var tr = Japt.transpile(temp.slice(0,-1));
+					if (tr.lastIndexOf(";") < 0)
+						outp += "return " + tr + "}";
+					else
+						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
+				}
+				else {
+					outp += letters.split("").join(",");
+					--i;
+				}
+			}
+			else if (char === " ") {
+				outp += ")";
+			}
+			else if (char === ")") {
+				outp += "))";
+			}
+			else if (isChar(char, "a-z")) {
+				if (outp.slice(-2) === "(!") {
+					outp = outp.slice(0,-1) + "\"!"+char+"\"";
+				} else if (outp.slice(-1) === "(") {
+					outp += "\""+char+"\"";
+				} else if (isChar(outp.slice(-1),"0-9")) {
+					if (char === "e") {
+						outp += char;
+					} else {
+						outp += " ." + char + "(";
+					}
+				} else {
+					outp += "." + char + "(";
+				}
+			}
+			else if (isChar(char, "\\u00E0-\\u00F6\\u00F8-\\u00FF")) {
+				if (outp.slice(-1) === "(") {
+					outp += "function(c){return c[\"\\u00" + char.charCodeAt(0).toString(16).toUpperCase() + "\"]()}";
+				} else {
+					outp += "[\"\\u00" + char.charCodeAt(0).toString(16).toUpperCase() + "\"](";
+				}
+			}
+			else if (pairs[char]) {
+				code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+			}
+			else if (outp.slice(-2) === "(!" && [">>>","===","!=="].indexOf(code.slice(i,i+3)) > -1) {
+				outp = outp.slice(0,-1) + "\"!"+code.slice(i,i+3)+"\"";
+				i += 2;
+			}
+			else if (outp.slice(-1) === "(" && [">>>","===","!=="].indexOf(code.slice(i,i+3)) > -1) {
+				outp += "\""+code.slice(i,i+3)+"\"";
+				i += 2;
+			}
+			else if (outp.slice(-2) === "(!" && ["<<",">>","==","!=","<=",">=","||","&&"].indexOf(code.slice(i,i+2)) > -1) {
+				outp = outp.slice(0,-1) + "\"!"+code.slice(i,i+2)+"\"";
+				++i;
+			}
+			else if (outp.slice(-1) === "(" && ["<<",">>","==","!=","<=",">=","||","&&"].indexOf(code.slice(i,i+2)) > -1) {
+				outp += "\""+code.slice(i,i+2)+"\"";
+				++i;
+			}
+			else if (outp.slice(-2) === "(!" && isChar(char, "+\\-*%\\^&|<>") && !isChar(code[i+1],"+\\-=")) {
+				outp = outp.slice(0,-1) + "\"!"+char+"\"";
+			}
+			else if (outp.slice(-1) === "(" && isChar(char, "+\\-*%\\^&|<>") && !isChar(code[i+1],"+\\-=")) {
+				outp += "\""+char+"\"";
 			}
 			else {
-				outp += letters.split("").join(",");
-				i--;
+				outp += char;
 			}
 		}
-		else if (char === " ") {
-			outp += ")";
-		}
-		else if (char === ")") {
-			outp += "))";
-		}
-		else if (isChar(char, "a-z")) {
-			if (outp.slice(-2) === "(!") {
-				outp = outp.slice(0,-1) + "\"!"+char+"\"";
-			} else if (outp.slice(-1) === "(") {
-				outp += "\""+char+"\"";
-			} else if (isChar(outp.slice(-1),"0-9")) {
-				if (char === "e") {
-					outp += char;
-				} else {
-					outp += " ." + char + "(";
-				}
-			} else {
-				outp += "." + char + "(";
-			}
-		}
-		else if (isChar(char, "\\u00E0-\\u00F6\\u00F8-\\u00FF")) {
-			if (outp.slice(-1) === "(") {
-				outp += "function(c){return c[\"\\u00" + char.charCodeAt(0).toString(16).toUpperCase() + "\"]()}";
-			} else {
-				outp += "[\"\\u00" + char.charCodeAt(0).toString(16).toUpperCase() + "\"](";
-			}
-		}
-		else if (pairs[char]) {
-			code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
-		}
-		else if (outp.slice(-2) === "(!" && [">>>","===","!=="].indexOf(code.slice(i,i+3)) > -1) {
-			outp = outp.slice(0,-1) + "\"!"+code.slice(i,i+3)+"\"";
-			i+=2;
-		}
-		else if (outp.slice(-1) === "(" && [">>>","===","!=="].indexOf(code.slice(i,i+3)) > -1) {
-			outp += "\""+code.slice(i,i+3)+"\"";
-			i+=2;
-		}
-		else if (outp.slice(-2) === "(!" && ["<<",">>","==","!=","<=",">=","||","&&"].indexOf(code.slice(i,i+2)) > -1) {
-			outp = outp.slice(0,-1) + "\"!"+code.slice(i,i+2)+"\"";
-			i++;
-		}
-		else if (outp.slice(-1) === "(" && ["<<",">>","==","!=","<=",">=","||","&&"].indexOf(code.slice(i,i+2)) > -1) {
-			outp += "\""+code.slice(i,i+2)+"\"";
-			i++;
-		}
-		else if (outp.slice(-2) === "(!" && isChar(char, "+\\-*%\\^&|<>") && !isChar(code[i+1],"+\\-=")) {
-			outp = outp.slice(0,-1) + "\"!"+char+"\"";
-		}
-		else if (outp.slice(-1) === "(" && isChar(char, "+\\-*%\\^&|<>") && !isChar(code[i+1],"+\\-=")) {
-			outp += "\""+char+"\"";
-		}
-		else {
-			outp += char;
-		}
-	}
+		
+		outp = outp.replace(/\$(\d+)\$/g,function(_,a){return Japt.snippets[+a]});
+		outp = fixParens(outp);
+		outp = outp.replace(/"(\d+)"/g,function(_,a){return Japt.strings[+a]});
+		return outp;
+	},
 	
-	outp = outp.replace(/\$(\d+)\$/g,function(_,a){return Japt.snippets[+a]});
-	outp = fixParens(outp);
-	outp = outp.replace(/"(\d+)"/g,function(_,a){return Japt.strings[+a]});
-	return outp;
-},
-
-eval: function(code) {
-	return eval(Japt.transpile(code));
-}
+	eval: function(code) {
+		return eval(Japt.transpile(code));
+	}
 }

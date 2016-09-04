@@ -479,12 +479,12 @@ var Japt = {
 		R = "\n",
 		S = " ",
 		T = 0,
-		U = 0 in N ? 0 : N[0],
-		V = 1 in N ? 0 : N[1],
-		W = 2 in N ? 0 : N[2],
-		X = 3 in N ? 0 : N[3],
-		Y = 4 in N ? 0 : N[4],
-		Z = 5 in N ? 0 : N[5];
+		U = 0 in N ? N[0] : 0,
+		V = 1 in N ? N[1] : 0,
+		W = 2 in N ? N[2] : 0,
+		X = 3 in N ? N[3] : 0,
+		Y = 4 in N ? N[4] : 0,
+		Z = 5 in N ? N[5] : 0;
 		
 		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe,false), Japt.is_safe = true;
 		

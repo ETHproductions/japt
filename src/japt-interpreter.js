@@ -48,7 +48,8 @@ var pairs_1_3 = {
 	"\u00C1": ">>>",  // Á - 193
 	"\u00C2": "~~",   // Â - 194
 	"\u00C3": "} ",   // Ã - 195
-	"\u00D0": "$new Date$(" // Ð - 208
+	"\u00D0": "$new Date$(", // Ð - 208
+	"\u00DF": "$program$("   // ß - 223
 };
 
 var pairs_2_0 = { 
@@ -495,7 +496,7 @@ var Japt = {
 		}
 		if (before) before(code);
 		try {
-		    code = eval(code);
+		    code = (function program(U,V,W,X,Y,Z){ return eval(code); })(U,V,W,X,Y,Z);
 		    if (onsuccess) onsuccess(code);
 		} catch (e) {
 		    if (onerror) onerror(e);

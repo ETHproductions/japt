@@ -540,7 +540,7 @@ var Japt = {
 						newcode += "$" + Japt.snippets.length + "$";
 						Japt.snippets.push(code[++i]);
 					}
-					else if (isChar(char, "\"`") && extrabraces[0] === 0) {
+					else if (isChar(char, "\"`")) {
 						level++;
 						strchars[level] = char;
 						currstr = "\"";

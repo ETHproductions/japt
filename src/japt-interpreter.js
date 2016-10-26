@@ -593,6 +593,7 @@ var Japt = {
 	                			currstr += "\\\"";
 					}
 					else if (char === "{") {
+                        if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 						level++;
 						currbraces = "";
 					}

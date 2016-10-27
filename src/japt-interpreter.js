@@ -497,7 +497,7 @@ var Japt = {
 		}
 		if (before) before(code);
 		try {
-			var program = function program(U,V,W,X,Y,Z){ if(!program.cache) program.cache = {}; var cached = program.cache[str(U,V,W,X,Y,Z)]; if(cached) return cached; return program.cache[str(U,V,W,X,Y,Z)] = eval(code); };
+			var program = function program(U,V,W,X,Y,Z){ if(!program.cache) program.cache = {}; var cached = program.cache[str(U,V,W,X,Y,Z)]; if(typeof cached !== "undefined") return cached; return program.cache[str(U,V,W,X,Y,Z)] = eval(code); };
 		    code = program(U,V,W,X,Y,Z);
 		    if (onsuccess) onsuccess(code);
 		} catch (e) {

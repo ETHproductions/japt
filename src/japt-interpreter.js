@@ -7,6 +7,7 @@ function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configu
 function regexify(x,y){if(x instanceof RegExp)return x;y=fb(y,null);var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="V"?a?" -?B-DF-HJ-NP-TV-`b-df-hj-np-tv-\uFFFF":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"").replace(/g/g,"")+"g")}
 function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/[a-z]/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
 function isChar(str,char){return RegExp('^['+char+']$').test(str);}
+function str(x){return x instanceof Array?x.map(str).join():x instanceof String?'"'+x.replace(/"/g,"\\\"")+'"':x+""}
 
 var pairs_1_3 = { 
 	// Unicode shortcuts
@@ -496,7 +497,8 @@ var Japt = {
 		}
 		if (before) before(code);
 		try {
-		    code = (function program(U,V,W,X,Y,Z){ return eval(code); })(U,V,W,X,Y,Z);
+			var program = function program(U,V,W,X,Y,Z){ if(!program.cache) program.cache = {}; var cached = program.cache[str(U,V,W,X,Y,Z)]; if(cached) return cached; return program.cache[str(U,V,W,X,Y,Z)] = eval(code); };
+		    code = program(U,V,W,X,Y,Z);
 		    if (onsuccess) onsuccess(code);
 		} catch (e) {
 		    if (onerror) onerror(e);

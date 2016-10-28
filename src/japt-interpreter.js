@@ -546,7 +546,7 @@ var Japt = {
 							if (code[i] === "$") break;
 							Japt.snippets[Japt.snippets.length-1] += code[i]; 
 						}
-						newcode += "$" + (alert(Japt.snippets), extrabraces[0] > 0 ? Japt.snippets.pop() : Japt.snippets.length - 1) + "$";
+						newcode += "$" + (extrabraces[0] > 0 ? Japt.snippets.pop() : Japt.snippets.length - 1) + "$";
 					}
 					else if (char === "\\") {
 						if (Japt.use_safe) Japt.is_safe = false;

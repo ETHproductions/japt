@@ -497,18 +497,26 @@ var Japt = {
 		}
 		if (before) before(code);
 		try {
-			var program = function program(U,V,W,X,Y,Z){ if(!program.cache) program.cache = {}; var cached = program.cache[str(U,V,W,X,Y,Z)]; if(typeof cached !== "undefined") return cached; return program.cache[str(U,V,W,X,Y,Z)] = eval(code); };
-		    code = program(U,V,W,X,Y,Z);
-		    if (onsuccess) onsuccess(code);
+			var program = function program(U,V,W,X,Y,Z) {
+				if (!program.cache)
+					program.cache = {};
+				var id = str(U,V,W,X,Y,Z);
+				var cached = program.cache[id];
+				if (typeof cached !== "undefined")
+					return cached;
+				return program.cache[id] = eval(code);
+			};
+			code = program(U,V,W,X,Y,Z);
+			if (onsuccess) onsuccess(code);
 		} catch (e) {
-		    if (onerror) onerror(e);
+			if (onerror) onerror(e);
 		}
 	},
 	
 	transpile: function(code) {
 		var level = 0,  // Current number of parentheses or curly braces that we're inside
 			temp = "",
-			extrabraces = [],
+			extrabraces = Array(20).fill(0),
 			currstr = "",
 			currbraces = "",
 			newcode = "",
@@ -516,8 +524,6 @@ var Japt = {
 			i = 0,
 			j = 0,
 			outp = "";  // Temporary output
-		
-		for (i = 0; i < 20; ++i) extrabraces.push(0);
 	
 		function pretranspile(code) {
 			var i = 0, strchars = Array(20).fill(""), polyglot = '"(p|';
@@ -564,15 +570,15 @@ var Japt = {
 						}
 					}
 					else if (char === "#") {
-	                			newcode += code[++i].charCodeAt(0);
+						newcode += code[++i].charCodeAt(0);
 					}
 					else if (char === "{") {
 						++extrabraces[0];
-	                			newcode += char;
+						newcode += char;
 					}
 					else if (char === "}") {
 						--extrabraces[0];
-	                			newcode += char;
+						newcode += char;
 					}
 					else if (pairs.hasOwnProperty(char)) {
 						code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
@@ -593,15 +599,15 @@ var Japt = {
 						Japt.strings.push("("+currstr+")");
 					}
 					else if (char === "\"") {
-	                			currstr += "\\\"";
+						currstr += "\\\"";
 					}
 					else if (char === "{") {
-                        if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 						level++;
 						currbraces = "";
 					}
 					else if (char === "\n") {
-	                			currstr += "\\n";
+						currstr += "\\n";
 					}
 					else {
 						currstr += char;
@@ -659,7 +665,7 @@ var Japt = {
 		
 		code = pretranspile(code);
 		outp = "";
-	  
+		
 		for (i = 0; i < code.length; ++i) {
 			var char = code[i];
 			if (char === ";" && i === 0)

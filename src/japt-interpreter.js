@@ -492,7 +492,7 @@ var Japt = {
 		Y = 4 in N ? N[4] : 0,
 		Z = 5 in N ? N[5] : 0;
 		
-		Japt.use_safe = fb(safe,false), Japt.is_safe = true;
+		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe,false), Japt.is_safe = true;
 		
 		code = Japt.transpile(code);
 		if (!Japt.is_safe) {
@@ -528,7 +528,6 @@ var Japt = {
 			i = 0,
 			j = 0,
 			outp = "";  // Temporary output
-		Japt.strings = [], Japt.snippets = [];
 	
 		function pretranspile(code) {
 			var i = 0, strchars = Array(20).fill(""), polyglot = '"(p|';

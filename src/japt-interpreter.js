@@ -248,7 +248,7 @@ df(Date,'x',function(){noFunc('D.x')});
 df(Date,'y',function(){noFunc('D.y')});
 df(Date,'z',function(){noFunc('D.z')});
 
-df(Object,'\xFF',function(){alert(this);return this});
+df(Object,'\xFF',function(){alert(this);return this instanceof Number?+this:this instanceof String?""+this:this});
 
 // Shorter Date properties
 Date.p = Date.parse;

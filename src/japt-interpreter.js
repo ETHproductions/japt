@@ -50,7 +50,7 @@ var pairs_1_3 = {
 	"\xC2": "~~",   // Â - 194
 	"\xC3": "} ",   // Ã - 195
 	"\xD0": "$new Date$(", // Ð - 208
-	"\xDF": "$program$("   // ß - 223
+	"\xDF": "$rp$("   // ß - 223
 };
 
 var pairs_2_0 = { 
@@ -504,10 +504,20 @@ var Japt = {
 			var program = function program(U,V,W,X,Y,Z) {
 				if (!program.cache)
 					program.cache = {};
-				var id = str(U,V,W,X,Y,Z);
+				var id = str([U,V,W,X,Y,Z]);
 				var cached = program.cache[id];
 				if (typeof cached !== "undefined")
 					return cached;
+				var rp = function rp(u,v,w,x,y,z) {
+					return program(
+						fb(u,U),
+						fb(v,V),
+						fb(w,W),
+						fb(x,X),
+						fb(y,Y),
+						fb(z,Z)
+					);
+				};
 				return program.cache[id] = eval(code);
 			};
 			code = program(U,V,W,X,Y,Z);

@@ -274,10 +274,6 @@ shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constru
 
 void(0);
 
-function success(result) {
-	output(result);
-}
-
 function newvars() {
 	A = [],
 	B = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
@@ -355,6 +351,8 @@ function fixParens(code) {
 	cade += subparen(curr);
 	return cade;
 }
+
+var rp, program;
 
 var Japt = {
 	
@@ -504,14 +502,14 @@ var Japt = {
 		}
 		if (before) before(code);
 		try {
-			var program = function program(U,V,W,X,Y,Z) {
+			program = function program(U,V,W,X,Y,Z) {
 				if (!program.cache)
 					program.cache = {};
 				var id = str([U,V,W,X,Y,Z]);
 				var cached = program.cache[id];
 				if (typeof cached !== "undefined")
 					return cached;
-				var rp = function rp(u,v,w,x,y,z) {
+				rp = function rp(u,v,w,x,y,z) {
 					return program(
 						fb(u,U),
 						fb(v,V),

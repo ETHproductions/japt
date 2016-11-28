@@ -192,7 +192,7 @@ df(Number,'e',function(x){return this*Math.pow(10,x)});
 df(Number,'f',function(x){x=fb(x,1);return Math.floor(this/x)*x});
 df(Number,'g',function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});
 df(Number,'h',function(x){return pm(this,fb(x,2))});
-df(Number,'i',function(x){return setInterval(x,this)});
+df(Number,'i',function(x){return Japt.intervals[Japt.intervals.length]=setInterval(x,this)});
 df(Number,'j',function(){return this.k().length===1});
 df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f});
 df(Number,'l',function(){var n=this|0,x=this|0;if(n<1)return 1;while(--n)x*=n;return x});
@@ -203,7 +203,7 @@ df(Number,'p',function(x){x=fb(x,2);return Math.pow(this,x)});
 df(Number,'q',function(x){x=fb(x,2);return Math.pow(this,1/x)});
 df(Number,'r',function(x){x=fb(x,1);return Math.round(this/x)*x});
 df(Number,'s',function(x){x=fb(x,10);return this.toString(x)});
-df(Number,'t',function(x){return setTimeout(x,this)});
+df(Number,'t',function(x){return Japt.intervals[Japt.intervals.length]=setTimeout(x,this)});
 df(Number,'u',function(){return this%2===1?1:0});
 df(Number,'v',function(){return this%2===0?1:0});
 df(Number,'w',function(){return[].reduce.call(arguments,function(x,y){return Math.max(x,y)},this)});
@@ -367,11 +367,13 @@ var Japt = {
 	},
 	
 	output: function(x) {
-		try { Japt.stdout.value += x; } catch (e) { alert ("Error: Japt.stdout must be sent to an HTMLElement"); }
+		try { Japt.stdout.value += x; Japt.implicit_output = false; } catch (e) { alert ("Error: Japt.stdout must be sent to an HTMLElement"); }
 	},
 	
-	interrupt: function() {
-		Japt.error("Interrupted");
+	stop: function() {
+		for (var i = 0; i < Japt.intervals.length; i++)
+			clearInterval(Japt.intervals[i]);
+		Japt.intervals = [];
 	},
 	
 	error: function(msg) {
@@ -450,6 +452,7 @@ var Japt = {
 	snippets: [],
 	use_safe: false,
 	is_safe: false,
+	implicit_output: true,
 	
 	run: function(code, input, safe, before, onsuccess, onerror) {
 		Japt.clear_output();
@@ -474,7 +477,7 @@ var Japt = {
 			r:clearInterval,
 			o:Japt.output,
 			p:function(x){Japt.output(x+"\n")},
-			q:Japt.clear_output,
+			q:function(x){Japt.clear_output();if(id(x))Japt.output(x)},
 			c:shoco.c,
 			d:shoco.d,
 			v:function(x){var r="";try{r=eval(Japt.transpile(x))}catch(e){Japt.error(e)}return r},
@@ -492,7 +495,7 @@ var Japt = {
 		Y = 4 in N ? N[4] : 0,
 		Z = 5 in N ? N[5] : 0;
 		
-		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe,false), Japt.is_safe = true;
+		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe,false), Japt.is_safe = true, Japt.implicit_output = true, Japt.intervals = [];
 		
 		code = Japt.transpile(code);
 		if (!Japt.is_safe) {

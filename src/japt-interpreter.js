@@ -410,6 +410,7 @@ var Japt = {
 	},
 	
 	evalInput: function(input) {
+		if (input.constructor === Array) return input;
 		var input_mode = "next", current, processed = [], level = 0;
 		input = (input + " ").split("");
 		for(var index = 0; index < input.length; ++index) {

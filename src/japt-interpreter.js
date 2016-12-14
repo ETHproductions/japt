@@ -9,6 +9,9 @@ function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=f
 function isChar(str,char){return RegExp('^['+char+']$').test(str);}
 function str(x){return x instanceof Array?x.map(str).join():x instanceof String?'"'+x.replace(/"/g,"\\\"")+'"':x+""}
 
+var isnode = typeof window === "undefined";
+if (isnode) var shoco = require("../dependencies/shoco");
+
 var pairs_1_3 = { 
 	// Unicode shortcuts
 	// Using \u<hex> to avoid encoding incompatibilities
@@ -145,6 +148,7 @@ df(String,'\xE5',function(x,y){return this.q()['\xE5'](x,y)});
 df(String,'\xE8',function(x){return (this.f(x)||[]).length});
 df(String,'\xE9',function(x){return this.q()['\xE9'](x).q()});
 df(String,'\xEA',function(){return this+this.slice(0,-1).w();});
+//df(String,'\xEB',function(x){return this.q()['\xEB'](x).q()});
 
 df(Array,'a',function(x){return(typeof x)=="function"?this.map(function(a,b,c){return!!x(a,b,c)}).lastIndexOf(true):this.lastIndexOf(x)});
 df(Array,'b',function(x){return(typeof x)=="function"?this.map(function(a,b,c){return!!x(a,b,c)}).indexOf(true):this.indexOf(x)});
@@ -183,6 +187,7 @@ df(Array,'\xE7',function(x){return this.fill(x)});
 df(Array,'\xE8',function(x){return this.f(x).length});
 df(Array,'\xE9',function(x){var r=[],l=this.length,i=l;for(x=pm(-fb(x,1),l);i--;x++)r.push(this[x%l]);return r});
 df(Array,'\xEA',function(){return this.concat(this.slice(0,-1).w());});
+//df(Array,'\xEB',function(x,y){x=fb(x,2);y=fb(y,0);return this.slice(y).filter(function(a,b){return b%x==0});
 
 df(Number,'a',function(){return Math.abs(this)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
@@ -248,7 +253,7 @@ df(Date,'x',function(){noFunc('D.x')});
 df(Date,'y',function(){noFunc('D.y')});
 df(Date,'z',function(){noFunc('D.z')});
 
-df(Object,'\xFF',function(){alert(this);return this instanceof Number?+this:this instanceof String?""+this:this});
+df(Object,'\xFF',function(){if(!isnode)alert(this);return this instanceof Number?+this:this instanceof String?""+this:this});
 
 // Shorter Date properties
 Date.p = Date.parse;
@@ -360,12 +365,31 @@ var Japt = {
 	stderr: null,
 	
 	clear_output: function() {
-		try { Japt.stdout.value = ""; } catch (e) { alert ("Error: Japt.stdout must be sent to an HTMLElement"); }
-		try { Japt.stderr.innerHTML = ""; } catch (e) { alert ("Error: Japt.stderr must be sent to an HTMLElement"); }
+		if (isnode) {
+			// Not sure how to do this... Would console.log("\033c") work?
+		} else {
+			try {
+				Japt.stdout.value = "";
+			} catch (e) {
+				alert ("Error: Japt.stdout must be sent to an HTMLElement");
+			}
+			try {
+				Japt.stderr.innerHTML = "";
+			} catch (e) {
+				alert ("Error: Japt.stderr must be sent to an HTMLElement");
+			}
+		}
 	},
 	
 	output: function(x) {
-		try { Japt.stdout.value += x; Japt.implicit_output = false; } catch (e) { alert ("Error: Japt.stdout must be sent to an HTMLElement"); }
+		Japt.implicit_output = false;
+		if (isnode) {
+			process.stdout.write(String(x));
+		} else try {
+			Japt.stdout.value += x;
+		} catch (e) {
+			alert ("Error: Japt.stdout must be sent to an HTMLElement");
+		}
 	},
 	
 	stop: function() {
@@ -375,12 +399,19 @@ var Japt = {
 	},
 	
 	error: function(msg) {
-		try { Japt.stderr.innerHTML = msg; } catch (e) { alert ("Error: Japt.stderr must be sent to an HTMLElement"); }
+		if (isnode) {
+			process.stderr.write(msg);
+		}
+		else try {
+			Japt.stderr.innerHTML = msg;
+		} catch (e) {
+			alert ("Error: Japt.stderr must be sent to an HTMLElement");
+		}
 	},
 	
-	evalInput:function(input) {
+	evalInput: function(input) {
 		var input_mode = "next", current, processed = [], level = 0;
-		input = (input+" ").split("");
+		input = (input + " ").split("");
 		for(var index = 0; index < input.length; ++index) {
 			char = input[index];
 			switch (input_mode) {
@@ -470,16 +501,16 @@ var Japt = {
 		M = Math,
 		N = Japt.evalInput(input),
 		O = {
-			a:function(){alert.apply(window,arguments)},
-			l:function(){console.log.apply(console,arguments)},
-			r:clearInterval,
-			o:Japt.output,
-			p:function(x){Japt.output(x+"\n")},
-			q:function(x){Japt.clear_output();if(id(x))Japt.output(x)},
-			c:shoco.c,
-			d:shoco.d,
-			v:function(x){var r="";try{r=eval(Japt.transpile(x))}catch(e){Japt.error(e)}return r},
-			x:function(x){if(Japt.use_safe)throw"O.x() cannot be used in safe mode";var r="";try{r=eval(x)}catch(e){Japt.error(e)}return r}
+			a: function() { if(!isnode) alert.apply(window, arguments); },
+			l: function() { console.log.apply(console, arguments); },
+			r: clearInterval,
+			o: Japt.output,
+			p: function(x) { Japt.output(x + "\n"); },
+			q: function(x) { Japt.clear_output(); if(id(x)) Japt.output(x); },
+			c: shoco.c,
+			d: shoco.d,
+			v: function(x) { var r = ""; try{ r = eval(Japt.transpile(x)); } catch(e) { Japt.error(e); } return r; },
+			x: function(x) { if (Japt.use_safe) throw "O.x() cannot be used in safe mode"; var r = ""; try{ r = eval(x); } catch(e) { Japt.error(e); } return r; }
 		},
 		P = "",
 		Q = "\"",
@@ -493,7 +524,7 @@ var Japt = {
 		Y = 4 in N ? N[4] : 0,
 		Z = 5 in N ? N[5] : 0;
 		
-		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe,false), Japt.is_safe = true, Japt.implicit_output = true, Japt.intervals = [];
+		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.intervals = [];
 		
 		code = Japt.transpile(code);
 		if (!Japt.is_safe) {
@@ -798,3 +829,5 @@ var Japt = {
 		return eval(Japt.transpile(code));
 	}
 }
+
+if (isnode) module.exports = Japt;

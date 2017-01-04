@@ -260,7 +260,7 @@ Date.p = Date.parse;
 
 // Shorter Math properties
 Math.a = Math.atan2;
-Math.g = function(n){var f=Math.sqrt(5),g=.5*(1+f);return(1/f)*(Math.pow(g,n)-Math.pow(-g,-n))}; // Fibonacci
+Math.g = function(n){var f=Math.sqrt(5),g=.5*(1+f);return Math.round((1/f)*(Math.pow(g,n)-Math.pow(-g,-n)))}; // Fibonacci
 Math.r = function(x,y){x=fb(x,1);y=fb(y,0);return Math.random()*x+y};
 Math.q = function(x,y,z){x=fb(x,1);y=fb(y,0);z=fb(z,1);return Math.floor(Math.random()*x*z)/z+y};
 Math.s = Math.sin;

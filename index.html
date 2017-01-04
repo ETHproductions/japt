@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-<title>Japt interpreter</title>
+<title>Japt 1.3 interpreter</title>
 <link rel="stylesheet" type="text/css" href="../style/style.css">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
@@ -11,14 +11,13 @@
 <div id="docs">
 <h1>Japt Docs</h1>
 <p><strong>Japt</strong> is a shortened version of <strong>Ja</strong>vaScri<strong>pt</strong>.
-<p><strong>Note:</strong> The interpreter has recently undergone a major internal update. Please ping @ETHproductions in the <a href="http://chat.stackexchange.com/rooms/34018/japt">Japt chatroom</a> if you find any bugs.</p>
 
 <h2>arrow:syntax Syntax</h2>
 <div id="syntax" style="display:none">
 <h3>Parentheses</h3>
 <p>`)` transpiles to `))`.</p>
 <p>`&nbsp;` transpiles to `)`.</p>
-<p>Parens left out at `;[]{}` or at the end of the program are auto-inserted.
+<p>Parens left out at `;[]{}` or at the beginning or end of the program are auto-inserted.
 
 <h3>Variables & functions</h3>
 <p>`A-Z` are pre-defined variables. See the Variables table for more info.</p>
@@ -46,6 +45,19 @@
 <h3>Miscellaneous</h3>
 <p>`$...$` is evaluated as pure JS.</p>
 <p>Any of ``"`$`` left out at the end of the program is auto-inserted.</p>
+<p>`ß` is a function that runs the program again with given inputs.</p>
+</div>
+
+<h2>arrow:regex Regexes</h2>
+<div id="regex" style="display:none">
+<h3>Using regexes</h3>
+<p>Some functions require a regex, or a string like a regex. Pure regexes are extremely hard to use because the transpiler doesn't set them aside, like it does with strings. This creates several problems:</p>
+<p>- 1. The transpiler thinks a slash is a division sign.<br>
+- 2. If you try putting flags on the regex, the transpiler will see them as function calls.<br>
+- 3. Good luck successfully getting the transpiler to not mess with the contents of the regex.</p>
+<p>Instead, use a string. Strings can be used just like regexes, with a couple extra rules:</p>
+<p>- Flags need to be passed in a separate string. In most functions that require regexes, the `g` flag is on by default. Pass in an empty string to remove it.<br>
+- Backslashes `\` need to be doubled, or just replaced with `%`. This means that to get a literal `%`, you must use `%%`.</p>
 </div>
 
 <h2>arrow:variables Variables</h2>
@@ -74,6 +86,22 @@
   <tr><td>T</td><td>0</td></tr>
   <tr><td>UVWXYZ</td><td>...N</td></tr>
 </table>
+
+<p>If the first character in the program is `;`, the following vars are changed:</p>
+<table class="code-table">
+  <tr><td style="width:50px"><b>Var</b></td><td><b>Value</b></td></tr>
+  <tr><td>A</td><td>[]</td></tr>
+  <tr><td>B</td><td>ALPHABET</td></tr>
+  <tr><td>C</td><td>alphabet</td></tr>
+  <tr><td>D</td><td>QWERTY</td></tr>
+  <tr><td>E</td><td>"[a-z]"</td></tr>
+  <tr><td>F</td><td>"[A-Za-z]"></td></tr>
+  <tr><td>G</td><td>36</td></tr>
+  <tr><td>H</td><td>65</td></tr>
+  <tr><td>I</td><td>91</td></tr>
+  <tr><td>J</td><td>","</td></tr>
+  <tr><td>L</td><td>"."</td></tr>
+</table>
 </div>
 
 <h2>arrow:O-funcs `O` functions</h2>
@@ -81,9 +109,12 @@
 <table class="code-table">
   <tr><td style="width:50px"><b>Func</b></td><td><b>Value</b></td></tr>
   <tr><td>a</td><td>alert</td></tr>
+  <tr><td>c</td><td>compress</td></tr>
+  <tr><td>d</td><td>decompress</td></tr>
   <tr><td>l</td><td>console.log</td></tr>
   <tr><td>o</td><td>output</td></tr>
   <tr><td>p</td><td>output + "\n"</td></tr>
+  <tr><td>q</td><td>clear output</td></tr>
   <tr><td>v</td><td>eval Japt</td></tr>
   <tr><td>x</td><td>eval JS</td></tr>
 </table>
@@ -138,9 +169,9 @@
 <p>Returns `this.match(r/s)`.</p>
 <h3>`g(n=0)`</h3>
 <p>Returns the char at index `n` in `this`.</p>
-<h3>`h(n,s)`</h3>
-<p>Sets the char at index `n` in `this` to `s`.</p>
-<h3>`i(n,s)`</h3>
+<h3>`h(n,s)` or `i(s,n=0)`</h3>
+<p>Sets the chars starting at index `n` in `this` to `s`.</p>
+<h3>`i(n,s)` or `i(s,n=0)`</h3>
 <p>Inserts `s` at index `n` into `this`.</p>
 <h3>`j(n,n)`</h3>
 <p>Removes `n₁` chars from index `n₂` in `this`.</p>
@@ -152,7 +183,7 @@
 <p>Returns the length of `this`.</p>
 <h3>`m(f,s="")`</h3>
 <p>Splits `this` with `s`, maps each item by `f`, then rejoins with `s`.</p>
-<h3>`n(n)`</h3>
+<h3>`n(n=10)`</h3>
 <p>Returns `parseInt(this,n)`.</p>
 <h3>`o(s)`</h3>
 <p>Removes all characters not in `s` from `this`.</p>
@@ -194,6 +225,10 @@
 <p>Cumulative reduce; like `q r`, but returns an array of each intermediate value.</p>
 <h3>`è(r/s)`</h3>
 <p>Returns the number of matches of `r/s` in `this`.</p>
+<h3>`é(n=1)`</h3>
+<p>Rotates `this` `n` chars to the right.</p>
+<h3>`ê()`</h3>
+<p>Mirrors `this` at its last char; `"abc"ê` becomes `"abcba"`.</p>
 </div>
 
 <h2>arrow:array-funcs Array functions</h2>
@@ -212,9 +247,9 @@
 <p>Selects the items in `this` that return truthily to `f`.</p>
 <h3>`g(n=0)`</h3>
 <p>Returns the item at index `n` in `this`.</p>
-<h3>`h(n,a)`</h3>
+<h3>`h(n,a)` or `i(a,n=0)`</h3>
 <p>Sets the item at index `n` in `this` to `a`.</p>
-<h3>`i(n,a)`</h3>
+<h3>`i(n,a)` or `i(a,n=0)`</h3>
 <p>Inserts `a` at index `n` into `this`.</p>
 <h3>`j(n,n)`</h3>
 <p>Removes `n₁` items from index `n₂` in `this`.</p>
@@ -268,6 +303,10 @@
 <p>Fills `this` with `a`.</p>
 <h3>`è(f)`</h3>
 <p>Returns the number of items that return truthily when run through `f`.</p>
+<h3>`é(n=1)`</h3>
+<p>Rotates `this` `n` items to the right.</p>
+<h3>`ê()`</h3>
+<p>Mirrors `this` at its last item; `[1,2,3]ê` becomes `[1,2,3,2,1]`.</p>
 </div>
 
 <h2>arrow:number-funcs Number functions</h2>
@@ -284,8 +323,10 @@
 <p>Returns `this*Math.pow(10,n)`.</p>
 <h3>`f(n=1)`</h3>
 <p>Returns `this` rounded down to the nearest multiple of `n`.</p>
-<h3>`g(n)`</h3>
+<h3>`g()`</h3>
 <p>Returns the sign of `this`; `-1` for negative values, `1` for positive, `0` for `0`, and `NaN` for `NaN`.</p>
+<h3>`h(n=2)`</h3>
+<p>Returns `this` positive-modulated by `n`.</p>
 <h3>`i(f)`</h3>
 <p>Runs `f` every `this` milliseconds.</p>
 <h3>`i(s)`</h3>
@@ -298,12 +339,14 @@
 <p>Returns the factorial of `this`.</p>
 <h3>`m(n)`</h3>
 <p>Returns the smaller of `this` and `n`.</p>
-<h3>`n(n)`</h3>
+<h3>`n()`</h3>
 <p>Returns `-this`.</p>
-<h3>`o(n)`</h3>
-<p>Returns an array of all integers in the range `[this,n₁)`.</p>
-<h3>`o(n,n=1)`</h3>
-<p>Returns an array of numbers in the range `[this,n₁)`, generated by starting at `this` and repeatedly adding `n₂`.</p>
+<h3>`o(f?)`</h3>
+<p>Returns an array of all integers in the range `[0,this)` (or vice-versa). Optionally maps through `f`.</p>
+<h3>`o(n,f?)`</h3>
+<p>Returns an array of all integers in the range `[this,n₁)` (or vice-versa). Optionally maps through `f`.</p>
+<h3>`o(n,n=1,f?)`</h3>
+<p>Returns an array of numbers in the range `[this,n₁)`, generated by starting at `this` and repeatedly adding `n₂`. Optionally maps through `f`.</p>
 <h3>`p(n=2)`</h3>
 <p>Returns `this` to the `n`th power.</p>
 <h3>`q(n=2)`</h3>
@@ -320,7 +363,7 @@
 <p>Returns `1` if `this` is odd; `0` otherwise.</p>
 <h3>`v()`</h3>
 <p>Returns `1` if `this` is even; `0` otherwise.</p>
-<h3>`w()`</h3>
+<h3>`w(n)`</h3>
 <p>Returns the larger of `this` and `n`.</p>
 <h3>`à(n?)`</h3>
 <p>Returns the number of combinations of `[1..this]`. If `n` is specified, only returns the number of combinations of length `n`.</p>
@@ -378,8 +421,9 @@
 <h2>arrow:examples Examples</h2>
 <div id="examples" style="display:none">
 <p><a href="#" onclick="document.getElementById('code').value='&quot;Hello, World!'">"Hello, World!"</a></p>
-<p><a href="#" onclick="document.getElementById('code').value=shoco.c('`Hello, World!')">"Hello, World!" 2</a></p>
+<p><a href="#" onclick="document.getElementById('code').value=shoco.c('`Hello, World!')">"Hello, World!" compressed</a></p>
 <p><a href="#" onclick="document.getElementById('code').value='N'">`cat`</a></p>
+<p><a href="#" onclick="document.getElementById('code').value='OaU U©ßU';document.getElementById('input').value='1'">Truth machine</a></p>
 <p><a href="#" onclick="document.getElementById('code').value='1o#e m@&quot;FizzBuzz&quot;sX%3©4X%5?4:8 ªX}) qR'">FizzBuzz</a></p>
 </div>
 </div>
@@ -390,7 +434,7 @@
   <p>
   &nbsp;&nbsp;Code:
   <br>
-  <textarea id="code" title="code" rows="8" placeholder="Enter your code here..." onkeypress="setTimeout(function(){document.getElementById('js-code').value=(window.Japt||window).transpile(document.getElementById('code').value)},10)"></textarea>
+  <textarea id="code" title="code" rows="8" placeholder="Enter your code here..." oninput="setTimeout(function(){document.getElementById('js-code').value=(window.Japt||window).transpile(document.getElementById('code').value)},10)"></textarea>
   <br>
   &nbsp;&nbsp;Input:
   <br>
@@ -414,8 +458,8 @@
   <input id="safe_mode" type="checkbox">&nbsp;
   <br>
   <br>
-  <input id="run" type="button" value="Run" onclick="if(window.Japt)Japt.run(document.getElementById('code').value,document.getElementById('input').value,document.getElementById('safe_mode').checked,null,function(x){Japt.output(x)},function(x){Japt.error(x)});else run();">
-  <input id="stop" type="button" value="Stop" onclick="Japt.interrupt()" disabled="disabled">
+  <input id="run" type="button" value="Run" onclick="if(window.Japt)Japt.stdout=document.getElementById('output'),Japt.stderr=document.getElementById('stderr'),Japt.run(document.getElementById('code').value,document.getElementById('input').value,document.getElementById('safe_mode').checked,null,function(x){if(Japt.implicit_output)Japt.output(x)},function(x){Japt.error(x)});else run();">
+  <input id="stop" type="button" value="Stop" onclick="(Japt.interrupt||Japt.stop)()">
   <input id="clear" type="button" value="Clear" onclick="Japt.clear_output()">
   <br>
   <br>
@@ -434,6 +478,8 @@
 <script src="https://rawgit.com/ETHproductions/Japt/master/dependencies/shoco.js"></script>
 <script>
   var v="master";
+  var code="";
+  var input="";
   
   function escapedBtoA(text) {
     return btoa(
@@ -451,8 +497,6 @@
   
   function splitAddress() {
     var args=location.search.match(/[&?](code|input|v)=([^&]|&(?!(code|input|v)=))*/g);
-    var code="[U,V*Wg ,Wg1]qS";
-	var input='"abc" 13 [9 "zyx"]';
     if(args)for(var i of args){
       var tmp=i.slice(i.indexOf('=')+1);
       if(i.slice(1,i.indexOf('='))==="code")
@@ -463,29 +507,30 @@
         v=tmp;
     }
     var script = document.createElement('script');
-    script.setAttribute("src","https://rawgit.com/ETHproductions/Japt/"+v+"/src/japt-interpreter.js");
+    script.setAttribute("src","https://rawgit.com/ETHproductions/japt/"+v+"/src/japt-interpreter.js");
     document.getElementsByTagName('head')[0].appendChild(script);
-    setTimeout(function(){
-      document.getElementById("code").value=code;
-      document.getElementById("input").value=input;
-      if(typeof Japt!=="undefined")document.getElementById("js-code").value=Japt.transpile(code),
-	  Japt.stdout = document.getElementById("output"),
-	  Japt.stderr = document.getElementById("stderr");
-      else if(typeof transpile!=="undefined")document.getElementById("js-code").value=transpile(code);
-    },500);
-	for(var a = ["p","h1","h2","h3"], b = 0; b < 4; b++)
-	  for(var elems = document.body.getElementsByTagName(a[b]), i = 0; i < elems.length; i++) {
-	    var item = elems[i];
-	    item.innerHTML=item.innerHTML
+    for(var a = ["p","h1","h2","h3"], b = 0; b < 4; b++)
+      for(var elems = document.body.getElementsByTagName(a[b]), i = 0; i < elems.length; i++) {
+      	var item = elems[i];
+      	item.innerHTML=item.innerHTML
 			.replace(/(`{1,3})((?:.(?!\1))*[^`])\1/g,function(_,_,x){return'<span class="code" style="background-color:#F1E9E5">'+(x.length>1?x.trimRight():x)+'</span>'})
 			.replace(/arrow:([a-z-]+)/gi,'<a class="arrow"; id="toggle-$1"; onclick="toggleTab(\'$1\')" style="background-color:#3E2">▼</a>');
-	    }
+      }
+  }
+  
+  function setup() {
+    document.getElementById("code").value=code;
+    document.getElementById("input").value=input;
+    if(window.Japt)document.getElementById("js-code").value=Japt.transpile(code),
+      Japt.stdout = document.getElementById("output"),
+      Japt.stderr = document.getElementById("stderr");
+    else if(window.transpile)document.getElementById("js-code").value=transpile(code);
   }
   
   function getURL() {
     var code = escapedBtoA(document.getElementById("code").value);
     var input = escapedBtoA(document.getElementById("input").value);
-    document.getElementById("output").value = "http://ethproductions.github.io/japt?v="+v+"&code="+code+"&input="+input;
+    document.getElementById("output").value = "http://ethproductions.github.io/japt/?v="+v+"&code="+code+"&input="+input;
   }
   
   function toggleTab(tab) {
@@ -495,7 +540,8 @@
 	if(text.innerHTML=="▼")text.innerHTML="▲";else text.innerHTML="▼";
   }
   
-  var int=setInterval(function(){if(window.Japt||window.run)splitAddress(),clearInterval(int)},100)
+  splitAddress();
+  var int=setInterval(function(){if(window.Japt||window.run)setup(),clearInterval(int)},100);
 </script>
 </body>
 </html>

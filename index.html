@@ -132,247 +132,247 @@
 
 <h2>arrow:M-funcs `M` functions</h2>
 <div id="M-funcs" style="display:none">
-<h3>`a(n,n)`</h3>
+<h3>`.a(n,n)`</h3>
 <p>Returns `atan2(n₁,n₂)`.</p>
-<h3>`c(n)`</h3>
+<h3>`.c(n)`</h3>
 <p>Returns `cos(n)`.</p>
-<h3>`g(n)`</h3>
+<h3>`.g(n)`</h3>
 <p>Returns the `n`th Fibonacci number.</p>
-<h3>`h(n,n,...)`</h3>
+<h3>`.h(n,n,...)`</h3>
 <p>`Math.hypot`; returns the sqrt of the sum of the squares of the inputs.</p>
-<h3>`q(n,n,n=1)`</h3>
+<h3>`.q(n,n,n=1)`</h3>
 <p>Returns a random multiple of `n₃` (relative to `n₁`) between `n₁` and `n₂`.</p>
-<h3>`r(n,n)`</h3>
+<h3>`.r(n,n)`</h3>
 <p>Returns a random float between `n₁` and `n₂`.</p>
-<h3>`s(n)`</h3>
+<h3>`.s(n)`</h3>
 <p>Returns `sin(n)`.</p>
-<h3>`t(n)`</h3>
+<h3>`.t(n)`</h3>
 <p>Returns `tan(n)`.</p>
 </div>
 
 <h2>arrow:string-funcs String functions</h2>
 <div id="string-funcs" style="display:none">
-<h3>`a(s)`</h3>
+<h3>`.a(s)`</h3>
 <p>Returns the last index of `s` in `this`.</p>
-<h3>`b(s)`</h3>
+<h3>`.b(s)`</h3>
 <p>Returns the index of `s` in `this`.</p>
-<h3>`c(n=0)`</h3>
+<h3>`.c(n=0)`</h3>
 <p>Returns the char-code at index `n` in `this`.</p>
-<h3>`d(s)`</h3>
+<h3>`.d(s)`</h3>
 <p>Replaces `x` with `y` in `this` for each pair of chars `xy` in `s`.</p>
-<h3>`d(s,s,...)`</h3>
+<h3>`.d(s,s,...)`</h3>
 <p>Replaces `x` with `y` in `this` for each pair of args `x,y`.</p>
-<h3>`e(r/s,s="")`</h3>
+<h3>`.e(r/s,s="")`</h3>
 <p>Recursively replaces `r/s` with `s` in `this`.</p>
-<h3>`f(r/s)`</h3>
+<h3>`.f(r/s)`</h3>
 <p>Returns `this.match(r/s)`.</p>
-<h3>`g(n=0)`</h3>
+<h3>`.g(n=0)`</h3>
 <p>Returns the char at index `n` in `this`.</p>
-<h3>`h(n,s)` or `i(s,n=0)`</h3>
+<h3>`.h(n,s)` or `i(s,n=0)`</h3>
 <p>Sets the chars starting at index `n` in `this` to `s`.</p>
-<h3>`i(n,s)` or `i(s,n=0)`</h3>
+<h3>`.i(n,s)` or `i(s,n=0)`</h3>
 <p>Inserts `s` at index `n` into `this`.</p>
-<h3>`j(n,n)`</h3>
+<h3>`.j(n,n)`</h3>
 <p>Removes `n₁` chars from index `n₂` in `this`.</p>
-<h3>`k(r)`</h3>
+<h3>`.k(r)`</h3>
 <p>Replaces `r` with `""` in `this`.</p>
-<h3>`k(s,s="")`</h3>
+<h3>`.k(s,s="")`</h3>
 <p>Replace `RegExp(s₁,s₂="g")` with `""` in `this`.</p>
-<h3>`l()`</h3>
+<h3>`.l()`</h3>
 <p>Returns the length of `this`.</p>
-<h3>`m(f,s="")`</h3>
+<h3>`.m(f,s="")`</h3>
 <p>Splits `this` with `s`, maps each item by `f`, then rejoins with `s`.</p>
-<h3>`n(n=10)`</h3>
+<h3>`.n(n=10)`</h3>
 <p>Returns `parseInt(this,n)`.</p>
-<h3>`o(s)`</h3>
+<h3>`.o(s)`</h3>
 <p>Removes all characters not in `s` from `this`.</p>
-<h3>`p(n)`</h3>
+<h3>`.p(n)`</h3>
 <p>Returns `this` repeated `n` times.</p>
-<h3>`q(s="")`</h3>
+<h3>`.q(s="")`</h3>
 <p>Returns `this` split at `s`.</p>
-<h3>`r(r,s="")`</h3>
+<h3>`.r(r,s="")`</h3>
 <p>Replaces `r` with `s` in `this`.</p>
-<h3>`r(s,s="",s="")`</h3>
+<h3>`.r(s,s="",s="")`</h3>
 <p>Replaces `RegExp(s₁,s₃="g")` with `s₂` in `this`.</p>
-<h3>`s(n,n?)`</h3>
+<h3>`.s(n,n?)`</h3>
 <p>Returns `this.slice(n₁,n₂)`.</p>
-<h3>`t(n,n?)`</h3>
+<h3>`.t(n,n?)`</h3>
 <p>Returns `this.substr(n₁,n₂)`.</p>
-<h3>`u()`</h3>
+<h3>`.u()`</h3>
 <p>Returns `this.toUpperCase()`.</p>
-<h3>`v()`</h3>
+<h3>`.v()`</h3>
 <p>Returns `this.toLowerCase()`.</p>
-<h3>`w()`</h3>
+<h3>`.w()`</h3>
 <p>Returns `this.reverse()`.</p>
-<h3>`x(n?)`</h3>
+<h3>`.x(n?)`</h3>
 <p>If `n` is `1`, `.trimRight()`. If `n` is `2`, `.trimLeft()`. Otherwise, `.trim()`.</p>
-<h3>`y()`</h3>
+<h3>`.y()`</h3>
 <p>Splits `this` at newlines, transposes rows with columns, then joins with newlines.</p>
-<h3>`z(n=1)`</h3>
+<h3>`.z(n=1)`</h3>
 <p>Splits `this` at newlines, rotates by `n*90` degrees clockwise, then joins with newlines.</p>
-<h3>`à(n?)`</h3>
+<h3>`.à(n?)`</h3>
 <p>Returns all combinations of `this`. If `n` is specified, only returns the combinations of length `n`.</p>
-<h3>`á(n?)`</h3>
+<h3>`.á(n?)`</h3>
 <p>Returns all unique permutations of `this`. If `n` is specified, returns the unique permutations of length `n`.</p>
-<h3>`â(r/s)`</h3>
+<h3>`.â(r/s)`</h3>
 <p>Returns `this.search(r/s)`.</p>
-<h3>`ã(n=2,a?)`</h3>
+<h3>`.ã(n=2,a?)`</h3>
 <p>Returns an array of all subsections of `this` of length `n`. If `a` is specified, it is concatenated to the beginning beforehand.</p>
-<h3>`ä(f,a?)`</h3>
+<h3>`.ä(f,a?)`</h3>
 <p>Takes `this.ã()` and maps each item `[x,y]` with `f(x,y,x+y)`. If `a` is specified, it is concatenated to the beginning beforehand.</p>
-<h3>`å(f)`</h3>
+<h3>`.å(f)`</h3>
 <p>Cumulative reduce; like `q r`, but returns an array of each intermediate value.</p>
-<h3>`è(r/s)`</h3>
+<h3>`.è(r/s)`</h3>
 <p>Returns the number of matches of `r/s` in `this`.</p>
-<h3>`é(n=1)`</h3>
+<h3>`.é(n=1)`</h3>
 <p>Rotates `this` `n` chars to the right.</p>
-<h3>`ê()`</h3>
+<h3>`.ê()`</h3>
 <p>Mirrors `this` at its last char; `"abc"ê` becomes `"abcba"`.</p>
 </div>
 
 <h2>arrow:array-funcs Array functions</h2>
 <div id="array-funcs" style="display:none">
-<h3>`a(a)`</h3>
+<h3>`.a(a)`</h3>
 <p>Returns the last index of `a` in `this`.</p>
-<h3>`b(a)`</h3>
+<h3>`.b(a)`</h3>
 <p>Returns the index of `a` in `this`.</p>
-<h3>`c()`</h3>
+<h3>`.c()`</h3>
 <p>Flattens `this`, i.e. expands all sub-arrays into the main array.</p>
-<h3>`d(f)`</h3>
+<h3>`.d(f)`</h3>
 <p>Maps each item in `this` through `f`, then returns `true` if any are truthy, and `false` otherwise.</p>
-<h3>`e(f)`</h3>
+<h3>`.e(f)`</h3>
 <p>Maps each item in `this` through `f`, then returns `true` if all are truthy, and `false` otherwise.</p>
-<h3>`f(f)`</h3>
+<h3>`.f(f)`</h3>
 <p>Selects the items in `this` that return truthily to `f`.</p>
-<h3>`g(n=0)`</h3>
+<h3>`.g(n=0)`</h3>
 <p>Returns the item at index `n` in `this`.</p>
-<h3>`h(n,a)` or `i(a,n=0)`</h3>
+<h3>`.h(n,a)` or `i(a,n=0)`</h3>
 <p>Sets the item at index `n` in `this` to `a`.</p>
-<h3>`i(n,a)` or `i(a,n=0)`</h3>
+<h3>`.i(n,a)` or `i(a,n=0)`</h3>
 <p>Inserts `a` at index `n` into `this`.</p>
-<h3>`j(n,n)`</h3>
+<h3>`.j(n,n)`</h3>
 <p>Removes `n₁` items from index `n₂` in `this`.</p>
-<h3>`k(a)`</h3>
+<h3>`.k(a)`</h3>
 <p>Removes `a` from `this`.</p>
-<h3>`l()`</h3>
+<h3>`.l()`</h3>
 <p>Returns the length of `this`.</p>
-<h3>`m(f)`</h3>
+<h3>`.m(f)`</h3>
 <p>Maps each item in `this` through `f`.</p>
-<h3>`n(f)`</h3>
+<h3>`.n(f)`</h3>
 <p>Sorts `this` by passing each pair of items through `f`. If `f(x,y)<0`, `x` is sorted to the left; if `f(x,y)>0`, `y` is sorted to the left.</p>
-<h3>`o(n=1)`</h3>
+<h3>`.o(n=1)`</h3>
 <p>Removes the last `n` items in `this` and returns them.</p>
-<h3>`p(a)`</h3>
+<h3>`.p(a)`</h3>
 <p>Pushes `a` to `this`.</p>
-<h3>`q(s="")`</h3>
+<h3>`.q(s="")`</h3>
 <p>Returns `this` joined with `s`.</p>
-<h3>`r(f,a?)`</h3>
+<h3>`.r(f,a?)`</h3>
 <p>Reduces `this` with `f`. If `a` is specified, the initial value is set to `a`.</p>
-<h3>`s(n,n?)`</h3>
+<h3>`.s(n,n?)`</h3>
 <p>Returns `this.slice(n₁,n₂)`.</p>
-<h3>`t(n,n?)`</h3>
+<h3>`.t(n,n?)`</h3>
 <p>Returns `this.slice(n₁,n₁+n₂)`.</p>
-<h3>`u(a)`</h3>
+<h3>`.u(a)`</h3>
 <p>Adds `a` to the beginning of `this`.</p>
-<h3>`v()`</h3>
+<h3>`.v()`</h3>
 <p>Removes the first item of `this` and returns it.</p>
-<h3>`w()`</h3>
+<h3>`.w()`</h3>
 <p>Returns `this.reverse()`.</p>
-<h3>`x()`</h3>
+<h3>`.x()`</h3>
 <p>Returns `this` reduced with `+`. If all items are numbers, this sums them.</p>
-<h3>`y()`</h3>
+<h3>`.y()`</h3>
 <p>If `this` is a 2D array, or an array of strings, transposes rows with columns.</p>
-<h3>`z(n=1)`</h3>
+<h3>`.z(n=1)`</h3>
 <p>If `this` is a 2D array, or an array of strings, rotates `this` by `n*90` degrees clockwise.</p>
-<h3>`à(n?)`</h3>
+<h3>`.à(n?)`</h3>
 <p>Returns all combinations of `this`. If `n` is specified, only returns the combinations of length `n`.</p>
-<h3>`á(n?)`</h3>
+<h3>`.á(n?)`</h3>
 <p>Returns all unique permutations of `this`. If `n` is specified, returns the unique permutations of length `n`.</p>
-<h3>`â()`</h3>
+<h3>`.â()`</h3>
 <p>Returns all unique items of `this`, in original order.</p>
-<h3>`ã(n=2,a?)`</h3>
+<h3>`.ã(n=2,a?)`</h3>
 <p>Returns an array of all subsections of `this` of length `n`. If `a` is specified, it is concatenated to the beginning beforehand.</p>
-<h3>`ä(f,a?)`</h3>
+<h3>`.ä(f,a?)`</h3>
 <p>Takes `this.ã()` and reduces each item with `f`. If `a` is specified, it is concatenated to the beginning beforehand.</p>
-<h3>`å(f)`</h3>
+<h3>`.å(f)`</h3>
 <p>Cumulative reduce; like `r`, but returns an array of each intermediate value.</p>
-<h3>`æ(f)`</h3>
+<h3>`.æ(f)`</h3>
 <p>Returns the first item that returns truthily when run through `f`.</p>
-<h3>`ç(a)`</h3>
+<h3>`.ç(a)`</h3>
 <p>Fills `this` with `a`.</p>
-<h3>`è(f)`</h3>
+<h3>`.è(f)`</h3>
 <p>Returns the number of items that return truthily when run through `f`.</p>
-<h3>`é(n=1)`</h3>
+<h3>`.é(n=1)`</h3>
 <p>Rotates `this` `n` items to the right.</p>
-<h3>`ê()`</h3>
+<h3>`.ê()`</h3>
 <p>Mirrors `this` at its last item; `[1,2,3]ê` becomes `[1,2,3,2,1]`.</p>
 </div>
 
 <h2>arrow:number-funcs Number functions</h2>
 <div id="number-funcs" style="display:none">
-<h3>`a()`</h3>
+<h3>`.a()`</h3>
 <p>Returns the absolute value of `this`.</p>
-<h3>`b(n,n)`</h3>
+<h3>`.b(n,n)`</h3>
 <p>Returns `this` bounded with min `n₁` and max `n₂`.</p>
-<h3>`c(n=1)`</h3>
+<h3>`.c(n=1)`</h3>
 <p>Returns `this` rounded up to the nearest multiple of `n`.</p>
-<h3>`d()`</h3>
+<h3>`.d()`</h3>
 <p>Returns the char at code-point `this`.</p>
-<h3>`e(n)`</h3>
+<h3>`.e(n)`</h3>
 <p>Returns `this*Math.pow(10,n)`.</p>
-<h3>`f(n=1)`</h3>
+<h3>`.f(n=1)`</h3>
 <p>Returns `this` rounded down to the nearest multiple of `n`.</p>
-<h3>`g()`</h3>
+<h3>`.g()`</h3>
 <p>Returns the sign of `this`; `-1` for negative values, `1` for positive, `0` for `0`, and `NaN` for `NaN`.</p>
-<h3>`h(n=2)`</h3>
+<h3>`.h(n=2)`</h3>
 <p>Returns `this` positive-modulated by `n`.</p>
-<h3>`i(f)`</h3>
+<h3>`.i(f)`</h3>
 <p>Runs `f` every `this` milliseconds.</p>
-<h3>`i(s)`</h3>
+<h3>`.i(s)`</h3>
 <p>Evaluates `s` as JS every `this` milliseconds.</p>
-<h3>`j()`</h3>
+<h3>`.j()`</h3>
 <p>Returns `true` if `this` is prime; `false` otherwise.</p>
-<h3>`k()`</h3>
+<h3>`.k()`</h3>
 <p>Returns the factors of `this` as an array.</p>
-<h3>`l()`</h3>
+<h3>`.l()`</h3>
 <p>Returns the factorial of `this`.</p>
-<h3>`m(n)`</h3>
+<h3>`.m(n)`</h3>
 <p>Returns the smaller of `this` and `n`.</p>
-<h3>`n()`</h3>
+<h3>`.n()`</h3>
 <p>Returns `-this`.</p>
-<h3>`o(f?)`</h3>
+<h3>`.o(f?)`</h3>
 <p>Returns an array of all integers in the range `[0,this)` (or vice-versa). Optionally maps through `f`.</p>
-<h3>`o(n,f?)`</h3>
+<h3>`.o(n,f?)`</h3>
 <p>Returns an array of all integers in the range `[this,n₁)` (or vice-versa). Optionally maps through `f`.</p>
-<h3>`o(n,n=1,f?)`</h3>
+<h3>`.o(n,n=1,f?)`</h3>
 <p>Returns an array of numbers in the range `[this,n₁)`, generated by starting at `this` and repeatedly adding `n₂`. Optionally maps through `f`.</p>
-<h3>`p(n=2)`</h3>
+<h3>`.p(n=2)`</h3>
 <p>Returns `this` to the `n`th power.</p>
-<h3>`q(n=2)`</h3>
+<h3>`.q(n=2)`</h3>
 <p>Returns the `n`th root of `this`.</p>
-<h3>`r(n=1)`</h3>
+<h3>`.r(n=1)`</h3>
 <p>Returns `this` rounded to the nearest multiple of `n`.</p>
-<h3>`s(n=10)`</h3>
+<h3>`.s(n=10)`</h3>
 <p>Returns `this` converted to a base-`n` string.</p>
-<h3>`t(f)`</h3>
+<h3>`.t(f)`</h3>
 <p>Runs `f` after `this` milliseconds.</p>
-<h3>`t(s)`</h3>
+<h3>`.t(s)`</h3>
 <p>Evaluates `s` as JS after `this` milliseconds.</p>
-<h3>`u()`</h3>
+<h3>`.u()`</h3>
 <p>Returns `1` if `this` is odd; `0` otherwise.</p>
-<h3>`v()`</h3>
+<h3>`.v()`</h3>
 <p>Returns `1` if `this` is even; `0` otherwise.</p>
-<h3>`w(n)`</h3>
+<h3>`.w(n)`</h3>
 <p>Returns the larger of `this` and `n`.</p>
-<h3>`à(n?)`</h3>
+<h3>`.à(n?)`</h3>
 <p>Returns the number of combinations of `[1..this]`. If `n` is specified, only returns the number of combinations of length `n`.</p>
-<h3>`á(n?)`</h3>
+<h3>`.á(n?)`</h3>
 <p>Returns the number of permutations of `[1..this]`. If `n` is specified, returns the number of permutations of length `n`.</p>
-<h3>`ò(n,n=1)`</h3>
+<h3>`.ò(n,n=1)`</h3>
 <p>Like `o`, but inclusive (creates the range `[this..n]` instead of `[this..n)`).</p>
-<h3>`ó(n,n=1)`</h3>
+<h3>`.ó(n,n=1)`</h3>
 <p>Like `o`, but creates the range `[this..this+n)` instead of `[this..n)`.</p>
-<h3>`ô(n,n=1)`</h3>
+<h3>`.ô(n,n=1)`</h3>
 <p>Like `ó`, but inclusive.</p>
 </div>
 

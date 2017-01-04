@@ -573,6 +573,7 @@ var Japt = {
 			outp = "";  // Temporary output
 	
 		function pretranspile(code) {
+			if (/^[a-zà-ÿ]/.test(code)) code = "U" + code;
 			var i = 0, strchars = Array(20).fill(""), polyglot = '"(p|';
 			var quickie = function () {
 			for (; i < code.length; ++i) {

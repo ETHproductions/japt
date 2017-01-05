@@ -719,8 +719,6 @@ var Japt = {
 			var char = code[i];
 			if (char === ";" && i === 0)
 				outp += "newvars()";
-			else if (isChar(char, "A-Z") && outp.slice(-1) === "M")
-				outp += ".";
 			else if (isChar(char, "`'\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
 				&& !(isChar(char, "0-9") && isChar(outp.slice(-1), "0-9")))
 				outp += ",";
@@ -760,7 +758,7 @@ var Japt = {
 						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
 				}
 				else {
-					outp += letters.split("").join(",");
+					outp += letters.split("").join(",").replace(/M,/g, "M.");
 					--i;
 				}
 			}

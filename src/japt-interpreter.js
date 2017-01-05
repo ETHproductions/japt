@@ -182,7 +182,7 @@ df(Array,'\xE2',function(){var u={},a=[];for(var i of this)if(!u.hasOwnProperty(
 df(Array,'\xE3',function(x,y){x=fb(x,2);var a=[];if(id(y))a[0]=this.slice(0,x-1),a[0].unshift(y);for(var i=0;i<=this.length-x;i++)a.push(this.slice(i,i+x));return a});
 df(Array,'\xE4',function(x,y){x=functify(x);return this['\xE3'](2,y).map(function(z){return z.reduce(x)})});
 df(Array,'\xE5',function(x,y){x=functify(x);var a=[];this.reduce(function(q,r,s){var t=x(q,r,s);a.push(t);return t},y||(typeof this[0]=="number"?0:""));return a});
-df(Array,'\xE6',function(x){return this.f(x)[0]});
+df(Array,'\xE6',function(x,y){x=functify(fb(x,function(q){return!!q}),y);for(var i=0;i<this.length;i++)if(x(this[i]))return this[i]});
 df(Array,'\xE7',function(x){return this.fill(x)});
 df(Array,'\xE8',function(x){return this.f(x).length});
 df(Array,'\xE9',function(x){var r=[],l=this.length,i=l;for(x=pm(-fb(x,1),l);i--;x++)r.push(this[x%l]);return r});

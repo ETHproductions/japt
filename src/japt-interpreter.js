@@ -768,7 +768,7 @@ var Japt = {
 			else if (char === ")") {
 				outp += "))";
 			}
-			else if (isChar(char, "a-z")) {
+			else if (isChar(char, "a-zà-ÿ")) {
 				if (outp.slice(-2) === "(!") {
 					outp = outp.slice(0,-1) + "\"!"+char+"\"";
 				} else if (outp.slice(-1) === "(") {
@@ -781,13 +781,6 @@ var Japt = {
 					}
 				} else {
 					outp += "." + char + "(";
-				}
-			}
-			else if (isChar(char, "\\xE0-\\xF6\\xF8-\\xFF")) {
-				if (outp.slice(-1) === "(") {
-					outp += "function(c){return c[\"\\x" + char.charCodeAt(0).toString(16).toUpperCase() + "\"]()}";
-				} else {
-					outp += "[\"\\x" + char.charCodeAt(0).toString(16).toUpperCase() + "\"](";
 				}
 			}
 			else if (pairs[char]) {

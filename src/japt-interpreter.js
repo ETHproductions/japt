@@ -760,7 +760,7 @@ var Japt = {
 					if (tr.lastIndexOf(";") < 0)
 						outp += "return " + tr + "})";
 					else
-						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
+						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "})";
 				}
 				else {
 					outp += letters.split("").join(",").replace(/M,/g, "M.");

@@ -311,6 +311,10 @@
 <p>Rotates `this` `n` items to the right.</p>
 <h3>`.ê()`</h3>
 <p>Mirrors `this` at its last item; `[1,2,3]ê` becomes `[1,2,3,2,1]`.</p>
+<h3>`.ë(x,y=0)`</h3>
+<p>Returns every `x`th item of `this`, starting at index `y`.</p>
+<h3>`.ì(n=10)`</h3>
+<p>Converts `this` from an array of base-`n` numbers into an integer.</p>
 </div>
 
 <h2>arrow:number-funcs Number functions</h2>
@@ -373,6 +377,8 @@
 <p>Returns the number of combinations of `[1..this]`. If `n` is specified, only returns the number of combinations of length `n`.</p>
 <h3>`.á(n?)`</h3>
 <p>Returns the number of permutations of `[1..this]`. If `n` is specified, returns the number of permutations of length `n`.</p>
+<h3>`.ì(n=10)`</h3>
+<p>Returns an array of the base-`n` digits of `this`. Works for all `n` greater than 2.</p>
 <h3>`.ò(n,n=1)`</h3>
 <p>Like `o`, but inclusive (creates the range `[this..n]` instead of `[this..n)`).</p>
 <h3>`.ó(n,n=1)`</h3>

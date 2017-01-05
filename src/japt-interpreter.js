@@ -187,7 +187,8 @@ df(Array,'\xE7',function(x){return this.fill(x)});
 df(Array,'\xE8',function(x,y){return this.f(x,y).length});
 df(Array,'\xE9',function(x){var r=[],l=this.length,i=l;for(x=pm(-fb(x,1),l);i--;x++)r.push(this[x%l]);return r});
 df(Array,'\xEA',function(){return this.concat(this.slice(0,-1).w());});
-//df(Array,'\xEB',function(x,y){x=fb(x,2);y=fb(y,0);return this.slice(y).filter(function(a,b){return b%x==0});
+df(Array,'\xEB',function(x,y){x=fb(x,2);y=fb(y,0);return this.slice(y).filter(function(a,b){return b%x==0})});
+df(Array,'\xEC',function(x){x=fb(x,10);return this.reduce(function(a,b){return a*x+parseFloat(b)},0)});
 
 df(Number,'a',function(){return Math.abs(this)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
@@ -217,6 +218,7 @@ df(Number,'y',function(){noFunc('N.y')});
 df(Number,'z',function(){noFunc('N.z')});
 df(Number,'\xE0',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
 df(Number,'\xE1',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return n.l();return n["\xE0"]()*x.l()});
+df(Number,'\xEC',function(x){var n=Math.min(Math.floor(this),Math.pow(2,53));x=Math.floor(fb(x,10));if(x<2)return[];for(var a=[];n>0;n=Math.floor(n/x))a.unshift(n%x);return a});
 df(Number,'\xF2',function(x,y,f){if(typeof x=="function"||typeof y=="function")return(this+1).o(x,y,f);x=fb(x,0);y=y||1;return this<x?this.o(x+y,y,f):x.o(this+y,y,f)});
 df(Number,'\xF3',function(x,y,f){if(typeof x=="function"||typeof y=="function")return this.o(x,y,f);x=fb(x,0);y=y||1;return this.o(this+x*y,y,f)});
 df(Number,'\xF4',function(x,y,f){if(typeof x=="function"||typeof y=="function")return(this+1)['\xF2'](x,y,f);x=fb(x,0);y=y||1;return this['\xF2'](this+x*y,y,f)});

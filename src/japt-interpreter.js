@@ -5,7 +5,7 @@ function fb(x,y){return id(x)?x:y} // Fallback: returns x if x is defined, y oth
 function pm(x,y){return(x%y+y)%y} // Positive modulo
 function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configurable:false,writable:true,value:f})}
 function regexify(x,y){if(x instanceof RegExp)return x;y=fb(y,null);var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="V"?a?" -?B-DF-HJ-NP-TV-`b-df-hj-np-tv-\uFFFF":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"").replace(/g/g,"")+"g")}
-function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/[a-z]/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
+function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/^!?[a-zà-ÿ]$/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
 function isChar(str,char){return RegExp('^['+char+']$').test(str);}
 function str(x){return x instanceof Array?x.map(str).join():x instanceof String?'"'+x.replace(/"/g,"\\\"")+'"':x+""}
 
@@ -252,6 +252,11 @@ df(Date,'w',function(){noFunc('D.w')});
 df(Date,'x',function(){noFunc('D.x')});
 df(Date,'y',function(){noFunc('D.y')});
 df(Date,'z',function(){noFunc('D.z')});
+
+function bij(a,b){var s="";a=Math.floor(a);b=fb(b,10);if(b%1||b<2)return s;if(a<0)s="-",a=~a;var c=0,x=1;while(a>=x){c++;a-=x;x*=b;}for(var i=0;i<c;i++){s=(a%b)+s;a=Math.floor(a/b);}return s;}
+
+df(Function,'a',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e6;++i){var j=x(i,fb(y,i));if(this(j))return j;}});
+df(Function,'b',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e6;++i){j=x(bij(i,10),fb(y,i));if(this(j))return j;}});
 
 df(Object,'\xFF',function(){if(!isnode)alert(this);return this instanceof Number?+this:this instanceof String?""+this:this});
 
@@ -738,7 +743,7 @@ var Japt = {
 					letters += code[i];
 				}
 				if (code[i] === "{") {
-					outp += "function(" + letters.split("").join(",") + "){";
+					outp += "(function(" + letters.split("").join(",") + "){";
 					temp = "";
 					for (level = 1, ++i; level > 0 && i < code.length; i++) {
 						if (code[i] === "{") {
@@ -753,7 +758,7 @@ var Japt = {
 					else i--;
 					var tr = Japt.transpile(temp.slice(0,-1));
 					if (tr.lastIndexOf(";") < 0)
-						outp += "return " + tr + "}";
+						outp += "return " + tr + "})";
 					else
 						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
 				}

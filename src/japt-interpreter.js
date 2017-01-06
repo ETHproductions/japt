@@ -148,7 +148,7 @@ df(String,'\xE5',function(x,y){return this.q()['\xE5'](x,y)});
 df(String,'\xE8',function(x){return (this.f(x)||[]).length});
 df(String,'\xE9',function(x){return this.q()['\xE9'](x).q()});
 df(String,'\xEA',function(){return this+this.slice(0,-1).w();});
-//df(String,'\xEB',function(x){return this.q()['\xEB'](x).q()});
+df(String,'\xEB',function(x,y){return this.q()['\xEB'](x,y).q()});
 
 df(Array,'a',function(x){return(typeof x)=="function"?this.map(function(a,b,c){return!!x(a,b,c)}).lastIndexOf(true):this.lastIndexOf(x)});
 df(Array,'b',function(x){return(typeof x)=="function"?this.map(function(a,b,c){return!!x(a,b,c)}).indexOf(true):this.indexOf(x)});

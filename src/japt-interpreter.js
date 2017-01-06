@@ -52,6 +52,7 @@ var pairs_1_3 = {
 	"\xC1": ">>>",  // Á - 193
 	"\xC2": "~~",   // Â - 194
 	"\xC3": "} ",   // Ã - 195
+	"\xC4": "+1",   // Ä - 196
 	"\xD0": "$new Date$(", // Ð - 208
 	"\xDF": "$rp$("   // ß - 223
 };
@@ -204,7 +205,7 @@ df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;i
 df(Number,'l',function(){var n=this|0,x=this|0;if(n<1)return 1;while(--n)x*=n;return x});
 df(Number,'m',function(){return[].reduce.call(arguments,function(x,y){return Math.min(x,y)},this)});
 df(Number,'n',function(){return-this});
-df(Number,'o',function(x,y,f){if(typeof x=="function")f=x,x=undefined;if(typeof y=="function")f=y,y=undefined;var z=this;y=y||1;if(!id(x))x=z,z=0;if(x<z)_=x,x=z,z=_;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);if(typeof f=="function")return r.map(f);return r});
+df(Number,'o',function(x,y,f){var q;if(typeof x=="function")f=x,x=undefined;if(typeof x=="string")f=functify(x,y),q=y,x=y=undefined;if(typeof y=="function")f=y,y=undefined;var z=this;y=y||1;if(!id(x))x=z,z=0;if(x<z)_=x,x=z,z=_;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);if(typeof f=="function")return r.map(function(a,b,c){return f(a,fb(q,b),c)});return r});
 df(Number,'p',function(x){x=fb(x,2);return Math.pow(this,x)});
 df(Number,'q',function(x){x=fb(x,2);return Math.pow(this,1/x)});
 df(Number,'r',function(x){x=fb(x,1);return Math.round(this/x)*x});

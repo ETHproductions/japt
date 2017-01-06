@@ -23,6 +23,7 @@
 <p>`A-Z` are pre-defined variables. See the Variables table for more info.</p>
 <p>`a-z` are various functions, and transpile to e.g. `.a(`. See the Functions tables below.</p>
 <p>`ABC{` starts an anonymous function with parameters `A`, `B`, and `C`. Equivalent to `function(A,B,C){`.</p>
+<p>`@` is equivalent to `XYZ{`, and `_` is equivalent to `Z{Z`.</p>
 <p>If `a-z` is the first item in a function call, it is transpiled to `function(c){return c.(letter)()}`.</p>
 <p>If an infix operator is the first item in a function call, it is transpiled to `function(a,b){return a(operator)b}`.</p>
 <p>If the above is prefixed by `!`, it is transpiled to `function(a,b){return b(operator)a}`.</p>
@@ -383,6 +384,14 @@
 <p>Like `o`, but creates the range `[this..this+n)` instead of `[this..n)`.</p>
 <h3>`.ô(n,n=1)`</h3>
 <p>Like `ó`, but inclusive.</p>
+</div>
+
+<h2>arrow:function-funcs Function functions</h2>
+<div id="function-funcs" style="display:none">
+<h3>`.a(f?)`</h3>
+<p>Returns the smallest non-negative integer that returns a truthy value when run through `this`, mapping through `f` beforehand.</p>
+<h3>`.b(f?)`</h3>
+<p>Like `.a()`, but with bijective base-10 integers.</p>
 </div>
 
 <h2>arrow:unicode-shortcuts Unicode shortcuts</h2>

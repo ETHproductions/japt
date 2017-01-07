@@ -15,8 +15,8 @@ if (isnode) var shoco = require("../dependencies/shoco");
 var pairs_1_3 = { 
 	// Unicode shortcuts
 	// Using \u<hex> to avoid encoding incompatibilities
-	"@":	  "XYZ{",
-	"_":	  "Z{Z",
+	"@":    "XYZ{",
+	"_":    "Z{Z",
 	"\xA1": "Um@",  // ¡ - 161
 	"\xA2": "Us2 ", // ¢ - 162
 	"\xA3": "m@",   // £ - 163
@@ -54,7 +54,8 @@ var pairs_1_3 = {
 	"\xC3": "} ",   // Ã - 195
 	"\xC4": "+1",   // Ä - 196
 	"\xD0": "$new Date$(", // Ð - 208
-	"\xDF": "$rp$("   // ß - 223
+	"\xD7": "r*1 ", // × - 215
+	"\xDF": "$rp$(" // ß - 223
 };
 
 var pairs_2_0 = { 

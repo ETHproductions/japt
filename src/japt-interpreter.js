@@ -191,6 +191,7 @@ df(Array,'\xE9',function(x){var r=[],l=this.length,i=l;for(x=pm(-fb(x,1),l);i--;
 df(Array,'\xEA',function(){return this.concat(this.slice(0,-1).w());});
 df(Array,'\xEB',function(x,y){x=fb(x,2);y=fb(y,0);return this.slice(y).filter(function(a,b){return b%x==0})});
 df(Array,'\xEC',function(x){x=fb(x,10);return this.reduce(function(a,b){return a*x+parseFloat(b)},0)});
+df(Array,'\xF1',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.sort(function(a,b,i){a=x(a,fb(y,i));b=x(b,fb(y,i));return(a>b)-(a<b)})});
 
 df(Number,'a',function(){return Math.abs(this)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
@@ -199,7 +200,7 @@ df(Number,'d',function(){return String.fromCharCode(this)});
 df(Number,'e',function(x){return this*Math.pow(10,x)});
 df(Number,'f',function(x){x=fb(x,1);return Math.floor(this/x)*x});
 df(Number,'g',function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});
-df(Number,'h',function(){noFunc('N.h')});
+df(Number,'h',function(x){x=fb(x,1);return this.toPrecision(x)});
 df(Number,'i',function(x){return Japt.intervals[Japt.intervals.length]=setInterval(x,this)});
 df(Number,'j',function(){var n=+this;if(n===2)return true;if(n%1||n<2||n%2===0)return false;for(var i=3,s=Math.sqrt(n);i<=s;i+=2)if(n%i===0)return false;return true});
 df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f});
@@ -215,7 +216,7 @@ df(Number,'t',function(x){return Japt.intervals[Japt.intervals.length]=setTimeou
 df(Number,'u',function(x){return pm(this,fb(x,2))});
 df(Number,'v',function(x){x=fb(x,2);return this%x===0?1:0});
 df(Number,'w',function(){return[].reduce.call(arguments,function(x,y){return Math.max(x,y)},this)});
-df(Number,'x',function(){noFunc('N.x')});
+df(Number,'x',function(x){x=fb(x,0);return this.toFixed(x)});
 df(Number,'y',function(){noFunc('N.y')});
 df(Number,'z',function(){noFunc('N.z')});
 df(Number,'\xE0',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
@@ -261,6 +262,7 @@ function bij(a,b){var s="";a=Math.floor(a);b=fb(b,10);if(b%1||b<2)return s;if(a<
 
 df(Function,'a',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){var j=x(i,fb(y,i));if(this(j))return j;}});
 df(Function,'b',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){j=x(bij(i,10),fb(y,i));if(this(j))return j;}});
+df(Function,'c',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;i=-i-(i>-1)){var j=x(i,fb(y,i));if(this(j))return j;}});
 
 df(Object,'\xFF',function(){if(!isnode)alert(this);return this instanceof Number?+this:this instanceof String?""+this:this});
 

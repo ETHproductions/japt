@@ -1,4 +1,5 @@
-var A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z; // Japt variables
+var A,B,C,D,E,F,G,H,I,J,_K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z; // Japt variables
+Object.defineProperty(window,"K",{enumerable:false,configurable:false,get:function(){return fb(_K,new Date())},set:function(x){return _K=x}});
 function noFunc(x){alert("No such function: "+x)} // Runs whenever the program contains a non-existant function call
 function id(x){return(typeof x)!=="undefined"} // Detects whether the variable is defined
 function fb(x,y){return id(x)?x:y} // Fallback: returns x if x is defined, y otherwise
@@ -508,7 +509,7 @@ var Japt = {
 		H = 32,
 		I = 64,
 		J = -1,
-		K = Date,
+		K = undefined,
 		L = 100,
 		M = Math,
 		N = Japt.evalInput(input),

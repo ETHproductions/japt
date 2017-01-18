@@ -244,6 +244,8 @@
 <p>Returns the index of `a` in `this`.</p>
 <h3>`.c()`</h3>
 <p>Flattens `this`, i.e. expands all sub-arrays into the main array.</p>
+<h3>`.c(a)`</h3>
+<p>Appends `a` to `this`.</p>
 <h3>`.d(f)`</h3>
 <p>Maps each item in `this` through `f`, then returns `true` if any are truthy, and `false` otherwise.</p>
 <h3>`.e(f)`</h3>
@@ -350,8 +352,8 @@
 <p>Returns the factorial of `this`.</p>
 <h3>`.m(n)`</h3>
 <p>Returns the smaller of `this` and `n`.</p>
-<h3>`.n()`</h3>
-<p>Returns `-this`.</p>
+<h3>`.n(n=0)`</h3>
+<p>Returns `n - this`. If no `n` is given, this returns `-this`.</p>
 <h3>`.o(f?)`</h3>
 <p>Returns an array of all integers in the range `[0,this)` (or vice-versa). Optionally maps through `f`.</p>
 <h3>`.o(n,f?)`</h3>

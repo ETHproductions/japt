@@ -243,10 +243,10 @@ df(Date,'k',function(){return this.getTimezoneOffset()});
 
 // Ds accepts one argument that controls how the string is formatted. Some formats may not work on some browsers.
 df(Date,'s',function(x){return this["to"+["","Date","Time","ISO","GMT","UTC","Locale","LocaleDate","LocaleTime"][x||0]+"String"]()});
+df(Date,'n',function(x){return id(x)?x-this:+this});
 
 df(Date,'l',function(){noFunc('D.l')});
 df(Date,'m',function(){noFunc('D.m')});
-df(Date,'n',function(){noFunc('D.n')});
 df(Date,'o',function(){noFunc('D.o')});
 df(Date,'p',function(){noFunc('D.p')});
 df(Date,'q',function(){noFunc('D.q')});

@@ -1,5 +1,4 @@
 var A,B,C,D,E,F,G,H,I,J,_K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z; // Japt variables
-Object.defineProperty(window,"K",{enumerable:false,configurable:false,get:function(){return fb(_K,new Date())},set:function(x){return _K=x}});
 function noFunc(x){alert("No such function: "+x)} // Runs whenever the program contains a non-existant function call
 function id(x){return(typeof x)!=="undefined"} // Detects whether the variable is defined
 function fb(x,y){return id(x)?x:y} // Fallback: returns x if x is defined, y otherwise
@@ -12,6 +11,7 @@ function str(x){return x instanceof Array?x.map(str).join():x instanceof String?
 
 var isnode = typeof window === "undefined";
 if (isnode) var shoco = require("../dependencies/shoco");
+if (!isnode) Object.defineProperty(window,"K",{enumerable:false,configurable:false,get:function(){return fb(_K,new Date())},set:function(x){return _K=x}});
 
 var pairs_1_3 = { 
 	// Unicode shortcuts

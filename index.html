@@ -572,9 +572,11 @@
   function setup() {
 	if(typeof code !== "undefined") document.getElementById("code").value = code;
     if(typeof input !== "undefined") document.getElementById("input").value = input;
-    if(window.Japt) document.getElementById("js-code").value = Japt.transpile(code),
-      Japt.stdout = document.getElementById("output"),
+    if(window.Japt) {
+	  if(typeof code !== "undefined") document.getElementById("js-code").value = Japt.transpile(code);
+      Japt.stdout = document.getElementById("output");
       Japt.stderr = document.getElementById("stderr");
+	}
     else if(window.transpile)document.getElementById("js-code").value = transpile(code);
   }
   

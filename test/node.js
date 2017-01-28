@@ -7,7 +7,7 @@ Japt.run(
 	false,		// safe mode
 	null,		// function run after transpiling
 	function (output) { // function run after program runs successfully
-		if (Japt.implicit_output) process.stdout.write(output);
+		if (Japt.implicit_output) process.stdout.write(String(output));
 	},
 	function (error) { // function run after program errors
 		throw error;

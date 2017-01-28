@@ -11,7 +11,7 @@ function str(x){return x instanceof Array?x.map(str).join():x instanceof String?
 
 var isnode = typeof window === "undefined";
 if (isnode) var shoco = require("../dependencies/shoco");
-if (!isnode) Object.defineProperty(window,"K",{enumerable:false,configurable:false,get:function(){return fb(_K,new Date())},set:function(x){return _K=x}});
+Object.defineProperty(isnode ? global : window, "K", { enumerable: false, configurable: true, get: function() { return fb(_K, new Date()); }, set: function(x) { return _K=x; }});
 
 var pairs_1_3 = { 
 	// Unicode shortcuts
@@ -509,7 +509,7 @@ var Japt = {
 		H = 32,
 		I = 64,
 		J = -1,
-		K = undefined,
+		_K = undefined,
 		L = 100,
 		M = Math,
 		N = Japt.evalInput(input),

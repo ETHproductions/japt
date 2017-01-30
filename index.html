@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-<title>Japt 1.4.3 interpreter</title>
+<title>Japt 1.4.4 interpreter</title>
 <link rel="stylesheet" type="text/css" href="../style/style.css">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
@@ -286,8 +286,8 @@
 <p>Removes the first item of `this` and returns it.</p>
 <h3>`.w()`</h3>
 <p>Returns `this.reverse()`.</p>
-<h3>`.x()`</h3>
-<p>Returns the sum of all items in `this`.</p>
+<h3>`.x(f?)`</h3>
+<p>Returns the sum of all items in `this`. If `f` is given, each item is mapped through `f` first.</p>
 <h3>`.y()`</h3>
 <p>If `this` is a 2D array, or an array of strings, transposes rows with columns.</p>
 <h3>`.z(n=1)`</h3>
@@ -506,7 +506,7 @@
 </div>
 <script src="https://rawgit.com/ETHproductions/Japt/master/dependencies/shoco.js"></script>
 <script>
-  var defv = "1.4.3";
+  var defv = "1.4.4";
   var v = defv;
   var code, input;
   

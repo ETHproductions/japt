@@ -786,8 +786,8 @@ var Japt = {
 					outp = outp.slice(0,-1) + "\"!"+char+"\"";
 				} else if (outp.slice(-1) === "(") {
 					outp += "\""+char+"\"";
-				} else if (isChar(outp.slice(-1),"0-9")) {
-					if (char === "e") {
+				} else if (isChar(outp.slice(-1), "0-9")) {
+					if (char === "e" && isChar(code[i + 1], "0-9") && outp.slice(-2,-1) !== "e") {
 						outp += char;
 					} else {
 						outp += " ." + char + "(";

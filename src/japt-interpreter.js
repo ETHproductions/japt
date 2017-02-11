@@ -751,7 +751,9 @@ var Japt = {
 					letters += code[i];
 				}
 				if (code[i] === "{") {
-					outp += "(function(" + letters.split("").join(",") + "){";
+					var extraparen = outp === "" || outp.slice(-1) === ";";
+					if (extraparen) outp += "(";
+					outp += "function(" + letters.split("").join(",") + "){";
 					temp = "";
 					for (level = 1, ++i; level > 0 && i < code.length; i++) {
 						if (code[i] === "{") {
@@ -766,9 +768,10 @@ var Japt = {
 					else i--;
 					var tr = Japt.transpile(temp.slice(0,-1));
 					if (tr.lastIndexOf(";") < 0)
-						outp += "return " + tr + "})";
+						outp += "return " + tr + "}";
 					else
-						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "})";
+						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
+					if (extraparen) outp += ")";
 				}
 				else {
 					outp += letters.split("").join(",").replace(/M,/g, "M.");

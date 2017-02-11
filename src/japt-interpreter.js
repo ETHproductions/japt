@@ -588,6 +588,7 @@ var Japt = {
 		function pretranspile(code) {
 			var i = 0, strchars = Array(20).fill(""), polyglot = '"(p|';
 			var quickie = function () {
+			var extraparen = false;
 			for (; i < code.length; ++i) {
 				var char = code[i];
 				if (code.slice(i).indexOf(polyglot) === 0) {
@@ -658,7 +659,8 @@ var Japt = {
 						level--;
 						currstr += "\"";
 						newcode += "\"" + Japt.strings.length + "\"";
-						Japt.strings.push("("+currstr+")");
+						Japt.strings.push(extraparen ? "(" + currstr + ")" : currstr);
+						extraparen = false;
 					}
 					else if (char === "\"") {
 						currstr += "\\\"";
@@ -666,6 +668,7 @@ var Japt = {
 					else if (char === "{") {
 						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 						level++;
+						extraparen = true;
 						currbraces = "";
 					}
 					else if (char === "\n") {
@@ -679,12 +682,15 @@ var Japt = {
 					if (level === 2 && extrabraces[level] === 0 && char === "}") {
 						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 						level--;
-						currstr += "\"+("+Japt.transpile(currbraces)+")+\"";
+						var transpiled = Japt.transpile(currbraces);
+						var transparen = !/^([\d.e]+|[A-Z]|"(\\.|[^"{}])*")$/.test(transpiled);
+						currstr += "\"+" + (transparen ? "(" : "") + transpiled + (transparen ? ")" : "") + "+\"";
 					}
 					else {
-						currbraces+=char;
-						if (char === "\"") {
+						currbraces += char;
+						if (isChar(char, "\"`")) {
 							level++;
+							strchars[level] = char;
 						}
 						else if (isChar(char,"'#")) {
 							currbraces += code[++i];
@@ -703,12 +709,15 @@ var Japt = {
 					if (char === "\\") {
 						currbraces += code[++i];
 					}
-					else if (char === "\"") {
+					else if (char === strchars[level]) {
 						level--;
 					}
 					else if (char === "{") {
 						level++;
 					}
+				}
+				if (i + 1 === code.length && level > 0) {
+					code += level % 2 ? strchars[level] : "}";
 				}
 			}
 			};
@@ -789,8 +798,12 @@ var Japt = {
 					outp = outp.slice(0,-1) + "\"!"+char+"\"";
 				} else if (outp.slice(-1) === "(") {
 					outp += "\""+char+"\"";
-				} else if (char === "e" && isChar(outp.slice(-1), "0-9") && isChar(code[i + 1], "0-9") && outp.slice(-2,-1) !== "e") {
-					outp += char;
+				} else if (isChar(outp.slice(-1), "0-9")) {
+					if (char === "e" && isChar(code[i + 1], "0-9") && outp.slice(-2,-1) !== "e") {
+						outp += char;
+					} else {
+						outp += " ." + char + "(";
+					}
 				} else {
 					outp += "." + char + "(";
 				}
@@ -827,13 +840,7 @@ var Japt = {
 		
 		outp = outp.replace(/\$(\d+)\$/g,function(_,a){return Japt.snippets[+a]});
 		outp = fixParens(outp);
-		outp = outp.replace(/(\d)(\.[a-zà-ÿ])/g, "$1 $2");
 		outp = outp.replace(/"(\d+)"/g,function(_,a){return Japt.strings[+a]});
-		
-		var extraparens = /(^|[^a-zà-ÿ])\(("(?:\\.|[^"])*"|[A-Z]|[\d.]+)\)(?=(.?))/;
-		while (extraparens.test(outp)) outp = outp.replace(extraparens, function (_, a, b, c) {
-			return a + b + (/^[\d.]+$/.test(b) && c === "." ? " " : "")
-		});
 		return outp;
 	},
 	

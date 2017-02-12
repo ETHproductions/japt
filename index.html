@@ -129,9 +129,9 @@
 		return;
       docs.innerHTML = "<h1>Japt Docs</h1>";
       if (realv === "master")
-		docs.innerHTML += "<p>You're using <a href='https://github.com/ETHproductions/japt'>the latest version</a> of Japt.</p>";
+		docs.innerHTML += "<p>You're using <a target='_blank' href='https://github.com/ETHproductions/japt'>the latest version</a> of Japt.</p>";
       else
-		docs.innerHTML += "<p>You're using Japt <a href='https://github.com/ETHproductions/japt/tree/" + realv + "'>" + (v.length > 16 ? "commit " + v.slice(0, 7) : "version " + v) + "</a>.</p>";
+		docs.innerHTML += "<p>You're using Japt <a target='_blank' href='https://github.com/ETHproductions/japt/tree/" + realv + "'>" + (v.length > 16 ? "commit " + v.slice(0, 7) : "version " + v) + "</a>.</p>";
       if (realv !== docv)
 		docs.innerHTML += "<p>Note: You're viewing the docs for the latest version of Japt; some features listed may not work.</p>";
       docs.innerHTML += "<a id='toggler' style='text-decoration:underline;cursor:pointer;' onclick='toggleAll(this)'>▼ Expand all</span>";

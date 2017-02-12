@@ -119,17 +119,13 @@
     document.getElementsByTagName('head')[0].appendChild(script);
 	
 	  var docv = realv.length > 16 ? "master" : realv;
+	  var docaddress = 'docs/' + docv + '.html';
 	  document.getElementById("docs").innerHTML = "<p>The docs for " + docv + " could not be loaded.</p>";
 	  
-	  var docaddress = 'docs/' + docv + '.html'
 	  var getdocs = new XMLHttpRequest();
 	  getdocs.addEventListener("load", function () {
-		  if (this.status !== 200) {
-			  if (this.status === 404) document.getElementById('docs').innerHTML = "<p>Could not find docs at " + docaddress + ".</p>";
-			  alert(this.status);
-			  alert(this.responseText);
+		  if (this.status !== 200)
 			  return;
-		  }
 		  document.getElementById('docs').innerHTML = "<h1>Japt Docs</h1>";
 		  if (realv === "master")
 			  document.getElementById('docs').innerHTML += "<p>You're using <a href='https://github.com/ETHproductions/japt'>the latest version</a> of Japt.</p>";

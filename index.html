@@ -118,30 +118,32 @@
     script.setAttribute("src", "https://rawgit.com/ETHproductions/japt/" + realv + "/src/japt-interpreter.js");
     document.getElementsByTagName('head')[0].appendChild(script);
 	
-	  var docv = realv.length > 16 ? "master" : realv;
-	  var docaddress = 'docs/' + docv + '.html';
-	  document.getElementById("docs").innerHTML = "<p>The docs for " + docv + " could not be loaded.</p>";
+    var docs = document.getElementById('docs');
+    var docv = realv.length > 16 ? "master" : realv;
+    var docaddress = 'docs/' + docv + '.html';
+    docs.innerHTML = "<p>The docs for " + docv + " could not be loaded.</p>";
 	  
-	  var getdocs = new XMLHttpRequest();
-	  getdocs.addEventListener("load", function () {
-		  if (this.status !== 200)
-			  return;
-		  document.getElementById('docs').innerHTML = "<h1>Japt Docs</h1>";
-		  if (realv === "master")
-			  document.getElementById('docs').innerHTML += "<p>You're using <a href='https://github.com/ETHproductions/japt'>the latest version</a> of Japt.</p>";
-		  else
-			  document.getElementById('docs').innerHTML += "<p>You're using Japt <a href='https://github.com/ETHproductions/japt/tree/" + realv + "'>" + (v.length > 16 ? "commit " + v.slice(0, 7) : "version " + v) + "</a>.</p>";
-		  if (realv !== docv)
-			  document.getElementById('docs').innerHTML += "<p>Note: You're viewing the latest version of the docs; some features may not work."
-		  document.getElementById('docs').innerHTML += this.responseText
-			  .replace(/^.+?\/\*|\*\/.+?$/g, "")
-			  .replace(/(`{1,3})((?:.(?!\1))*[^`])\1/g, function(_, _, x) {
-			  	  return '<span class="code" style="background-color:#F1E9E5">' + (x.length > 1 ? x.trimRight() : x) + '</span>';
-		  	  })
-			  .replace(/arrow:([a-z-]+)/gi, '<a class="arrow"; id="toggle-$1"; onclick="toggleTab(\'$1\')" style="background-color:#3E2">▼</a>');
-	  });
-	  getdocs.open("GET", docaddress);
-	  getdocs.send();
+    var getdocs = new XMLHttpRequest();
+    getdocs.addEventListener("load", function () {
+      if (this.status !== 200)
+		return;
+      docs.innerHTML = "<h1>Japt Docs</h1>";
+      if (realv === "master")
+		docs.innerHTML += "<p>You're using <a href='https://github.com/ETHproductions/japt'>the latest version</a> of Japt.</p>";
+      else
+		docs.innerHTML += "<p>You're using Japt <a href='https://github.com/ETHproductions/japt/tree/" + realv + "'>" + (v.length > 16 ? "commit " + v.slice(0, 7) : "version " + v) + "</a>.</p>";
+      if (realv !== docv)
+		docs.innerHTML += "<p>Note: You're viewing the docs for the latest version of Japt; some features listed may not work.</p>";
+      docs.innerHTML += "<a id='toggler' style='text-decoration:underline;cursor:pointer;' onclick='toggleAll(this)'>▼ Expand all</span>";
+      docs.innerHTML += this.responseText
+        .replace(/^.+?\/\*|\*\/.+?$/g, "")
+        .replace(/(`{1,3})((?:.(?!\1))*[^`])\1/g, function(_, _, x) {
+          return '<span class="code" style="background-color:#F1E9E5">' + (x.length > 1 ? x.trimRight() : x) + '</span>';
+        })
+        .replace(/arrow:([a-z-]+)/gi, '<a class="arrow"; id="toggle-$1"; onclick="toggleTab(\'$1\')" style="background-color:#3E2">▼</a>');
+    });
+    getdocs.open("GET", docaddress);
+    getdocs.send();
   }
   
   function setup() {
@@ -163,9 +165,19 @@
   
   function toggleTab(tab) {
     var style = document.getElementById(tab).style;
-	if(style.display == "none")style.display="block"; else style.display = "none";
+	if (style.display == "none") style.display = "block"; else style.display = "none";
 	var text = document.getElementById("toggle-" + tab);
-	if(text.innerHTML == "▼")text.innerHTML="▲"; else text.innerHTML = "▼";
+	if (text.innerHTML == "▼") text.innerHTML="▲"; else text.innerHTML = "▼";
+  }
+  
+  function toggleAll(src) {
+    var arrows = document.getElementsByClassName("arrow");
+    for (var i in arrows) {
+      var arrow = arrows[i];
+      if (arrow.innerHTML === src.innerHTML[0])
+        arrow.click();
+    }
+    src.innerHTML = (src.innerHTML[0] === "▼" ? "▲ Collapse all" : "▼ Expand all");
   }
   
   splitAddress();

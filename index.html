@@ -120,8 +120,16 @@
 	
 	  var docv = realv.length > 16 ? "master" : realv;
 	  document.getElementById("docs").innerHTML = "<p>The docs for " + docv + " could not be loaded.</p>";
+	  
+	  var docaddress = '/docs/' + docv + '123.html'
 	  var getdocs = new XMLHttpRequest();
 	  getdocs.addEventListener("load", function () {
+		  if (this.status !== 200) {
+			  if (this.status === 404) document.getElementById('docs').innerHTML = "<p>Could not find docs at " + docaddress + ".</p>";
+			  alert(this.status);
+			  alert(this.responseText);
+			  return;
+		  }
 		  document.getElementById('docs').innerHTML = "<h1>Japt Docs</h1>";
 		  if (realv === "master")
 			  document.getElementById('docs').innerHTML += "<p>You're using <a href='https://github.com/ETHproductions/japt'>the latest version</a> of Japt.</p>";
@@ -136,7 +144,7 @@
 		  	  })
 			  .replace(/arrow:([a-z-]+)/gi, '<a class="arrow"; id="toggle-$1"; onclick="toggleTab(\'$1\')" style="background-color:#3E2">▼</a>');
 	  });
-	  getdocs.open("GET", '/docs/' + docv + '.html');
+	  getdocs.open("GET", docaddress);
 	  getdocs.send();
   }
   

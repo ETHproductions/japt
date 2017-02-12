@@ -121,7 +121,7 @@
 	  var docv = realv.length > 16 ? "master" : realv;
 	  document.getElementById("docs").innerHTML = "<p>The docs for " + docv + " could not be loaded.</p>";
 	  
-	  var docaddress = '/docs/' + docv + '123.html'
+	  var docaddress = '/docs/' + docv + '.html'
 	  var getdocs = new XMLHttpRequest();
 	  getdocs.addEventListener("load", function () {
 		  if (this.status !== 200) {

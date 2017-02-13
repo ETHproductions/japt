@@ -16,9 +16,9 @@
 <h1>&nbsp;&nbsp;Japt Interpreter</h1>
   <div id="left-column" style="float:left">
   <p>
-  &nbsp;&nbsp;Code:
+  &nbsp;&nbsp;Code:&nbsp;(<span id="bytes">0</span> bytes)
   <br>
-  <textarea id="code" title="code" rows="8" placeholder="Enter your code here..." oninput="setTimeout(function(){document.getElementById('js-code').value=(window.Japt||window).transpile(document.getElementById('code').value)},10)"></textarea>
+  <textarea id="code" title="code" rows="8" placeholder="Enter your code here..." oninput="setTimeout(update,10)"></textarea>
   <br>
   &nbsp;&nbsp;Input:
   <br>
@@ -152,11 +152,15 @@
 	if(typeof code !== "undefined") document.getElementById("code").value = code;
     if(typeof input !== "undefined") document.getElementById("input").value = input;
     if(window.Japt) {
-	  if(typeof code !== "undefined") document.getElementById("js-code").value = Japt.transpile(code);
       Japt.stdout = document.getElementById("output");
       Japt.stderr = document.getElementById("stderr");
 	}
-    else if(window.transpile)document.getElementById("js-code").value = transpile(code);
+    update();
+  }
+  
+  function update() {
+    document.getElementById('bytes').innerHTML = document.getElementById('code').value.length;
+    document.getElementById('js-code').value = (window.Japt || window).transpile(document.getElementById('code').value);
   }
   
   function getURL() {

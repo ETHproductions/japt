@@ -31,7 +31,7 @@
   <br>
   <textarea id="js-code" rows="8" placeholder="Transpiled code appears here." readonly ></textarea>
   <br>
-  &nbsp;&nbsp;Output:
+  &nbsp;&nbsp;Output:&nbsp;<span id="time"></span>
   <br>
   <textarea id="output" placeholder="Output appears here." rows="6" readonly ></textarea>
   </p>
@@ -42,7 +42,7 @@
   <input id="safe_mode" type="checkbox">&nbsp;
   <br>
   <br>
-  <input id="run" type="button" value="Run" onclick="if(window.Japt)Japt.stdout=document.getElementById('output'),Japt.stderr=document.getElementById('stderr'),Japt.run(document.getElementById('code').value,document.getElementById('input').value,document.getElementById('safe_mode').checked,null,function(x){if(Japt.implicit_output)Japt.output(x)},function(x){Japt.error(x)});else run();">
+  <input id="run" type="button" value="Run" onclick="onrun()">
   <input id="stop" type="button" value="Stop" onclick="(Japt.interrupt||Japt.stop)()">
   <input id="clear" type="button" value="Clear" onclick="Japt.clear_output()">
   <br>
@@ -117,7 +117,7 @@
 		}
 	}
     var script = document.createElement('script');
-    script.setAttribute("src", "https://rawgit.com/ETHproductions/japt/" + realv + "/src/japt-interpreter.js");
+    script.setAttribute("src",  "/src/japt-interpreter.js");
     document.getElementsByTagName('head')[0].appendChild(script);
 	
     var docs = document.getElementById('docs');
@@ -184,6 +184,24 @@
         arrow.click();
     }
     src.innerHTML = (src.innerHTML[0] === "▼" ? "▲ Collapse all" : "▼ Expand all");
+  }
+  
+  function onrun() {
+    if (window.Japt) {
+      Japt.stdout = document.getElementById('output');
+      Japt.stderr = document.getElementById('stderr');
+      Japt.run(
+        document.getElementById('code').value,
+        document.getElementById('input').value,
+        document.getElementById('safe_mode').checked,
+        null,
+        function(result, compiletime, runtime) {
+          if (Japt.implicit_output) Japt.output(result);
+          document.getElementById('time').innerHTML = '(took ' + (runtime / 1e3).toFixed(3) + ' seconds)';
+        },
+        function(x) { Japt.error(x); }
+      );
+    } else run();
   }
   
   splitAddress();

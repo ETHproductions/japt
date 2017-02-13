@@ -114,6 +114,11 @@ var pairs_2_0 = {
 	"\xD0": "$new Date$(" // Ð - 208
 };
 
+var pcache = {};
+function perm(x,l){if(l===0)return[[]];if(x.length<2)return[x];var id=l+';'+str(x);if(pcache[id])return pcache[id];var a=[];for(var i in x)if(+i===x.indexOf(x[i]))perm([].concat(x.slice(0,i),x.slice(+i+1)),l-1).map(function(b){a.push([x[i]].concat(b))});return pcache[id]=a}
+var ccache = {};
+function comb(x,l){if(l===0)return[[]];if(x.length<1&&l)return[];var id=l+';'+str(x);if(ccache[id])return ccache[id];var a=[];for(var i in x)if(+i===x.indexOf(x[i]))comb(x.slice(+i+1),l-1).map(function(b){a.push([x[i]].concat(b))});if(!l)a.push([]);return ccache[id]=a}
+
 String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)};
 df(String,'a',function(x){return this.lastIndexOf(x)});
 df(String,'b',function(x){return this.indexOf(x)});
@@ -182,6 +187,8 @@ df(Array,'y',function(){var t="string"==typeof this[0],n=t?this.map(function(t){
 df(Array,'z',function(n){if((typeof n)!="number")n=1;n%=4;if(n<0)n+=4;var f=function(l){return l.w()};return n==1?this.y().map(f):n==2?this.w().map(f):n==3?this.map(f).y():this}); // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
 df(Array,'\xE0',function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)return;if(z.length===0){a.push(y)}else{var n=y.slice(0);n.push(z[0]);f(n,z.slice(1),a);f(y,z.slice(1),a)}return a};return f([],this,[]).filter(function(z){return x?z.length===x:1})});
 df(Array,'\xE1',function(x){var p=[],u=[],f=function(z){var c,i;for(i=0;i<z.length;i++){c=z.splice(i,1)[0];u.push(c);if(z.length===0)p.push(u.slice());f(z);z.splice(i,0,c);u.pop()}return p};var l;return f(this).map(function(z){return z.slice(0,x||z.length)})["\xE2"]()});
+//df(Array,'\xE0',function(x){x=fb(x,NaN);return comb(this,x)});
+//df(Array,'\xE1',function(x){x=fb(x,1/0);return perm(this,x)});
 df(Array,'\xE2',function(){var u={},a=[];for(var i of this)if(!u.hasOwnProperty(i))u[i]=1,a.push(i);return a});
 df(Array,'\xE3',function(x,y){x=fb(x,2);var a=[];if(id(y))a[0]=this.slice(0,x-1),a[0].unshift(y);for(var i=0;i<=this.length-x;i++)a.push(this.slice(i,i+x));return a});
 df(Array,'\xE4',function(x,y){x=functify(x);return this['\xE3'](2,y).map(function(z){return z.reduce(x)})});
@@ -500,6 +507,7 @@ var Japt = {
 	implicit_output: true,
 	
 	run: function(code, input, safe, before, onsuccess, onerror) {
+		var times = [+new Date];
 		Japt.clear_output();
 	
 		A = 10,
@@ -548,6 +556,7 @@ var Japt = {
 			return;
 		}
 		if (before) before(code);
+		times.push(+new Date);
 		try {
 			program = function program(U,V,W,X,Y,Z) {
 				if (!program.cache)
@@ -568,8 +577,9 @@ var Japt = {
 				};
 				return program.cache[id] = eval(code);
 			};
-			code = program(U,V,W,X,Y,Z);
-			if (onsuccess) onsuccess(code);
+			var result = program(U,V,W,X,Y,Z);
+			times.push(+new Date);
+			if (onsuccess) onsuccess(result, times[1] - times[0], times[2] - times[1]);
 		} catch (e) {
 			if (onerror) onerror(e);
 		}

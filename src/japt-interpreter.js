@@ -54,6 +54,7 @@ var pairs_1_3 = {
 	"\xC2": "~~",   // Â - 194
 	"\xC3": "} ",   // Ã - 195
 	"\xC4": "+1",   // Ä - 196
+	"\xC5": "s1 ",  // Å - 197
 	"\xD0": "$new Date$(", // Ð - 208
 	"\xD7": "r*1 ", // × - 215
 	"\xDF": "$rp$(" // ß - 223
@@ -223,6 +224,7 @@ df(Number,'y',function(){noFunc('N.y')});
 df(Number,'z',function(){noFunc('N.z')});
 df(Number,'\xE0',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
 df(Number,'\xE1',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return n.l();return n["\xE0"]()*x.l()});
+df(Number,'\xE2',function(){if(this%1)return[];var n=Math.abs(this);var a=[1];for(var i=2;i<Math.sqrt(n);++i)if(n%i===0)a.push(i,n/i);if(i*i===n)a.push(i);return a.n()});
 df(Number,'\xEC',function(x){var n=Math.min(Math.floor(this),Math.pow(2,53));x=Math.floor(fb(x,10));if(x<2)return[];for(var a=[];n>0;n=Math.floor(n/x))a.unshift(n%x);return a});
 df(Number,'\xF2',function(x,y,f){return this.o(x,y,f,1)});
 df(Number,'\xF3',function(x,y,f){return this.o(x,y,f,2)});

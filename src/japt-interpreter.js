@@ -507,7 +507,6 @@ var Japt = {
 	implicit_output: true,
 	
 	run: function(code, input, safe, before, onsuccess, onerror) {
-		var times = [+new Date];
 		Japt.clear_output();
 	
 		A = 10,
@@ -556,7 +555,6 @@ var Japt = {
 			return;
 		}
 		if (before) before(code);
-		times.push(+new Date);
 		try {
 			program = function program(U,V,W,X,Y,Z) {
 				if (!program.cache)
@@ -578,8 +576,7 @@ var Japt = {
 				return program.cache[id] = eval(code);
 			};
 			var result = program(U,V,W,X,Y,Z);
-			times.push(+new Date);
-			if (onsuccess) onsuccess(result, times[1] - times[0], times[2] - times[1]);
+			if (onsuccess) onsuccess(result);
 		} catch (e) {
 			if (onerror) onerror(e);
 		}

@@ -187,6 +187,7 @@
   }
   
   function onrun() {
+    var start;
     if (window.Japt) {
       Japt.stdout = document.getElementById('output');
       Japt.stderr = document.getElementById('stderr');
@@ -194,14 +195,20 @@
         document.getElementById('code').value,
         document.getElementById('input').value,
         document.getElementById('safe_mode').checked,
-        null,
-        function(result, compiletime, runtime) {
+        function() {
+			start = new Date;
+		},
+        function(result) {
           if (Japt.implicit_output) Japt.output(result);
-          document.getElementById('time').innerHTML = '(took ' + (runtime / 1e3).toFixed(3) + ' seconds)';
+          document.getElementById('time').innerHTML = '(took ' + ((new Date - start) / 1e3).toFixed(3) + ' seconds)';
         },
         function(x) { Japt.error(x); }
       );
-    } else run();
+    } else {
+      start = new Date;
+      run();
+      document.getElementById('time').innerHTML = '(took ' + ((new Date - start) / 1e3).toFixed(3) + ' seconds)';
+    }
   }
   
   splitAddress();

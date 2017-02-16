@@ -120,6 +120,7 @@ var ccache = {};
 function comb(x,l){if(l===0)return[[]];if(x.length<1&&l)return[];var id=l+';'+str(x);if(ccache[id])return ccache[id];var a=[];for(var i in x)if(+i===x.indexOf(x[i]))comb(x.slice(+i+1),l-1).map(function(b){a.push([x[i]].concat(b))});if(!l)a.push([]);return ccache[id]=a}
 
 String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)};
+Array.prototype.contains = Array.prototype.contains || function(x){return-1<this.indexOf(x)};
 df(String,'a',function(x){return this.lastIndexOf(x)});
 df(String,'b',function(x){return this.indexOf(x)});
 df(String,'c',function(x){return this.charCodeAt(x)});
@@ -434,6 +435,7 @@ var Japt = {
 	evalInput: function(input) {
 		if (input.constructor === Array) return input;
 		var input_mode = "next", current, processed = [], level = 0;
+		processed.flags = [];
 		input = (input + " ").split("");
 		for(var index = 0; index < input.length; ++index) {
 			char = input[index];
@@ -451,9 +453,23 @@ var Japt = {
 						level = 1;
 					}
 					break;
+				case "flag":
+					if (/\S/.test(char)) {
+						current += char;
+					} else {
+						for (var i = 0; i < current.length; i++) {
+							processed.flags.push("-" + current[i]);
+						}
+						current = undefined;
+						input_mode = "next";
+					}
+					break;
 				case "number":
 					if (/[0-9.]/.test(char)) {
 						current += char;
+					} else if (current == "-" && /\S/.test(char)) {
+						input_mode = "flag";
+						current = char;
 					} else {
 						processed.push(+current);
 						current = undefined;
@@ -547,7 +563,7 @@ var Japt = {
 		Y = 4 in N ? N[4] : 0,
 		Z = 5 in N ? N[5] : 0;
 		
-		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.intervals = [];
+		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.intervals = [], Japt.flags = N.flags;
 		
 		code = Japt.transpile(code);
 		if (!Japt.is_safe) {
@@ -576,6 +592,12 @@ var Japt = {
 				return program.cache[id] = eval(code);
 			};
 			var result = program(U,V,W,X,Y,Z);
+			
+			if (Japt.flags.contains('-P') && result instanceof Array) result = result.join("");
+			else if (Japt.flags.contains('-Q')) result = JSON.stringify(result);
+			else if (Japt.flags.contains('-R') && result instanceof Array) result = result.join("\n");
+			else if (Japt.flags.contains('-S') && result instanceof Array) result = result.join(" ");
+			
 			if (onsuccess) onsuccess(result);
 		} catch (e) {
 			if (onerror) onerror(e);

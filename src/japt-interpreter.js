@@ -435,7 +435,7 @@ var Japt = {
 	evalInput: function(input) {
 		if (input.constructor === Array) return input;
 		var input_mode = "next", current, processed = [], level = 0;
-		processed.flags = [];
+		processed.flags = {};
 		input = (input + " ").split("");
 		for(var index = 0; index < input.length; ++index) {
 			char = input[index];
@@ -457,9 +457,14 @@ var Japt = {
 					if (/\S/.test(char)) {
 						current += char;
 					} else {
+						var flag = "", value = true;
 						for (var i = 0; i < current.length; i++) {
-							processed.flags.push("-" + current[i]);
+							if (/[^\de.+-]/.test(current[i])) flags[flag = current[i]] = value = true;
+							else if (value === true) value = current[i];
+							else value += current[i];
+							processed.flags[current[i]] = value;
 						}
+						flags[flag] = value;
 						current = undefined;
 						input_mode = "next";
 					}
@@ -593,10 +598,10 @@ var Japt = {
 			};
 			var result = program(U,V,W,X,Y,Z);
 			
-			if (Japt.flags.contains('-P') && result instanceof Array) result = result.join("");
-			else if (Japt.flags.contains('-Q')) result = JSON.stringify(result);
-			else if (Japt.flags.contains('-R') && result instanceof Array) result = result.join("\n");
-			else if (Japt.flags.contains('-S') && result instanceof Array) result = result.join(" ");
+			if (Japt.flags.P && result instanceof Array) result = result.join("");
+			else if (Japt.flags.Q) result = JSON.stringify(result);
+			else if (Japt.flags.R && result instanceof Array) result = result.join("\n");
+			else if (Japt.flags.S && result instanceof Array) result = result.join(" ");
 			
 			if (onsuccess) onsuccess(result);
 		} catch (e) {

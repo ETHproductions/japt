@@ -399,6 +399,12 @@
 <h2>arrow:flags Flags</h2>
 <div id="flags" style="display:none">
 <p>Flags are inserted directly into the input box. You can use multiple flags at once, e.g. `-Prw`.</p>
+<h3>`-m`</h3>
+<p>Returns the input with each item `U` mapped through the program. If the input is a number, this turns it into a range first.</p>
+<h3>`-f`</h3>
+<p>Returns the items `U` in the input that return truthily when run through the program. If the input is a number, this turns it into a range first.</p>
+<h3>`-g`</h3>
+<p>Returns the first item in the output. If given a number (`-g3`), returns the `n`th item.</p>
 <h3>`-P`</h3>
 <p>If the output is an array, outputs with no separator (i.e. joined with `P`).</p>
 <h3>`-Q`</h3>

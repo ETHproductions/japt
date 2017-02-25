@@ -459,12 +459,12 @@ var Japt = {
 					} else {
 						var flag = "", value = true;
 						for (var i = 0; i < current.length; i++) {
-							if (/[^\de.+-]/.test(current[i])) flags[flag = current[i]] = value = true;
+							if (/[^\de.+-]/.test(current[i])) processed.flags[flag = current[i]] = value = true;
 							else if (value === true) value = current[i];
 							else value += current[i];
-							processed.flags[current[i]] = value;
+							processed.flags[flag] = value;
 						}
-						flags[flag] = value;
+						processed.flags[flag] = value;
 						current = undefined;
 						input_mode = "next";
 					}
@@ -529,7 +529,8 @@ var Japt = {
 	
 	run: function(code, input, safe, before, onsuccess, onerror) {
 		Japt.clear_output();
-	
+		
+		input = Japt.evalInput(input);
 		A = 10,
 		B = 11,
 		C = 12,
@@ -543,7 +544,7 @@ var Japt = {
 		_K = undefined,
 		L = 100,
 		M = Math,
-		N = Japt.evalInput(input),
+		N = input.slice(),
 		O = {
 			a: function() { if(!isnode) alert.apply(window, arguments); },
 			l: function() { console.log.apply(console, arguments); },
@@ -568,7 +569,7 @@ var Japt = {
 		Y = 4 in N ? N[4] : 0,
 		Z = 5 in N ? N[5] : 0;
 		
-		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.intervals = [], Japt.flags = N.flags;
+		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.intervals = [], Japt.flags = input.flags;
 		
 		code = Japt.transpile(code);
 		if (!Japt.is_safe) {
@@ -596,8 +597,23 @@ var Japt = {
 				};
 				return program.cache[id] = eval(code);
 			};
-			var result = program(U,V,W,X,Y,Z);
+			var result;
 			
+			if (Japt.flags.m || Japt.flags.f) {
+				result = [];
+				U = typeof U === "number" ? U.o() : U.s();
+				for (var i = 0; i < U.length; i++) {
+					var temp = program(U[i],fb(N[1],i),fb(N[2],U),X,Y,Z)
+					if (!Japt.flags.f || temp) result.push(Japt.flags.m ? temp : U[i]);
+				}
+				if (typeof U === "string") {
+					result = result.q();
+				}
+			} else {
+				result = program(U,V,W,X,Y,Z);
+			}
+			
+			if (Japt.flags.hasOwnProperty('g')) result = result.g(Japt.flags.g === true ? 0 : Japt.flags.g); 
 			if (Japt.flags.P && result instanceof Array) result = result.join("");
 			else if (Japt.flags.Q) result = JSON.stringify(result);
 			else if (Japt.flags.R && result instanceof Array) result = result.join("\n");

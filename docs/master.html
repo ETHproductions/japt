@@ -400,11 +400,25 @@
 <div id="flags" style="display:none">
 <p>Flags are inserted directly into the input box. You can use multiple flags at once, e.g. `-Prw`.</p>
 <h3>`-m`</h3>
-<p>Returns the input with each item `U` mapped through the program. If the input is a number, this turns it into a range first.</p>
+<p>Map; runs the program on each item in the input, returning an array of the results. If the input is a number, it's turned into a range first; if the input is a string, it's split into chars beforehand and joined again afterwards.</p>
 <h3>`-f`</h3>
-<p>Returns the items `U` in the input that return truthily when run through the program. If the input is a number, this turns it into a range first.</p>
+<p>Filter; runs the program on each item in the input, returning an array of only the items that return a truthy value. If the input is a number, it's turned into a range first; if the input is a string, it's split into chars beforehand and joined again afterwards.</p>
+<h3>`-æ`</h3>
+<p>A shortcut for `-fg`; runs the program on each item, returning the first one that returns a truthy value.</p>
+<h3>`-d`</h3>
+<p>Some; runs the program on each item, returning `true` if any returns a truthy value, `false` otherwise.</p>
+<h3>`-e`</h3>
+<p>Every; runs the program on each item, returning `false` if any returns a falsy value, `true` otherwise.</p>
 <h3>`-g`</h3>
 <p>Returns the first item in the output. If given a number (`-g3`), returns the `n`th item.</p>
+<h3>`-h`</h3>
+<p>Returns the last item in the output.</p>
+<h3>`-!`</h3>
+<p>Returns the boolean NOT of the output: `true` if the output is falsy; `false` otherwise.</p>
+<h3>`-¡`</h3>
+<p>Converts to boolean: returns `true` if the output is truthy; `false` otherwise.</p>
+<h3>`-N`</h3>
+<p>Converts the output to a number.</p>
 <h3>`-P`</h3>
 <p>If the output is an array, outputs with no separator (i.e. joined with `P`).</p>
 <h3>`-Q`</h3>

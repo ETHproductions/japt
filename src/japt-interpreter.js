@@ -459,7 +459,7 @@ var Japt = {
 					} else {
 						var flag = "", value = true;
 						for (var i = 0; i < current.length; i++) {
-							if (/[^\de.+-]/.test(current[i])) processed.flags[flag = current[i]] = value = true;
+							if (/[^\de.+-]/.test(current[i]) || (current[i] === "e" && flag === "")) processed.flags[flag = current[i]] = value = true;
 							else if (value === true) value = current[i];
 							else value += current[i];
 							processed.flags[flag] = value;
@@ -599,21 +599,55 @@ var Japt = {
 			};
 			var result;
 			
-			if (Japt.flags.m || Japt.flags.f) {
-				result = [];
+			if (Japt.flags.m || Japt.flags.d || Japt.flags.e || Japt.flags.f || Japt.flags.æ) {
+				if (Japt.flags.d) result = false;
+				else if (Japt.flags.e) result = true;
+				else if (!Japt.flags.æ) result = [];
 				U = typeof U === "number" ? U.o() : U.s();
 				for (var i = 0; i < U.length; i++) {
-					var temp = program(U[i],fb(N[1],i),fb(N[2],U),X,Y,Z)
-					if (!Japt.flags.f || temp) result.push(Japt.flags.m ? temp : U[i]);
+					var temp = program(U[i],fb(N[1],i),fb(N[2],U),X,Y,Z);
+					if (Japt.flags.æ) {
+						if (temp) {
+							result = Japt.flags.m ? temp : U[i];
+							break;
+						}
+					}
+					else if (Japt.flags.d) {
+						if (temp) {
+							result = true;
+							break;
+						}
+					}
+					else if (Japt.flags.e) {
+						if (!temp) {
+							result = false;
+							break;
+						}
+					}
+					else if (Japt.flags.f) {
+						if (temp) {
+							result.push(Japt.flags.m ? temp : U[i]);
+						}
+					}
+					else {
+						result.push(temp);
+					}
 				}
-				if (typeof U === "string") {
+				if (!(Japt.flags.æ || Japt.flags.d || Japt.flags.e) && typeof U === "string") {
 					result = result.q();
 				}
 			} else {
 				result = program(U,V,W,X,Y,Z);
 			}
 			
-			if (Japt.flags.hasOwnProperty('g')) result = result.g(Japt.flags.g === true ? 0 : Japt.flags.g); 
+			if (Japt.flags.hasOwnProperty('h')) result = result.g(-1);
+			else if (Japt.flags.hasOwnProperty('g')) result = result.g(Japt.flags.g === true ? 0 : Japt.flags.g);
+			
+			if (Japt.flags.hasOwnProperty('!')) result = !result;
+			else if (Japt.flags.hasOwnProperty('¡')) result = !!result;
+			
+			if (Japt.flags.N) result = +result;
+			
 			if (Japt.flags.P && result instanceof Array) result = result.join("");
 			else if (Japt.flags.Q) result = JSON.stringify(result);
 			else if (Japt.flags.R && result instanceof Array) result = result.join("\n");

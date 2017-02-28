@@ -653,6 +653,8 @@ var Japt = {
 			else if (Japt.flags.R && result instanceof Array) result = result.join("\n");
 			else if (Japt.flags.S && result instanceof Array) result = result.join(" ");
 			
+			if (Japt.flags.x) result = result.x();
+			
 			if (onsuccess) onsuccess(result);
 		} catch (e) {
 			if (onerror) onerror(e);

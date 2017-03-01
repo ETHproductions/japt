@@ -236,12 +236,16 @@
 <p>Takes `this.ã()` and maps each item `[x,y]` with `f(x,y,x+y)`. If `a` is specified, it is concatenated to the beginning beforehand.</p>
 <h3>`.å(f)`</h3>
 <p>Cumulative reduce; like `q r`, but returns an array of each intermediate value.</p>
+<h3>`.ç(s=" ")`</h3>
+<p>Replaces each char in `this` with `s`.</p>
 <h3>`.è(r/s)`</h3>
 <p>Returns the number of matches of `r/s` in `this`.</p>
 <h3>`.é(n=1)`</h3>
 <p>Rotates `this` `n` chars to the right.</p>
 <h3>`.ê()`</h3>
 <p>Mirrors `this` at its last char; `"abc"ê` becomes `"abcba"`.</p>
+<h3>`.î(s=" ")`</h3>
+<p>Repeats `s` until it reaches `this.length`. `"abcde"î"12" -> "12121"`</p>
 </div>
 
 <h2>arrow:array-funcs Array functions</h2>
@@ -330,6 +334,8 @@
 <p>Pairs each item in `this` with the corresponding item in `a`. If no `a` is given, uses the index instead.</p>
 <h3>`.í(a?,f)`</h3>
 <p>Same as above, but maps each pair of items through `f`.</p>
+<h3>`.î(a=[0])`</h3>
+<p>Repeats `a` until it reaches `this.length`. `[0,1,2,3,4]î[1,2] -> [1,2,1,2,1]`</p>
 <h3>`.ñ(f?)`</h3>
 <p>Sorts `this` as if each value has been run through `f`.</p>
 </div>

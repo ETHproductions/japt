@@ -736,8 +736,8 @@ var Japt = {
 						code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
 					}
 					else {
-						if (newcode === "" && /[a-zà-ÿ*/%^|&<=>?]/.test(char))
-							newcode = "U";
+						if ((newcode === "" || newcode.slice(-1) === ";") && /[a-zà-ÿ*/%^|&<=>?]/.test(char))
+							newcode += "U";
 						newcode += char;
 					}
 				}

@@ -441,6 +441,7 @@ var Japt = {
 		if (input.constructor === Array) return input;
 		var input_mode = "next", current, processed = [], level = 0;
 		processed.flags = {};
+		if (!input) return processed;
 		input = (input + " ").split("");
 		for(var index = 0; index < input.length; ++index) {
 			char = input[index];

@@ -441,6 +441,7 @@ var Japt = {
 		if (input.constructor === Array) return input;
 		var input_mode = "next", current, processed = [], level = 0;
 		processed.flags = {};
+		if (!input) return processed;
 		input = (input + " ").split("");
 		for(var index = 0; index < input.length; ++index) {
 			char = input[index];
@@ -574,7 +575,7 @@ var Japt = {
 		Y = 4 in N ? N[4] : 0,
 		Z = 5 in N ? N[5] : 0;
 		
-		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.intervals = [], Japt.flags = input.flags;
+		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.intervals = [], Japt.flags = input.flags || {};
 		
 		code = Japt.transpile(code);
 		if (!Japt.is_safe) {

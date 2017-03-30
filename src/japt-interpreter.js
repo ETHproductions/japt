@@ -123,8 +123,8 @@ function comb(x,l){if(l===0)return[[]];if(x.length<1&&l)return[];var id=l+';'+st
 
 String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)};
 Array.prototype.contains = Array.prototype.contains || function(x){return-1<this.indexOf(x)};
-df(String,'a',function(x){return this.lastIndexOf(x)});
-df(String,'b',function(x){return this.indexOf(x)});
+df(String,'a',function(x,y){return typeof x=="function"||typeof y!="undefined"?this.q().a(x,y):this.lastIndexOf(x)});
+df(String,'b',function(x,y){return typeof x=="function"||typeof y!="undefined"?this.q().b(x,y):this.indexOf(x)});
 df(String,'c',function(x){return this.charCodeAt(x)});
 df(String,'d',function(x){
 	if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
@@ -164,8 +164,8 @@ df(String,'\xEA',function(){return this+this.slice(0,-1).w();});
 df(String,'\xEB',function(x,y){return this.q()['\xEB'](x,y).q()});
 df(String,'\xEE',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]});});
 
-df(Array,'a',function(x){return(typeof x)=="function"?this.map(function(a,b,c){return!!x(a,b,c)}).lastIndexOf(true):this.lastIndexOf(x)});
-df(Array,'b',function(x){return(typeof x)=="function"?this.map(function(a,b,c){return!!x(a,b,c)}).indexOf(true):this.indexOf(x)});
+df(Array,'a',function(x){if(typeof y!="undefined")x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).lastIndexOf(true):this.lastIndexOf(x)});
+df(Array,'b',function(x){if(typeof y!="undefined")x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).indexOf(true):this.indexOf(x)});
 df(Array,'c',function(x){if(id(x))return this.concat(x);var f=[];for(var i of this){if(i instanceof Array)for(var j of i.c())f.push(j);else f.push(i);}return f});
 df(Array,'d',function(x,y){x=fb(x,function(y){return!!y});x=functify(x,y);return this.some(function(a,b,c){return x(a,fb(y,b),c)})});
 df(Array,'e',function(x,y){x=fb(x,function(y){return!!y});x=functify(x,y);return this.every(function(a,b,c){return x(a,fb(y,b),c)})});

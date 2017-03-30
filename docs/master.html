@@ -168,8 +168,12 @@
 <div id="string-funcs" style="display:none">
 <h3>`.a(s)`</h3>
 <p>Returns the last index of `s` in `this`.</p>
+<h3>`.a(f)`</h3>
+<p>Returns the last index `i` where `f(this[i])` returns truthily.</p>
 <h3>`.b(s)`</h3>
-<p>Returns the index of `s` in `this`.</p>
+<p>Returns the first index of `s` in `this`.</p>
+<h3>`.b(f)`</h3>
+<p>Returns the first index `i` where `f(this[i])` returns truthily.</p>
 <h3>`.c(n=0)`</h3>
 <p>Returns the char-code at index `n` in `this`.</p>
 <h3>`.d(s)`</h3>
@@ -251,9 +255,9 @@
 <h2>arrow:array-funcs Array functions</h2>
 <div id="array-funcs" style="display:none">
 <h3>`.a(a)`</h3>
-<p>Returns the last index of `a` in `this`.</p>
+<p>Returns the last index of `a` in `this`. If `a` is a function, returns the last index `i` where `a(this[i])` returns truthily.</p>
 <h3>`.b(a)`</h3>
-<p>Returns the index of `a` in `this`.</p>
+<p>Returns the first index of `a` in `this`. If `a` is a function, returns the first index `i` where `a(this[i])` returns truthily.</p>
 <h3>`.c()`</h3>
 <p>Flattens `this`, i.e. expands all sub-arrays into the main array.</p>
 <h3>`.c(a)`</h3>

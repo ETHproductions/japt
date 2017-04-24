@@ -414,14 +414,20 @@
 <p>Returns the number of permutations of `[1..this]`. If `n` is specified, returns the number of permutations of length `n`.</p>
 <h3>`.â(a?)`</h3>
 <p>Returns all integer divisors of `this`. If `a` is truthy, doesn't include `this`.</p>
+<h3>`.ç(s=" ")`</h3>
+<p>Repeats `s` `this` times.</p>
 <h3>`.ì(n=10)`</h3>
-<p>Returns an array of the base-`n` digits of `this`. Works for all `n` greater than 2.</p>
+<p>Returns an array of the base-`n` digits of `this`. Works for all integer `n` greater or equal to than 2.</p>
+<h3>`.î(s=" ")`</h3>
+<p>Repeats `s` until it reaches length `this`. `5î"ab" -> "ababa"`</p>
 <h3>`.ò(n,n=1)`</h3>
 <p>Like `o`, but inclusive (creates the range `[this..n]` instead of `[this..n)`).</p>
 <h3>`.ó(n,n=1)`</h3>
 <p>Like `o`, but creates the range `[this..this+n)` instead of `[this..n)`.</p>
 <h3>`.ô(n,n=1)`</h3>
 <p>Like `ó`, but inclusive.</p>
+<h3>`.õ(n=1,n=1)`</h3>
+<p>Like `o`, but creates the range `[n₁...this]`, and the range is not reversed if `this` is less than `n₁`.</p>
 </div>
 
 <h2>arrow:function-funcs Function functions</h2>

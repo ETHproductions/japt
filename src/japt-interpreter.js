@@ -123,8 +123,8 @@ function comb(x,l){if(l===0)return[[]];if(x.length<1&&l)return[];var id=l+';'+st
 
 String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)};
 Array.prototype.contains = Array.prototype.contains || function(x){return-1<this.indexOf(x)};
-df(String,'a',function(x,y){return typeof x=="function"||typeof y!="undefined"?this.q().a(x,y):this.lastIndexOf(x)});
-df(String,'b',function(x,y){return typeof x=="function"||typeof y!="undefined"?this.q().b(x,y):this.indexOf(x)});
+df(String,'a',function(x,y){return typeof x=="function"||id(y)?this.q().a(x,y):this.lastIndexOf(x)});
+df(String,'b',function(x,y){return typeof x=="function"||id(y)?this.q().b(x,y):this.indexOf(x)});
 df(String,'c',function(x){return this.charCodeAt(x)});
 df(String,'d',function(x){
 	if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
@@ -164,8 +164,8 @@ df(String,'\xEA',function(){return this+this.slice(0,-1).w();});
 df(String,'\xEB',function(x,y){return this.q()['\xEB'](x,y).q()});
 df(String,'\xEE',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]});});
 
-df(Array,'a',function(x,y){if(typeof y!="undefined")x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).lastIndexOf(true):this.lastIndexOf(x)});
-df(Array,'b',function(x,y){if(typeof y!="undefined")x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).indexOf(true):this.indexOf(x)});
+df(Array,'a',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).lastIndexOf(true):this.lastIndexOf(x)});
+df(Array,'b',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).indexOf(true):this.indexOf(x)});
 df(Array,'c',function(x){if(id(x))return this.concat(x);var f=[];for(var i of this){if(i instanceof Array)for(var j of i.c())f.push(j);else f.push(i);}return f});
 df(Array,'d',function(x,y){x=fb(x,function(y){return!!y});x=functify(x,y);return this.some(function(a,b,c){return x(a,fb(y,b),c)})});
 df(Array,'e',function(x,y){x=fb(x,function(y){return!!y});x=functify(x,y);return this.every(function(a,b,c){return x(a,fb(y,b),c)})});
@@ -238,10 +238,13 @@ df(Number,'z',function(){noFunc('N.z')});
 df(Number,'\xE0',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
 df(Number,'\xE1',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return n.l();return n["\xE0"]()*x.l()});
 df(Number,'\xE2',function(x){if(this%1)return[];var n=Math.abs(this);var a=[];for(var i=1;i<Math.sqrt(n);++i)if(n%i===0)a.push(i,n/i);if(i*i===n)a.push(i);a.n();if(x)a.pop();return a});
+df(Number,'\xE7',function(x){x=fb(x," ")+"";return x.p(this)});
 df(Number,'\xEC',function(x){var n=Math.min(Math.floor(this),Math.pow(2,53));x=Math.floor(fb(x,10));if(x<2)return[];for(var a=[];n>0;n=Math.floor(n/x))a.unshift(n%x);return a});
+df(Number,'\xEE',function(x){return" ".p(this)['\xEE'](x)});
 df(Number,'\xF2',function(x,y,f){return this.o(x,y,f,1)});
 df(Number,'\xF3',function(x,y,f){return this.o(x,y,f,2)});
 df(Number,'\xF4',function(x,y,f){return this.o(x,y,f,3)});
+df(Number,'\xF5',function(x,y,f){var q,z,n=+this,r=[],i=0;if(!(1/n))return[];if(typeof x==="function")f=x,x=1;if(typeof x=="string")f=functify(x,y),z=y,x=y=1;x=fb(x,1);y=fb(y,1);if(y===0)return[];if(y<0)y=-y,q=x,x=n,n=q;if(x<n)for(;x<=n;x+=y)r.push(x);else if(x>n)for(;x>=n;x-=y)r.push(x);else r=[x];return typeof f==="function"?r.map(function(a,b,c){return f(a,fb(z,b),c)}):r});
 
 // Shorter Date properties. All but k accept an argument: 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
 function ts(x){return["get","set","getUTC","setUTC"][x||0]}
@@ -921,10 +924,10 @@ var Japt = {
 				outp += "\""+code.slice(i,i+2)+"\"";
 				++i;
 			}
-			else if (outp.slice(-2) === "(!" && isChar(char, "+\\-*%\\^&|<>") && !isChar(code[i+1],"+\\-=")) {
+			else if (outp.slice(-2) === "(!" && isChar(char, "+\\-*%\\^&|<>.") && !isChar(code[i+1],"+\\-=")) {
 				outp = outp.slice(0,-1) + "\"!"+char+"\"";
 			}
-			else if (outp.slice(-1) === "(" && isChar(char, "+\\-*%\\^&|<>") && !isChar(code[i+1],"+\\-=")) {
+			else if (outp.slice(-1) === "(" && isChar(char, "+\\-*%\\^&|<>.") && !isChar(code[i+1],"+\\-=")) {
 				outp += "\""+char+"\"";
 			}
 			else {

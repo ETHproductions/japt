@@ -704,8 +704,8 @@ var Japt = {
 					}
 					else if (char === "\\") {
 						if (Japt.use_safe) Japt.is_safe = false;
-						newcode += "$" + Japt.snippets.length + "$";
 						Japt.snippets.push(code[++i]);
+						newcode += "$" + (extrabraces[0] > 0 ? Japt.snippets.pop() : Japt.snippets.length - 1) + "$";
 					}
 					else if (isChar(char, "\"`")) {
 						level++;

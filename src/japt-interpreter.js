@@ -730,7 +730,7 @@ var Japt = {
 						}
 					}
 					else if (char === "#") {
-						newcode += code[++i].charCodeAt(0);
+						newcode += (code[++i] || "\0").charCodeAt(0);
 					}
 					else if (char === "{") {
 						++extrabraces[0];
@@ -837,11 +837,17 @@ var Japt = {
 		outp = "";
 		
 		for (i = 0; i < code.length; ++i) {
-			var char = code[i];
+			var char = code[i],
+				opMatch = code.slice(i).match(/^(===|!==|==|!=|>>>|>>|<<|&&|\|\||>=|<=|\+(?!\+)|-(?!-)|\.(?!\d)|[*%^&|<>,])(?!=)/),
+				nextIsOp = !!opMatch,
+				opLength = nextIsOp ? opMatch[0].length : 0;
 			if (char === ";" && i === 0)
 				outp += "newvars()";
-			else if (isChar(char, "`'\"A-Z0-9\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}")
-				&& !(isChar(char, "0-9") && isChar(outp.slice(-1), "0-9")))
+			else if (isChar(char, "`'\"A-Z\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}"))
+				outp += ",";
+			else if (isChar(char, "0-9") && isChar(outp.slice(-1), "`\"A-Z\\)\\]}"))
+				outp += ",";
+			else if (char === "." && /\.\d+$/.test(outp))
 				outp += ",";
 			else if (isChar(outp.slice(-1), "+\\-&|\\^") && isChar(char, " \\)\\]};"))
 				code = code.slice(0,i)+'1'+code.slice(i);
@@ -910,27 +916,13 @@ var Japt = {
 			else if (pairs[char]) {
 				code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
 			}
-			else if (outp.slice(-2) === "(!" && [">>>","===","!=="].indexOf(code.slice(i,i+3)) > -1) {
-				outp = outp.slice(0,-1) + "\"!"+code.slice(i,i+3)+"\"";
-				i += 2;
+			else if (outp.slice(-2) === "(!" && nextIsOp) {
+				outp = outp.slice(0,-1) + "\"!" + code.slice(i, i + opLength) + "\"";
+				i += opLength - 1;
 			}
-			else if (outp.slice(-1) === "(" && [">>>","===","!=="].indexOf(code.slice(i,i+3)) > -1) {
-				outp += "\""+code.slice(i,i+3)+"\"";
-				i += 2;
-			}
-			else if (outp.slice(-2) === "(!" && ["<<",">>","==","!=","<=",">=","||","&&"].indexOf(code.slice(i,i+2)) > -1) {
-				outp = outp.slice(0,-1) + "\"!"+code.slice(i,i+2)+"\"";
-				++i;
-			}
-			else if (outp.slice(-1) === "(" && ["<<",">>","==","!=","<=",">=","||","&&"].indexOf(code.slice(i,i+2)) > -1) {
-				outp += "\""+code.slice(i,i+2)+"\"";
-				++i;
-			}
-			else if (outp.slice(-2) === "(!" && isChar(char, "+\\-*%\\^&|<>.") && !isChar(code[i+1],"+\\-=")) {
-				outp = outp.slice(0,-1) + "\"!"+char+"\"";
-			}
-			else if (outp.slice(-1) === "(" && isChar(char, "+\\-*%\\^&|<>.") && !isChar(code[i+1],"+\\-=")) {
-				outp += "\""+char+"\"";
+			else if (outp.slice(-1) === "(" && nextIsOp) {
+				outp += "\"" + code.slice(i, i + opLength) + "\"";
+				i += opLength - 1;
 			}
 			else {
 				outp += char;

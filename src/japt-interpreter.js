@@ -163,6 +163,9 @@ df(String,'\xE9',function(x){return this.q()['\xE9'](x).q()});
 df(String,'\xEA',function(){return this+this.slice(0,-1).w();});
 df(String,'\xEB',function(x,y){return this.q()['\xEB'](x,y).q()});
 df(String,'\xEE',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]});});
+df(String,'\xF2',function(x){return this.q()['\xF2'](x).map(function(a){return a.q()})});
+df(String,'\xF3',function(x){return this.q()['\xF3'](x).map(function(a){return a.q()})});
+df(String,'\xF4',function(x,y){return this.q()['\xF4'](x,y).map(function(a){return a.q()})});
 
 df(Array,'a',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).lastIndexOf(true):this.lastIndexOf(x)});
 df(Array,'b',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).indexOf(true):this.indexOf(x)});
@@ -209,6 +212,9 @@ df(Array,'\xEC',function(x){x=fb(x,10);return this.reduce(function(a,b){return a
 df(Array,'\xED',function(x,y){if(!(x instanceof Array)){y=x,x=[];for(var i=0;i<this.length;i++)x[i]=i}y=functify(fb(y,function(a,b){return[a,b]}),0);return this.map(function(a,b,c){return y(a,x[b],c)})});
 df(Array,'\xEE',function(x){x=fb(x,[0]);return this.map(function(_,i){return x[i%x.length]});});
 df(Array,'\xF1',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.sort(function(a,b,i){a=x(a,fb(y,i));b=x(b,fb(y,i));return(a>b)-(a<b)})});
+df(Array,'\xF2',function(x){x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i+=x)a.push(this.slice(i,i+x));}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)&&a.push([])}return a;});
+df(Array,'\xF3',function(x){x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i++)a[i%x]=a[i%x]||[],a[i%x].push(this[i]);}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)||a.push([])}return a;});
+df(Array,'\xF4',function(x,y){x=functify(fb(x,function(z){return!z}),y);var a=[],i=0;for(a.push([]);i<this.length;i++)x(this[i],fb(y,i),this)?a.push([]):a.g(-1).push(this[i]);return a;});
 
 df(Number,'a',function(){return Math.abs(this)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:this});

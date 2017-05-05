@@ -255,6 +255,16 @@
 <p>Mirrors `this` at its last char; `"abc"ê` becomes `"abcba"`.</p>
 <h3>`.î(s=" ")`</h3>
 <p>Repeats `s` until it reaches `this.length`. `"abcde"î"12" -> "12121"`</p>
+<h3>`.ò(n=2)`</h3>
+<p>Cuts `this` into slices of length `n`. `"abcde"ò2 -> ["ab","cd","e"]`</p>
+<h3>`.ò(f)`</h3>
+<p>Partitions `this` between chars `X, Y` where `f(X,Y)` is truthy. `"abba"ò@X&lt;Y} -> ["a","bba"]`.</p>
+<h3>`.ó(n=2)`</h3>
+<p>Cuts `this` into `n` arrays of every `n`th char. `"abcde"ó2 -> ["ace","bd"]`</p>
+<h3>`.ó(f)`</h3>
+<p>Partitions `this` between chars `X, Y` where `f(X,Y)` is falsy. `"abbc"ó@X&lt;Y} -> ["ab","bc"]`.</p>
+<h3>`.ô(f)`</h3>
+<p>Partitions `this` at chars `X` where `f(X)` is truthy. `"abca"ô@X>'b} -> ["ab","a"]`</p>
 </div>
 
 <h2>arrow:array-funcs Array functions</h2>
@@ -353,6 +363,18 @@
 <p>Repeats `a` until it reaches `this.length`. `[0,1,2,3,4]î[1,2] -> [1,2,1,2,1]`</p>
 <h3>`.ñ(f?)`</h3>
 <p>Sorts `this` as if each value has been run through `f`.</p>
+<h3>`.ò(n=2)`</h3>
+<p>Cuts `this` into slices of length `n`. `[1,2,3,4,5]ò2 -> [[1,2],[3,4],[5]]`</p>
+<h3>`.ò(f)`</h3>
+<p>Partitions `this` between items `X, Y` where `f(X,Y)` is truthy. `[1,2,0,3]ò@X>Y} -> [[1,2],[0,3]]`.</p>
+<h3>`.ó(n=2)`</h3>
+<p>Cuts `this` into `n` arrays of every `n`th item. `[1,2,3,4,5]ò2 -> [[1,3,5],[2,4]]`</p>
+<h3>`.ó(f)`</h3>
+<p>Partitions `this` between items `X, Y` where `f(X,Y)` is falsy. `[1,2,0,3]ò@X&lt;Y} -> [[1,2],[0,3]]`.</p>
+<h3>`.ô()`</h3>
+<p>Partitions `this` at items `X` where `X` is falsy. `[1,2,0,3]ô -> [[1,2],[3]]`</p>
+<h3>`.ô(f)`</h3>
+<p>Partitions `this` at items `X` where `f(X)` is truthy. `[1,2,3,1]ô@X>2} -> [[1,2],[1]]`</p>
 </div>
 
 <h2>arrow:number-funcs Number functions</h2>

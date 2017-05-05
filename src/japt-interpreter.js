@@ -7,7 +7,7 @@ function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configu
 function regexify(x,y){if(x instanceof RegExp)return x;x+="";y=fb(y,null);var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="L"?a?"\\W_\\D":"[^A-Za-z]":x[i]=="V"?a?"\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":x[i]=="Y"?a?"\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_":"[^AaEeIiOoUuYy]":x[i]=="y"?a?"AaEeIiOoUuYy":"[AaEeIiOoUuYy]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"").replace(/g/g,"")+"g")}
 function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/^!?[a-zà-ÿ]$/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
 function isChar(str,char){return RegExp('^['+char+']$').test(str);}
-function str(x){return x instanceof Array?x.map(str).join():x instanceof String?'"'+x.replace(/"/g,"\\\"")+'"':x+""}
+function str(x){return x instanceof Array?'['+x.map(str).join()+']':x instanceof String||typeof x==="string"?'"'+x.replace(/"/g,"\\\"")+'"':x+""}
 
 var isnode = typeof window === "undefined";
 if (isnode) var shoco = require("../dependencies/shoco");
@@ -119,7 +119,7 @@ var pairs_2_0 = {
 var pcache = {};
 function perm(x,l){if(l===0)return[[]];if(x.length<2)return[x];var id=l+';'+str(x);if(pcache[id])return pcache[id];var a=[];for(var i in x)if(+i===x.indexOf(x[i]))perm([].concat(x.slice(0,i),x.slice(+i+1)),l-1).map(function(b){a.push([x[i]].concat(b))});return pcache[id]=a}
 var ccache = {};
-function comb(x,l){if(l===0)return[[]];if(x.length<1&&l)return[];var id=l+';'+str(x);if(ccache[id])return ccache[id];var a=[];for(var i in x)if(+i===x.indexOf(x[i]))comb(x.slice(+i+1),l-1).map(function(b){a.push([x[i]].concat(b))});if(!l)a.push([]);return ccache[id]=a}
+function comb(x,l){if(l===0)return[[]];if(x.length<1&&l)return[];var id=l+';'+str(x);if(ccache[id])return ccache[id];var a=[];for(var i=0;i<x.length;++i)if(i===x.indexOf(x[i]))comb(x.slice(i+1),l-1).map(function(b){a.push([x[i]].concat(b))});if(!l)a.push([]);return ccache[id]=a}
 
 String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)};
 Array.prototype.contains = Array.prototype.contains || function(x){return-1<this.indexOf(x)};
@@ -191,6 +191,7 @@ df(Array,'x',function(x,y){x=functify(fb(x,function(z){return z}),y);return this
 df(Array,'y',function(){var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a});
 df(Array,'z',function(n){if((typeof n)!="number")n=1;n%=4;if(n<0)n+=4;var f=function(l){return l.w()};return n==1?this.y().map(f):n==2?this.w().map(f):n==3?this.map(f).y():this}); // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
 df(Array,'\xE0',function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)return;if(z.length===0){a.push(y)}else{var n=y.slice(0);n.push(z[0]);f(n,z.slice(1),a);f(y,z.slice(1),a)}return a};return f([],this,[]).filter(function(z){return x?z.length===x:1})});
+//df(Array,'\xE0',function(x){var a=[[]],s=[];for(var i=0;i<this.length;++i){var l=a.length;for(var j=0;j<l;j++){var b=a[j].concat([this[i]]);if(s.indexOf(str(b))<0)a.push(b),s.push(str(b));}}return a});
 df(Array,'\xE1',function(x){var p=[],u=[],f=function(z){var c,i;for(i=0;i<z.length;i++){c=z.splice(i,1)[0];u.push(c);if(z.length===0)p.push(u.slice());f(z);z.splice(i,0,c);u.pop()}return p};var l;return f(this).map(function(z){return z.slice(0,x||z.length)})["\xE2"]()});
 //df(Array,'\xE0',function(x){x=fb(x,NaN);return comb(this,x)});
 //df(Array,'\xE1',function(x){x=fb(x,1/0);return perm(this,x)});
@@ -292,8 +293,8 @@ Date.p = Date.parse;
 // Shorter Math properties
 Math.a = Math.atan2;
 Math.g = function(n){var f=Math.sqrt(5),g=.5*(1+f);return Math.round((1/f)*(Math.pow(g,n)-Math.pow(-g,-n)))}; // Fibonacci
-Math.r = function(x,y){x=fb(x,1);y=fb(y,0);return Math.random()*x+y};
-Math.q = function(x,y,z){x=fb(x,1);y=fb(y,0);z=fb(z,1);return Math.floor(Math.random()*x*z)/z+y};
+Math.r = function(x,y){x=fb(x,1);if(!id(y))y=x,x=0;return Math.random()*(y-x)+x};
+Math.q = function(x,y,z){x=fb(x,2);if(!id(y))y=x,x=0;z=fb(z,1);return Math.floor(Math.random()*(y-x)/z)*z+x};
 Math.s = Math.sin;
 Math.c = Math.cos;
 Math.t = Math.tan;
@@ -301,8 +302,9 @@ Math.h = Math.hypot || function hypot(){return Math.sqrt(arguments.reduce(functi
 
 Math.P = Math.PI;
 Math.Q = 1.618033988749894848;
+Math.R = Math.SQRT_1_2;
 Math.S = Math.SQRT_2;
-Math.T = Math.SQRT_1_2;
+Math.T = Math.PI * 2;
 
 // String compression
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };

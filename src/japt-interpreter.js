@@ -304,6 +304,10 @@ Math.q = function(x,y,z){x=fb(x,2);if(!id(y))y=x,x=0;z=fb(z,1);return Math.floor
 Math.s = Math.sin;
 Math.c = Math.cos;
 Math.t = Math.tan;
+Math.e = Math.exp;
+Math.l = Math.log;
+Math.m = Math.log2;
+Math.n = Math.log10;
 Math.h = Math.hypot || function hypot(){return Math.sqrt(arguments.reduce(function(a,b){return a+b*b}))};
 
 Math.P = Math.PI;

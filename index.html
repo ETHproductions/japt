@@ -16,7 +16,7 @@
 <h1>&nbsp;&nbsp;Japt Interpreter</h1>
   <div id="left-column" style="float:left">
   <p>
-  &nbsp;&nbsp;Code:&nbsp;(<span id="bytes">0</span> bytes)
+  &nbsp;&nbsp;Code:&nbsp;(<span id="bytes">0 bytes</span>)
   <br>
   <textarea id="code" title="code" rows="8" placeholder="Enter your code here..." oninput="setTimeout(update,10)"></textarea>
   <br>
@@ -159,7 +159,7 @@
   }
   
   function update() {
-    document.getElementById('bytes').innerHTML = document.getElementById('code').value.length;
+    document.getElementById('bytes').innerHTML = (document.getElementById('code').value.length + " bytes").replace(/^1 bytes$/, "1 byte");
     document.getElementById('js-code').value = (window.Japt || window).transpile(document.getElementById('code').value);
   }
   

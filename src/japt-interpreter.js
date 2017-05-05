@@ -125,7 +125,7 @@ String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<
 Array.prototype.contains = Array.prototype.contains || function(x){return-1<this.indexOf(x)};
 df(String,'a',function(x,y){return typeof x=="function"||id(y)?this.q().a(x,y):this.lastIndexOf(x)});
 df(String,'b',function(x,y){return typeof x=="function"||id(y)?this.q().b(x,y):this.indexOf(x)});
-df(String,'c',function(x){return this.charCodeAt(x)});
+df(String,'c',function(x){var l=this.length;x=pm(fb(x,0),l);return this.charCodeAt(x)});
 df(String,'d',function(x){
 	if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
 	else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(regexify(f,'g'),a[i+1]);},this)}});

@@ -166,6 +166,7 @@ df(String,'\xEE',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(
 df(String,'\xF2',function(x){return this.q()['\xF2'](x).map(function(a){return a.q()})});
 df(String,'\xF3',function(x){return this.q()['\xF3'](x).map(function(a){return a.q()})});
 df(String,'\xF4',function(x,y){return this.q()['\xF4'](x,y).map(function(a){return a.q()})});
+df(String,'\xF6',function(x){if(!id(x))return this[Math.random()*this.length|0];return this.q()['\xF6'](x).q()});
 
 df(Array,'a',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).lastIndexOf(true):this.lastIndexOf(x)});
 df(Array,'b',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).indexOf(true):this.indexOf(x)});
@@ -215,6 +216,7 @@ df(Array,'\xF1',function(x,y){x=functify(fb(x,function(z){return z}),y);return t
 df(Array,'\xF2',function(x){x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i+=x)a.push(this.slice(i,i+x));}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)&&a.push([])}return a;});
 df(Array,'\xF3',function(x){x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i++)a[i%x]=a[i%x]||[],a[i%x].push(this[i]);}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)||a.push([])}return a;});
 df(Array,'\xF4',function(x,y){x=functify(fb(x,function(z){return!z}),y);var a=[],i=0;for(a.push([]);i<this.length;i++)x(this[i],fb(y,i),this)?a.push([]):a.g(-1).push(this[i]);return a;});
+df(Array,'\xF6',function(x){if(!id(x))return this[Math.random()*this.length|0];var b=[];if(isNaN(x))for(var a=this.slice();a.length>0;)b.push(a.splice(Math.random()*a.length|0,1)[0]);else for(var i=+x;i>0;i--)b.push(this[Math.random()*this.length|0]);return b});
 
 df(Number,'a',function(){return Math.abs(this)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
@@ -252,6 +254,7 @@ df(Number,'\xF2',function(x,y,f){return this.o(x,y,f,1)});
 df(Number,'\xF3',function(x,y,f){return this.o(x,y,f,2)});
 df(Number,'\xF4',function(x,y,f){return this.o(x,y,f,3)});
 df(Number,'\xF5',function(x,y,f){var q,z,n=+this,r=[],i=0;if(!(1/n))return[];if(typeof x==="function")f=x,x=1;if(typeof x=="string")f=functify(x,y),z=y,x=y=1;x=fb(x,1);y=fb(y,1);if(y===0)return[];if(y<0)y=-y,q=x,x=n,n=q;if(x<n)for(;x<=n;x+=y)r.push(x);else if(x>n)for(;x>=n;x-=y)r.push(x);else r=[x];return typeof f==="function"?r.map(function(a,b,c){return f(a,fb(z,b),c)}):r});
+df(Number,'\xF6',function(x){if(!id(x))return Math.floor(Math.random()*this);return this.o()['\xF6'](x)});
 
 // Shorter Date properties. All but k accept an argument: 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
 function ts(x){return["get","set","getUTC","setUTC"][x||0]}

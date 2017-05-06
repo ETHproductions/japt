@@ -274,14 +274,24 @@
 <p>Partitions `this` between chars `X, Y` where `f(X,Y)` is falsy. `"abbc"ó@X&lt;Y} -> ["ab","bc"]`.</p>
 <h3>`.ô(f)`</h3>
 <p>Partitions `this` at chars `X` where `f(X)` is truthy. `"abca"ô@X>'b} -> ["ab","a"]`</p>
+<h3>`.ö()`</h3>
+<p>Returns a random character of `this`.</p>
+<h3>`.ö(n)`</h3>
+<p>Returns an array of `ceil(n)` random characters of `this` (with replacement).</p>
+<h3>`.ö(x)`</h3>
+<p>Returns a random permutation of `this`.</p>
 </div>
 
 <h2>arrow:array-funcs Array functions</h2>
 <div id="array-funcs" style="display:none">
-<h3>`.a(a)`</h3>
-<p>Returns the last index of `a` in `this`. If `a` is a function, returns the last index `i` where `a(this[i])` returns truthily.</p>
-<h3>`.b(a)`</h3>
-<p>Returns the first index of `a` in `this`. If `a` is a function, returns the first index `i` where `a(this[i])` returns truthily.</p>
+<h3>`.a(f)`</h3>
+<p>Returns the last index `i` where `f(this[i])` returns truthily.</p>
+<h3>`.a(x)`</h3>
+<p>Returns the last index of `a` in `this`, or `-1` if `a` doesn't exist in `this`.</p>
+<h3>`.b(f)`</h3>
+<p>Returns the first index `i` where `f(this[i])` returns truthily.</p>
+<h3>`.b(x)`</h3>
+<p>Returns the first index of `a` in `this`, or `-1` if `a` doesn't exist in `this`.</p>
 <h3>`.c()`</h3>
 <p>Flattens `this`, i.e. expands all sub-arrays into the main array.</p>
 <h3>`.c(a)`</h3>
@@ -384,6 +394,12 @@
 <p>Partitions `this` at items `X` where `X` is falsy. `[1,2,0,3]ô -> [[1,2],[3]]`</p>
 <h3>`.ô(f)`</h3>
 <p>Partitions `this` at items `X` where `f(X)` is truthy. `[1,2,3,1]ô@X>2} -> [[1,2],[1]]`</p>
+<h3>`.ö()`</h3>
+<p>Returns a random element of `this`.</p>
+<h3>`.ö(n)`</h3>
+<p>Returns a string of `ceil(n)` random elements of `this` (with replacement).</p>
+<h3>`.ö(x)`</h3>
+<p>Returns a random permutation of `this`.</p>
 </div>
 
 <h2>arrow:number-funcs Number functions</h2>
@@ -464,6 +480,12 @@
 <p>Like `ó`, but inclusive.</p>
 <h3>`.õ(n=1,n=1)`</h3>
 <p>Like `o`, but creates the range `[n₁...this]`, and the range is not reversed if `this` is less than `n₁`.</p>
+<h3>`.ö()`</h3>
+<p>Returns a random item of `this.o()`.</p>
+<h3>`.ö(n)`</h3>
+<p>Returns an array of `ceil(n)` random items of `this.o()` (with replacement).</p>
+<h3>`.ö(x)`</h3>
+<p>Returns a random permutation of `this.o()`.</p>
 </div>
 
 <h2>arrow:function-funcs Function functions</h2>

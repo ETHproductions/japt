@@ -139,7 +139,7 @@ df(String,'k',function(x,y){y=fb(y,"");return this.replace(regexify(x,y),"")});
 df(String,'l',function(){return this.length});
 df(String,'m',function(x,y,z){if(typeof x==="string")return this.q(z).m(x,y).q(z);return this.q(y).m(x).q(y)});
 df(String,'n',function(x){x=x||10;if(x==10)return parseFloat(this);else return parseInt(this,x)});
-df(String,'o',function(x){return this.replace(regexify('[^'+x+']','gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
+df(String,'o',function(x,y){return this.replace(regexify('[^'+x+']',y?'g':'gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
 df(String,'p',function(x){return this.repeat(x)});
 df(String,'q',function(x){x=fb(x,"");return this.split(x)});
 df(String,'r',function(x,y,z){y=fb(y,"");return this.replace(regexify(x,z),y)});

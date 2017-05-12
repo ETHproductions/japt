@@ -216,8 +216,8 @@
 <p>Splits `this` with `s`, maps each item by `f`, then rejoins with `s`.</p>
 <h3>`.n(n=10)`</h3>
 <p>Returns `parseInt(this,n)`.</p>
-<h3>`.o(s)`</h3>
-<p>Removes all characters not in `s` from `this`.</p>
+<h3>`.o(s,x?)`</h3>
+<p>Removes all characters not in `s` from `this`, case-insensitive unless `x` is truthy.</p>
 <h3>`.p(n)`</h3>
 <p>Returns `this` repeated `n` times.</p>
 <h3>`.q(s="")`</h3>
@@ -480,6 +480,8 @@
 <p>Like `ó`, but inclusive.</p>
 <h3>`.õ(n=1,n=1)`</h3>
 <p>Like `o`, but creates the range `[n₁...this]`, and the range is not reversed if `this` is less than `n₁`.</p>
+<h3>`.õ(f)`</h3>
+<p>Maps each integer in `[1...this]` through `f`.</p>
 <h3>`.ö()`</h3>
 <p>Returns a random item of `this.o()`.</p>
 <h3>`.ö(n)`</h3>

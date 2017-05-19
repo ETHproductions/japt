@@ -123,6 +123,7 @@ function comb(x,l){if(l===0)return[[]];if(x.length<1&&l)return[];var id=l+';'+st
 
 String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)};
 Array.prototype.contains = Array.prototype.contains || function(x){return-1<this.indexOf(x)};
+Math.trunc = Math.trunc || function(x){return isNaN(x)?NaN:x<0?Math.ceil(x):Math.floor(x)}
 df(String,'a',function(x,y){return typeof x=="function"||id(y)?this.q().a(x,y):this.lastIndexOf(x)});
 df(String,'b',function(x,y){return typeof x=="function"||id(y)?this.q().b(x,y):this.indexOf(x)});
 df(String,'c',function(x){var l=this.length;x=pm(fb(x,0),l);return this.charCodeAt(x)});
@@ -191,7 +192,7 @@ df(Array,'t',function(x,y){y=fb(y,this.length);return this.slice(x,x+y)});
 df(Array,'u',function(){for(var i of [].slice.call(arguments))this.unshift(i);return this});
 df(Array,'v',function(){return this.shift()});
 df(Array,'w',function(){return this.reverse()});
-df(Array,'x',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.reduce(function(a,b,i,z){return a+parseFloat(x(b,fb(y,i),z))},0)});
+df(Array,'x',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.reduce(function(a,b,i,z){b=x(b,fb(y,i),z);return a+(isNaN(+b)?parseFloat(b):+b)},0)});
 df(Array,'y',function(){var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a});
 df(Array,'z',function(n){if((typeof n)!="number")n=1;n%=4;if(n<0)n+=4;var f=function(l){return l.w()};return n==1?this.y().map(f):n==2?this.w().map(f):n==3?this.map(f).y():this}); // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
 df(Array,'\xE0',function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)return;if(z.length===0){a.push(y)}else{var n=y.slice(0);n.push(z[0]);f(n,z.slice(1),a);f(y,z.slice(1),a)}return a};return f([],this,[]).filter(function(z){return x?z.length===x:1})});
@@ -229,7 +230,7 @@ df(Number,'h',function(x){x=fb(x,1);return this.toPrecision(x)});
 df(Number,'i',function(x){return Japt.intervals[Japt.intervals.length]=setInterval(x,this)});
 df(Number,'j',function(){var n=+this;if(n===2)return true;if(n%1||n<2||n%2===0)return false;for(var i=3,s=Math.sqrt(n);i<=s;i+=2)if(n%i===0)return false;return true});
 df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f});
-df(Number,'l',function(){var n=this|0,x=this|0;if(n<1)return 1;while(--n)x*=n;return x});
+df(Number,'l',function(){var n=Math.trunc(this),x=Math.trunc(this);if(n<1)return 1;while(--n)x*=n;return x});
 df(Number,'m',function(){return[].reduce.call(arguments,function(x,y){return Math.min(x,y)},this)});
 df(Number,'n',function(x){x=fb(x,0);return x-this});
 df(Number,'o',function(x,y,f,s){var q;if(typeof x=="function")f=x,x=undefined;if(typeof x=="string")f=functify(x,y),q=y,x=y=undefined;if(typeof y=="function")f=y,y=undefined;var z=+this;y=y||1;if(!id(x))x=z,z=0;if(s&2)x+=z;if(x<z)_=x,x=z,z=_;if(s&1)x++;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);if(typeof f=="function")return r.map(function(a,b,c){return f(a,fb(q,b),c)});return r});
@@ -244,11 +245,11 @@ df(Number,'w',function(){return[].reduce.call(arguments,function(x,y){return Mat
 df(Number,'x',function(x){x=fb(x,0);return this.toFixed(x)});
 df(Number,'y',function(){noFunc('N.y')});
 df(Number,'z',function(){noFunc('N.z')});
-df(Number,'\xE0',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
-df(Number,'\xE1',function(x){var n=this|0;x=fb(x,0)|0;if(x<0||n<0)return 0;if(x===0)return n.l();return n["\xE0"]()*x.l()});
+df(Number,'\xE0',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
+df(Number,'\xE1',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return n.l();return n["\xE0"]()*x.l()});
 df(Number,'\xE2',function(x){if(this%1)return[];var n=Math.abs(this);var a=[];for(var i=1;i<Math.sqrt(n);++i)if(n%i===0)a.push(i,n/i);if(i*i===n)a.push(i);a.n();if(x)a.pop();return a});
 df(Number,'\xE7',function(x){x=fb(x," ")+"";return x.p(this)});
-df(Number,'\xEC',function(x){var n=Math.min(Math.floor(this),Math.pow(2,53));x=Math.floor(fb(x,10));if(x<2)return[];for(var a=[];n>0;n=Math.floor(n/x))a.unshift(n%x);return a});
+df(Number,'\xEC',function(x){var n=Math.trunc(this);x=Math.floor(fb(x,10));if(x<2)return[];for(var a=[];n!=0;n=Math.trunc(n/x))a.unshift(n%x);return a});
 df(Number,'\xEE',function(x){return" ".p(this)['\xEE'](x)});
 df(Number,'\xF2',function(x,y,f){return this.o(x,y,f,1)});
 df(Number,'\xF3',function(x,y,f){return this.o(x,y,f,2)});
@@ -704,7 +705,7 @@ var Japt = {
 			for (; i < code.length; ++i) {
 				var char = code[i];
 				if (code.slice(i).indexOf(polyglot) === 0) {
-					outp = Japt.transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2|0)+"\"":"\\".repeat(b.length/2)}));
+					outp = Japt.transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2)+"\"":"\\".repeat(b.length/2)}));
 					i = code.length;
 				}
 				else if (level === 0) {

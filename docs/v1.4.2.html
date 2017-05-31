@@ -405,6 +405,14 @@
 <h2>arrow:date-funcs Date functions</h2>
 <div id="date-funcs" style="display:none">
 <p>You can use `Ð` to call `new Date(`.</p>
+<p>If you give these functions a number as a first parameter, it will change the `get` part of the function according to the following table:</p>
+<table class="code-table">
+  <tr><td style="width:50px"><b>Input</b></td><td><b>Function</b></td></tr>
+  <tr><td>0</td><td>get</td></tr>
+  <tr><td>1</td><td>set</td></tr>
+  <tr><td>2</td><td>getUTC</td></tr>
+  <tr><td>3</td><td>setUTC</td></tr>
+</table>
 <p>See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Getter" target="_blank">MDN</a> for more information on these functions.</p>
 <h3>`.a()`</h3>
 <p>Returns `this.getMilliseconds()`.</p>

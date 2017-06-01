@@ -139,11 +139,11 @@ df(String,'g',function(x){var l=this.length;x=pm(fb(x,0),l);return this[x]});
 df(String,'h',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x+y.length)});
 df(String,'i',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x)});
 df(String,'j',function(x,y){y=fb(y,1);return this.substring(0,x)+this.substring(x+y)});
-df(String,'k',function(x,y){y=fb(y,"");return this.replace(regexify(x,y),"")});
+df(String,'k',function(x,y){if(["<",">"].contains(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return!x(a,fb(y,b),c)}).q()};return this.replace(regexify('['+x+']',y?'g':'gi'),"")});
 df(String,'l',function(){return this.length});
 df(String,'m',function(x,y,z){if(typeof x==="string")return this.q(z).m(x,y).q(z);return this.q(y).m(x).q(y)});
 df(String,'n',function(x){x=x||10;if(x==10)return parseFloat(this);else return parseInt(this,x)});
-df(String,'o',function(x,y){return this.replace(regexify('[^'+x+']',y?'g':'gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
+df(String,'o',function(x,y){if(["<",">"].contains(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return x(a,fb(y,b),c)}).q()};return this.replace(regexify('[^'+x+']',y?'g':'gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
 df(String,'p',function(x,y){x=fb(x,2);return typeof x==="number"?this.repeat(x):this+[this].m(x,y)});
 df(String,'q',function(x){x=fb(x,"");return this.split(x)});
 df(String,'r',function(x,y,z){y=fb(y,"");return this.replace(regexify(x,z),y)});
@@ -183,7 +183,7 @@ df(Array,'g',function(x){var l=this.length;x=pm(fb(x,0),l);return this[x]});
 df(Array,'h',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);this[x]=y;return this});
 df(Array,'i',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);this.splice(x,0,y);return this});
 df(Array,'j',function(x,y){y=fb(y,1);return this.splice(x,y)});
-df(Array,'k',function(x){if(x instanceof Array)return this.filter(function(a){return!x.contains(a)});this.splice(this.indexOf(x),1);return this});
+df(Array,'k',function(x,y){if(!id(x)||typeof x==="function"||(typeof x==="string"&&id(y))){x=functify(fb(x,function(z){return z}),y);return this.filter(function(a,b,c){return!x(a,fb(y,b),c)})}if(x instanceof Array)return this.filter(function(a){return!x.contains(a)});this.splice(this.indexOf(x),1);return this});
 df(Array,'l',function(){return this.length});
 df(Array,'m',function(x,y){x=functify(x,y);return this.map(function(q,r,s){return x(q,fb(y,r),s)})});
 df(Array,'n',function(x){x=functify(fb(x,function(x,y){return(x>y)-(x<y)}));return this.sort(x)});

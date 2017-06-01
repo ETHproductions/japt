@@ -208,10 +208,10 @@
 <p>Inserts `s` at index `n` into `this`.</p>
 <h3>`.j(n,n)`</h3>
 <p>Removes `n₁` chars from index `n₂` in `this`.</p>
-<h3>`.k(r)`</h3>
-<p>Replaces `r` with `""` in `this`.</p>
-<h3>`.k(s,s="")`</h3>
-<p>Replace `RegExp(s₁,s₂="g")` with `""` in `this`.</p>
+<h3>`.k(s,x?)`</h3>
+<p>Removes all characters in `s` from `this`, case-insensitive unless `x` is truthy.</p>
+<h3>`.k(f)`</h3>
+<p>Removes all characters that return a truthy value when run through `f` from `this`.</p>
 <h3>`.l()`</h3>
 <p>Returns the length of `this`.</p>
 <h3>`.m(f,s="")`</h3>
@@ -220,6 +220,8 @@
 <p>Returns `parseInt(this,n)`.</p>
 <h3>`.o(s,x?)`</h3>
 <p>Removes all characters not in `s` from `this`, case-insensitive unless `x` is truthy.</p>
+<h3>`.o(f)`</h3>
+<p>Removes all characters that return a falsy value when run through `f` from `this`.</p>
 <h3>`.p(n=2)`</h3>
 <p>Returns `this` repeated `n` times.</p>
 <h3>`.p(f)`</h3>
@@ -328,6 +330,8 @@
 <p>Removes `n₁` items from index `n₂` in `this`.</p>
 <h3>`.k(a)`</h3>
 <p>Removes all elements in `a` from `this`.</p>
+<h3>`.k(f)`</h3>
+<p>Selects the items in `this` that return falsily to `f`.</p>
 <h3>`.k(x)`</h3>
 <p>Removes `x` from `this`.</p>
 <h3>`.l()`</h3>

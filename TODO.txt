@@ -11,11 +11,12 @@ Completed:
 1.4.4  É -> `-1`
 1.4.4  È -> `XYZ{X`
 
-Planned:
 1.4.5  S.o(f) -> filter  (no default function)
 1.4.5  S.k(s) -> remove all chars in s from this (opposite of S.o(s))
 1.4.5  S.k(f) -> filter-false  (no default function)
 1.4.5  A.k(f) -> filter-false  (default function: identity)
+
+Planned:
 1.4.5  X.?(f) -> run X through f  (default function: identity?)
 1.4.5  S.?(n,s=" ") -> pad S to n chars with filler s
 1.4.5  A.n(s/a) -> sort A with key s/a
@@ -24,11 +25,14 @@ Planned:
 1.4.5  ? -> `w `?
 1.4.5  ? -> `c `?
 1.4.5  Have each method control its own regex flags (modifying regexify() and various methods)
+1.4.5  Add some character that looks at the next byte and inserts a predefined value
 
 1.5.0  Clean up code
+1.5.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)
 
 2.0.0  Use new encoding (https://github.com/ETHproductions/japt/issues/28)
 2.0.0  Add custom string compressor (https://github.com/ETHproductions/japt/issues/29)
+2.0.0  Add characters that represent `U`, `X`, and `Z` in strings
 2.0.0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
 2.0.0  Add single-class regexes with `\` (i.e. `Uf\w` == `Uf/\w/`)
 2.0.0  Use ⁺ and ⁻ for unary plus and minus, make + and - always binary operators

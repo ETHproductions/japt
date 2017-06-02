@@ -19,11 +19,21 @@ Completed:
 Planned:
 1.4.5  X.?(f) -> run X through f  (default function: identity?)
 1.4.5  S.?(n,s=" ") -> pad S to n chars with filler s
-1.4.5  A.n(s/a) -> sort A with key s/a
+1.4.5  A.n(s) -> sort the items in A by their alphabetical order in s
+1.4.5  A.n(a) -> sort A by the order the items appear in a?
 1.4.5  S.n(s) -> convert to number ("baab"n"ab" -> 9)
 1.4.5  N.s(s) -> convert to string (9s"ab" -> "baab")
+1.4.5  A.?(f) -> all truthy indices
+1.4.5  S.?(f) -> all truthy indices
+1.4.5  S.?(s,n) -> insert s at every n'th position
+1.4.5  A.?(x,n) -> insert x at every n'th position
+1.4.5  S.?(s) -> interleave
+1.4.5  A.?(a) -> interleave
+1.4.5  S.u(x)? -> uppercase first character
+1.4.5  S.v(x)? -> title case
 1.4.5  ? -> `w `?
 1.4.5  ? -> `c `?
+1.4.5  ? -> `gJ `
 1.4.5  Have each method control its own regex flags (modifying regexify() and various methods)
 1.4.5  Add some character that looks at the next byte and inserts a predefined value
 

@@ -102,7 +102,8 @@
 		"master": "v1.4",
 		"dev": "master"
 	};
-	if (v.length > 16)
+    var iscommit = v.length > 16;
+	if (iscommit)
 		realv = v;
 	else if (versions.hasOwnProperty(v))
 		realv = versions[v];
@@ -122,31 +123,52 @@
     document.getElementsByTagName('head')[0].appendChild(script);
 	
     var docs = document.getElementById('docs');
-    var docv = realv.length > 16 ? "master" : realv;
-    var docaddress = 'docs/' + docv + '.html';
-    docs.innerHTML = "<p>The docs for " + docv + " could not be loaded.</p>";
-	  
-    var getdocs = new XMLHttpRequest();
-    getdocs.addEventListener("load", function () {
-      if (this.status !== 200)
-		return;
-      docs.innerHTML = "<h1>Japt Docs</h1>";
-      if (realv === "master")
-		docs.innerHTML += "<p>You're using <a target='_blank' href='https://github.com/ETHproductions/japt'>the latest version</a> of Japt.</p>";
-      else
-		docs.innerHTML += "<p>You're using Japt <a target='_blank' href='https://github.com/ETHproductions/japt/tree/" + realv + "'>" + (v.length > 16 ? "commit " + v.slice(0, 7) : "version " + v) + "</a>.</p>";
-      if (realv !== docv)
-		docs.innerHTML += "<p>Note: You're viewing the docs for the latest version of Japt; some features listed may not work.</p>";
+    function addDocs(header, text) {
+      docs.innerHTML = header;
+      if (!text) return;
       docs.innerHTML += "<a id='toggler' style='text-decoration:underline;cursor:pointer;' onclick='toggleAll(this)'>▼ Expand all</span>";
-      docs.innerHTML += this.responseText
+      docs.innerHTML += text
         .replace(/^.+?\/\*|\*\/.+?$/g, "")
         .replace(/(`{1,3})((?:.(?!\1))*[^`])\1/g, function(_, _, x) {
           return '<span class="code" style="background-color:#F1E9E5">' + (x.length > 1 ? x.trimRight() : x) + '</span>';
         })
         .replace(/arrow:([a-z-]+)/gi, '<a class="arrow"; id="toggle-$1"; onclick="toggleTab(\'$1\')" style="background-color:#3E2">▼</a>');
+    }
+    
+    var versionText;
+    function addMaster () {
+      getWebpage('docs/master.html', function (response) {
+        addDocs("<h1>Japt Docs</h1>" + versionText + "<p>Note: You're viewing the docs for the latest version of Japt; some features listed may not work.</p>", response.responseText);
+      }, function (response) {
+        addDocs("Could not load docs.");
+      });
+    }
+    
+    if (iscommit) {
+      versionText = "<p>You're using Japt <a target='_blank' href='https://github.com/ETHproductions/japt/tree/" + realv + "'>commit " + v.slice(0, 7) + "</a>.</p>";
+      getWebpage('https://rawgit.com/ETHproductions/Japt/' + realv + '/docs/master.html', function (response) {
+        addDocs("<h1>Japt Docs</h1>" + versionText, response.responseText);
+      }, addMaster);
+    }
+    else {
+      if (v === realv)
+        versionText = "<p>You're using Japt <a target='_blank' href='https://github.com/ETHproductions/japt/tree/" + realv + "'>version " + v + "</a>.</p>";
+      else
+        versionText = "<p>You're using <a target='_blank' href='https://github.com/ETHproductions/japt'>the latest version</a> of Japt.</p>";
+      getWebpage('docs/' + realv + '.html', function (response) {
+        addDocs("<h1>Japt Docs</h1>" + versionText, response.responseText);
+      }, addMaster);
+    }
+  }
+  function getWebpage(url, success, error) {
+    var request = new XMLHttpRequest();
+    request.addEventListener("load", function (response) {
+      var target = response.target;
+      if (target.status === 200) success && success(target);
+      else error && error(target);
     });
-    getdocs.open("GET", docaddress);
-    getdocs.send();
+    request.open("GET", url);
+    request.send();
   }
   
   function setup() {

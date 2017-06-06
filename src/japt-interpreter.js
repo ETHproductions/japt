@@ -508,6 +508,7 @@ var Japt = {
 					} else {
 						processed.push(+current);
 						current = undefined;
+						index--;
 						input_mode = "next";
 					}
 					break;
@@ -704,8 +705,7 @@ var Japt = {
 			outp = "";  // Temporary output
 	
 		function pretranspile(code) {
-			var i = 0, strchars = Array(20).fill(""), polyglot = '"(p|';
-			var quickie = function () {
+			var i = 0, line = 0, lines = [], strchars = Array(20).fill(""), polyglot = '"(p|';
 			var extraparen = false;
 			for (; i < code.length; ++i) {
 				var char = code[i];
@@ -761,6 +761,15 @@ var Japt = {
 					}
 					else if (pairs.hasOwnProperty(char)) {
 						code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+					}
+					else if (char === "\n") {
+						while (extrabraces[0] > 0) {
+							newcode += "}";
+							extrabraces[0]--;
+						}
+						if (newcode) lines.push("UVWXYZABCDEFGHIJKLMNOPQRST"[line] + "=" + newcode + ";");
+						line++;
+						newcode = "";
 					}
 					else {
 						if ((newcode === "" || newcode.slice(-1) === ";") && /[a-zà-ÿ*/%^|&<=>?]/.test(char))
@@ -838,18 +847,8 @@ var Japt = {
 					code += level % 2 ? strchars[level] : "}";
 				}
 			}
-			};
-			quickie();
-			for (var templevel = level, tempbraces = extrabraces.slice(); level > 0; level--) {
-				for (; extrabraces[level] > 0; extrabraces[level]--) {
-					code += "}";
-				}
-				code += (level % 2? strchars[level] : "}");
-			}
-			level = templevel;
-			extrabraces = tempbraces.slice();
-			quickie();
-			return newcode;
+			lines.push(newcode);
+			return lines.join("\n");
 		}
 		
 		code = pretranspile(code);
@@ -928,6 +927,8 @@ var Japt = {
 					} else {
 						outp += " ." + char + "(";
 					}
+				} else if (/([A-Z])[+\-*/%^&|<=>!~]+$/.test(outp)) {
+					outp += outp.match(/([A-Z])[+\-*/%^&|<=>!~]+$/)[1] + "." + char + "(";
 				} else {
 					outp += "." + char + "(";
 				}

@@ -960,7 +960,7 @@ var Japt = {
 		outp = outp
 			.replace(/[,;]/g, "$& ")
 			.replace(/[}]/g, " $&")
-			.replace(/[{?:]|[+\-*/%&|^<=>]+/g, " $& ")
+			.replace(/[{?:]|!==?|[+\-*/%&|^<=>]+/g, " $& ")
 			.replace(/ +/g, " ")
 			.replace(/ ;/g, ";");
 		outp = outp.replace(/"(\d+)"/g,function(_,a){return Japt.strings[+a]});

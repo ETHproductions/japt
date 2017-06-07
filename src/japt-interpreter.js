@@ -771,6 +771,10 @@ var Japt = {
 						line++;
 						newcode = "";
 					}
+					else if (char === ";") {
+						if (newcode) lines.push(newcode + ";");
+						newcode = "";
+					}
 					else {
 						if ((newcode === "" || newcode.slice(-1) === ";") && /[a-zà-ÿ*/%^|&<=>?]/.test(char))
 							newcode += "U";
@@ -848,7 +852,7 @@ var Japt = {
 				}
 			}
 			lines.push(newcode);
-			return lines.join("\n");
+			return lines.join("");
 		}
 		
 		code = pretranspile(code);
@@ -900,9 +904,9 @@ var Japt = {
 					else i--;
 					var tr = Japt.transpile(temp.slice(0,-1));
 					if (tr.lastIndexOf(";") < 0)
-						outp += "return " + tr + "}";
+						outp += "return " + tr + ";}";
 					else
-						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
+						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + ";}";
 					if (extraparen) outp += ")";
 				}
 				else {
@@ -937,11 +941,13 @@ var Japt = {
 				code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
 			}
 			else if (outp.slice(-2) === "(!" && nextIsOp) {
-				outp = outp.slice(0,-1) + "\"!" + code.slice(i, i + opLength) + "\"";
+				outp = outp.slice(0,-1) + "\"!" + Japt.strings.length + "\"";
+				Japt.strings.push(code.slice(i, i + opLength));
 				i += opLength - 1;
 			}
 			else if (outp.slice(-1) === "(" && nextIsOp) {
-				outp += "\"" + code.slice(i, i + opLength) + "\"";
+				outp += "\"" + Japt.strings.length + "\"";
+				Japt.strings.push(code.slice(i, i + opLength));
 				i += opLength - 1;
 			}
 			else {
@@ -951,6 +957,12 @@ var Japt = {
 		
 		outp = outp.replace(/\$(\d+)\$/g,function(_,a){return Japt.snippets[+a]});
 		outp = fixParens(outp);
+		outp = outp
+			.replace(/[,;]/g, "$& ")
+			.replace(/[}]/g, " $&")
+			.replace(/[{?:]|[+\-*/%&|^<=>]+/g, " $& ")
+			.replace(/ +/g, " ")
+			.replace(/ ;/g, ";");
 		outp = outp.replace(/"(\d+)"/g,function(_,a){return Japt.strings[+a]});
 		return outp;
 	},

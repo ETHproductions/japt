@@ -942,12 +942,12 @@ var Japt = {
 			}
 			else if (outp.slice(-2) === "(!" && nextIsOp) {
 				outp = outp.slice(0,-1) + "\"!" + Japt.strings.length + "\"";
-				Japt.strings.push(code.slice(i, i + opLength));
+				Japt.strings.push("\"" + code.slice(i, i + opLength) + "\"");
 				i += opLength - 1;
 			}
 			else if (outp.slice(-1) === "(" && nextIsOp) {
 				outp += "\"" + Japt.strings.length + "\"";
-				Japt.strings.push(code.slice(i, i + opLength));
+				Japt.strings.push("\"" + code.slice(i, i + opLength) + "\"");
 				i += opLength - 1;
 			}
 			else {

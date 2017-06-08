@@ -934,8 +934,8 @@ var Japt = {
 					} else {
 						outp += " ." + char + "(";
 					}
-				} else if (/([A-Z])[+\-*/%^&|<=>!~]+$/.test(outp)) {
-					outp += outp.match(/([A-Z])[+\-*/%^&|<=>!~]+$/)[1] + "." + char + "(";
+				} else if (/([A-Z])(?!\+\+|--)[+\-*/%^&|<=>!~]+$/.test(outp)) {
+					outp += outp.match(/([A-Z])(?!\+\+|--)[+\-*/%^&|<=>!~]+$/)[1] + "." + char + "(";
 				} else {
 					outp += "." + char + "(";
 				}
@@ -961,9 +961,10 @@ var Japt = {
 		outp = outp.replace(/\$(\d+)\$/g,function(_,a){return Japt.snippets[+a]});
 		outp = fixParens(outp);
 		outp = outp
+			.replace(/(\+\+|--)[A-Z]|[A-Z](\+\+|--)/g, function(s) { Japt.strings.push("(" + s + ")"); return "\"" + (Japt.strings.length - 1) + "\""; })
 			.replace(/[,;]/g, "$& ")
 			.replace(/[}]/g, " $&")
-			.replace(/[{?:]|!==?|[+\-*/%&|^<=>]+/g, " $& ")
+			.replace(/[{?:]|&&|\|\||(?:\*\*|==|!=|[+\-*/%&|^<=>])=?/g, " $& ")
 			.replace(/ +/g, " ")
 			.replace(/ ;/g, ";");
 		outp = outp.replace(/"(\d+)"/g,function(_,a){return Japt.strings[+a]});

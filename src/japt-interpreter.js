@@ -713,6 +713,9 @@ var Japt = {
 					outp = Japt.transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2)+"\"":"\\".repeat(b.length/2)}));
 					i = code.length;
 				}
+				else if (i === 0 && char === ";") {
+					lines.push(";")
+				}
 				else if (level === 0) {
 					if (char === "$") {
 						if (Japt.use_safe) Japt.is_safe = false;

@@ -15,14 +15,20 @@ Completed:
 1.4.5  S.k(s) -> remove all chars in s from this (opposite of S.o(s))
 1.4.5  S.k(f) -> filter-false  (no default function)
 1.4.5  A.k(f) -> filter-false  (default function: identity)
+1.4.5  S.n(s) -> convert to number ("baab"n"ab" -> 9)
+1.4.5  N.s(s) -> convert to string (9s"ab" -> "baab")
+1.4.5  S.n(a) -> convert to number ("7abab7"n["ab"7] -> 9)
+1.4.5  N.s(a) -> convert to string (9s["ab"7] -> "7abab7")
+1.4.5  A.ì(a) -> convert to number ([7'c'c7]ì['c7] -> 9)
+1.4.5  N.ì(a) -> convert to array (9ì['c7] -> [7,"c","c",7])
+1.4.5  A.ì(s) -> convert to number ([7'c'c7]ì"c7" -> 9)
+1.4.5  N.ì(s) -> convert to array (9ì"c7" -> ["7","c","c","7"])
 
 Planned:
-1.4.5  X.?(f) -> run X through f  (default function: identity?)
+1.4.5  X.?(f) -> run X through f  (default function: output with newline?)
 1.4.5  S.?(n,s=" ") -> pad S to n chars with filler s
 1.4.5  A.n(s) -> sort the items in A by their alphabetical order in s
 1.4.5  A.n(a) -> sort A by the order the items appear in a?
-1.4.5  S.n(s) -> convert to number ("baab"n"ab" -> 9)
-1.4.5  N.s(s) -> convert to string (9s"ab" -> "baab")
 1.4.5  A.?(f) -> all truthy indices
 1.4.5  S.?(f) -> all truthy indices
 1.4.5  S.?(s,n) -> insert s at every n'th position
@@ -31,6 +37,9 @@ Planned:
 1.4.5  A.?(a) -> interleave
 1.4.5  S.u(x)? -> uppercase first character
 1.4.5  S.v(x)? -> title case
+1.4.5  S.w(n%3==1?) -> reverse and mirror ()[]{}<>\/
+1.4.5  S.w(n%3==2?) -> mirror ()[]{}<>\/
+1.4.5  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
 1.4.5  ? -> `w `?
 1.4.5  ? -> `c `?
 1.4.5  ? -> `gJ `

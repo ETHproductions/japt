@@ -1,19 +1,155 @@
-var A,B,C,D,E,F,G,H,I,J,_K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z; // Japt variables
-function noFunc(x){alert("No such function: "+x)} // Runs whenever the program contains a non-existant function call
-function id(x){return(typeof x)!=="undefined"} // Detects whether the variable is defined
-function fb(x,y){return id(x)?x:y} // Fallback: returns x if x is defined, y otherwise
-function pm(x,y){return(x%y+y)%y} // Positive modulo
-function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configurable:false,writable:true,value:f})}
-function regexify(x,y){if(x instanceof RegExp)return x;x+="";y=fb(y,null);var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="L"?a?"\\W_\\d":"[^A-Za-z]":x[i]=="V"?a?"\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":x[i]=="Y"?a?"\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_":"[^AaEeIiOoUuYy]":x[i]=="y"?a?"AaEeIiOoUuYy":"[AaEeIiOoUuYy]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"").replace(/g/g,"")+"g")}
-function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/^!?[a-zà-ÿ]$/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
-function isChar(str,char){return RegExp('^['+char+']$').test(str);}
-function str(x){return x instanceof Array?'['+x.map(str).join()+']':x instanceof String||typeof x==="string"?'"'+x.replace(/"/g,"\\\"")+'"':x+""}
-function regescape(s){s=String(s);return s.replace(/[()[\]{}\-+*^$|\\/.]/g,"\\$&")}
-function clone(x){return x instanceof Array?x.slice():x}
+var A, B, C, D, E, F, G, H, I, J, _K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z; // Japt variables
 
 var isnode = typeof window === "undefined";
 if (isnode) var shoco = require("../dependencies/shoco");
-Object.defineProperty(isnode ? global : window, "K", { enumerable: false, configurable: true, get: function() { return fb(_K, new Date()); }, set: function(x) { return _K=x; }});
+
+// K defaults to new Date()
+Object.defineProperty(isnode ? global : window, "K", {
+	enumerable: false,
+	configurable: true,
+	get: function() {
+		return fb(_K, new Date());
+	},
+	set: function(x) {
+		return _K = x; 
+	}
+});
+
+// Runs whenever the program contains a non-existant function call
+function noFunc(x) {
+	Japt.error("No such function: " + x);
+}
+
+// Detects whether the variable is defined
+function id(x) {
+	return typeof x !== "undefined";
+}
+
+// Fallback: returns x if x is defined, y otherwise (like ||, but only if x is undefined)
+function fb(x, y) {
+	return id(x) ? x : y;
+}
+
+// Positive modulo (like Python's %)
+function pm(x, y) {
+	return (x % y + y) % y;
+}
+
+// Defines a function on a prototype
+function df(klass, property, func) {
+	Object.defineProperty(klass.prototype, property, {
+		enumerable: false,
+		configurable: false,
+		writable: true, // in case we need to change it later
+		value: func
+	});
+}
+
+// Converts a string to a regex, Japt-style
+function regexify(string, flags) {
+	if (string instanceof RegExp)
+		// you dirty rotten liar
+		return string;
+	string = String(string);
+	
+	if (flags !== "") {
+		flags = String(fb(flags, ""));
+		if (!flags.contains("g"))
+			flags += "g";
+	}
+	
+	var regex = "", inCharClass = false;
+	for(var i = 0; i < string.length; i++) {
+		var char = string[i];
+		if (char === "%") {
+			string = string.slice(0, i + 1) + "\\" + string.slice(i + 1);
+		}
+		else if (char === "\\") {
+			char = string[++i];
+			if (char === "A")
+				regex += inCharClass ? "A-Z" : "[A-Z]";
+			else if (char === "a")
+				regex += inCharClass ? "a-z" : "[a-z]";
+			else if (char === "l")
+				regex += inCharClass ? "A-Za-z" : "[A-Za-z]";
+			else if (char === "L")
+				regex += inCharClass ? "\\W_\\d" : "[^A-Za-z]";
+			else if (char === "V")
+				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_" : "[^AaEeIiOoUu]";
+			else if (char === "v")
+				regex += inCharClass ? "AaEeIiOoUu" : "[AaEeIiOoUu]";
+			else if (char === "Y")
+				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_" : "[^AaEeIiOoUuYy]";
+			else if (char === "y")
+				regex += inCharClass ? "AaEeIiOoUuYy" : "[AaEeIiOoUuYy]";
+			else
+				regex += "\\" + char;
+		}
+		else {
+			if (char === "[")
+				inCharClass = true;
+			else if (char === "]")
+				inCharClass = false;
+			regex += char;
+		}
+	}
+	
+	return RegExp(regex, flags);
+}
+
+// Converts an operator/method and an argument to a function, Japt-style
+function functify(operator, argument) {
+	if (typeof operator === "function")
+		return operator;
+	
+	var hasArg = id(argument),
+		func = "f=function(a,b){return ",
+		isMethod = /^!?[a-zà-ÿ]$/.test(operator);
+	
+	if (isMethod) {
+		if (operator[0] !== "!")
+			func += "a." + operator + (hasArg ? "(b)" : "()");
+		else
+			func += "b." + operator.slice(1) + "(a)";
+	}
+	else {
+		if (operator[0] !== "!" || operator.slice(0, 2) === "!=")
+			func += "a" + operator + "b";
+		else
+			func += "b" + operator.slice(1) + "a";
+	}
+	func += "}";
+	
+	return eval(func);
+}
+
+// Returns whether the character is in a specified range
+function isChar(char, chars) {
+	return RegExp('^[' + chars + ']$').test(char);
+}
+
+// Stringifies an object in a good-looking way
+function str(x) {
+	if (x.constructor === Array)
+		return '[' + x.map(str).join(', ') + ']';
+	if (x.constructor === String)
+		return JSON.stringify(String(x));
+	return String(x);
+}
+
+// Escapes all special regex characters so they can be used in a regex
+function regescape(s) {
+	return String(s).replace(/[()[\]{}\-+*^$|\\/.]/g, "\\$&");
+}
+
+// Deep-clones an object (note: does not work on arbitrary objects)
+function clone(x) {
+	if (x instanceof Array)
+		return x.map(clone);
+	if (x instanceof Date)
+		return new Date(x);
+	return x;
+}
 
 var pairs_1_3 = { 
 	// Unicode shortcuts
@@ -329,30 +465,14 @@ Math.T = Math.PI * 2;
 
 // String compression
 shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
-shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {return char.charCodeAt(0)})))};
-
-void(0);
-
-function newvars() {
-	A = [],
-	B = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-	C = "abcdefghijklmnopqrstuvwxyz",
-	D = "QWERTYUIOP\nASDFGHJKL\nZXCVBNM",
-	E = "[a-z]",
-	F = "[A-Za-z]",
-	G = 36,
-	H = 65,
-	I = 91,
-	J = ",",
-	L = ".";
-}
+shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor === Array ? str[0] : str ).split('').map(function (char) {return char.charCodeAt(0)})))};
 
 function subparen(code) {
 	var level = 0, min = 0;
 	for(var i = 0; i < code.length; ++i) {
-		if(code[i]=='(')
+		if(code[i] === '(')
 			++level;
-		if(code[i]==')')
+		if(code[i] === ')')
 			--level, min = Math.min(min, level);
 	}
 	if(min < 0) code = '('.repeat(-min) + code, level -= min;
@@ -366,13 +486,13 @@ function fixParens(code) {
 		char = code[i];
 		switch(mode) {
 			case "next":
-				if (char == ";") {
+				if (char === ";") {
 					cade += subparen(curr) + char;
 					curr = "";
-				} else if (char == "[") {
+				} else if (char === "[") {
 					mode = "array";
 					level = 0;
-				} else if (char == "{") {
+				} else if (char === "{") {
 					mode = "brackets";
 					level = 0;
 				} else {
@@ -380,9 +500,9 @@ function fixParens(code) {
 				}
 				break;
 			case "array":
-				if (char == "[") {
+				if (char === "[") {
 					++level;
-				} else if (char == "]") {
+				} else if (char === "]") {
 					--level;
 				}
 				if (level < 0) {
@@ -394,7 +514,7 @@ function fixParens(code) {
 				}
 				break;
 			case "brackets":
-				if (char == "}") {
+				if (char === "}") {
 					--level;
 				}
 				if (level < 0) {
@@ -477,9 +597,9 @@ var Japt = {
 						input_mode = "number";
 						current = char;
 					} else if (/["']/.test(char)) {
-						input_mode = "string "+char;
+						input_mode = "string " + char;
 						current = "";
-					} else if (char == "[") {
+					} else if (char === "[") {
 						input_mode = "array";
 						current = "";
 						level = 1;
@@ -504,7 +624,7 @@ var Japt = {
 				case "number":
 					if (/[0-9.]/.test(char)) {
 						current += char;
-					} else if (current == "-" && /\S/.test(char)) {
+					} else if (current === "-" && /\S/.test(char)) {
 						input_mode = "flag";
 						current = char;
 					} else {
@@ -515,31 +635,31 @@ var Japt = {
 					}
 					break;
 				case "string \"":
-					if (char == "\"") {
+					if (char === "\"") {
 						processed.push(current);
 						current = undefined;
 						input_mode = "next";
-					} else if (char == "\\" && /'"\\/.test(input[index+1])) {
+					} else if (char === "\\" && /'"\\/.test(input[index + 1])) {
 						current += input[++index];
 					} else {
 						current += char;
 					}
 					break;
 				case "string '":
-					if (char == "'") {
+					if (char === "'") {
 						processed.push(current);
 						current = undefined;
 						input_mode = "next";
-					} else if (char == "\\" && /'"\\/.test(input[index+1])) {
+					} else if (char === "\\" && /'"\\/.test(input[index + 1])) {
 						current += input[++index];
 					} else {
 						current += char;
 					}
 					break;
 				case "array":
-					if (char == "[")
+					if (char === "[")
 						++level;
-					if (char == "]")
+					if (char === "]")
 						--level;
 					if (level === 0) {
 						processed.push(Japt.evalInput(current));
@@ -611,21 +731,21 @@ var Japt = {
 		}
 		if (before) before(code);
 		try {
-			program = function program(U,V,W,X,Y,Z) {
+			program = function program(U, V, W, X, Y, Z) {
 				if (!program.cache)
 					program.cache = {};
-				var id = str([U,V,W,X,Y,Z]);
+				var id = str([U, V, W, X, Y, Z]);
 				var cached = program.cache[id];
 				if (typeof cached !== "undefined")
 					return cached;
-				rp = function rp(u,v,w,x,y,z) {
+				rp = function rp(u, v, w, x, y, z) {
 					return program(
-						fb(u,U),
-						fb(v,V),
-						fb(w,W),
-						fb(x,X),
-						fb(y,Y),
-						fb(z,Z)
+						fb(u, U),
+						fb(v, V),
+						fb(w, W),
+						fb(x, X),
+						fb(y, Y),
+						fb(z, Z)
 					);
 				};
 				return program.cache[id] = eval(code);
@@ -638,7 +758,7 @@ var Japt = {
 				else if (!Japt.flags.æ) result = [];
 				U = typeof U === "number" ? U.o() : U.s();
 				for (var i = 0; i < U.length; i++) {
-					var temp = program(U[i],fb(N[1],i),fb(N[2],U),X,Y,Z);
+					var temp = program(U[i], fb(N[1], i), fb(N[2], U),X,Y,Z);
 					if (Japt.flags.æ) {
 						if (temp) {
 							result = Japt.flags.m ? temp : U[i];
@@ -716,7 +836,7 @@ var Japt = {
 					Japt.snippets.push("");
 					for (++i; i < code.length; ++i) {
 						if (code[i] === "$") break;
-						Japt.snippets[Japt.snippets.length-1] += code[i]; 
+						Japt.snippets[Japt.snippets.length - 1] += code[i]; 
 					}
 					newcode += "$" + (extrabraces[0] > 0 ? Japt.snippets.pop() : Japt.snippets.length - 1) + "$";
 				}
@@ -742,7 +862,7 @@ var Japt = {
 						Japt.strings.push("\"\\\"\"");
 					}
 					else {
-						Japt.strings.push("\""+code[i]+"\"");
+						Japt.strings.push("\"" + code[i] + "\"");
 					}
 				}
 				else if (char === "#") {
@@ -757,7 +877,7 @@ var Japt = {
 					newcode += char;
 				}
 				else if (pairs.hasOwnProperty(char)) {
-					code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+					code = code.slice(0, i + 1) + pairs[char] + code.slice(i + 1);
 				}
 				else if (char === "\n") {
 					while (extrabraces[0] > 0) {
@@ -783,7 +903,7 @@ var Japt = {
 					currstr += "\\" + code[++i];
 				}
 				else if (char === strchars[level]) {
-					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/, function(_, a) { return "\"" + shoco.d(a); });
 					level--;
 					currstr += "\"";
 					newcode += "\"" + Japt.strings.length + "\"";
@@ -794,7 +914,7 @@ var Japt = {
 					currstr += "\\\"";
 				}
 				else if (char === "{") {
-					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/, function(_, a) { return "\"" + shoco.d(a); });
 					level++;
 					extraparen = true;
 					currbraces = "";
@@ -808,7 +928,7 @@ var Japt = {
 			}
 			else if (level % 2 === 0) {
 				if (level === 2 && extrabraces[level] === 0 && char === "}") {
-					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/, function(_, a) { return "\"" + shoco.d(a); });
 					level--;
 					var transpiled = Japt.transpile(currbraces);
 					var transparen = !/^([\d.e]+|[A-Z]|"(\\.|[^"{}])*")$/.test(transpiled);
@@ -898,10 +1018,10 @@ var Japt = {
 						temp += "}";
 					else i--;
 					var tr = Japt.transpile(temp.slice(0,-1));
-					if (tr.lastIndexOf(";") === -1)
-						tr = "return " + tr;
+					if (tr.contains(";"))
+						tr = tr.slice(0, tr.lastIndexOf(";") + 2) + "return " + tr.slice(tr.lastIndexOf(";") + 2);
 					else
-						tr = tr.slice(0, tr.lastIndexOf(";") + 2) + "return " + tr.slice(tr.lastIndexOf(";") + 2)
+						tr = "return " + tr;
 					
 					outp += "\"" + Japt.strings.length + "\"}";
 					if (extraparen) outp += ")";
@@ -920,9 +1040,9 @@ var Japt = {
 			}
 			else if (isChar(char, "a-zà-ÿ")) {
 				if (outp.slice(-2) === "(!") {
-					outp = outp.slice(0,-1) + "\"!"+char+"\"";
+					outp = outp.slice(0,-1) + "\"!" + char + "\"";
 				} else if (outp.slice(-1) === "(") {
-					outp += "\""+char+"\"";
+					outp += "\"" + char + "\"";
 				} else if (isChar(outp.slice(-1), "0-9")) {
 					if (char === "e" && isChar(code[i + 1], "0-9") && outp.slice(-2,-1) !== "e") {
 						outp += char;
@@ -936,7 +1056,7 @@ var Japt = {
 				}
 			}
 			else if (pairs[char]) {
-				code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+				code = code.slice(0, i + 1) + pairs[char] + code.slice(i + 1);
 			}
 			else if (outp.slice(-2) === "(!" && nextIsOp) {
 				outp = outp.slice(0,-1) + "\"" + Japt.strings.length + "\"";
@@ -953,7 +1073,7 @@ var Japt = {
 			}
 		}
 		
-		outp = outp.replace(/\$(\d+)\$/g,function(_,a){return Japt.snippets[+a]});
+		outp = outp.replace(/\$(\d+)\$/g, function(_, a) { return Japt.snippets[+a]; });
 		outp = fixParens(outp);
 		outp = outp
 			.replace(/(\+\+|--)[A-Z]|[A-Z](\+\+|--)/g, function(s) { Japt.strings.push("(" + s + ")"); return "\"" + (Japt.strings.length - 1) + "\""; })
@@ -962,7 +1082,7 @@ var Japt = {
 			.replace(/[{?:]|&&|\|\||(?:\*\*|==|<<|>>>?|!=|[+\-*/%&|^<=>])=?/g, " $& ")
 			.replace(/ +/g, " ")
 			.replace(/ ;/g, ";");
-		outp = outp.replace(/"(\d+)"/g,function(_,a){return Japt.strings[+a]});
+		outp = outp.replace(/"(\d+)"/g, function(_, a) { return Japt.strings[+a]; });
 		return outp;
 	},
 	

@@ -706,161 +706,158 @@ var Japt = {
 			j = 0,
 			outp = "";  // Temporary output
 	
-		function pretranspile(code) {
-			var i = 0, line = 0, lines = [], strchars = Array(20).fill(""), polyglot = '"(p|';
-			var extraparen = false;
-			for (; i < code.length; ++i) {
-				var char = code[i];
-				if (code.slice(i).indexOf(polyglot) === 0) {
-					outp = Japt.transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2)+"\"":"\\".repeat(b.length/2)}));
-					i = code.length;
+		var i = 0, line = 0, lines = [], strchars = Array(20).fill(""), polyglot = '"(p|';
+		var extraparen = false;
+		for (; i < code.length; ++i) {
+			var char = code[i];
+			if (code.slice(i).indexOf(polyglot) === 0) {
+				outp = Japt.transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2)+"\"":"\\".repeat(b.length/2)}));
+				i = code.length;
+			}
+			else if (i === 0 && char === ";") {
+				lines.push(";")
+			}
+			else if (level === 0) {
+				if (char === "$") {
+					if (Japt.use_safe) Japt.is_safe = false;
+					Japt.snippets.push("");
+					for (++i; i < code.length; ++i) {
+						if (code[i] === "$") break;
+						Japt.snippets[Japt.snippets.length-1] += code[i]; 
+					}
+					newcode += "$" + (extrabraces[0] > 0 ? Japt.snippets.pop() : Japt.snippets.length - 1) + "$";
 				}
-				else if (i === 0 && char === ";") {
-					lines.push(";")
+				else if (char === "\\") {
+					if (Japt.use_safe) Japt.is_safe = false;
+					Japt.snippets.push(code[++i]);
+					newcode += "$" + (extrabraces[0] > 0 ? Japt.snippets.pop() : Japt.snippets.length - 1) + "$";
 				}
-				else if (level === 0) {
-					if (char === "$") {
-						if (Japt.use_safe) Japt.is_safe = false;
-						Japt.snippets.push("");
-						for (++i; i < code.length; ++i) {
-							if (code[i] === "$") break;
-							Japt.snippets[Japt.snippets.length-1] += code[i]; 
-						}
-						newcode += "$" + (extrabraces[0] > 0 ? Japt.snippets.pop() : Japt.snippets.length - 1) + "$";
+				else if (isChar(char, "\"`")) {
+					level++;
+					strchars[level] = char;
+					currstr = "\"";
+				}
+				else if (char === "'") {
+					newcode += "\"" + Japt.strings.length + "\"";
+					if (code[++i] === "\\") {
+						Japt.strings.push("\"\\\\\"");
 					}
-					else if (char === "\\") {
-						if (Japt.use_safe) Japt.is_safe = false;
-						Japt.snippets.push(code[++i]);
-						newcode += "$" + (extrabraces[0] > 0 ? Japt.snippets.pop() : Japt.snippets.length - 1) + "$";
+					else if (code[i] === "\n") {
+						Japt.strings.push("\"\\n\"");
 					}
-					else if (isChar(char, "\"`")) {
-						level++;
-						strchars[level] = char;
-						currstr = "\"";
-					}
-					else if (char === "'") {
-						newcode += "\"" + Japt.strings.length + "\"";
-						if (code[++i] === "\\") {
-							Japt.strings.push("\"\\\\\"");
-						}
-						else if (code[i] === "\n") {
-							Japt.strings.push("\"\\n\"");
-						}
-						else if (code[i] === "\"") {
-							Japt.strings.push("\"\\\"\"");
-						}
-						else {
-							Japt.strings.push("\""+code[i]+"\"");
-						}
-					}
-					else if (char === "#") {
-						newcode += (code[++i] || "\0").charCodeAt(0);
-					}
-					else if (char === "{") {
-						++extrabraces[0];
-						newcode += char;
-					}
-					else if (char === "}") {
-						--extrabraces[0];
-						newcode += char;
-					}
-					else if (pairs.hasOwnProperty(char)) {
-						code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
-					}
-					else if (char === "\n") {
-						while (extrabraces[0] > 0) {
-							newcode += "}";
-							extrabraces[0]--;
-						}
-						if (newcode) lines.push("UVWXYZABCDEFGHIJKLMNOPQRST"[line] + "=" + newcode + ";");
-						line++;
-						newcode = "";
-					}
-					else if (char === ";") {
-						if (newcode) lines.push(newcode + ";");
-						newcode = "";
+					else if (code[i] === "\"") {
+						Japt.strings.push("\"\\\"\"");
 					}
 					else {
-						if ((newcode === "" || newcode.slice(-1) === ";") && /[a-zà-ÿ*/%^|&<=>?]/.test(char))
-							newcode += "U";
-						newcode += char;
+						Japt.strings.push("\""+code[i]+"\"");
 					}
 				}
-				else if (level === 1) {
-					if (char === "\\") {
-						currstr += "\\" + code[++i];
-					}
-					else if (char === strchars[level]) {
-						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
-						level--;
-						currstr += "\"";
-						newcode += "\"" + Japt.strings.length + "\"";
-						Japt.strings.push(extraparen ? "(" + currstr + ")" : currstr);
-						extraparen = false;
-					}
-					else if (char === "\"") {
-						currstr += "\\\"";
-					}
-					else if (char === "{") {
-						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
-						level++;
-						extraparen = true;
-						currbraces = "";
-					}
-					else if (char === "\n") {
-						currstr += "\\n";
-					}
-					else {
-						currstr += char;
-					}
+				else if (char === "#") {
+					newcode += (code[++i] || "\0").charCodeAt(0);
 				}
-				else if (level % 2 === 0) {
-					if (level === 2 && extrabraces[level] === 0 && char === "}") {
-						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
-						level--;
-						var transpiled = Japt.transpile(currbraces);
-						var transparen = !/^([\d.e]+|[A-Z]|"(\\.|[^"{}])*")$/.test(transpiled);
-						currstr += "\"+" + (transparen ? "(" : "") + transpiled + (transparen ? ")" : "") + "+\"";
+				else if (char === "{") {
+					++extrabraces[0];
+					newcode += char;
+				}
+				else if (char === "}") {
+					--extrabraces[0];
+					newcode += char;
+				}
+				else if (pairs.hasOwnProperty(char)) {
+					code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+				}
+				else if (char === "\n") {
+					while (extrabraces[0] > 0) {
+						newcode += "}";
+						extrabraces[0]--;
 					}
-					else {
-						currbraces += char;
-						if (isChar(char, "\"`")) {
-							level++;
-							strchars[level] = char;
-						}
-						else if (isChar(char,"'#")) {
-							currbraces += code[++i];
-						}
-						else if (char === "{") {
-							extrabraces[level]++;
-						}
-						else if (char === "}") {
-							if (extrabraces[level] === 0) level--;
-							else extrabraces[level]--;
-						}
-					}
+					if (newcode) lines.push("UVWXYZABCDEFGHIJKLMNOPQRST"[line] + "=" + newcode + ";");
+					line++;
+					newcode = "";
+				}
+				else if (char === ";") {
+					if (newcode) lines.push(newcode + ";");
+					newcode = "";
+				}
+				else {
+					if ((newcode === "" || newcode.slice(-1) === ";") && /[a-zà-ÿ*/%^|&<=>?]/.test(char))
+						newcode += "U";
+					newcode += char;
+				}
+			}
+			else if (level === 1) {
+				if (char === "\\") {
+					currstr += "\\" + code[++i];
+				}
+				else if (char === strchars[level]) {
+					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					level--;
+					currstr += "\"";
+					newcode += "\"" + Japt.strings.length + "\"";
+					Japt.strings.push(extraparen ? "(" + currstr + ")" : currstr);
+					extraparen = false;
+				}
+				else if (char === "\"") {
+					currstr += "\\\"";
+				}
+				else if (char === "{") {
+					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					level++;
+					extraparen = true;
+					currbraces = "";
+				}
+				else if (char === "\n") {
+					currstr += "\\n";
+				}
+				else {
+					currstr += char;
+				}
+			}
+			else if (level % 2 === 0) {
+				if (level === 2 && extrabraces[level] === 0 && char === "}") {
+					if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+					level--;
+					var transpiled = Japt.transpile(currbraces);
+					var transparen = !/^([\d.e]+|[A-Z]|"(\\.|[^"{}])*")$/.test(transpiled);
+					currstr += "\"+" + (transparen ? "(" : "") + transpiled + (transparen ? ")" : "") + "+\"";
 				}
 				else {
 					currbraces += char;
-					if (char === "\\") {
+					if (isChar(char, "\"`")) {
+						level++;
+						strchars[level] = char;
+					}
+					else if (isChar(char,"'#")) {
 						currbraces += code[++i];
 					}
-					else if (char === strchars[level]) {
-						level--;
-					}
 					else if (char === "{") {
-						level++;
+						extrabraces[level]++;
 					}
-				}
-				if (i + 1 === code.length && level > 0) {
-					code += level % 2 ? strchars[level] : "}";
+					else if (char === "}") {
+						if (extrabraces[level] === 0) level--;
+						else extrabraces[level]--;
+					}
 				}
 			}
-			lines.push(newcode);
-			return lines.join("");
+			else {
+				currbraces += char;
+				if (char === "\\") {
+					currbraces += code[++i];
+				}
+				else if (char === strchars[level]) {
+					level--;
+				}
+				else if (char === "{") {
+					level++;
+				}
+			}
+			if (i + 1 === code.length && level > 0) {
+				code += level % 2 ? strchars[level] : "}";
+			}
 		}
+		lines.push(newcode);
+		code = lines.join("");
 		
-		code = pretranspile(code);
 		outp = "";
 		
 		for (i = 0; i < code.length; ++i) {

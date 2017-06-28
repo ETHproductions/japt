@@ -908,11 +908,13 @@ var Japt = {
 						temp += "}";
 					else i--;
 					var tr = Japt.transpile(temp.slice(0,-1));
-					if (tr.lastIndexOf(";") < 0)
-						outp += "return " + tr + "}";
+					if (tr.contains(";"))
+						tr = tr.slice(0, tr.lastIndexOf(";") + 2) + "return " + tr.slice(tr.lastIndexOf(";") + 2);
 					else
-						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
+					
+					outp += "\"" + Japt.strings.length + "\"}";
 					if (extraparen) outp += ")";
+					Japt.strings.push(tr);
 				}
 				else {
 					outp += letters.split("").join(",").replace(/M,/g, "M.");

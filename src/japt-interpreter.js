@@ -911,6 +911,7 @@ var Japt = {
 					if (tr.contains(";"))
 						tr = tr.slice(0, tr.lastIndexOf(";") + 2) + "return " + tr.slice(tr.lastIndexOf(";") + 2);
 					else
+						tr = "return " + tr;
 					
 					outp += "\"" + Japt.strings.length + "\"}";
 					if (extraparen) outp += ")";

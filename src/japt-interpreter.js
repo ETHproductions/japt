@@ -602,7 +602,7 @@ var Japt = {
 		Y = 4 in N ? N[4] : 0,
 		Z = 5 in N ? N[5] : 0;
 		
-		Japt.strings = [], Japt.snippets = [], Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.intervals = [], Japt.flags = input.flags || {};
+		Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.flags = input.flags || {};
 		
 		code = Japt.transpile(code);
 		if (!Japt.is_safe) {
@@ -695,27 +695,27 @@ var Japt = {
 	},
 	
 	transpile: function(code) {
-		var level = 0,  // Current number of parentheses or curly braces that we're inside
-			temp = "",
-			extrabraces = Array(20).fill(0),
-			currstr = "",
-			currbraces = "",
-			newcode = "",
-			pairs = pairs_1_3,  // Version of Unicode shortcuts to use
-			i = 0,
-			j = 0,
-			outp = "";  // Temporary output
+		Japt.strings = [];
+		Japt.snippets = [];
+		Japt.intervals = [];
 	
-		function pretranspile(code) {
-			var i = 0, line = 0, lines = [], strchars = Array(20).fill(""), polyglot = '"(p|';
-			var extraparen = false;
+		function subtranspile(code) {
+			var level = 0,  // Current number of parentheses or curly braces that we're inside
+				extrabraces = Array(20).fill(0),
+				currstr = "",
+				currbraces = "",
+				newcode = "",
+				pairs = pairs_1_3,  // Version of Unicode shortcuts to use
+				i = 0,
+				j = 0,
+				outp = "",  // Temporary output
+				lines = [],
+				strchars = Array(20).fill(""),
+				extraparen = false;
+			
 			for (; i < code.length; ++i) {
 				var char = code[i];
-				if (code.slice(i).indexOf(polyglot) === 0) {
-					outp = Japt.transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2)+"\"":"\\".repeat(b.length/2)}));
-					i = code.length;
-				}
-				else if (i === 0 && char === ";") {
+				if (i === 0 && char === ";") {
 					lines.push(";")
 				}
 				else if (level === 0) {
@@ -739,7 +739,6 @@ var Japt = {
 						currstr = "\"";
 					}
 					else if (char === "'") {
-						newcode += "\"" + Japt.strings.length + "\"";
 						if (code[++i] === "\\") {
 							Japt.strings.push("\"\\\\\"");
 						}
@@ -752,6 +751,7 @@ var Japt = {
 						else {
 							Japt.strings.push("\""+code[i]+"\"");
 						}
+						newcode += extrabraces[0] > 0 ? Japt.strings.pop() : "\"" + (Japt.strings.length - 1) + "\"";
 					}
 					else if (char === "#") {
 						newcode += (code[++i] || "\0").charCodeAt(0);
@@ -794,15 +794,20 @@ var Japt = {
 						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 						level--;
 						currstr += "\"";
-						newcode += "\"" + Japt.strings.length + "\"";
-						Japt.strings.push(extraparen ? "(" + currstr + ")" : currstr);
+						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
+						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
+						newcode += "$" + Japt.snippets.length + "$";
+						Japt.snippets.push(extraparen ? "(" + currstr + ")" : currstr);
 						extraparen = false;
 					}
 					else if (char === "\"") {
 						currstr += "\\\"";
 					}
 					else if (char === "{") {
-						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+						currstr += "\"";
+						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)"$/,function(_,a){return"\""+shoco.d(a)+"\""});
+						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
+						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
 						level++;
 						extraparen = true;
 						currbraces = "";
@@ -816,11 +821,10 @@ var Japt = {
 				}
 				else if (level % 2 === 0) {
 					if (level === 2 && extrabraces[level] === 0 && char === "}") {
-						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 						level--;
-						var transpiled = Japt.transpile(currbraces);
-						var transparen = !/^([\d.e]+|[A-Z]|"(\\.|[^"{}])*")$/.test(transpiled);
-						currstr += "\"+" + (transparen ? "(" : "") + transpiled + (transparen ? ")" : "") + "+\"";
+						var transpiled = subtranspile(currbraces);
+						var transparen = !/^[+-~!]*([\d.e]+|[A-Z]|"(\\.|[^"{}])*")$/.test(transpiled);
+						currstr += "+" + (transparen ? "(" : "") + transpiled + (transparen ? ")" : "") + "+\"";
 					}
 					else {
 						currbraces += char;
@@ -857,113 +861,115 @@ var Japt = {
 				}
 			}
 			lines.push(newcode);
-			return lines.join("");
-		}
-		
-		code = pretranspile(code);
-		outp = "";
-		
-		for (i = 0; i < code.length; ++i) {
-			var char = code[i],
-				opMatch = code.slice(i).match(/^(===|!==|==|!=|>>>|>>|<<|&&|\|\||>=|<=|\+(?!\+)|-(?!-)|\.(?!\d)|[*%^&|<>,])(?!=)/),
-				nextIsOp = !!opMatch,
-				opLength = nextIsOp ? opMatch[0].length : 0;
-			if (char === ";" && i === 0)
-				outp += "newvars()";
-			else if (isChar(char, "`'\"A-Z\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}"))
-				outp += ",";
-			else if (isChar(char, "0-9") && isChar(outp.slice(-1), "`\"A-Z\\)\\]}"))
-				outp += ",";
-			else if (char === "." && /\.\d+$/.test(outp))
-				outp += ",";
-			else if (isChar(outp.slice(-1), "+\\-&|\\^") && isChar(char, " \\)\\]};"))
-				code = code.slice(0,i)+'1'+code.slice(i);
-			else if (isChar(outp.slice(-1), "*%") && isChar(char, " \\)\\]};"))
-				code = code.slice(0,i)+'2'+code.slice(i);
+			code = lines.join("");
+			outp = "";
 			
-			if (char === "\"") {
-				var tms = code.slice(i).match(/"(\d+)"/)[0];
-				outp += tms;
-				i += tms.length - 1;
-			}
-			else if (isChar(char, "A-Z{")) {
-				var letters = "";
-				for (; isChar(code[i], "A-Z") && i < code.length; i++) {
-					letters += code[i];
+			for (i = 0; i < code.length; ++i) {
+				var char = code[i],
+					opMatch = code.slice(i).match(/^(===|!==|==|!=|>>>|>>|<<|&&|\|\||>=|<=|\+(?!\+)|-(?!-)|\.(?!\d)|[*%^&|<>,])(?!=)/),
+					nextIsOp = !!opMatch,
+					opLength = nextIsOp ? opMatch[0].length : 0;
+				if (char === ";" && i === 0)
+					outp += "newvars()";
+				else if (isChar(char, "`'\"A-Z\\(\\[{") && isChar(outp.slice(-1), "`\"A-Z0-9\\)\\]}"))
+					outp += ",";
+				else if (isChar(char, "0-9") && isChar(outp.slice(-1), "`\"A-Z\\)\\]}"))
+					outp += ",";
+				else if (char === "." && /\.\d+$/.test(outp))
+					outp += ",";
+				else if (isChar(outp.slice(-1), "+\\-&|\\^") && isChar(char, " \\)\\]};"))
+					code = code.slice(0,i)+'1'+code.slice(i);
+				else if (isChar(outp.slice(-1), "*%") && isChar(char, " \\)\\]};"))
+					code = code.slice(0,i)+'2'+code.slice(i);
+
+				if (char === "\"") {
+					var tms = code.slice(i).match(/"(\d+)"/)[0];
+					outp += tms;
+					i += tms.length - 1;
 				}
-				if (code[i] === "{") {
-					var extraparen = outp === "" || outp.slice(-1) === ";";
-					if (extraparen) outp += "(";
-					outp += "function(" + letters.split("").join(",") + "){";
-					temp = "";
-					for (level = 1, ++i; level > 0 && i < code.length; i++) {
-						if (code[i] === "{") {
-							++level;
-						} else if (code[i] === "}") {
-							--level;
-						}
-						temp += code[i];
+				else if (isChar(char, "A-Z{")) {
+					var letters = "";
+					for (; isChar(code[i], "A-Z") && i < code.length; i++) {
+						letters += code[i];
 					}
-					if (temp.slice(-1) !== "}")
-						temp += "}";
-					else i--;
-					var tr = Japt.transpile(temp.slice(0,-1));
-					if (tr.contains(";"))
-						tr = tr.slice(0, tr.lastIndexOf(";") + 2) + "return " + tr.slice(tr.lastIndexOf(";") + 2);
-					else
-						tr = "return " + tr;
-					
-					outp += "\"" + Japt.strings.length + "\"}";
-					if (extraparen) outp += ")";
-					Japt.strings.push(tr);
+					if (code[i] === "{") {
+						extraparen = outp === "" || outp.slice(-1) === ";";
+						if (extraparen) outp += "(";
+						outp += "function(" + letters.split("").join(",") + "){";
+						var temp = "";
+						for (level = 1, ++i; level > 0 && i < code.length; i++) {
+							if (code[i] === "{") {
+								++level;
+							} else if (code[i] === "}") {
+								--level;
+							}
+							temp += code[i];
+						}
+						if (temp.slice(-1) !== "}")
+							temp += "}";
+						else i--;
+						var tr = subtranspile(temp.slice(0,-1));
+
+						if (tr.contains(";"))
+							tr = tr.slice(0, tr.lastIndexOf(";") + 2) + "return " + tr.slice(tr.lastIndexOf(";") + 2);
+						else
+							tr = "return " + tr;
+
+						outp += tr + "}";
+						if (extraparen) outp += ")";
+					}
+					else {
+						outp += letters.split("").join(",").replace(/M,/g, "M.");
+						--i;
+					}
+				}
+				else if (char === " ") {
+					outp += ")";
+				}
+				else if (char === ")") {
+					outp += "))";
+				}
+				else if (isChar(char, "a-zà-ÿ")) {
+					if (outp.slice(-2) === "(!") {
+						outp = outp.slice(0,-1) + "\"!"+char+"\"";
+					} else if (outp.slice(-1) === "(") {
+						outp += "\""+char+"\"";
+					} else if (isChar(outp.slice(-1), "0-9")) {
+						if (char === "e" && isChar(code[i + 1], "0-9") && outp.slice(-2,-1) !== "e") {
+							outp += char;
+						} else {
+							outp += " ." + char + "(";
+						}
+					} else if (/([A-Z])(?!\+\+|--)[+\-*/%^&|<=>!~]+$/.test(outp)) {
+						outp += outp.match(/([A-Z])(?!\+\+|--)[+\-*/%^&|<=>!~]+$/)[1] + "." + char + "(";
+					} else {
+						outp += "." + char + "(";
+					}
+				}
+				else if (pairs[char]) {
+					code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
+				}
+				else if (outp.slice(-2) === "(!" && nextIsOp) {
+					outp = outp.slice(0,-1) + "\"" + Japt.strings.length + "\"";
+					Japt.strings.push("\"!" + code.slice(i, i + opLength) + "\"");
+					i += opLength - 1;
+				}
+				else if (outp.slice(-1) === "(" && nextIsOp) {
+					outp += "\"" + Japt.strings.length + "\"";
+					Japt.strings.push("\"" + code.slice(i, i + opLength) + "\"");
+					i += opLength - 1;
 				}
 				else {
-					outp += letters.split("").join(",").replace(/M,/g, "M.");
-					--i;
+					outp += char;
 				}
 			}
-			else if (char === " ") {
-				outp += ")";
-			}
-			else if (char === ")") {
-				outp += "))";
-			}
-			else if (isChar(char, "a-zà-ÿ")) {
-				if (outp.slice(-2) === "(!") {
-					outp = outp.slice(0,-1) + "\"!"+char+"\"";
-				} else if (outp.slice(-1) === "(") {
-					outp += "\""+char+"\"";
-				} else if (isChar(outp.slice(-1), "0-9")) {
-					if (char === "e" && isChar(code[i + 1], "0-9") && outp.slice(-2,-1) !== "e") {
-						outp += char;
-					} else {
-						outp += " ." + char + "(";
-					}
-				} else if (/([A-Z])(?!\+\+|--)[+\-*/%^&|<=>!~]+$/.test(outp)) {
-					outp += outp.match(/([A-Z])(?!\+\+|--)[+\-*/%^&|<=>!~]+$/)[1] + "." + char + "(";
-				} else {
-					outp += "." + char + "(";
-				}
-			}
-			else if (pairs[char]) {
-				code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
-			}
-			else if (outp.slice(-2) === "(!" && nextIsOp) {
-				outp = outp.slice(0,-1) + "\"!" + Japt.strings.length + "\"";
-				Japt.strings.push("\"" + code.slice(i, i + opLength) + "\"");
-				i += opLength - 1;
-			}
-			else if (outp.slice(-1) === "(" && nextIsOp) {
-				outp += "\"" + Japt.strings.length + "\"";
-				Japt.strings.push("\"" + code.slice(i, i + opLength) + "\"");
-				i += opLength - 1;
-			}
-			else {
-				outp += char;
-			}
+			
+			return outp;
 		}
 		
-		outp = outp.replace(/\$(\d+)\$/g,function(_,a){return Japt.snippets[+a]});
+		var outp = subtranspile(code);
+		
+		while(/\$(\d+)\$/.test(outp)) outp = outp.replace(/\$(\d+)\$/,function(_,a){return Japt.snippets[+a]});
 		outp = fixParens(outp);
 		outp = outp
 			.replace(/(\+\+|--)[A-Z]|[A-Z](\+\+|--)/g, function(s) { Japt.strings.push("(" + s + ")"); return "\"" + (Japt.strings.length - 1) + "\""; })

@@ -100,17 +100,18 @@
 		"1.4.2": "v1.4.2",
 		"1.4.3": "v1.4.3",
 		"1.4.4": "v1.4.4",
-		"2.0a0": "v2",
 		"dev": "master"
 	};
     var iscommit = v.length > 16,
-		isbeta = /^2.0\w/.test(v);
+		isbeta = /^2.0\w/.test(v),
+		isv2 = v[0] === "2",
+		file = isv2 ? "/src/japt.js" : "/src/japt-interpreter.js";
 	if (iscommit)
 		realv = v;
 	else if (versions.hasOwnProperty(v))
 		realv = versions[v];
 	else if (v >= defv)
-		realv = "master";
+		realv = isv2 ? "v2" : "master";
 	else {
 		var keys = Object.getOwnPropertyNames(versions).sort();
 		for (var i = 0; i < keys.length; i++) {
@@ -121,7 +122,7 @@
 		}
 	}
     var script = document.createElement('script');
-    script.setAttribute("src", "https://rawgit.com/ETHproductions/japt/" + realv + "/src/japt-interpreter.js");
+    script.setAttribute("src", "https://rawgit.com/ETHproductions/japt/" + (realv === 'v2' ? 'master' : realv) + file);
     document.getElementsByTagName('head')[0].appendChild(script);
 	
     var docs = document.getElementById('docs');
@@ -140,7 +141,7 @@
     var versionText;
     function addMaster (x) {
       return function () {
-        getWebpage(x === 'beta' ? 'https://rawgit.com/ETHproductions/japt/v2/docs/master.html' : 'docs/master.html', function (response) {
+        getWebpage(x === 'beta' ? '/docs/v2.html' : 'docs/master.html', function (response) {
           addDocs("<h1>Japt Docs</h1>" + versionText + "<p>Note: You're viewing the docs for the latest " + (x || "version") + " of Japt; some features listed may not work.</p>", response.responseText);
         }, function (response) {
           addDocs("Could not load docs.");
@@ -156,10 +157,10 @@
     }
     else if (isbeta) {
       if (realv === "v2")
-        versionText = "<p>You're using <a target='_blank' href='https://github.com/ETHproductions/japt/tree/v2'>the latest beta</a> of Japt.</p>";
+        versionText = "<p>You're using <a target='_blank' href='https://github.com/ETHproductions/japt/tree/'>the latest beta</a> of Japt.</p>";
       else
         versionText = "<p>You're using Japt <a target='_blank' href='https://github.com/ETHproductions/japt/tree/" + realv + "'>version " + v + "</a>.</p>";
-      getWebpage('https://rawgit.com/ETHproductions/japt/v2/docs/' + realv + '.html', function (response) {
+      getWebpage('docs/' + realv + '.html', function (response) {
         addDocs("<h1>Japt Docs</h1>" + versionText, response.responseText);
       }, addMaster('beta'));
     }

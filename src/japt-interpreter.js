@@ -741,6 +741,7 @@ var Japt = {
 				newcode = "",
 				pairs = pairs_1_3,  // Version of Unicode shortcuts to use
 				i = 0,
+				line = 0,
 				lines = [],
 				strchars = Array(20).fill("");
 			

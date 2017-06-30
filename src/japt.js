@@ -1052,6 +1052,7 @@ var Japt = {
 				newcode = "",
 				pairs = pairs_1_3,  // Version of Unicode shortcuts to use
 				i = 0,
+				line = 0,
 				lines = [],
 				strchars = Array(20).fill("");
 
@@ -1138,8 +1139,6 @@ var Japt = {
 						newcode = "";
 					}
 					else {
-						if ((newcode === "" || newcode.slice(-1) === ";") && /[a-zà-öø-ÿ*÷%^|&<=>?]/.test(char))
-							newcode += "U";
 						newcode += char;
 					}
 				}
@@ -1241,6 +1240,8 @@ var Japt = {
 					code = code.slice(0,i)+'1'+code.slice(i);
 				else if (isChar(outp.slice(-1), "*%") && isChar(char, " \\)\\]};"))
 					code = code.slice(0,i)+'2'+code.slice(i);
+				else if ((outp === "" || outp.slice(-1) === ";") && /[a-zà-ÿ*/%^|&<=>?]/.test(char))
+					outp += "U";
 
 				if (char === "\"") {
 					var tms = code.slice(i).match(/"(\d+)"/)[0];

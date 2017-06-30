@@ -36,13 +36,9 @@ function pm(x, y) {
 }
 
 // Defines a function on a prototype
-function df(klass, property, func) {
-	Object.defineProperty(klass.prototype, property, {
-		enumerable: false,
-		configurable: false,
-		writable: true, // in case we need to change it later
-		value: func
-	});
+function df(target, properties) {
+	for (var key in properties) properties[key] = { value: properties[key], writable: true };
+	Object.defineProperties(target, properties);
 }
 
 // Converts a string to a regex, Japt-style
@@ -256,189 +252,284 @@ var pairs_2_0 = {
 	"\xD0": "$new Date$(" // Ð - 208
 };
 
-var pcache = {};
-function perm(x,l){if(l===0)return[[]];if(x.length<2)return[x];var id=l+';'+str(x);if(pcache[id])return pcache[id];var a=[];for(var i in x)if(+i===x.indexOf(x[i]))perm([].concat(x.slice(0,i),x.slice(+i+1)),l-1).map(function(b){a.push([x[i]].concat(b))});return pcache[id]=a}
-var ccache = {};
-function comb(x,l){if(l===0)return[[]];if(x.length<1&&l)return[];var id=l+';'+str(x);if(ccache[id])return ccache[id];var a=[];for(var i=0;i<x.length;++i)if(i===x.indexOf(x[i]))comb(x.slice(i+1),l-1).map(function(b){a.push([x[i]].concat(b))});if(!l)a.push([]);return ccache[id]=a}
+var permcache = {};
+function perm (arr, len) {
+	if (len === 0)
+		return [[]];
+	if (arr.length < 2)
+		return [x];
+	
+	var id = len + ';' + str(arr);
+	if (permcache[id])
+		return permcache[id];
+	
+	var result = [];
+	for (var index in arr)
+		if (+index === arr.indexOf(arr[index]))
+			perm(arr.slice(0, index).concat(arr.slice(+index + 1)), len - 1).map(function(b) {
+				result.push([arr[index]].concat(b));
+			});
+	
+	return permcache[id] = result;
+}
 
-String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)};
-String.prototype.contains = String.prototype.contains || function(x){return-1<this.indexOf(x)};
-Array.prototype.contains = Array.prototype.contains || function(x){return-1<this.indexOf(x)};
-Math.trunc = Math.trunc || function(x){return isNaN(x)?NaN:x<0?Math.ceil(x):Math.floor(x)}
-df(String,'a',function(x,y){return typeof x=="function"||id(y)?this.q().a(x,y):this.lastIndexOf(x)});
-df(String,'b',function(x,y){return typeof x=="function"||id(y)?this.q().b(x,y):this.indexOf(x)});
-df(String,'c',function(x,y){x=fb(x,0);if(typeof x==="number")return this.charCodeAt(pm(x,this.length));x=functify(x,y);return this.m(function(a,b,c){var z=x(a.charCodeAt(0),fb(y,b),c);return typeof z==="number"?z.d():z})});
-df(String,'d',function(x){
-	if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
-	else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(regexify(f,'g'),a[i+1]);},this)}});
-df(String,'e',function(x,y,z){x=regexify(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t});
-df(String,'f',function(x,y){return this.match(regexify(x,y))});
-df(String,'g',function(x){var l=this.length;x=pm(fb(x,0),l);return this[x]});
-df(String,'h',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x+y.length)});
-df(String,'i',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x)});
-df(String,'j',function(x,y){y=fb(y,1);return this.substring(0,x)+this.substring(x+y)});
-df(String,'k',function(x,y){if(["<",">"].contains(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return!x(a,fb(y,b),c)}).q()};return this.replace(regexify('['+x+']',y?'g':'gi'),"")});
-df(String,'l',function(){return this.length});
-df(String,'m',function(x,y,z){if(typeof x==="string")return this.q(z).m(x,y).q(z);return this.q(y).m(x).q(y)});
-df(String,'n',function(x,y){if(typeof x==="string")x=x.q();if(x instanceof Array){x=x.map(String);return(this.match(RegExp(clone(x)['\xF1']('l').w().map(regescape).join("|"),y?'gi':'g'))||[]).reduce(function(p,c){var i=x.findIndex(function(z){return z.v()==c.v()});if(i<0)return NaN;return p*x.length+i},0)}x=x||10;if(x==10)return parseFloat(this);else return parseInt(this,x)});
-df(String,'o',function(x,y){if(["<",">"].contains(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return x(a,fb(y,b),c)}).q()};return this.replace(regexify('[^'+x+']',y?'g':'gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
-df(String,'p',function(x,y){x=fb(x,2);return typeof x==="number"?this.repeat(x):this+[this].m(x,y)});
-df(String,'q',function(x){x=fb(x,"");return this.split(x)});
-df(String,'r',function(x,y,z){y=fb(y,"");return this.replace(regexify(x,z),y)});
-df(String,'s',function(x,y){y=fb(y,this.length);if(y<0)y+=this.length;return this.substring(x,y)});
-df(String,'t',function(x,y){y=fb(y,this.length);return this.substr(x,y)});
-df(String,'u',function(){return this.toUpperCase()});
-df(String,'v',function(){return this.toLowerCase()});
-df(String,'w',function(){return this.split('').reverse().join('')});
-df(String,'x',function(x){return x==1?this.trimRight():x==2?this.trimLeft():this.trim()});
-df(String,'y',function(){return this.split("\n").y().join("\n")});
-df(String,'z',function(n){return this.split("\n").z(n).join("\n")});
-df(String,'\xE0',function(x){return this.q()['\xE0'](x).map(function(y){return y.q()})});
-df(String,'\xE1',function(x){return this.q()['\xE1'](x).map(function(y){return y.q()})});
-df(String,'\xE2',function(x){return this.search(x)});
-df(String,'\xE3',function(x,y){return this.q()['\xE3'](x,y).map(function(a){return a.q()})});
-df(String,'\xE4',function(x,y){x=functify(x);return this.q()['\xE3'](2,y).map(function(a){return x(a[0],a[1],a.q())})});
-df(String,'\xE5',function(x,y){return this.q()['\xE5'](x,y)});
-df(String,'\xE7',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,x);});
-df(String,'\xE8',function(x){return (this.f(x)||[]).length});
-df(String,'\xE9',function(x){return this.q()['\xE9'](x).q()});
-df(String,'\xEA',function(x){return typeof x==="string"?this==this.w():this+this.slice(0,Math.floor(fb(x,0))%2?this.length:-1).w()});
-df(String,'\xEB',function(x,y){return this.q()['\xEB'](x,y).q()});
-df(String,'\xEE',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]});});
-df(String,'\xF2',function(x){return this.q()['\xF2'](x).map(function(a){return a.q()})});
-df(String,'\xF3',function(x){return this.q()['\xF3'](x).map(function(a){return a.q()})});
-df(String,'\xF4',function(x,y){return this.q()['\xF4'](x,y).map(function(a){return a.q()})});
-df(String,'\xF6',function(x){if(!id(x))return this[Math.random()*this.length|0];return this.q()['\xF6'](x).q()});
-df(String,'\xF8',function(x){if(!id(x))return false;if(!(x instanceof Array))x=[x];var s=this;return x.some(function(a){return s.contains(a)})});
+var combcache = {};
+function comb(arr, len) {
+	if (len === 0)
+		return [[]];
+	if (arr.length < 1 && !isNaN(len))
+		return [];
+	
+	var id = len + ';' + str(arr);
+	if (combcache[id])
+		return ccache[id];
+	
+	var result = [];
+	for (var index in arr)
+		if (+index === arr.indexOf(arr[index]))
+			comb(arr.slice(+index + 1), len - 1).map(function(b) {
+				result.push([arr[index]].concat(b));
+			});
+	
+	if (isNaN(len)) result.push([]);
+	return combcache[id] = result;
+}
 
-df(Array,'a',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).lastIndexOf(true):this.lastIndexOf(x)});
-df(Array,'b',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).indexOf(true):this.indexOf(x)});
-df(Array,'c',function(x){if(id(x))return this.concat(x);var f=[];for(var i of this){if(i instanceof Array)for(var j of i.c())f.push(j);else f.push(i);}return f});
-df(Array,'d',function(x,y){x=fb(x,function(y){return!!y});x=functify(x,y);return this.some(function(a,b,c){return x(a,fb(y,b),c)})});
-df(Array,'e',function(x,y){x=fb(x,function(y){return!!y});x=functify(x,y);return this.every(function(a,b,c){return x(a,fb(y,b),c)})});
-df(Array,'f',function(x,y){if(x instanceof Array){y=fb(y,0)%3;if(y===2)return this.filter(function(q){var a=x.indexOf(q);if(~a)x.splice(a,1);return~a});else if(y===1)return this.filter(function(q,i,a){return~x.indexOf(q)&&a.indexOf(q)===i});else return this.filter(function(q){return~x.indexOf(q)})}x=fb(x,function(y){return!!y});x=functify(x,y);return this.filter(function(a,b,c){return x(a,fb(y,b),c)})});
-df(Array,'g',function(x){var l=this.length;x=pm(fb(x,0),l);return this[x]});
-df(Array,'h',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);this[x]=y;return this});
-df(Array,'i',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);this.splice(x,0,y);return this});
-df(Array,'j',function(x,y){y=fb(y,1);return this.splice(x,y)});
-df(Array,'k',function(x,y){if(!id(x)||typeof x==="function"||(typeof x==="string"&&id(y))){x=functify(fb(x,function(z){return z}),y);return this.filter(function(a,b,c){return!x(a,fb(y,b),c)})}if(x instanceof Array)return this.filter(function(a){return!x.contains(a)});this.splice(this.indexOf(x),1);return this});
-df(Array,'l',function(){return this.length});
-df(Array,'m',function(x,y){x=functify(x,y);return this.map(function(q,r,s){return x(q,fb(y,r),s)})});
-df(Array,'n',function(x){x=functify(fb(x,function(x,y){return(x>y)-(x<y)}));return this.sort(x)});
-df(Array,'o',function(x){x=x||1;if(x>1){for(var a=[];x--;)a.push(this.pop());return a}else return this.pop()});
-df(Array,'p',function(){for(var i of [].slice.call(arguments))this.push(i);return this});
-df(Array,'q',function(x){return this.join(x||"")});
-df(Array,'r',function(x,y){x=functify(x,0);return this.reduce(function(q,r,s){return x(q,r,s)},y||(typeof this[0]=="number"?0:""))});
-df(Array,'s',function(x,y){y=fb(y,this.length);return this.slice(x,y)});
-df(Array,'t',function(x,y){y=fb(y,this.length);return this.slice(x,x+y)});
-df(Array,'u',function(){for(var i of [].slice.call(arguments))this.unshift(i);return this});
-df(Array,'v',function(){return this.shift()});
-df(Array,'w',function(){return this.reverse()});
-df(Array,'x',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.reduce(function(a,b,i,z){b=x(b,fb(y,i),z);return a+(isNaN(+b)?parseFloat(b)||0:+b)},0)});
-df(Array,'y',function(){var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a});
-df(Array,'z',function(n){if((typeof n)!="number")n=1;n%=4;if(n<0)n+=4;var f=function(l){return l.w()};return n==1?this.y().map(f):n==2?this.w().map(f):n==3?this.map(f).y():this}); // (clockwise) 1: 90deg, 2: 180deg, 3: -90deg
-df(Array,'\xE0',function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)return;if(z.length===0){a.push(y)}else{var n=y.slice(0);n.push(z[0]);f(n,z.slice(1),a);f(y,z.slice(1),a)}return a};return f([],this,[]).filter(function(z){return x?z.length===x:1})});
-//df(Array,'\xE0',function(x){var a=[[]],s=[];for(var i=0;i<this.length;++i){var l=a.length;for(var j=0;j<l;j++){var b=a[j].concat([this[i]]);if(s.indexOf(str(b))<0)a.push(b),s.push(str(b));}}return a});
-df(Array,'\xE1',function(x){var p=[],u=[],f=function(z){var c,i;for(i=0;i<z.length;i++){c=z.splice(i,1)[0];u.push(c);if(z.length===0)p.push(u.slice());f(z);z.splice(i,0,c);u.pop()}return p};var l;return f(this).map(function(z){return z.slice(0,x||z.length)})["\xE2"]()});
-//df(Array,'\xE0',function(x){x=fb(x,NaN);return comb(this,x)});
-//df(Array,'\xE1',function(x){x=fb(x,1/0);return perm(this,x)});
-df(Array,'\xE2',function(x){var a=[];x=this.concat(fb(x,[]));for(var i=0;i<x.length;i++)if(a.indexOf(x[i])<0)a.push(x[i]);return a});
-df(Array,'\xE3',function(x,y){x=fb(x,2);var a=[];if(id(y))a[0]=this.slice(0,x-1),a[0].unshift(y);for(var i=0;i<=this.length-x;i++)a.push(this.slice(i,i+x));return a});
-df(Array,'\xE4',function(x,y){x=functify(x);return this['\xE3'](2,y).map(function(z){return z.reduce(x)})});
-df(Array,'\xE5',function(x,y){x=functify(x);var a=[];this.reduce(function(q,r,s){var t=x(q,r,s);a.push(t);return t},y||(typeof this[0]=="number"?0:""));return a});
-df(Array,'\xE6',function(x,y){x=functify(fb(x,function(q){return!!q}),y);for(var i=0;i<this.length;i++)if(x(this[i],fb(y,i)))return this[i]});
-df(Array,'\xE7',function(x){return this.map(function(){return clone(x)})});
-df(Array,'\xE8',function(x,y){return this.f(x,y).length});
-df(Array,'\xE9',function(x){var r=[],l=this.length,i=l;for(x=pm(-fb(x,1),l);i--;x++)r.push(this[x%l]);return r});
-df(Array,'\xEA',function(x){return typeof x==="string"?str(this)===str(this.slice().w()):this.concat(this.slice(0,Math.floor(fb(x,0))%2?this.length:-1).w())});
-df(Array,'\xEB',function(x,y){x=fb(x,2);y=fb(y,0);return this.slice(y).filter(function(a,b){return b%x==0})});
-df(Array,'\xEC',function(x){if(typeof x==="string")x=x.q();x=fb(x,10);return this.reduce(function(a,b){return x instanceof Array?a*x.length+x.indexOf(b):a*x+parseFloat(b)},0)});
-df(Array,'\xED',function(x,y){if(!(x instanceof Array)){y=x,x=[];for(var i=0;i<this.length;i++)x[i]=i}y=functify(fb(y,function(a,b){return[a,b]}),0);return this.map(function(a,b,c){return y(a,x[b],c)})});
-df(Array,'\xEE',function(x){x=fb(x,[0]);return this.map(function(_,i){return x[i%x.length]});});
-df(Array,'\xF1',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.sort(function(a,b,i){a=x(a,fb(y,i));b=x(b,fb(y,i));return(a>b)-(a<b)})});
-df(Array,'\xF2',function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i+=x)a.push(this.slice(i,i+x));}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)&&a.push([])}return a;});
-df(Array,'\xF3',function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i++)a[i%x]=a[i%x]||[],a[i%x].push(this[i]);}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)||a.push([])}return a;});
-df(Array,'\xF4',function(x,y){if(this.length===0)return[];x=functify(fb(x,function(z){return!z}),y);var a=[],i=0;for(a.push([]);i<this.length;i++)x(this[i],fb(y,i),this)?a.push([]):a.g(-1).push(this[i]);return a;});
-df(Array,'\xF6',function(x){if(!id(x))return this[Math.random()*this.length|0];var b=[];if(isNaN(x))for(var a=this.slice();a.length>0;)b.push(a.splice(Math.random()*a.length|0,1)[0]);else for(var i=+x;i>0;i--)b.push(this[Math.random()*this.length|0]);return b});
-df(Array,'\xF8',function(x){if(!id(x))return false;if(!(x instanceof Array))x=[x];return this.some(function(a){return x.contains(a)})});
+if (!id(String.prototype.repeat)) String.prototype.repeat = function(len) {
+	len = Math.trunc(fb(len, 1));
+	
+	var i = Math.pow(2, Math.floor(Math.log2(len)));
+	var str = '';
+	while (i >= 1) {
+		str += str + (len / i % 2 < 1 ? '' : this);
+		len %= i;
+		i /= 2;
+	}
+	return str;
+};
 
-df(Number,'a',function(){return Math.abs(this)});
-df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
-df(Number,'c',function(x){x=fb(x,1);return Math.ceil(this/x)*x});
-df(Number,'d',function(){return String.fromCharCode(this)});
-df(Number,'e',function(x){return this*Math.pow(10,x)});
-df(Number,'f',function(x){x=fb(x,1);return Math.floor(this/x)*x});
-df(Number,'g',function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});
-df(Number,'h',function(x){x=fb(x,1);return this.toPrecision(x)});
-df(Number,'i',function(x){return Japt.intervals[Japt.intervals.length]=setInterval(x,this)});
-df(Number,'j',function(){var n=+this;if(n===2)return true;if(n%1||n<2||n%2===0)return false;for(var i=3,s=Math.sqrt(n);i<=s;i+=2)if(n%i===0)return false;return true});
-df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f});
-df(Number,'l',function(){var n=Math.trunc(this),x=Math.trunc(this);if(n<1)return 1;while(--n)x*=n;return x});
-df(Number,'m',function(){return[].reduce.call(arguments,function(x,y){return Math.min(x,y)},this)});
-df(Number,'n',function(x){x=fb(x,0);return x-this});
-df(Number,'o',function(x,y,f,s){var q;if(typeof x=="function")f=x,x=undefined;if(typeof x=="string")f=functify(x,y),q=y,x=y=undefined;if(typeof y=="function")f=y,y=undefined;var z=+this;y=y||1;if(!id(x))x=z,z=0;if(s&2)x+=z;if(x<z)_=x,x=z,z=_;if(s&1)x++;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);if(typeof f=="function")return r.map(function(a,b,c){return f(a,fb(q,b),c)});return r});
-df(Number,'p',function(x){x=fb(x,2);return Math.pow(this,x)});
-df(Number,'q',function(x){x=fb(x,2);return Math.pow(this,1/x)});
-df(Number,'r',function(x){x=fb(x,1);return Math.round(this/x)*x});
-df(Number,'s',function(x){if(typeof x==="string")x=x.q();if(x instanceof Array)return this['\xEC'](x).q();x=fb(x,10);return this.toString(x)});
-df(Number,'t',function(x){return Japt.intervals[Japt.intervals.length]=setTimeout(x,this)});
-df(Number,'u',function(x){return pm(this,fb(x,2))});
-df(Number,'v',function(x){x=fb(x,2);return this%x===0?1:0});
-df(Number,'w',function(){return[].reduce.call(arguments,function(x,y){return Math.max(x,y)},this)});
-df(Number,'x',function(x){x=fb(x,0);return this.toFixed(x)});
-df(Number,'y',function(){noFunc('N.y')});
-df(Number,'z',function(){noFunc('N.z')});
-df(Number,'\xE0',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
-df(Number,'\xE1',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return n.l();return n["\xE0"]()*x.l()});
-df(Number,'\xE2',function(x){if(this%1)return[];var n=Math.abs(this);var a=[];for(var i=1;i<Math.sqrt(n);++i)if(n%i===0)a.push(i,n/i);if(i*i===n)a.push(i);a.n();if(x)a.pop();return a});
-df(Number,'\xE7',function(x){x=fb(x," ")+"";return x.p(+this)});
-df(Number,'\xEC',function(x){if(typeof x==="string")x=x.q();if(x instanceof Array)return this['\xEC'](x.length).m(function(y){return x[y]});var n=Math.trunc(this);x=Math.floor(fb(x,10));if(x<2)return[];for(var a=[];n!=0;n=Math.trunc(n/x))a.unshift(n%x);return a});
-df(Number,'\xEE',function(x){return" ".p(+this)['\xEE'](x)});
-df(Number,'\xF2',function(x,y,f){return this.o(x,y,f,1)});
-df(Number,'\xF3',function(x,y,f){return this.o(x,y,f,2)});
-df(Number,'\xF4',function(x,y,f){return this.o(x,y,f,3)});
-df(Number,'\xF5',function(x,y,f){var q,z,n=+this,r=[],i=0;if(!(1/n))return[];if(typeof x==="function")f=x,x=1;if(typeof x=="string")f=functify(x,y),z=y,x=y=1;x=fb(x,1);y=fb(y,1);if(y===0)return[];if(y<0)y=-y,q=x,x=n,n=q;if(x<n)for(;x<=n;x+=y)r.push(x);else if(x>n)for(;x>=n;x-=y)r.push(x);else r=[x];return typeof f==="function"?r.map(function(a,b,c){return f(a,fb(z,b),c)}):r});
-df(Number,'\xF6',function(x){if(!id(x))return Math.floor(Math.random()*this);return this.o()['\xF6'](x)});
+if (!id(String.prototype.contains)) String.prototype.contains = function(str) {
+	return this.indexOf(str) > 0;
+};
+
+if (!id(Array.prototype.contains)) Array.prototype.contains = function(item) {
+	return this.indexOf(item) > 0;
+};
+
+if (!id(Math.trunc)) Math.trunc = function(n) {
+	if (isNaN(n))
+		return NaN;
+	if (n < 0)
+		return Math.ceil(n);
+	return Math.floor(n);
+};
+
+df(String.prototype, {
+	a: function(x,y){return typeof x=="function"||id(y)?this.q().a(x,y):this.lastIndexOf(x)},
+	b: function(x,y){return typeof x=="function"||id(y)?this.q().b(x,y):this.indexOf(x)},
+	c: function(x,y){x=fb(x,0);if(typeof x==="number")return this.charCodeAt(pm(x,this.length));x=functify(x,y);return this.m(function(a,b,c){var z=x(a.charCodeAt(0),fb(y,b),c);return typeof z==="number"?z.d():z})},
+	d: function(x){if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(regexify(f,'g'),a[i+1]);},this)}},
+	e: function(x,y,z){x=regexify(x,z||"g");var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t},
+	f: function(x,y){return this.match(regexify(x,y))},
+	g: function(x){var l=this.length;x=pm(fb(x,0),l);return this[x]},
+	h: function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x+y.length)},
+	i: function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x)},
+	j: function(x,y){y=fb(y,1);return this.substring(0,x)+this.substring(x+y)},
+	k: function(x,y){if(["<",">"].contains(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return!x(a,fb(y,b),c)}).q()};return this.replace(regexify('['+x+']',y?'g':'gi'),"")},
+	l: function(){return this.length},
+	m: function(x,y,z){if(typeof x==="string")return this.q(z).m(x,y).q(z);return this.q(y).m(x).q(y)},
+	n: function(x,y){if(typeof x==="string")x=x.q();if(x instanceof Array){x=x.map(String);return(this.match(RegExp(clone(x).ñ('l').w().map(regescape).join("|"),y?'gi':'g'))||[]).reduce(function(p,c){var i=x.findIndex(function(z){return z.v()==c.v()});if(i<0)return NaN;return p*x.length+i},0)}x=x||10;if(x==10)return parseFloat(this);else return parseInt(this,x)},
+	o: function(x,y){if(["<",">"].contains(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return x(a,fb(y,b),c)}).q()};return this.replace(regexify('[^'+x+']',y?'g':'gi'),"")},
+	p: function(x,y){x=fb(x,2);return typeof x==="number"?this.repeat(x):this+[this].m(x,y)},
+	q: function(x){x=fb(x,"");return this.split(x)},
+	r: function(x,y,z){y=fb(y,"");return this.replace(regexify(x,z),y)},
+	s: function(x,y){y=fb(y,this.length);if(y<0)y+=this.length;return this.substring(x,y)},
+	t: function(x,y){y=fb(y,this.length);return this.substr(x,y)},
+	u: function(){return this.toUpperCase()},
+	v: function(){return this.toLowerCase()},
+	w: function(){return this.split('').reverse().join('')},
+	x: function(x){return x==1?this.trimRight():x==2?this.trimLeft():this.trim()},
+	y: function(){return this.split("\n").y().join("\n")},
+	z: function(n){return this.split("\n").z(n).join("\n")},
+	à: function(x){return this.q().à(x).map(function(y){return y.q()})},
+	á: function(x){return this.q().á(x).map(function(y){return y.q()})},
+	â: function(x){return this.search(x)},
+	ã: function(x,y){return this.q().ã(x,y).map(function(a){return a.q()})},
+	ä: function(x,y){x=functify(x);return this.q().ã(2,y).map(function(a){return x(a[0],a[1],a.q())})},
+	å: function(x,y){return this.q().å(x,y)},
+	ç: function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,x);},
+	è: function(x){return (this.f(x)||[]).length},
+	é: function(x){return this.q().é(x).q()},
+	ê: function(x){return typeof x==="string"?this==this.w():this+this.slice(0,Math.floor(fb(x,0))%2?this.length:-1).w()},
+	ë: function(x,y){return this.q().ë(x,y).q()},
+	î: function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]});},
+	ò: function(x){return this.q().ò(x).map(function(a){return a.q()})},
+	ó: function(x){return this.q().ó(x).map(function(a){return a.q()})},
+	ô: function(x,y){return this.q().ô(x,y).map(function(a){return a.q()})},
+	ö: function(x){if(!id(x))return this[Math.random()*this.length|0];return this.q().ö(x).q()},
+	ø: function(x){if(!id(x))return false;if(!(x instanceof Array))x=[x];var s=this;return x.some(function(a){return s.contains(a)})}
+});
+
+df(Array.prototype, {
+	a: function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).lastIndexOf(true):this.lastIndexOf(x)},
+	b: function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).indexOf(true):this.indexOf(x)},
+	c: function(x){if(id(x))return this.concat(x);var f=[];for(var i of this){if(i instanceof Array)for(var j of i.c())f.push(j);else f.push(i);}return f},
+	d: function(x,y){x=fb(x,function(y){return!!y});x=functify(x,y);return this.some(function(a,b,c){return x(a,fb(y,b),c)})},
+	e: function(x,y){x=fb(x,function(y){return!!y});x=functify(x,y);return this.every(function(a,b,c){return x(a,fb(y,b),c)})},
+	f: function(x,y){if(x instanceof Array){y=fb(y,0)%3;if(y===2)return this.filter(function(q){var a=x.indexOf(q);if(~a)x.splice(a,1);return~a});else if(y===1)return this.filter(function(q,i,a){return~x.indexOf(q)&&a.indexOf(q)===i});else return this.filter(function(q){return~x.indexOf(q)})}x=fb(x,function(y){return!!y});x=functify(x,y);return this.filter(function(a,b,c){return x(a,fb(y,b),c)})},
+	g: function(x){var l=this.length;x=pm(fb(x,0),l);return this[x]},
+	h: function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);this[x]=y;return this},
+	i: function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);this.splice(x,0,y);return this},
+	j: function(x,y){y=fb(y,1);return this.splice(x,y)},
+	k: function(x,y){if(!id(x)||typeof x==="function"||(typeof x==="string"&&id(y))){x=functify(fb(x,function(z){return z}),y);return this.filter(function(a,b,c){return!x(a,fb(y,b),c)})}if(x instanceof Array)return this.filter(function(a){return!x.contains(a)});this.splice(this.indexOf(x),1);return this},
+	l: function(){return this.length},
+	m: function(x,y){x=functify(x,y);return this.map(function(q,r,s){return x(q,fb(y,r),s)})},
+	n: function(x){x=functify(fb(x,function(x,y){return(x>y)-(x<y)}));return this.sort(x)},
+	o: function(x){x=x||1;if(x>1){for(var a=[];x--;)a.push(this.pop());return a}else return this.pop()},
+	p: function(){for(var i of [].slice.call(arguments))this.push(i);return this},
+	q: function(x){return this.join(x||"")},
+	r: function(x,y){x=functify(x,0);return this.reduce(function(q,r,s){return x(q,r,s)},y||(typeof this[0]=="number"?0:""))},
+	s: function(x,y){y=fb(y,this.length);return this.slice(x,y)},
+	t: function(x,y){y=fb(y,this.length);return this.slice(x,x+y)},
+	u: function(){for(var i of [].slice.call(arguments))this.unshift(i);return this},
+	v: function(){return this.shift()},
+	w: function(){return this.reverse()},
+	x: function(x,y){x=functify(fb(x,function(z){return z}),y);return this.reduce(function(a,b,i,z){b=x(b,fb(y,i),z);return a+(isNaN(+b)?parseFloat(b)||0:+b)},0)},
+	y: function(){var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a},
+	z: function(n){if((typeof n)!="number")n=1;n%=4;if(n<0)n+=4;var f=function(l){return l.w()};return n==1?this.y().map(f):n==2?this.w().map(f):n==3?this.map(f).y():this},
+	à: function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)return;if(z.length===0){a.push(y)}else{var n=y.slice(0);n.push(z[0]);f(n,z.slice(1),a);f(y,z.slice(1),a)}return a};return f([],this,[]).filter(function(z){return x?z.length===x:1})},
+	//df(Array,'à',function(x){var a=[[]],s=[];for(var i=0;i<this.length;++i){var l=a.length;for(var j=0;j<l;j++){var b=a[j].concat([this[i]]);if(s.indexOf(str(b))<0)a.push(b),s.push(str(b));}}return a},
+	á: function(x){var p=[],u=[],f=function(z){var c,i;for(i=0;i<z.length;i++){c=z.splice(i,1)[0];u.push(c);if(z.length===0)p.push(u.slice());f(z);z.splice(i,0,c);u.pop()}return p};var l;return f(this).map(function(z){return z.slice(0,x||z.length)})["â"]()},
+	//df(Array,'à',function(x){x=fb(x,NaN);return comb(this,x)});
+	//df(Array,'á',function(x){x=fb(x,1/0);return perm(this,x)},
+	â: function(x){var a=[];x=this.concat(fb(x,[]));for(var i=0;i<x.length;i++)if(a.indexOf(x[i])<0)a.push(x[i]);return a},
+	ã: function(x,y){x=fb(x,2);var a=[];if(id(y))a[0]=this.slice(0,x-1),a[0].unshift(y);for(var i=0;i<=this.length-x;i++)a.push(this.slice(i,i+x));return a},
+	ä: function(x,y){x=functify(x);return this.ã(2,y).map(function(z){return z.reduce(x)})},
+	å: function(x,y){x=functify(x);var a=[];this.reduce(function(q,r,s){var t=x(q,r,s);a.push(t);return t},y||(typeof this[0]=="number"?0:""));return a},
+	æ: function(x,y){x=functify(fb(x,function(q){return!!q}),y);for(var i=0;i<this.length;i++)if(x(this[i],fb(y,i)))return this[i]},
+	ç: function(x){return this.map(function(){return clone(x)})},
+	è: function(x,y){return this.f(x,y).length},
+	é: function(x){var r=[],l=this.length,i=l;for(x=pm(-fb(x,1),l);i--;x++)r.push(this[x%l]);return r},
+	ê: function(x){return typeof x==="string"?str(this)===str(this.slice().w()):this.concat(this.slice(0,Math.floor(fb(x,0))%2?this.length:-1).w())},
+	ë: function(x,y){x=fb(x,2);y=fb(y,0);return this.slice(y).filter(function(a,b){return b%x==0})},
+	ì: function(x){if(typeof x==="string")x=x.q();x=fb(x,10);return this.reduce(function(a,b){return x instanceof Array?a*x.length+x.indexOf(b):a*x+parseFloat(b)},0)},
+	í: function(x,y){if(!(x instanceof Array)){y=x,x=[];for(var i=0;i<this.length;i++)x[i]=i}y=functify(fb(y,function(a,b){return[a,b]}),0);return this.map(function(a,b,c){return y(a,x[b],c)})},
+	î: function(x){x=fb(x,[0]);return this.map(function(_,i){return x[i%x.length]});},
+	ñ: function(x,y){x=functify(fb(x,function(z){return z}),y);return this.sort(function(a,b,i){a=x(a,fb(y,i));b=x(b,fb(y,i));return(a>b)-(a<b)})},
+	ò: function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i+=x)a.push(this.slice(i,i+x));}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)&&a.push([])}return a;},
+	ó: function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i++)a[i%x]=a[i%x]||[],a[i%x].push(this[i]);}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)||a.push([])}return a;},
+	ô: function(x,y){if(this.length===0)return[];x=functify(fb(x,function(z){return!z}),y);var a=[],i=0;for(a.push([]);i<this.length;i++)x(this[i],fb(y,i),this)?a.push([]):a.g(-1).push(this[i]);return a;},
+	ö: function(x){if(!id(x))return this[Math.random()*this.length|0];var b=[];if(isNaN(x))for(var a=this.slice();a.length>0;)b.push(a.splice(Math.random()*a.length|0,1)[0]);else for(var i=+x;i>0;i--)b.push(this[Math.random()*this.length|0]);return b},
+	ø: function(x){if(!id(x))return false;if(!(x instanceof Array))x=[x];return this.some(function(a){return x.contains(a)})}
+});
+
+df(Number.prototype, {
+	a: function(){return Math.abs(this)},
+	b: function(x,y){return this<x?x:this>y?y:this},
+	c: function(x){x=fb(x,1);return Math.ceil(this/x)*x},
+	d: function(){return String.fromCharCode(this)},
+	e: function(x){return this*Math.pow(10,x)},
+	f: function(x){x=fb(x,1);return Math.floor(this/x)*x},
+	g: function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0},
+	h: function(x){x=fb(x,1);return this.toPrecision(x)},
+	i: function(x){return Japt.intervals[Japt.intervals.length]=setInterval(x,this)},
+	j: function(){var n=+this;if(n===2)return true;if(n%1||n<2||n%2===0)return false;for(var i=3,s=Math.sqrt(n);i<=s;i+=2)if(n%i===0)return false;return true},
+	k: function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f},
+	l: function(){var n=Math.trunc(this),x=Math.trunc(this);if(n<1)return 1;while(--n)x*=n;return x},
+	m: function(){return[].reduce.call(arguments,function(x,y){return Math.min(x,y)},this)},
+	n: function(x){x=fb(x,0);return x-this},
+	o: function(x,y,f,s){var q;if(typeof x=="function")f=x,x=undefined;if(typeof x=="string")f=functify(x,y),q=y,x=y=undefined;if(typeof y=="function")f=y,y=undefined;var z=+this;y=y||1;if(!id(x))x=z,z=0;if(s&2)x+=z;if(x<z)_=x,x=z,z=_;if(s&1)x++;var r=[],i=0;if(y>0)for(;z<x;z+=y)r.push(z);else if(y<0)for(;z<x;x+=y)r.push(x);if(typeof f=="function")return r.map(function(a,b,c){return f(a,fb(q,b),c)});return r},
+	p: function(x){x=fb(x,2);return Math.pow(this,x)},
+	q: function(x){x=fb(x,2);return Math.pow(this,1/x)},
+	r: function(x){x=fb(x,1);return Math.round(this/x)*x},
+	s: function(x){if(typeof x==="string")x=x.q();if(x instanceof Array)return this.ì(x).q();x=fb(x,10);return this.toString(x)},
+	t: function(x){return Japt.intervals[Japt.intervals.length]=setTimeout(x,this)},
+	u: function(x){return pm(this,fb(x,2))},
+	v: function(x){x=fb(x,2);return this%x===0?1:0},
+	w: function(){return[].reduce.call(arguments,function(x,y){return Math.max(x,y)},this)},
+	x: function(x){x=fb(x,0);return this.toFixed(x)},
+	y: function(){noFunc('N.y')},
+	z: function(){noFunc('N.z')},
+	à: function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))},
+	á: function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return n.l();return n["à"]()*x.l()},
+	â: function(x){if(this%1)return[];var n=Math.abs(this);var a=[];for(var i=1;i<Math.sqrt(n);++i)if(n%i===0)a.push(i,n/i);if(i*i===n)a.push(i);a.n();if(x)a.pop();return a},
+	ç: function(x){x=fb(x," ")+"";return x.p(+this)},
+	ì: function(x){if(typeof x==="string")x=x.q();if(x instanceof Array)return this.ì(x.length).m(function(y){return x[y]});var n=Math.trunc(this);x=Math.floor(fb(x,10));if(x<2)return[];for(var a=[];n!=0;n=Math.trunc(n/x))a.unshift(n%x);return a},
+	î: function(x){return" ".p(+this).î(x)},
+	ò: function(x,y,f){return this.o(x,y,f,1)},
+	ó: function(x,y,f){return this.o(x,y,f,2)},
+	ô: function(x,y,f){return this.o(x,y,f,3)},
+	õ: function(x,y,f){var q,z,n=+this,r=[],i=0;if(!(1/n))return[];if(typeof x==="function")f=x,x=1;if(typeof x=="string")f=functify(x,y),z=y,x=y=1;x=fb(x,1);y=fb(y,1);if(y===0)return[];if(y<0)y=-y,q=x,x=n,n=q;if(x<n)for(;x<=n;x+=y)r.push(x);else if(x>n)for(;x>=n;x-=y)r.push(x);else r=[x];return typeof f==="function"?r.map(function(a,b,c){return f(a,fb(z,b),c)}):r},
+	ö: function(x){if(!id(x))return Math.floor(Math.random()*this);return this.o().ö(x)}
+});
 
 // Shorter Date properties. All but k accept an argument: 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
 function ts(x){return["get","set","getUTC","setUTC"][x||0]}
-df(Date,'a',function(x,y){return this[ts(x||0)+"Milliseconds"](y||0)});
-df(Date,'b',function(x,y){return this[ts(x||0)+"Seconds"](y||0)});
-df(Date,'c',function(x,y){return this[ts(x||0)+"Minutes"](y||0)});
-df(Date,'d',function(x,y){return this[ts(x||0)+"Hours"](y||0)});
-df(Date,'e',function(x,y){return this[ts(x||0)+"Day"](y||0)});
-df(Date,'f',function(x,y){return this[ts(x||0)+"Date"](y||0)});
-df(Date,'g',function(x,y){return this[ts(x||0)+"Month"](y||0)});
-df(Date,'h',function(x,y){return this[ts(x||0)+"Year"](y||0)}); // Note: getYear() and setYear() do not have UTC partners
-df(Date,'i',function(x,y){return this[ts(x||0)+"FullYear"](y||0)});
-df(Date,'j',function(x,y){return this[ts(x||0)+"Time"](y||0)}); // Note: getTime() and setTime() do not have UTC partners
-df(Date,'k',function(){return this.getTimezoneOffset()});
+df(Date, {
+	a: function(x,y){return this[ts(x||0)+"Milliseconds"](y||0)},
+	b: function(x,y){return this[ts(x||0)+"Seconds"](y||0)},
+	c: function(x,y){return this[ts(x||0)+"Minutes"](y||0)},
+	d: function(x,y){return this[ts(x||0)+"Hours"](y||0)},
+	e: function(x,y){return this[ts(x||0)+"Day"](y||0)},
+	f: function(x,y){return this[ts(x||0)+"Date"](y||0)},
+	g: function(x,y){return this[ts(x||0)+"Month"](y||0)},
+	h: function(x,y){return this[ts(x||0)+"Year"](y||0)},
+	i: function(x,y){return this[ts(x||0)+"FullYear"](y||0)},
+	j: function(x,y){return this[ts(x||0)+"Time"](y||0)},
+	k: function(){return this.getTimezoneOffset()},
+	
+	s: function(x){return this["to"+["","Date","Time","ISO","GMT","UTC","Locale","LocaleDate","LocaleTime"][x||0]+"String"]()},
+	n: function(x){return id(x)?x-this:+this},
+	
+	l: function(){noFunc('D.l')},
+	m: function(){noFunc('D.m')},
+	o: function(){noFunc('D.o')},
+	p: function(){noFunc('D.p')},
+	q: function(){noFunc('D.q')},
+	r: function(){noFunc('D.r')},
+	t: function(){noFunc('D.t')},
+	u: function(){noFunc('D.u')},
+	v: function(){noFunc('D.v')},
+	w: function(){noFunc('D.w')},
+	x: function(){noFunc('D.x')},
+	y: function(){noFunc('D.y')},
+	z: function(){noFunc('D.z')}
+});
 
-// Ds accepts one argument that controls how the string is formatted. Some formats may not work on some browsers.
-df(Date,'s',function(x){return this["to"+["","Date","Time","ISO","GMT","UTC","Locale","LocaleDate","LocaleTime"][x||0]+"String"]()});
-df(Date,'n',function(x){return id(x)?x-this:+this});
+// experimental, not finished yet
+function bij (num, radix) {
+	var result = "";
+	num = Math.floor(num);
+	radix = fb(radix, 10);
+	if (radix % 1 || radix < 2)
+		return result;
+	
+	if (num < 0) result = "-", num = -num - 1;
+	
+	var c = 0, x = 1;
+	while (num >= x) {
+		c++;
+		num -= x;
+		x *= radix;
+	}
+	
+	for (var i = 0; i < c; i++) {
+		result = (num % radix) + result;
+		num = Math.trunc(num / radix);
+	}
+	
+	return result;
+}
 
-df(Date,'l',function(){noFunc('D.l')});
-df(Date,'m',function(){noFunc('D.m')});
-df(Date,'o',function(){noFunc('D.o')});
-df(Date,'p',function(){noFunc('D.p')});
-df(Date,'q',function(){noFunc('D.q')});
-df(Date,'r',function(){noFunc('D.r')});
-df(Date,'t',function(){noFunc('D.t')});
-df(Date,'u',function(){noFunc('D.u')});
-df(Date,'v',function(){noFunc('D.v')});
-df(Date,'w',function(){noFunc('D.w')});
-df(Date,'x',function(){noFunc('D.x')});
-df(Date,'y',function(){noFunc('D.y')});
-df(Date,'z',function(){noFunc('D.z')});
+df(Function.prototype, {
+	a: function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){var j=x(i,fb(y,i));if(this(j))return j;}},
+	b: function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){j=x(bij(i,10),fb(y,i));if(this(j))return j;}},
+	c: function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;i=-i-(i>-1)){var j=x(i,fb(y,i));if(this(j))return j;}}
+});
 
-function bij(a,b){var s="";a=Math.floor(a);b=fb(b,10);if(b%1||b<2)return s;if(a<0)s="-",a=~a;var c=0,x=1;while(a>=x){c++;a-=x;x*=b;}for(var i=0;i<c;i++){s=(a%b)+s;a=Math.floor(a/b);}return s;}
-
-df(Function,'a',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){var j=x(i,fb(y,i));if(this(j))return j;}});
-df(Function,'b',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){j=x(bij(i,10),fb(y,i));if(this(j))return j;}});
-df(Function,'c',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;i=-i-(i>-1)){var j=x(i,fb(y,i));if(this(j))return j;}});
-
-df(Object,'\xFF',function(){if(!isnode)alert(this);return this instanceof Number?+this:this instanceof String?""+this:this});
+df(Object.prototype, {
+	ÿ: function(){if(!isnode)alert(this);return this instanceof Number?+this:this instanceof String?""+this:this}
+});
 
 // Shorter Date properties
 Date.p = Date.parse;
@@ -455,7 +546,9 @@ Math.e = Math.exp;
 Math.l = Math.log;
 Math.m = Math.log2;
 Math.n = Math.log10;
-Math.h = Math.hypot || function hypot(){return Math.sqrt(arguments.reduce(function(a,b){return a+b*b}))};
+Math.h = Math.hypot || function hypot() {
+	return Math.sqrt(arguments.reduce(function(a, b) { return a + b * b; }));
+};
 
 Math.P = Math.PI;
 Math.Q = 1.618033988749894848;
@@ -464,8 +557,19 @@ Math.S = Math.SQRT_2;
 Math.T = Math.PI * 2;
 
 // String compression
-shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
-shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor === Array ? str[0] : str ).split('').map(function (char) {return char.charCodeAt(0)})))};
+shoco.c = function (str) {
+	return Array.prototype.map.call(shoco.compress(str), function (char) {
+		return String.fromCharCode(char);
+	}).join('');
+};
+
+shoco.d = function (str) {
+	return shoco.decompress(new Uint8Array(
+		( str.constructor === Array ? str[0] : str ).split('').map(function (char) {
+			return char.charCodeAt(0);
+		})
+	));
+};
 
 function subparen(code) {
 	var level = 0, min = 0;

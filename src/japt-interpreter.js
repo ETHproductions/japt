@@ -168,6 +168,7 @@ df(String,'\xE8',function(x){return (this.f(x)||[]).length});
 df(String,'\xE9',function(x){return this.q()['\xE9'](x).q()});
 df(String,'\xEA',function(x){return typeof x==="string"?this==this.w():this+this.slice(0,Math.floor(fb(x,0))%2?this.length:-1).w()});
 df(String,'\xEB',function(x,y){return this.q()['\xEB'](x,y).q()});
+df(String,'\xED',function(x,y){return this.q().í(id(x)?x.constructor===String?x.q():x:undefined,y).map(function(z){return z instanceof Array?z.q():String(z)}).q()});
 df(String,'\xEE',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]});});
 df(String,'\xF2',function(x){return this.q()['\xF2'](x).map(function(a){return a.q()})});
 df(String,'\xF3',function(x){return this.q()['\xF3'](x).map(function(a){return a.q()})});

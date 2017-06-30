@@ -263,6 +263,12 @@
 <p>Returns `true` if `this` is a palindrome (i.e. equal to its reverse); `false` otherwise.</p>
 <h3>`.ë(x,y=0)`</h3>
 <p>Returns every `x`th char of `this`, starting at index `y`.</p>
+<h3>`.í(s)`</h3>
+<p>Interleaves the strings, concatenating each char in `this` with the corresponding char in `s`.</p>
+<h3>`.í(a?)`</h3>
+<p>Interleaves the string with the array, concatenating each char in `this` with the corresponding item in `a`. If no `a` is given, uses the index instead.</p>
+<h3>`.í(x?,f)`</h3>
+<p>Same as above, but maps each pair of chars/items through `f`.</p>
 <h3>`.î(s=" ")`</h3>
 <p>Repeats `s` until it reaches `this.length`. `"abcde"î"12" -> "12121"`</p>
 <h3>`.ò(n=2)`</h3>

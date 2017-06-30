@@ -446,6 +446,7 @@ df(String.prototype, {
 	ê: function(x){return typeof x==="string"?this==this.w():this+this.slice(0,Math.floor(fb(x,0))%2?this.length:-1).w()},
 	ë: function(x,y){return this.q().ë(x,y).q()},
 	î: function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]});},
+	í: function(x,y){return this.q().í(id(x)?x.constructor===String?x.q():x:undefined,y).map(function(z){return z instanceof Array?z.q():String(z)}).q()},
 	ò: function(x){return this.q().ò(x).map(function(a){return a.q()})},
 	ó: function(x){return this.q().ó(x).map(function(a){return a.q()})},
 	ô: function(x,y){return this.q().ô(x,y).map(function(a){return a.q()})},

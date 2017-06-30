@@ -32,7 +32,10 @@ function fb(x, y) {
 
 // Positive modulo (like Python's %)
 function pm(x, y) {
-	return (x % y + y) % y;
+	return (  // Puts x in the range
+		x % y // (-y, +y)
+		+ y   // ( 0, 2y)
+	) % y;    // [ 0,  y)
 }
 
 // Defines a function on a prototype
@@ -93,6 +96,86 @@ function regexify(string, flags) {
 	return RegExp(regex, flags);
 }
 
+// Converts a regex string to a regex literal, Japt-style
+function regexify2(string) {
+	if (string.length === 1) {
+		return {
+			"\n": /\n/g
+		}[string] || regexify2("/\\" + string + "/");
+	}
+	var end = string.lastIndexOf("/");
+	var flags = string.slice(end + 1);
+	string = string.slice(1, end);
+	
+	if (flags.contains("g"))
+		flags = flags.replace("g", "");
+	else
+		flags += "g";
+	
+	var dotAll = false;
+	if (flags.contains("s")) {
+		dotAll = true;
+		flags = flags.replace("s", "");
+	}
+	
+	var regex = "", inCharClass = false, parens = 0;
+	for(var i = 0; i < string.length; i++) {
+		var char = string[i];
+		if (char === "\\") {
+			char = string[++i];
+			if (char === "A")
+				regex += inCharClass ? "A-Z" : "[A-Z]";
+			else if (char === "a")
+				regex += inCharClass ? "a-z" : "[a-z]";
+			else if (char === "l")
+				regex += inCharClass ? "A-Za-z" : "[A-Za-z]";
+			else if (char === "L")
+				regex += inCharClass ? "\\W_\\d" : "[^A-Za-z]";
+			else if (char === "V")
+				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_" : "[^AaEeIiOoUu]";
+			else if (char === "v")
+				regex += inCharClass ? "AaEeIiOoUu" : "[AaEeIiOoUu]";
+			else if (char === "Y")
+				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_" : "[^AaEeIiOoUuYy]";
+			else if (char === "y")
+				regex += inCharClass ? "AaEeIiOoUuYy" : "[AaEeIiOoUuYy]";
+			else
+				regex += "\\" + char;
+		}
+		else if (char === "." && dotAll) {
+			regex += "[^]";
+		}
+		else if (char === "\n") {
+			regex += "\\n";
+		}
+		else {
+			if (char === "[")
+				inCharClass = true;
+			else if (char === "]")
+				inCharClass = false;
+			else if (!inCharClass && isChar(char, "*+") && /(^|(^|[^\\])[?*+^(|])$/.test(regex))
+				regex += dotAll? "[^]" : ".";
+			else if (!inCharClass && isChar(char, "?") && /(^|(^|[^\\])[?^(|])$/.test(regex))
+				regex += dotAll? "[^]" : ".";
+			else if (char === "(")
+				parens += 1;
+			else if (char === ")") {
+				parens -= 1;
+				while (parens < 0) {
+					regex = "(" + regex;
+					parens += 1;
+				}
+			}
+			regex += char;
+		}
+	}
+	
+	if (inCharClass) regex += "]";
+	while (parens > 0) regex += ")", parens -= 1;
+	
+	return RegExp(regex, flags);
+}
+
 // Converts an operator/method and an argument to a function, Japt-style
 function functify(operator, argument) {
 	if (typeof operator === "function")
@@ -100,7 +183,7 @@ function functify(operator, argument) {
 	
 	var hasArg = id(argument),
 		func = "f=function(a,b){return ",
-		isMethod = /^!?[a-zà-ÿ]$/.test(operator);
+		isMethod = /^!?[a-zà-öø-ÿ]$/.test(operator);
 	
 	if (isMethod) {
 		if (operator[0] !== "!")
@@ -309,11 +392,11 @@ if (!id(String.prototype.repeat)) String.prototype.repeat = function(len) {
 };
 
 if (!id(String.prototype.contains)) String.prototype.contains = function(str) {
-	return this.indexOf(str) > 0;
+	return this.indexOf(str) > -1;
 };
 
 if (!id(Array.prototype.contains)) Array.prototype.contains = function(item) {
-	return this.indexOf(item) > 0;
+	return this.indexOf(item) > -1;
 };
 
 if (!id(Math.trunc)) Math.trunc = function(n) {
@@ -527,6 +610,10 @@ df(Function.prototype, {
 	c: function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;i=-i-(i>-1)){var j=x(i,fb(y,i));if(this(j))return j;}}
 });
 
+df(RegExp.prototype, {
+	t: function(x){return this.test(x);}
+});
+
 df(Object.prototype, {
 	ÿ: function(){if(!isnode)alert(this);return this instanceof Number?+this:this instanceof String?""+this:this}
 });
@@ -652,7 +739,7 @@ function isSingle(snippet) {
 		else if (braces === 0) {
 			if (char === "(") ++parens;
 			else if (char === ")") --parens;
-			else if (parens === 0 && isChar(char, ",+\\-*/%&^|<=>?:")) return false;
+			else if (parens === 0 && isChar(char, ",+\\-*/÷%&^|<=>?:")) return false;
 			if (parens < 0) return false;
 		}
 	}
@@ -980,13 +1067,33 @@ var Japt = {
 						}
 					}
 					else if (char === "\\") {
-						if (Japt.use_safe) Japt.is_safe = false;
-						newcode += "$" + code[++i] + "$";
+						newcode += "\"" + Japt.strings.length + "\"";
+						Japt.strings.push(regexify2(code[++i] || "\\"));
 					}
 					else if (isChar(char, "\"`")) {
 						level++;
 						strchars[level] = char;
 						currstr = "\"";
+					}
+					else if (char === "/") {
+						currstr = "/";
+						for (var inCharClass = false; ++i < code.length; ) {
+							if (code[i] === "/" && !inCharClass) break;
+							currstr += code[i];
+							if (code[i] === "\\") currstr += code[++i];
+							else if (code[i] === "[") inCharClass = true;
+							else if (code[i] === "]") inCharClass = false;
+						}
+						currstr += "/";
+						for ( ; ++i < code.length; ) {
+							if (!isChar(code[i], "gimsux") || currstr.lastIndexOf(code[i]) > currstr.lastIndexOf("/")) {
+								i--;
+								break;
+							}
+							currstr += code[i];
+						}
+						newcode += "\"" + Japt.strings.length + "\"";
+						Japt.strings.push(regexify2(currstr));
 					}
 					else if (char === "'") {
 						if (code[++i] === "\\") {
@@ -1031,7 +1138,7 @@ var Japt = {
 						newcode = "";
 					}
 					else {
-						if ((newcode === "" || newcode.slice(-1) === ";") && /[a-zà-ÿ*/%^|&<=>?]/.test(char))
+						if ((newcode === "" || newcode.slice(-1) === ";") && /[a-zà-öø-ÿ*÷%^|&<=>?]/.test(char))
 							newcode += "U";
 						newcode += char;
 					}
@@ -1188,7 +1295,7 @@ var Japt = {
 				else if (char === ")") {
 					outp += "))";
 				}
-				else if (isChar(char, "a-zà-ÿ")) {
+				else if (isChar(char, "a-zà-öø-ÿ")) {
 					if (outp.slice(-2) === "(!") {
 						outp = outp.slice(0,-1) + "\"!" + char + "\"";
 					} else if (outp.slice(-1) === "(") {
@@ -1199,8 +1306,8 @@ var Japt = {
 						} else {
 							outp += " ." + char + "(";
 						}
-					} else if (/([A-Z])(?!\+\+|--)[+\-*/%^&|<=>!~]+$/.test(outp)) {
-						outp += outp.match(/([A-Z])(?!\+\+|--)[+\-*/%^&|<=>!~]+$/)[1] + "." + char + "(";
+					} else if (/([A-Z])(?!\+\+|--)[+\-*÷%^&|<=>!~]+$/.test(outp)) {
+						outp += outp.match(/([A-Z])(?!\+\+|--)[+\-*÷%^&|<=>!~]+$/)[1] + "." + char + "(";
 					} else {
 						outp += "." + char + "(";
 					}
@@ -1231,9 +1338,10 @@ var Japt = {
 			.replace(/(\+\+|--)[A-Z]|[A-Z](\+\+|--)/g, function(s) { Japt.strings.push("(" + s + ")"); return "\"" + (Japt.strings.length - 1) + "\""; })
 			.replace(/[,;]/g, "$& ")
 			.replace(/[}]/g, " $&")
-			.replace(/[{?:]|&&|\|\||(?:\*\*|==|<<|>>>?|!=|[+\-*/%&|^<=>])=?/g, " $& ")
+			.replace(/[{?:]|&&|\|\||(?:\*\*|==|<<|>>>?|!=|[+\-*/÷%&|^<=>])=?/g, " $& ")
 			.replace(/ +/g, " ")
-			.replace(/ ;/g, ";");
+			.replace(/ ;/g, ";")
+			.replace(/÷/g, "/");
 		outp = outp.replace(/"(\d+)"/g, function(_, a) { return Japt.strings[+a]; });
 		return outp;
 	},

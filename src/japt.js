@@ -706,18 +706,11 @@ var Japt = {
 			j = 0,
 			outp = "";  // Temporary output
 	
-		var i = 0, line = 0, lines = [], strchars = Array(20).fill(""), polyglot = '"(p|';
+		var i = 0, line = 0, lines = [], strchars = Array(20).fill("");
 		var extraparen = false;
 		for (; i < code.length; ++i) {
 			var char = code[i];
-			if (code.slice(i).indexOf(polyglot) === 0) {
-				outp = Japt.transpile((code.slice(i + polyglot.length).match(/(?:\\"|[^"])+/)||[""])[0].replace(/(\\+)"/,function(a,b){return b.length%2?"\\".repeat(b.length/2)+"\"":"\\".repeat(b.length/2)}));
-				i = code.length;
-			}
-			else if (i === 0 && char === ";") {
-				lines.push(";")
-			}
-			else if (level === 0) {
+			if (level === 0) {
 				if (char === "$") {
 					if (Japt.use_safe) Japt.is_safe = false;
 					Japt.snippets.push("");
@@ -905,11 +898,14 @@ var Japt = {
 						temp += "}";
 					else i--;
 					var tr = Japt.transpile(temp.slice(0,-1));
-					if (tr.lastIndexOf(";") < 0)
-						outp += "return " + tr + "}";
+					if (tr.lastIndexOf(";") === -1)
+						tr = "return " + tr;
 					else
-						outp += tr.slice(0,tr.lastIndexOf(";")+1) + "return " + tr.slice(tr.lastIndexOf(";")+1) + "}";
+						tr = tr.slice(0, tr.lastIndexOf(";") + 2) + "return " + tr.slice(tr.lastIndexOf(";") + 2)
+					
+					outp += "\"" + Japt.strings.length + "\"}";
 					if (extraparen) outp += ")";
+					Japt.strings.push(tr);
 				}
 				else {
 					outp += letters.split("").join(",").replace(/M,/g, "M.");
@@ -943,8 +939,8 @@ var Japt = {
 				code = code.slice(0,i+1) + pairs[char] + code.slice(i+1);
 			}
 			else if (outp.slice(-2) === "(!" && nextIsOp) {
-				outp = outp.slice(0,-1) + "\"!" + Japt.strings.length + "\"";
-				Japt.strings.push("\"" + code.slice(i, i + opLength) + "\"");
+				outp = outp.slice(0,-1) + "\"" + Japt.strings.length + "\"";
+				Japt.strings.push("\"!" + code.slice(i, i + opLength) + "\"");
 				i += opLength - 1;
 			}
 			else if (outp.slice(-1) === "(" && nextIsOp) {

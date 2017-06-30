@@ -802,7 +802,7 @@ var Japt = {
 							newcode += "}";
 							extrabraces[0]--;
 						}
-						if (newcode) lines.push("UVWXYZABCDEFGHIJKLMNOPQRST"[line] + "=" + newcode + ";");
+						if (newcode) lines.push("UVWXYZABCDEFGHIJKLMNOPQRST"[line] + "=" + subtranspile(newcode) + ";");
 						line++;
 						newcode = "";
 					}
@@ -885,8 +885,8 @@ var Japt = {
 					code += level % 2 ? strchars[level] : "}";
 				}
 			}
-			lines.push(newcode);
-			return subtranspile(lines.join(""));
+			lines.push(subtranspile(newcode));
+			return lines.join("");
 		}
 		
 		function subtranspile(code) {

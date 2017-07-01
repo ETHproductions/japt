@@ -73,14 +73,22 @@ function regexify(string, flags) {
 				regex += inCharClass ? "A-Za-z" : "[A-Za-z]";
 			else if (char === "L")
 				regex += inCharClass ? "\\W_\\d" : "[^A-Za-z]";
-			else if (char === "V")
-				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_" : "[^AaEeIiOoUu]";
+			else if (char === "p")
+				regex += inCharClass ? " -~" : "[ -~]";
+			else if (char === "P")
+				regex += inCharClass ? "\\x00-\\x1f\\x7f-\\uffff" : "[^ -~]";
+			else if (char === "q")
+				regex += inCharClass ? "\\n -~" : "[\\n -~]";
+			else if (char === "Q")
+				regex += inCharClass ? "\\x00-\\x09\\x0b-\\x1f\\x7f-\\uffff" : "[^\\n -~]";
 			else if (char === "v")
 				regex += inCharClass ? "AaEeIiOoUu" : "[AaEeIiOoUu]";
-			else if (char === "Y")
-				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_" : "[^AaEeIiOoUuYy]";
+			else if (char === "V")
+				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_" : "[^AaEeIiOoUu]";
 			else if (char === "y")
 				regex += inCharClass ? "AaEeIiOoUuYy" : "[AaEeIiOoUuYy]";
+			else if (char === "Y")
+				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_" : "[^AaEeIiOoUuYy]";
 			else
 				regex += "\\" + char;
 		}
@@ -131,14 +139,22 @@ function regexify2(string) {
 				regex += inCharClass ? "A-Za-z" : "[A-Za-z]";
 			else if (char === "L")
 				regex += inCharClass ? "\\W_\\d" : "[^A-Za-z]";
-			else if (char === "V")
-				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_" : "[^AaEeIiOoUu]";
+			else if (char === "p")
+				regex += inCharClass ? " -~" : "[ -~]";
+			else if (char === "P")
+				regex += inCharClass ? "\\x00-\\x1f\\x7f-\\uffff" : "[^ -~]";
+			else if (char === "q")
+				regex += inCharClass ? "\\n -~" : "[\\n -~]";
+			else if (char === "Q")
+				regex += inCharClass ? "\\x00-\\x09\\x0b-\\x1f\\x7f-\\uffff" : "[^\\n -~]";
 			else if (char === "v")
 				regex += inCharClass ? "AaEeIiOoUu" : "[AaEeIiOoUu]";
-			else if (char === "Y")
-				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_" : "[^AaEeIiOoUuYy]";
+			else if (char === "V")
+				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_" : "[^AaEeIiOoUu]";
 			else if (char === "y")
 				regex += inCharClass ? "AaEeIiOoUuYy" : "[AaEeIiOoUuYy]";
+			else if (char === "Y")
+				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_" : "[^AaEeIiOoUuYy]";
 			else
 				regex += "\\" + char;
 		}
@@ -171,7 +187,10 @@ function regexify2(string) {
 	}
 	
 	if (inCharClass) regex += "]";
-	while (parens > 0) regex += ")", parens -= 1;
+	while (parens > 0) {
+		regex += ")";
+		parens -= 1;
+	}
 	
 	return RegExp(regex, flags);
 }
@@ -223,10 +242,16 @@ function regescape(s) {
 
 // Deep-clones an object (note: does not work on arbitrary objects)
 function clone(x) {
+	if (!id(x))
+		return undefined;
 	if (x instanceof Array)
 		return x.map(clone);
 	if (x instanceof Date)
 		return new Date(x);
+	if (x.constructor === String)
+		return String(x);
+	if (x.constructor === Number)
+		return Number(x);
 	return x;
 }
 

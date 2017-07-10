@@ -533,7 +533,7 @@ df(Array.prototype, {
 });
 
 df(Number.prototype, {
-	a: function(){return Math.abs(this)},
+	a: function(x){x=fb(x,0);return Math.abs(this-x)},
 	b: function(x,y){return this<x?x:this>y?y:this},
 	c: function(x){x=fb(x,1);return Math.ceil(this/x)*x},
 	d: function(){return String.fromCharCode(this)},

@@ -202,7 +202,7 @@ function regexify2(string) {
 function saferegex(object, flags) {
 	if (object instanceof RegExp)
 		return object;
-	return RegExp(regescape(object), flags || 'g');
+	return RegExp(regescape(object), flags);
 }
 
 // Converts an operator/method and an argument to a function, Japt-style
@@ -531,7 +531,10 @@ df(String.prototype, {
 		}
 	},
 	e: function(x, y) {
-		x = saferegex(x);
+		x = eval(saferegex(x, '').toString().replace(/[a-z]*$/, function (s) {
+			return s.replace('g', '');
+		}));
+		y = fb(y, '');
 		var t = clone(this),
 			u;
 		for (var i = 1e6; i-- && t !== u; ) {
@@ -541,7 +544,7 @@ df(String.prototype, {
 		return t;
 	},
 	f: function (x) {
-		return this.match(saferegex(x));
+		return this.match(saferegex(x), 'g');
 	},
 	g: function (x) {
 		x = fb(x, 0);
@@ -647,7 +650,7 @@ df(String.prototype, {
 	},
 	r: function (x, y, z) {
 		y = fb(y, "");
-		return this.replace(saferegex(x, z), y);
+		return this.replace(saferegex(x, fb(z, 'g')), y);
 	},
 	s: function (x, y) {
 		y = fb(y, this.length);

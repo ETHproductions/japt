@@ -128,7 +128,8 @@ function comb(x,l){if(l===0)return[[]];if(x.length<1&&l)return[];var id=l+';'+st
 String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)};
 String.prototype.contains = String.prototype.contains || function(x){return-1<this.indexOf(x)};
 Array.prototype.contains = Array.prototype.contains || function(x){return-1<this.indexOf(x)};
-Math.trunc = Math.trunc || function(x){return isNaN(x)?NaN:x<0?Math.ceil(x):Math.floor(x)}
+Math.trunc = Math.trunc || function(x){return isNaN(x)?NaN:x<0?Math.ceil(x):Math.floor(x)};
+Math.approx = function(x,p){p=fb(p,5);for(var y=1;Math.abs(x-Math.round(x))>Math.pow(10,-p);)x*=10,y*=10;return Math.round(x)/y};
 df(String,'a',function(x,y){return typeof x=="function"||id(y)?this.q().a(x,y):this.lastIndexOf(x)});
 df(String,'b',function(x,y){return typeof x=="function"||id(y)?this.q().b(x,y):this.indexOf(x)});
 df(String,'c',function(x,y){x=fb(x,0);if(typeof x==="number")return this.charCodeAt(pm(x,this.length));x=functify(x,y);return this.m(function(a,b,c){var z=x(a.charCodeAt(0),fb(y,b),c);return typeof z==="number"?z.d():z})});
@@ -236,7 +237,7 @@ df(Number,'f',function(x){x=fb(x,1);return Math.floor(this/x)*x});
 df(Number,'g',function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});
 df(Number,'h',function(x){x=fb(x,1);return this.toPrecision(x)});
 df(Number,'i',function(x){return Japt.intervals[Japt.intervals.length]=setInterval(x,this)});
-df(Number,'j',function(){var n=+this;if(n===2)return true;if(n%1||n<2||n%2===0)return false;for(var i=3,s=Math.sqrt(n);i<=s;i+=2)if(n%i===0)return false;return true});
+df(Number,'j',function(x){if(id(x))return this.y(x)==1;var n=+this;if(n===2)return true;if(n%1||n<2||n%2===0)return false;for(var i=3,s=Math.sqrt(n);i<=s;i+=2)if(n%i===0)return false;return true});
 df(Number,'k',function(){var n=this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f});
 df(Number,'l',function(){var n=Math.trunc(this),x=Math.trunc(this);if(n<1)return 1;while(--n)x*=n;return x});
 df(Number,'m',function(){return[].reduce.call(arguments,function(x,y){return Math.min(x,y)},this)});
@@ -251,7 +252,7 @@ df(Number,'u',function(x){return pm(this,fb(x,2))});
 df(Number,'v',function(x){x=fb(x,2);return this%x===0?1:0});
 df(Number,'w',function(){return[].reduce.call(arguments,function(x,y){return Math.max(x,y)},this)});
 df(Number,'x',function(x){x=fb(x,0);return this.toFixed(x)});
-df(Number,'y',function(){noFunc('N.y')});
+df(Number,'y',function(x){var y=+this,z;while(x&&y)z=x,x=y,y=Math.approx(z%y);return x});
 df(Number,'z',function(){noFunc('N.z')});
 df(Number,'\xE0',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
 df(Number,'\xE1',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return n.l();return n["\xE0"]()*x.l()});
@@ -907,7 +908,7 @@ var Japt = {
 					outp += ",";
 				else if (isChar(char, "0-9") && isChar(outp.slice(-1), "`'\"A-Z\\)\\]}"))
 					outp += ",";
-				else if (char === "." && /\.\d+$/.test(outp))
+				else if (char === "." && /(\.\d+|[`'"A-Z)\]}])$/.test(outp))
 					outp += ",";
 				else if (isChar(outp.slice(-1), "+\\-&|\\^") && isChar(char, " \\)\\]};"))
 					code = code.slice(0,i)+'1'+code.slice(i);

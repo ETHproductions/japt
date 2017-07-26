@@ -252,7 +252,7 @@ df(Number,'u',function(x){return pm(this,fb(x,2))});
 df(Number,'v',function(x){x=fb(x,2);return this%x===0?1:0});
 df(Number,'w',function(){return[].reduce.call(arguments,function(x,y){return Math.max(x,y)},this)});
 df(Number,'x',function(x){x=fb(x,0);return this.toFixed(x)});
-df(Number,'y',function(x){var y=+this,z;while(x&&y)z=x,x=y,y=Math.approx(z%y);return x});
+df(Number,'y',function(x){x=fb(x,2);var y=+this,z;while(x&&y)z=x,x=y,y=Math.approx(z%y);return x});
 df(Number,'z',function(){noFunc('N.z')});
 df(Number,'\xE0',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return Math.pow(2,n)-1;return Math.round(n.l()/(x.l()*(n-x).l()))});
 df(Number,'\xE1',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return n.l();return n["\xE0"]()*x.l()});

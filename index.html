@@ -241,7 +241,7 @@
           if (Japt.implicit_output) Japt.output(result);
           document.getElementById('time').innerHTML = '(took ' + ((new Date - start) / 1e3).toFixed(3) + ' seconds)';
         },
-        function(x) { Japt.error(x); }
+        function(x) { console.error(x); Japt.error(x); }
       );
     } else {
       start = new Date;

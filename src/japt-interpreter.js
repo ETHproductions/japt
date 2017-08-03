@@ -191,7 +191,7 @@ df(Array,'k',function(x,y){if(!id(x)||typeof x==="function"||(typeof x==="string
 df(Array,'l',function(){return this.length});
 df(Array,'m',function(x,y){x=functify(x,y);return this.map(function(q,r,s){return x(q,fb(y,r),s)})});
 df(Array,'n',function(x){x=functify(fb(x,function(x,y){return(x>y)-(x<y)}));return this.sort(x)});
-df(Array,'o',function(x){x=x||1;if(x>1){for(var a=[];x--;)a.push(this.pop());return a}else return this.pop()});
+df(Array,'o',function(x){if(id(x)){for(var a=[],x=Math.trunc(x);x>0;--x)a.push(this.pop());return a}else return this.pop()});
 df(Array,'p',function(){for(var i of [].slice.call(arguments))this.push(i);return this});
 df(Array,'q',function(x){return this.join(x||"")});
 df(Array,'r',function(x,y){x=functify(x,0);return this.reduce(function(q,r,s){return x(q,r,s)},y||(typeof this[0]=="number"?0:""))});

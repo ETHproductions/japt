@@ -749,10 +749,7 @@ var Japt = {
 			
 			for (; i < code.length; ++i) {
 				var char = code[i];
-				if (i === 0 && char === ";") {
-					lines.push(";")
-				}
-				else if (level === 0) {
+				if (level === 0) {
 					if (char === "$") {
 						if (Japt.use_safe) Japt.is_safe = false;
 						newcode += "$";
@@ -808,9 +805,8 @@ var Japt = {
 						line++;
 						newcode = "";
 					}
-					else if (char === ";") {
-						if (newcode) lines.push(newcode + ";");
-						newcode = "";
+					else if (char === ";" && !newcode) {
+						lines.push("newvars();");
 					}
 					else {
 						newcode += char;
@@ -952,7 +948,7 @@ var Japt = {
 						var tr = subtranspile(temp.slice(0,-1));
 
 						if (tr.contains(";"))
-							tr = tr.slice(0, tr.lastIndexOf(";") + 2) + "return " + tr.slice(tr.lastIndexOf(";") + 2);
+							tr = tr.slice(0, tr.lastIndexOf(";") + 1) + "return " + tr.slice(tr.lastIndexOf(";") + 1);
 						else
 							tr = "return " + tr;
 

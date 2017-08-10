@@ -941,19 +941,28 @@ df(Array.prototype, {
 		return t ? a.map(function(r) { return r.join(""); }) : a;
 	},
 	z: function (n) {
-		if (typeof n !== "number")
-			n = 1;
-		n = pm(n, 4);
-		var f = function (l) {
-			return l.w();
-		};
-		if (n === 1)
-			return this.y().map(f);
-		if (n === 2)
-			return this.w().map(f);
-		if (n === 3)
-			return this.map(f).y();
-		return this;
+		n = pm(fb(n, 1), 4) || 4;
+		var q = this[0] instanceof Array,
+			l = this.reduce(function(p, x) {
+				return Math.max(p, x instanceof Array ? x.length : String(x).length);
+			}, 0),
+			a = this.map(function(x) {
+				if (x instanceof Array)
+					return x.concat(Array(l - x.length).fill(q ? 0 : " "));
+				return " ".p(l).h(x);
+			});
+		for ( ; n > 0; --n ) {
+			var b = [];
+			for (var y = 0; y < a.length; y++)
+				for (var x = 0; x < a[y].length; x++) {
+					b[x] = b[x] || [];
+					b[x][l - y - 1] = a[y][x];
+				}
+			a = b;
+		}
+		if (q)
+			return a;
+		return a.map(function(x){return x.q()});
 	},
 	à: function (x) {
 		var f = function(y, z, a) {

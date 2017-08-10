@@ -300,9 +300,9 @@ df(Date,'z',function(){noFunc('D.z')});
 
 function bij(a,b){var s="";a=Math.floor(a);b=fb(b,10);if(b%1||b<2)return s;if(a<0)s="-",a=~a;var c=0,x=1;while(a>=x){c++;a-=x;x*=b;}for(var i=0;i<c;i++){s=(a%b)+s;a=Math.floor(a/b);}return s;}
 
-df(Function,'a',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){var j=x(i,fb(y,i));if(this(j))return j;}});
-df(Function,'b',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){j=x(bij(i,10),fb(y,i));if(this(j))return j;}});
-df(Function,'c',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;i=-i-(i>-1)){var j=x(i,fb(y,i));if(this(j))return j;}});
+df(Function,'a',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){var j=x(i,fb(y,i));if(this(j,i))return j;}});
+df(Function,'b',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){j=x(bij(i,10),fb(y,i));if(this(j,i))return j;}});
+df(Function,'c',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;i=-i-(i>-1)){var j=x(i,fb(y,i));if(this(j,i))return j;}});
 
 df(Object,'\xFF',function(){if(!isnode)alert(this);return this instanceof Number?+this:this instanceof String?""+this:this});
 

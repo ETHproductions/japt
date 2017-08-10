@@ -1519,7 +1519,7 @@ df(Function.prototype, {
 		x = functify2(fb(x, function(q) { return q; }), y);
 		for (var i = 0; i < 1e8; ++i) {
 			var j = x(i, i);
-			if (this(j))
+			if (this(j, i))
 				return j;
 		}
 	},
@@ -1527,7 +1527,7 @@ df(Function.prototype, {
 		x = functify2(fb(x, function(q){ return q; }), y);
 		for (var i = 0; i < 1e8; ++i) {
 			j = x(bij(i, 10), i);
-			if (this(j))
+			if (this(j, i))
 				return j;
 		}
 	},
@@ -1535,7 +1535,7 @@ df(Function.prototype, {
 		x = functify2(fb(x, function(q){ return q; }), y);
 		for (var i = 0, index = 0; i < 1e8; ++index, i = i < 0 ? -i : ~i) {
 			var j = x(i, index);
-			if(this(j))
+			if(this(j, i))
 				return j;
 		}
 	}

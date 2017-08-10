@@ -1538,6 +1538,20 @@ df(Function.prototype, {
 			if(this(j, i))
 				return j;
 		}
+	},
+	g: function (n, a) {
+		if (n instanceof Array) {
+			var tmp = a;
+			a = n;
+			n = tmp;
+		}
+		n = fb(n, U);
+		a = fb(a, [0, 1]);
+		for (var i = a.length; i <= n; ++i) {
+			var j = this(fb(a.g(-1), -1), i, clone(a));
+			a.push(j);
+		}
+		return a.g(n);
 	}
 });
 

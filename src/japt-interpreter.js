@@ -303,6 +303,7 @@ function bij(a,b){var s="";a=Math.floor(a);b=fb(b,10);if(b%1||b<2)return s;if(a<
 df(Function,'a',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){var j=x(i,fb(y,i));if(this(j,i))return j;}});
 df(Function,'b',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;++i){j=x(bij(i,10),fb(y,i));if(this(j,i))return j;}});
 df(Function,'c',function(x,y){x=functify(fb(x,function(q){return q}),y);for(var i=0;i<1e8;i=-i-(i>-1)){var j=x(i,fb(y,i));if(this(j,i))return j;}});
+df(Function,'g',function(n,a){if(n instanceof Array){var z=a;a=n;n=z}n=fb(n,U);a=fb(a,[0,1]);for(var i=a.length;i<=n;++i)a.push(this(fb(a.g(-1),-1),i,clone(a)));return a.g(n)});
 
 df(Object,'\xFF',function(){if(!isnode)alert(this);return this instanceof Number?+this:this instanceof String?""+this:this});
 

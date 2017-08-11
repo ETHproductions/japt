@@ -156,7 +156,7 @@ df(String,'u',function(){return this.toUpperCase()});
 df(String,'v',function(){return this.toLowerCase()});
 df(String,'w',function(){return this.split('').reverse().join('')});
 df(String,'x',function(x){return x==1?this.trimRight():x==2?this.trimLeft():this.trim()});
-df(String,'y',function(){return this.split("\n").y().join("\n")});
+df(String,'y',function(x,y){var z=this.split("\n").y();if(id(x))z=z.m(x,y).y();return z.join("\n")});
 df(String,'z',function(n){return this.split("\n").z(n).join("\n")});
 df(String,'\xE0',function(x){return this.q()['\xE0'](x).map(function(y){return y.q()})});
 df(String,'\xE1',function(x){return this.q()['\xE1'](x).map(function(y){return y.q()})});
@@ -201,7 +201,7 @@ df(Array,'u',function(){for(var i of [].slice.call(arguments))this.unshift(i);re
 df(Array,'v',function(){return this.shift()});
 df(Array,'w',function(){return this.reverse()});
 df(Array,'x',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.reduce(function(a,b,i,z){b=x(b,fb(y,i),z);return a+(isNaN(+b)?parseFloat(b)||0:+b)},0)});
-df(Array,'y',function(){var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a});
+df(Array,'y',function(x,y){if(id(x))return this.y().m(x,y).y();var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a});
 df(Array,'z',function(n){n=pm(fb(n,1),4)||4;var q=this[0] instanceof Array,l=this.reduce(function(p,x){return Math.max(p,(x instanceof Array?x:String(x)).length)},0),a=this.map(function(x){return x instanceof Array?x.concat(Array(l-x.length).fill(q?0:" ")):" ".p(l).h(x)});for(;n>0;--n){var b=[];for(var y=0;y<a.length;y++)for(var x=0;x<a[y].length;x++)b[x]=b[x]||[],b[x][l-y-1]=a[y][x];a=b}return q?a:a.map(function(x){return x.q()})});
 df(Array,'\xE0',function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)return;if(z.length===0){a.push(y)}else{var n=y.slice(0);n.push(z[0]);f(n,z.slice(1),a);f(y,z.slice(1),a)}return a};return f([],this,[]).filter(function(z){return x?z.length===x:1})});
 //df(Array,'\xE0',function(x){var a=[[]],s=[];for(var i=0;i<this.length;++i){var l=a.length;for(var j=0;j<l;j++){var b=a[j].concat([this[i]]);if(s.indexOf(str(b))<0)a.push(b),s.push(str(b));}}return a});

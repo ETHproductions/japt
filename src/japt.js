@@ -678,8 +678,11 @@ df(String.prototype, {
 			return this.trimLeft();
 		return this.trim();
 	},
-	y: function () {
-		return this.split("\n").y().join("\n");
+	y: function (x, y) {
+		var z = this.split("\n").y();
+		if (id(x))
+			z = z.m(x, y).y();
+		return z.join("\n");
 	},
 	z: function (n) {
 		return this.split("\n").z(n).join("\n");
@@ -927,7 +930,9 @@ df(Array.prototype, {
 			return a + (isNaN(+b) ? parseFloat(b) || 0 : +b);
 		}, 0);
 	},
-	y: function () {
+	y: function (x, y) {
+		if (id(x))
+			return this.y().m(x, y).y();
 		var t = "string" === typeof this[0],
 			n = t ? this.map(function(t) { return t.split(""); }) : this,
 			x, y,

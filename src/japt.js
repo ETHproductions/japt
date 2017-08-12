@@ -111,6 +111,7 @@ function regexify2(string) {
 			"\n": /\n/g,
 			"*": /.*/g,
 			"+": /.+/g,
+			"?": /.?/g,
 			".": /./g,
 			"^": /[^]/g
 		}[string] || regexify2("/\\" + string + "/");
@@ -1343,7 +1344,7 @@ df(Number.prototype, {
 	},
 	v: function (x) {
 		x = fb(x, 2);
-		if (this % x === 0)
+		if (x == 0 || this % x === 0)
 			return 1;
 		return 0;
 	},

@@ -71,8 +71,16 @@
   <tr><td>\y</td><td>AEIOUYaeiouy</td></tr>
   <tr><td>\Y</td><td>Anything else</td></tr>
 </table>
-<p>If you have a regex that's just a single class, you can omit the outer slashes. This means that e.g. `/\v/` can be shortened to `\v`.</p>
 <p>Note: because `/` is parsed as the start of a regex, `÷` is used for division.</p>
+<p>If you have a regex that's just a single class, you can omit the outer slashes. This means that e.g. `/\v/` can be shortened to `\v`. There are a few special shortcuts as well:</p>
+<table class="code-table">
+  <tr><td style="width:50px"><b>Shortcut</b></td><td><b>Transpiled</b></td></tr>
+  <tr><td>\.</td><td>/./g</td></tr>
+  <tr><td>\^</td><td>/[^]/g</td></tr>
+  <tr><td>\*</td><td>/.*/g</td></tr>
+  <tr><td>\+</td><td>/.+/g</td></tr>
+  <tr><td>\?</td><td>/.?/g</td></tr>
+</table>
 </div>
 
 <h2>arrow:variables Variables</h2>
@@ -501,7 +509,7 @@
 <p>Returns the larger of `this` and `n`.</p>
 <h3>`.x(n=0)`</h3>
 <p>Returns `this` rounded to `n` decimals.</p>
-<h3>`.y(n)`</h3>
+<h3>`.y(n=2)`</h3>
 <p>Returns the GCD of `this` and `n`.</p>
 <h3>`.à(n?)`</h3>
 <p>Returns the number of combinations of `[1..this]`. If `n` is specified, only returns the number of combinations of length `n`.</p>

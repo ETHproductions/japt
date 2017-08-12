@@ -23,6 +23,19 @@ Completed:
 1.4.5  N.ì(a) -> convert to array (9ì['c7] -> [7,"c","c",7])
 1.4.5  A.ì(s) -> convert to number ([7'c'c7]ì"c7" -> 9)
 1.4.5  N.ì(s) -> convert to array (9ì"c7" -> ["7","c","c","7"])
+1.4.5  S.í(s) -> pair strings, like A.í(a)
+1.4.5  Add %p (printable), %P, %q (printable + newline), and %Q character classes
+1.4.5  N.a(n) -> absolute difference
+1.4.5  N.j(n) -> coprime?
+1.4.5  N.y(n=2) -> GCD
+1.4.5  F.g(n,a=[0,1]) -> Generate n'th item of sequence (repeatedly appending this(a.g(-1), i, a) to a)
+1.4.5  S.y(f) -> Map columns
+1.4.5  A.y(f) -> Map columns
+
+2.0.0  Clean up code
+2.0.0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
+2.0.0  Add single-class regexes with `\` (i.e. `Uf\w` == `Uf/\w/`)
+2.0.0  Have each method control its own regex flags (modifying regexify() and various methods)
 
 Planned:
 1.4.5  X.?(f) -> run X through f  (default function: output with newline?)
@@ -43,16 +56,27 @@ Planned:
 1.4.5  ? -> `w `?
 1.4.5  ? -> `c `?
 1.4.5  ? -> `gJ `
-1.4.5  Have each method control its own regex flags (modifying regexify() and various methods)
-1.4.5  Add some character that looks at the next byte and inserts a predefined value
+1.4.5  ? -> `y `?
+1.4.5  ? -> `l `
+1.4.5  A.?(s) -> keys/indices (like Jelly's `J`)
+1.4.5  N.?(f) -> Number(f(String(N)))?
+1.4.5  A.?() -> fill range ([1,5,3,3,4] -> [1,2,3,4,5,4,3,3,4])
+1.4.5  A.?(f) -> minimum
+1.4.5  A.?(f) -> maximum
+1.4.5  Auto-finish arrays []
+1.4.5  Auto-start functions? {}
+1.4.5  Auto-finish/fill a?b:c
+1.4.5  All substrings
 
-1.5.0  Clean up code
-1.5.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)
-
+2.0.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)
+2.0.0  Command-line-ify
 2.0.0  Use new encoding (https://github.com/ETHproductions/japt/issues/28)
 2.0.0  Add custom string compressor (https://github.com/ETHproductions/japt/issues/29)
 2.0.0  Add characters that represent `U`, `X`, and `Z` in strings
-2.0.0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
-2.0.0  Add single-class regexes with `\` (i.e. `Uf\w` == `Uf/\w/`)
 2.0.0  Use ⁺ and ⁻ for unary plus and minus, make + and - always binary operators
 2.0.0  Turn l into a property? (i.e. `Ul +1` -> `Ul+1`)
+2.0.0  Add constants that return the inputs
+2.0.0  Add function that takes next byte and uses it to apply reverse and/or palindromize with options
+2.0.0  Regex interpolation (like {} in strings)
+2.0.0  Use non-ASCII chars for strings and regexes? (“” for strings, ‹› for regexes?)
+2.0.0  Make mini-regexes take as many chars as is reasonable (i.e. \d+ -> /\d+/g, \d^m -> /^\d/gm)

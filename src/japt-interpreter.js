@@ -249,7 +249,7 @@ df(Number,'r',function(x){x=fb(x,1);return Math.round(this/x)*x});
 df(Number,'s',function(x){if(typeof x==="string")x=x.q();if(x instanceof Array)return this['\xEC'](x).q();x=fb(x,10);return this.toString(x)});
 df(Number,'t',function(x){return Japt.intervals[Japt.intervals.length]=setTimeout(x,this)});
 df(Number,'u',function(x){return pm(this,fb(x,2))});
-df(Number,'v',function(x){x=fb(x,2);return this%x===0?1:0});
+df(Number,'v',function(x){x=fb(x,2);return x==0||this%x===0?1:0});
 df(Number,'w',function(){return[].reduce.call(arguments,function(x,y){return Math.max(x,y)},this)});
 df(Number,'x',function(x){x=fb(x,0);return this.toFixed(x)});
 df(Number,'y',function(x){x=fb(x,2);var y=+this,z;while(x&&y)z=x,x=y,y=Math.approx(z%y);return x});

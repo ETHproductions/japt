@@ -932,8 +932,14 @@ df(Array.prototype, {
 		}, 0);
 	},
 	y: function (x, y) {
-		if (id(x))
-			return this.y().m(x, y).y();
+		if (id(x)) {
+			var z = this.y().m(x, y);
+			if (z.every(function(q) {
+				return typeof q === "string" || q instanceof Array;
+			}))
+				z = z.y();
+			return z;
+		}
 		var t = "string" === typeof this[0],
 			n = t ? this.map(function(t) { return t.split(""); }) : this,
 			x, y,
@@ -1321,7 +1327,12 @@ df(Number.prototype, {
 		x = fb(x, 1);
 		return Math.round(this / x) * x;
 	},
-	s: function (x) {
+	s: function (x, y) {
+		if (typeof x === "function"
+			|| (typeof x === "string"
+				&& (id(y) ? /^!?.$/.test(x) : x.length === 1)
+			   ))
+			return Number(functify(x, y)(this.s(), y));
 		if (typeof x === "string")
 			x = x.q();
 		if (x instanceof Array)
@@ -1401,7 +1412,16 @@ df(Number.prototype, {
 		x = String(fb(x, " "));
 		return x.p(+this);
 	},
-	ì: function (x) {
+	ì: function (x, y) {
+		if (typeof x === "function"
+			|| (typeof x === "string"
+				&& (id(y) ? /^!?.$/.test(x) : x.length === 1)
+			   )) {
+			var z = functify(x, y)(this.ì(), y);
+			if (z instanceof Array)
+				z = z.ì();
+			return Number(z);
+		}
 		if (typeof x === "string")
 			x = x.q();
 		if (x instanceof Array)

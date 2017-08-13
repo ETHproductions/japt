@@ -201,7 +201,7 @@ df(Array,'u',function(){for(var i of [].slice.call(arguments))this.unshift(i);re
 df(Array,'v',function(){return this.shift()});
 df(Array,'w',function(){return this.reverse()});
 df(Array,'x',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.reduce(function(a,b,i,z){b=x(b,fb(y,i),z);return a+(isNaN(+b)?parseFloat(b)||0:+b)},0)});
-df(Array,'y',function(x,y){if(id(x))return this.y().m(x,y).y();var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a});
+df(Array,'y',function(x,y){if(id(x)){var z=this.y().m(x,y);if(z.every(function(q){return typeof q==="string"||q instanceof Array}))z=z.y();return z}var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a});
 df(Array,'z',function(n){n=pm(fb(n,1),4)||4;var q=this[0] instanceof Array,l=this.reduce(function(p,x){return Math.max(p,(x instanceof Array?x:String(x)).length)},0),a=this.map(function(x){return x instanceof Array?x.concat(Array(l-x.length).fill(q?0:" ")):" ".p(l).h(x)});for(;n>0;--n){var b=[];for(var y=0;y<a.length;y++)for(var x=0;x<a[y].length;x++)b[x]=b[x]||[],b[x][l-y-1]=a[y][x];a=b}return q?a:a.map(function(x){return x.q()})});
 df(Array,'\xE0',function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)return;if(z.length===0){a.push(y)}else{var n=y.slice(0);n.push(z[0]);f(n,z.slice(1),a);f(y,z.slice(1),a)}return a};return f([],this,[]).filter(function(z){return x?z.length===x:1})});
 //df(Array,'\xE0',function(x){var a=[[]],s=[];for(var i=0;i<this.length;++i){var l=a.length;for(var j=0;j<l;j++){var b=a[j].concat([this[i]]);if(s.indexOf(str(b))<0)a.push(b),s.push(str(b));}}return a});
@@ -246,7 +246,7 @@ df(Number,'o',function(x,y,f,s){var q;if(typeof x=="function")f=x,x=undefined;if
 df(Number,'p',function(x){x=fb(x,2);return Math.pow(this,x)});
 df(Number,'q',function(x){x=fb(x,2);return Math.pow(this,1/x)});
 df(Number,'r',function(x){x=fb(x,1);return Math.round(this/x)*x});
-df(Number,'s',function(x){if(typeof x==="string")x=x.q();if(x instanceof Array)return this['\xEC'](x).q();x=fb(x,10);return this.toString(x)});
+df(Number,'s',function(x,y){if(typeof x==="function"||(typeof x==="string"&&(id(y)?/^!?.$/.test(x):x.length===1)))return Number(functify(x,y)(this.s(),y));if(typeof x==="string")x=x.q();if(x instanceof Array)return this['\xEC'](x).q();x=fb(x,10);return this.toString(x)});
 df(Number,'t',function(x){return Japt.intervals[Japt.intervals.length]=setTimeout(x,this)});
 df(Number,'u',function(x){return pm(this,fb(x,2))});
 df(Number,'v',function(x){x=fb(x,2);return x==0||this%x===0?1:0});
@@ -258,7 +258,7 @@ df(Number,'\xE0',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0
 df(Number,'\xE1',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return n.l();return n["\xE0"]()*x.l()});
 df(Number,'\xE2',function(x){if(this%1)return[];var n=Math.abs(this);var a=[];for(var i=1;i<Math.sqrt(n);++i)if(n%i===0)a.push(i,n/i);if(i*i===n)a.push(i);a.n();if(x)a.pop();return a});
 df(Number,'\xE7',function(x){x=fb(x," ")+"";return x.p(+this)});
-df(Number,'\xEC',function(x){if(typeof x==="string")x=x.q();if(x instanceof Array)return this['\xEC'](x.length).m(function(y){return x[y]});var n=Math.trunc(this);x=Math.floor(fb(x,10));if(x<2)return[];for(var a=[];n!=0;n=Math.trunc(n/x))a.unshift(n%x);return a});
+df(Number,'\xEC',function(x,y){if(typeof x==="function"||(typeof x==="string"&&(id(y)?/^!?.$/.test(x):x.length===1))){var z=functify(x,y)(this.ì(),y);if(z instanceof Array)z=z.ì();return Number(z)}if(typeof x==="string")x=x.q();if(x instanceof Array)return this['\xEC'](x.length).m(function(y){return x[y]});var n=Math.trunc(this);x=Math.floor(fb(x,10));if(x<2)return[];for(var a=[];n!=0;n=Math.trunc(n/x))a.unshift(n%x);return a});
 df(Number,'\xEE',function(x){return" ".p(+this)['\xEE'](x)});
 df(Number,'\xF2',function(x,y,f){return this.o(x,y,f,1)});
 df(Number,'\xF3',function(x,y,f){return this.o(x,y,f,2)});

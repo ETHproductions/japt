@@ -502,6 +502,8 @@
 <p>Returns `this` converted to a base-`s` string (`9s"ab" -> "baab"`).</p>
 <h3>`.s(a)`</h3>
 <p>Returns `this` converted to a base-`a` string (`9s["ab""tr"] -> "trababtr"`).</p>
+<h3>`.s(f)`</h3>
+<p>Converts `this` to a string, runs it through `f`, and then converts back to a number.</p>
 <h3>`.t(f)`</h3>
 <p>Runs `f` after `this` milliseconds.</p>
 <h3>`.t(s)`</h3>
@@ -530,6 +532,8 @@
 <p>Returns an array of the base-`a` digits of `this` (9ì["ab"7] -> [7,"ab","ab",7]).</p>
 <h3>`.ì(s)`</h3>
 <p>Returns an array of the base-`s` digits of `this` (9ì"ab" -> ["b","a","a","b"]).</p>
+<h3>`.ì(f)`</h3>
+<p>Converts `this` to an array of digits, runs it through `f`, and then converts back to a number.</p>
 <h3>`.î(s=" ")`</h3>
 <p>Repeats `s` until it reaches length `this`. `5î"ab" -> "ababa"`</p>
 <h3>`.ò(n,n=1)`</h3>

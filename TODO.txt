@@ -31,6 +31,8 @@ Completed:
 1.4.5  F.g(n,a=[0,1]) -> Generate n'th item of sequence (repeatedly appending this(a.g(-1), i, a) to a)
 1.4.5  S.y(f) -> Map columns
 1.4.5  A.y(f) -> Map columns
+1.4.5  N.s(f) -> Number(f(String(N)))
+1.4.5  N.ì(f) -> Number(f(digits(N)))
 
 2.0.0  Clean up code
 2.0.0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
@@ -38,8 +40,16 @@ Completed:
 2.0.0  Have each method control its own regex flags (modifying regexify() and various methods)
 
 Planned:
+1.4.5  S.ù(n,s=" ") -> right-align S to n chars with filler s
+1.4.5  S.ú() -> S.ù, but left-aligned
+1.4.5  S.û() -> S.ù, but center-aligned
+1.4.5  A.ù() -> right-align all items
+1.4.5  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
+1.4.5  A.ù(n,a=[0]) -> right-align A to n items with filler a
+1.4.5  A.ù(n,x) -> right-align A to n items with filler [x]
+1.4.5  A.ú() -> A.ù, but left-aligned
+1.4.5  A.û() -> A.ù, but center-aligned
 1.4.5  X.?(f) -> run X through f  (default function: output with newline?)
-1.4.5  S.?(n,s=" ") -> pad S to n chars with filler s
 1.4.5  A.n(s) -> sort the items in A by their alphabetical order in s
 1.4.5  A.n(a) -> sort A by the order the items appear in a?
 1.4.5  A.?(f) -> all truthy indices
@@ -59,7 +69,6 @@ Planned:
 1.4.5  ? -> `y `?
 1.4.5  ? -> `l `
 1.4.5  A.?(s) -> keys/indices (like Jelly's `J`)
-1.4.5  N.?(f) -> Number(f(String(N)))?
 1.4.5  A.?() -> fill range ([1,5,3,3,4] -> [1,2,3,4,5,4,3,3,4])
 1.4.5  A.?(f) -> minimum
 1.4.5  A.?(f) -> maximum

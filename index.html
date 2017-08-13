@@ -186,8 +186,8 @@
   }
   
   function setup() {
-	if(typeof code !== "undefined") document.getElementById("code").value = code;
-    if(typeof input !== "undefined") document.getElementById("input").value = input;
+	if(typeof code !== "undefined" && !document.getElementById("code").value) document.getElementById("code").value = code;
+    if(typeof input !== "undefined" && !document.getElementById("input").value) document.getElementById("input").value = input;
     if(window.Japt) {
       Japt.stdout = document.getElementById("output");
       Japt.stderr = document.getElementById("stderr");

@@ -615,9 +615,11 @@ df(String.prototype, {
 			
 			var result = this.match(RegExp(z, y ? 'gi' : 'g')) || [];
 			return result.reduce(function(prev, curr) {
-				var i = x.findIndex(function(z) {
-					return z.v() === curr.v();
-				});
+				var i = x.indexOf(curr);
+				if (i < 0 && y)
+					i = x.findIndex(function(z) {
+						return z.v() === curr.v();
+					});
 				if (i < 0)
 					return NaN;
 				return prev * x.length + i;

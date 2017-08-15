@@ -274,7 +274,7 @@ function str(x) {
 
 // Escapes all special regex characters so they can be used in a regex
 function regescape(s) {
-	return String(s).replace(/[()[\]{}\-+*^$|\\/.]/g, "\\$&");
+	return String(s).replace(/[()[\]{}\-+*?^$|\\/.]/g, "\\$&");
 }
 
 // Deep-clones an object (note: does not work on arbitrary objects)

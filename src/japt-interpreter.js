@@ -8,7 +8,7 @@ function regexify(x,y){if(x instanceof RegExp)return x;x+="";y=fb(y,null);var z=
 function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/^!?[a-zà-ÿ]$/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
 function isChar(str,char){return RegExp('^['+char+']$').test(str);}
 function str(x){return x instanceof Array?'['+x.map(str).join()+']':x instanceof String||typeof x==="string"?'"'+x.replace(/"/g,"\\\"")+'"':x+""}
-function regescape(s){s=String(s);return s.replace(/[()[\]{}\-+*^$|\\/.]/g,"\\$&")}
+function regescape(s){s=String(s);return s.replace(/[()[\]{}\-+*?^$|\\/.]/g,"\\$&")}
 function clone(x){return x instanceof Array?x.slice():x}
 
 var isnode = typeof window === "undefined";

@@ -33,6 +33,9 @@ Completed:
 1.4.5  A.y(f) -> Map columns
 1.4.5  N.s(f) -> Number(f(String(N)))
 1.4.5  N.ì(f) -> Number(f(digits(N)))
+1.4.5  Ê -> `l `
+1.4.5  Ë -> `mDEF{D`
+1.4.5  Ì -> `gJ `
 
 2.0.0  Clean up code
 2.0.0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
@@ -65,9 +68,7 @@ Planned:
 1.4.5  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
 1.4.5  ? -> `w `?
 1.4.5  ? -> `c `?
-1.4.5  ? -> `gJ `
 1.4.5  ? -> `y `?
-1.4.5  ? -> `l `
 1.4.5  A.?(s) -> keys/indices (like Jelly's `J`)
 1.4.5  A.?() -> fill range ([1,5,3,3,4] -> [1,2,3,4,5,4,3,3,4])
 1.4.5  A.?(f) -> minimum
@@ -83,7 +84,7 @@ Planned:
 2.0.0  Use new encoding (https://github.com/ETHproductions/japt/issues/28)
 2.0.0  Add custom string compressor (https://github.com/ETHproductions/japt/issues/29)
 2.0.0  Add characters that represent `U`, `X`, and `Z` in strings
-2.0.0  Use ⁺ and ⁻ for unary plus and minus, make + and - always binary operators
+2.0.0  Use ⁺ and ⁻ for unary plus and minus, ₊ and ₋ for increment and decrement, make + and - always binary operators
 2.0.0  Turn l into a property? (i.e. `Ul +1` -> `Ul+1`)
 2.0.0  Add constants that return the inputs
 2.0.0  Add function that takes next byte and uses it to apply reverse and/or palindromize with options

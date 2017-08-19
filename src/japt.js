@@ -1551,26 +1551,41 @@ function bij (num, radix) {
 
 df(Function.prototype, {
 	a: function (x, y) {
-		x = functify2(fb(x, function(q) { return q; }), y);
-		for (var i = 0; i < 1e8; ++i) {
-			var j = x(i, i);
+		x = fb(x, function(q) { return q; });
+		var s = 0;
+		if (isNaN(x))
+			x = functify(x, y);
+		else
+			s = Number(x), x = function(q) { return q; };
+		for(var i = 0; i < 1e8; ++i ) {
+			var j = x(i + s, i);
 			if (this(j, i))
 				return j;
 		}
 	},
 	b: function (x, y) {
-		x = functify2(fb(x, function(q){ return q; }), y);
-		for (var i = 0; i < 1e8; ++i) {
+		x = fb(x, function(q) { return q; });
+		var s = 0;
+		if (isNaN(x))
+			x = functify(x, y);
+		else
+			s = Number(x), x = function(q) { return q; };
+		for(var i = 0; i < 1e8; ++i) {
 			j = x(bij(i, 10), i);
 			if (this(j, i))
 				return j;
 		}
 	},
 	c: function (x, y) {
-		x = functify2(fb(x, function(q){ return q; }), y);
-		for (var i = 0, index = 0; i < 1e8; ++index, i = i < 0 ? -i : ~i) {
-			var j = x(i, index);
-			if(this(j, i))
+		x = fb(x, function(q) { return q; });
+		var s = 0;
+		if (isNaN(x))
+			x = functify(x, y);
+		else
+			s = Number(x), x = function(q) { return q; };
+		for(var i = 0, index = 0; i < 1e8; ++index, i = i < 0 ? -i : ~i) {
+			var j = x(i + s, index);
+			if(this(j, index))
 				return j;
 		}
 	},

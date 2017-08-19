@@ -749,7 +749,8 @@ var Japt = {
 				i = 0,
 				line = 0,
 				lines = [],
-				strchars = Array(20).fill("");
+				strchars = Array(20).fill(""),
+				internary = false;
 			
 			for (; i < code.length; ++i) {
 				var char = code[i];
@@ -768,6 +769,7 @@ var Japt = {
 					}
 					else if (isChar(char, "\"`")) {
 						level++;
+						internary = newcode.slice(-1) === "?";
 						strchars[level] = char;
 						currstr = "\"";
 					}
@@ -819,6 +821,13 @@ var Japt = {
 				else if (level === 1) {
 					if (char === "\\") {
 						currstr += "\\" + code[++i];
+					}
+					else if (char === ":" && internary) {
+						internary = false;
+						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
+						currstr += "\"";
+						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
+						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"") + ":\"";
 					}
 					else if (char === strchars[level]) {
 						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});

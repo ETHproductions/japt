@@ -1378,6 +1378,10 @@ df(Number.prototype, {
 			z = x, x = y, y = Math.approx(z % y);
 		return x;
 	},
+	z: function (x) {
+		x = fb(x, 2);
+		return Math.trunc(this / x);
+	},
 	à: function (x) {
 		var n = Math.trunc(this);
 		x = Math.trunc(fb(x, 0));

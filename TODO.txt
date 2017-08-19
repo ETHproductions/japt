@@ -29,13 +29,14 @@ Completed:
 1.4.5  N.j(n) -> coprime
 1.4.5  N.y(n=2) -> GCD
 1.4.5  F.g(n,a=[0,1]) -> Generate n'th item of sequence (repeatedly appending this(a.g(-1), i, a) to a)
-1.4.5  S.y(f) -> Map columns
-1.4.5  A.y(f) -> Map columns
+1.4.5  S.y(f) -> map columns
+1.4.5  A.y(f) -> map columns
 1.4.5  N.s(f) -> Number(f(String(N)))
 1.4.5  N.ì(f) -> Number(f(digits(N)))
 1.4.5  Ê -> `l `
 1.4.5  Ë -> `mDEF{D`
 1.4.5  Ì -> `gJ `
+1.4.5  N.z(n=2) -> integer division
 
 2.0.0  Clean up code
 2.0.0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
@@ -79,15 +80,21 @@ Planned:
 1.4.5  S.?() -> All substrings
 1.4.5  A.?() -> All subslices
 
+
 2.0.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)
 2.0.0  Command-line-ify
+2.0.0  Completely redesign online interpreter
+2.0.0  Outsource eval() to Worker
+
 2.0.0  Use new encoding (https://github.com/ETHproductions/japt/issues/28)
-2.0.0  Add custom string compressor (https://github.com/ETHproductions/japt/issues/29)
 2.0.0  Add characters that represent `U`, `X`, and `Z` in strings
-2.0.0  Use ⁺ and ⁻ for unary plus and minus, ₊ and ₋ for increment and decrement, make + and - always binary operators
-2.0.0  Turn l into a property? (i.e. `Ul +1` -> `Ul+1`)
 2.0.0  Add constants that return the inputs
+2.0.0  Use non-ASCII chars for strings and regexes (“” for strings, ‹› for regexes?)
+2.0.0  Use ‹› for interpolation in strings and regexes
+2.0.0  Use ⁺ and ⁻ for unary plus and minus, ₊ and ₋ for increment and decrement, make + and - always binary operators
+2.0.0  Add custom string compressor (https://github.com/ETHproductions/japt/issues/29)
+
 2.0.0  Add function that takes next byte and uses it to apply reverse and/or palindromize with options
-2.0.0  Regex interpolation (like {} in strings)
-2.0.0  Use non-ASCII chars for strings and regexes? (“” for strings, ‹› for regexes?)
+
 2.0.0  Make mini-regexes take as many chars as is reasonable (i.e. \d+ -> /\d+/g, \d^m -> /^\d/gm)
+2.0.0  Turn l into a property? (i.e. `Ul +1` -> `Ul+1`)

@@ -2177,7 +2177,9 @@ var Japt = {
 						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/, function(_, a) { return "\"" + shoco.d(a); });
 						currstr += "\"";
 						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
-						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"") + ":\"";
+						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
+						newcode += "'" + currstr + "':";
+						currstr = strchars[level];
 					}
 					else if (char === strchars[level]) {
 						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/, function(_, a) { return "\"" + shoco.d(a); });
@@ -2281,11 +2283,19 @@ var Japt = {
 					outp += tms;
 					i += tms.length - 1;
 				}
-				else if (isChar(char, "$'")) {
-					for(++i; i < code.length; ++i) {
-						if (code[i] === char) break;
+				else if (char === "$") {
+					for (++i; i < code.length; ++i) {
+						if (code[i] === "$") break;
 						outp += code[i];
 					}
+				}
+				else if (char === "'") {
+					var temp = "";
+					for (++i; i < code.length; ++i) {
+						if (code[i] === "'") break;
+						temp += code[i];
+					}
+					outp += isSingle(temp) ? temp : "(" + temp + ")";
 				}
 				else if (isChar(char, "A-Z{")) {
 					var letters = "";

@@ -784,7 +784,7 @@ df(Array.prototype, {
 		if (id(x))
 			return this.concat(x);
 		var f = [];
-		for (var i in this) {
+		for (var i = 0; i < this.length; i++) 
 			if (this[i] instanceof Array) {
 				var q = this[i].c();
 				for (var j in q)

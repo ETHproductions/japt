@@ -784,7 +784,7 @@ df(Array.prototype, {
 		if (id(x))
 			return this.concat(x);
 		var f = [];
-		for (var i = 0; i < this.length; i++) 
+		for (var i = 0; i < this.length; i++) {
 			if (this[i] instanceof Array) {
 				var q = this[i].c();
 				for (var j in q)
@@ -1125,8 +1125,12 @@ df(Array.prototype, {
 		var a = [],
 			i = 0;
 		if (typeof x === "number") {
-			for ( ; i < this.length; i += x)
-				a.push(this.slice(i, i + x));
+			if (x > 0)
+				for ( ; i < this.length; i += x)
+					a.push(this.slice(i, i + x));
+			else if (x < 0)
+				for (i = this.length; i > 0; i += x)
+					a.unshift(this.slice(Math.max(i + x, 0), i));
 		}
 		else {
 			x = functify2(fb(x, function(z) { return z; }), 0);

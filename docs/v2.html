@@ -421,6 +421,7 @@
 <p>Sorts `this` as if each value has been run through `f`.</p>
 <h3>`.ò(n=2)`</h3>
 <p>Cuts `this` into slices of length `n`. `[1,2,3,4,5]ò2 -> [[1,2],[3,4],[5]]`</p>
+<p>If `n` is negative, starts from the beginning. `[1,2,3,4,5]ò2n -> [[1],[2,3],[4,5]]`</p>
 <h3>`.ò(f)`</h3>
 <p>Partitions `this` between items `X, Y` where `f(X,Y)` is truthy. `[1,2,0,3]ò@X>Y} -> [[1,2],[0,3]]`.</p>
 <h3>`.ó(n=2)`</h3>

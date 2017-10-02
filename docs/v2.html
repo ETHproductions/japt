@@ -406,7 +406,7 @@
 <h3>`.ë(x,y=0)`</h3>
 <p>Returns every `x`th item of `this`, starting at index `y`.</p>
 <h3>`.ì(n=10)`</h3>
-<p>Converts `this` from an array of base-`n` numbers into an integer.</p>
+<p>Converts `this` from an array of base-`n` digits into an integer.</p>
 <h3>`.ì(a)`</h3>
 <p>Converts `this` from an array of base-`a` digits into an integer (`['c,7,7,'c]ì[7,'c] -> [1,0,0,1]ì2 -> 9`).</p>
 <h3>`.ì(s)`</h3>
@@ -525,7 +525,7 @@
 <h3>`.ç(s=" ")`</h3>
 <p>Repeats `s` `this` times.</p>
 <h3>`.ì(n=10)`</h3>
-<p>Returns an array of the base-`n` digits of `this`. Works for all integer `n` greater or equal to than 2.</p>
+<p>Returns an array of the base-`n` digits of `this`; the inverse of `A.ì(n)`. Works for all integer `n` except 0.</p>
 <h3>`.ì(a)`</h3>
 <p>Returns an array of the base-`a` digits of `this` (9ì["ab"7] -> [7,"ab","ab",7]).</p>
 <h3>`.ì(s)`</h3>

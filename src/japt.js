@@ -1440,12 +1440,33 @@ df(Number.prototype, {
 		if (x instanceof Array)
 			return this.ì(x.length).m(function(y) { return x[y]; });
 		var n = Math.trunc(this);
-		x = Math.floor(fb(x, 10));
-		if (x < 2)
+		x = Math.trunc(fb(x, 10));
+		if (x > 0) {
+			if (x === 1) {
+				if (n < 0)
+					return (-n).o().ç(-1);
+				else
+					return n.o().ç(1);
+			}
+			else {
+				for (var a = []; n != 0; n = Math.trunc(n / x))
+					a.unshift(n % x);
+				return a;
+			}
+		}
+		else if (x < 0) {
+			if (x === -1) {
+				return (n > 0 ? n * 2 - 1 : -n * 2).o().î([1, 0]);
+			}
+			else {
+				x = -x;
+				for (var a = []; n != 0; n = Math.trunc(n < 0 ? -(n - x + 1) / x : -n / x))
+					a.unshift(pm(n, x));
+				return a;
+			}
+		}
+		else
 			return [];
-		for (var a = []; n != 0; n = Math.trunc(n / x))
-			a.unshift(n % x);
-		return a;
 	},
 	î: function (x) {
 		return " ".p(+this).î(x);

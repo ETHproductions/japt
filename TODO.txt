@@ -83,7 +83,7 @@ Planned:
 
 2.0.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)
 2.0.0  Command-line-ify
-2.0.0  Completely redesign online interpreter
+2.0.0  Completely redesign online interpreter (see: https://hackmd.io/CwQzGYDMHYFYFoBGA2ApgDnsaH4E5pxl4AmAYzPBDkUr2SA=#)
 2.0.0  Outsource eval() to Worker
 
 2.0.0  Use new encoding (https://github.com/ETHproductions/japt/issues/28)

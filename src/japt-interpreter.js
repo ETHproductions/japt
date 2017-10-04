@@ -835,7 +835,7 @@ var Japt = {
 				}
 				else if (level === 1) {
 					if (char === "\\") {
-						currstr += "\\" + code[++i];
+						currstr += "\\" + (code[++i] || (i--, "\\"));
 					}
 					else if (char === ":" && internary) {
 						internary = false;
@@ -899,7 +899,7 @@ var Japt = {
 				else {
 					currbraces += char;
 					if (char === "\\") {
-						currbraces += code[++i];
+						currbraces += (code[++i] || (i--, "\\"));
 					}
 					else if (char === strchars[level]) {
 						level--;

@@ -37,6 +37,12 @@ Completed:
 1.4.5  Ë -> `mDEF{D`
 1.4.5  Ì -> `gJ `
 1.4.5  N.z(n=2) -> integer division
+1.4.5  S.ù(n,s=" ") -> right-align S to n chars with filler s
+1.4.5  S.ú -> S.ù, but left-aligned
+1.4.5  S.û -> S.ù, but center-aligned
+1.4.5  A.ù -> right-align all items
+1.4.5  A.ú -> A.ù, but left-aligned
+1.4.5  A.û -> A.ù, but center-aligned
 
 2.0.0  Clean up code
 2.0.0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
@@ -44,15 +50,9 @@ Completed:
 2.0.0  Have each method control its own regex flags (modifying regexify() and various methods)
 
 Planned:
-1.4.5  S.ù(n,s=" ") -> right-align S to n chars with filler s
-1.4.5  S.ú() -> S.ù, but left-aligned
-1.4.5  S.û() -> S.ù, but center-aligned
-1.4.5  A.ù() -> right-align all items
 1.4.5  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
 1.4.5  A.ù(n,a=[0]) -> right-align A to n items with filler a
 1.4.5  A.ù(n,x) -> right-align A to n items with filler [x]
-1.4.5  A.ú() -> A.ù, but left-aligned
-1.4.5  A.û() -> A.ù, but center-aligned
 1.4.5  X.?(f) -> run X through f  (default function: output with newline?)
 1.4.5  A.n(s) -> sort the items in A by their alphabetical order in s
 1.4.5  A.n(a) -> sort A by the order the items appear in a?

@@ -1836,13 +1836,13 @@ function fixParens(code) {
 }
 
 function isSingle(snippet) {
-	snippet = snippet.replace(/^[+-~!]*/, "");
+	snippet = snippet.replace(/^[+\-~! ]*/, "");
 	var parens = 0, braces = 0, char;
 	for (var i = 0; i < snippet.length; i++) {
 		char = snippet[i];
 		if (char === "\"") {
 			for ( ; ++i < snippet.length - 1; ) {
-				char = snippet[i]
+				char = snippet[i];
 				if (char === "\"") break;
 				else if (char === "\\") i++;
 			}
@@ -1857,6 +1857,13 @@ function isSingle(snippet) {
 		}
 	}
 	return true;
+}
+
+function makeSingle(snippet) {
+	snippet = deparen(snippet);
+	if(!isSingle(snippet))
+		snippet = "(" + snippet + ")";
+	return snippet;
 }
 
 function isParen(snippet) {
@@ -2300,8 +2307,7 @@ var Japt = {
 					if (level === 2 && extrabraces[level] === 0 && char === "}") {
 						level--;
 						var transpiled = pretranspile(currbraces);
-						var transparen = !isSingle(transpiled);
-						currstr += "+" + (transparen ? "(" : "") + deparen(transpiled) + (transparen ? ")" : "") + "+\"";
+						currstr += "+" + makeSingle(transpiled) + "+\"";
 					}
 					else {
 						currbraces += char;

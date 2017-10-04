@@ -762,7 +762,39 @@ df(String.prototype, {
 			x = [x];
 		var s = this;
 		return x.some(function(a) { return s.contains(a); });
-	}
+	},
+	
+	pad: function(x, y, a) {
+		var s = String(this), z;
+		if (/\n/.test(s))
+			return s.q("\n").pad(x, y, a).q("\n");
+		if (!id(x))
+			return s;
+		if (typeof x === "number" && typeof y !== "number") {
+			var z = x;
+			x = y;
+			y = z;
+		}
+		x = fb(x, ' ');
+		if (s.length < y) {
+			if (a === 1)
+				s = (y - s.length).î(x) + s;
+			else if (a === -1)
+				s = y.î(x).h(s);
+			else
+				s = y.î(x).h(s, (y - s.length) / 2);
+		}
+		return s;
+	},
+	ù: function (x, y) {
+		return this.pad(x, y, 1);
+	},
+	ú: function (x, y) {
+		return this.pad(x, y, -1);
+	},
+	û: function (x, y) {
+		return this.pad(x, y, 0);
+	},
 });
 
 df(Array.prototype, {
@@ -1197,6 +1229,38 @@ df(Array.prototype, {
 		if (!(x instanceof Array))
 			x = [x];
 		return this.some(function(a) { return x.contains(a); });
+	},
+	pad: function(x, y, a) {
+		var q = this.map(function(c) {
+			return c instanceof Array ? c : String(c);
+		});
+		if (!id(x)) {
+			x = " ";
+		}
+		if (!id(y)) {
+			if (typeof x === "number") {
+				y = x;
+				x = " ";
+			}
+			else {
+				y = q.reduce(function(p, c) { return p.w(c.length); }, 0);
+			}
+		}
+		if (typeof x === "number" && typeof y !== "number") {
+			var z = x;
+			x = y;
+			y = z;
+		}
+		return q.map(function(z) { return z.pad(x, y, a); });
+	},
+	ù: function(x, y) {
+		return this.pad(x, y, 1);
+	},
+	ú: function(x, y) {
+		return this.pad(x, y, -1);
+	},
+	û: function(x, y) {
+		return this.pad(x, y, 0);
 	}
 });
 

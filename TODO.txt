@@ -53,7 +53,7 @@ Planned:
 1.4.5  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
 1.4.5  A.ù(n,a=[0]) -> right-align A to n items with filler a
 1.4.5  A.ù(n,x) -> right-align A to n items with filler [x]
-1.4.5  X.?(f) -> run X through f  (default function: output with newline?)
+1.4.5  X.?(f,n=1) -> run X through f, n times (default function: output with newline?)
 1.4.5  A.n(s) -> sort the items in A by their alphabetical order in s
 1.4.5  A.n(a) -> sort A by the order the items appear in a?
 1.4.5  A.?(f) -> all truthy indices
@@ -64,8 +64,8 @@ Planned:
 1.4.5  A.?(a) -> interleave
 1.4.5  S.u(x)? -> uppercase first character
 1.4.5  S.v(x)? -> title case
-1.4.5  S.w(n%3==1?) -> reverse and mirror ()[]{}<>\/
-1.4.5  S.w(n%3==2?) -> mirror ()[]{}<>\/
+1.4.5  S.w(s?) -> reverse and mirror ()[]{}<>\/
+1.4.5  S.w(n?) -> mirror ()[]{}<>\/
 1.4.5  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
 1.4.5  ? -> `w `?
 1.4.5  ? -> `c `?
@@ -77,8 +77,10 @@ Planned:
 1.4.5  Auto-finish arrays []
 1.4.5  Auto-start functions? {}
 1.4.5  Auto-finish/fill a?b:c
-1.4.5  S.?() -> All substrings
-1.4.5  A.?() -> All subslices
+1.4.5  S.?() -> all substrings
+1.4.5  A.?() -> all subslices
+1.4.5  F.?(f,n) -> like F.a(f,n), but until falsy
+1.4.5  F.w(f)? -> while F(), f()?
 
 
 2.0.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)
@@ -89,12 +91,15 @@ Planned:
 2.0.0  Use new encoding (https://github.com/ETHproductions/japt/issues/28)
 2.0.0  Add characters that represent `U`, `X`, and `Z` in strings
 2.0.0  Add constants that return the inputs
+2.0.0  Add a variable that's pre-defined to the raw input
 2.0.0  Use non-ASCII chars for strings and regexes (“” for strings, ‹› for regexes?)
 2.0.0  Use ‹› for interpolation in strings and regexes
+2.0.0  Use some non-ASCII chars for interpolating U, V, W, X, Y, and Z
+2.0.0  Use some non-ASCII char for interpolating the next value (e.g. if it were @, "my@string"1+2 -> "my3string")
 2.0.0  Use ⁺ and ⁻ for unary plus and minus, ₊ and ₋ for increment and decrement, make + and - always binary operators
 2.0.0  Add custom string compressor (https://github.com/ETHproductions/japt/issues/29)
 
 2.0.0  Add function that takes next byte and uses it to apply reverse and/or palindromize with options
 
 2.0.0  Make mini-regexes take as many chars as is reasonable (i.e. \d+ -> /\d+/g, \d^m -> /^\d/gm)
-2.0.0  Turn l into a property? (i.e. `Ul +1` -> `Ul+1`)
+2.0.0  Properties (i.e. `Ul +1` -> `UĿ+1` or similar)

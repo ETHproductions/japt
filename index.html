@@ -81,15 +81,16 @@
   
   function splitAddress() {
     var args=location.search.match(/[&?](code|input|v)=([^&]|&(?!(code|input|v)=))*/g);
-    if(args)for(var q in args){
+    if (args) for (var q in args) {
       var i = args[q];
-      var tmp=i.slice(i.indexOf('=')+1);
-      if(i.slice(1,i.indexOf('='))==="code")
-        code=escapedAtoB(tmp);
-      else if(i.slice(1,i.indexOf('='))==="input")
-        input=escapedAtoB(tmp);
-      else if(i.slice(1,i.indexOf('='))==="v")
-        v=tmp;
+      var key = i.slice(1, i.indexOf('='));
+      var tmp = i.slice(i.indexOf('=') + 1);
+      if(key === "code")
+        code = escapedAtoB(tmp);
+      else if (key === "input")
+        input = escapedAtoB(tmp);
+      else if (key === "v")
+        v = tmp;
     }
     document.getElementsByTagName("title")[0].innerHTML = "Japt " + v.slice(0, 7) + " interpreter"
 	var realv, versions = {
@@ -104,10 +105,10 @@
 	};
     var iscommit = v.length > 16,
 		isbeta = /^2.0\w/.test(v),
-		isv2 = v[0] === "2",
+		isv2 = /^2[.:]/.test(v),
 		file = isv2 ? "/src/japt.js" : "/src/japt-interpreter.js";
 	if (iscommit)
-		realv = v;
+		realv = isv2 ? v.slice(2) : v;
 	else if (versions.hasOwnProperty(v))
 		realv = versions[v];
 	else if (v >= defv)
@@ -150,8 +151,8 @@
     }
     
     if (iscommit) {
-      versionText = "<p>You're using Japt <a target='_blank' href='https://github.com/ETHproductions/japt/tree/" + realv + "'>commit " + v.slice(0, 7) + "</a>.</p>";
-      getWebpage('https://rawgit.com/ETHproductions/Japt/' + realv + '/docs/master.html', function (response) {
+      versionText = "<p>You're using Japt " + (isv2 ? "v2 " : "") + "<a target='_blank' href='https://github.com/ETHproductions/japt/tree/" + realv + "'>commit " + realv.slice(0, 7) + "</a>.</p>";
+      getWebpage('https://rawgit.com/ETHproductions/Japt/' + realv + '/docs/' + (isv2 ? 'v2.html' : 'master.html'), function (response) {
         addDocs("<h1>Japt Docs</h1>" + versionText, response.responseText);
       }, addMaster());
     }

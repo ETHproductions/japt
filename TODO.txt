@@ -81,6 +81,7 @@ Planned:
 1.4.5  A.?() -> all subslices
 1.4.5  F.?(f,n) -> like F.a(f,n), but until falsy
 1.4.5  F.w(f)? -> while F(), f()?
+1.4.5  N.c/f/r(f) -> ceil/floor/round to next integer that satisfies f (ignoring original number?)
 
 
 2.0.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)

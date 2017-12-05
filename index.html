@@ -92,7 +92,6 @@
       else if (key === "v")
         v = tmp;
     }
-    document.getElementsByTagName("title")[0].innerHTML = "Japt " + v.slice(0, 7) + " interpreter"
 	var realv, versions = {
 		"1.3": "v1.3",
 		"master": "v1.4",
@@ -122,6 +121,7 @@
 			}
 		}
 	}
+    document.getElementsByTagName("title")[0].innerHTML = "Japt " + (isv2 && iscommit ? "v2 " + v.slice(2, 9) : v.slice(0, 7)) + " interpreter"
     var script = document.createElement('script');
     script.setAttribute("src", "https://rawgit.com/ETHproductions/japt/" + (realv === 'v2' ? 'master' : realv) + file);
     document.getElementsByTagName('head')[0].appendChild(script);

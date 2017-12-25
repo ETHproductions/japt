@@ -73,6 +73,10 @@ function regexify(string, flags) {
 				regex += inCharClass ? "A-Za-z" : "[A-Za-z]";
 			else if (char === "L")
 				regex += inCharClass ? "\\W_\\d" : "[^A-Za-z]";
+			else if (char === "w")
+				regex += inCharClass ? "A-Za-z0-9" : "[A-Za-z0-9]";
+			else if (char === "W")
+				regex += inCharClass ? "\\W_" : "[^A-Za-z0-9]";
 			else if (char === "p")
 				regex += inCharClass ? " -~" : "[ -~]";
 			else if (char === "P")
@@ -144,6 +148,10 @@ function regexify2(string) {
 				regex += inCharClass ? "A-Za-z" : "[A-Za-z]";
 			else if (char === "L")
 				regex += inCharClass ? "\\W_\\d" : "[^A-Za-z]";
+			else if (char === "w")
+				regex += inCharClass ? "A-Za-z0-9" : "[A-Za-z0-9]";
+			else if (char === "W")
+				regex += inCharClass ? "\\W_" : "[^A-Za-z0-9]";
 			else if (char === "p")
 				regex += inCharClass ? " -~" : "[ -~]";
 			else if (char === "P")

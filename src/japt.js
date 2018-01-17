@@ -1288,8 +1288,9 @@ df(Number.prototype, {
 		x = fb(x, 1);
 		return Math.ceil(this / x) * x;
 	},
-	d: function () {
-		return String.fromCharCode(this);
+	d: function (x) {
+		x = fb(x, 0);
+		return String.fromCharCode(this + x);
 	},
 	e: function (x) {
 		return this * Math.pow(10, x);

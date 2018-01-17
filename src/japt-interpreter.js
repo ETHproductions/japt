@@ -242,7 +242,7 @@ df(Array,'\xFB',function(x,y){return this.pad(x,y,0)});
 df(Number,'a',function(x){x=fb(x,0);return Math.abs(this-x)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
 df(Number,'c',function(x){x=fb(x,1);return Math.ceil(this/x)*x});
-df(Number,'d',function(){return String.fromCharCode(this)});
+df(Number,'d',function(x){x=fb(x,0);return String.fromCharCode(this+x)});
 df(Number,'e',function(x){return this*Math.pow(10,x)});
 df(Number,'f',function(x){x=fb(x,1);return Math.floor(this/x)*x});
 df(Number,'g',function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});

@@ -15,7 +15,7 @@ var isnode = typeof window === "undefined";
 if (isnode) var shoco = require("../dependencies/shoco");
 Object.defineProperty(isnode ? global : window, "K", { enumerable: false, configurable: true, get: function() { return fb(_K, new Date()); }, set: function(x) { return _K=x; }});
 
-var pairs_1_3 = { 
+var pairs_1_3 = {
 	// Unicode shortcuts
 	// Using \u<hex> to avoid encoding incompatibilities
 	"@":    "XYZ{",
@@ -69,7 +69,7 @@ var pairs_1_3 = {
 	"\xDF": "$rp$(" // ß - 223
 };
 
-var pairs_2_0 = { 
+var pairs_2_0 = {
 	// A new list of Unicode shortcuts
 	// Using \u<hex> to avoid encoding incompatibilities
 	"@":	  "XYZ{",
@@ -242,7 +242,7 @@ df(Array,'\xFB',function(x,y){return this.pad(x,y,0)});
 df(Number,'a',function(x){x=fb(x,0);return Math.abs(this-x)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
 df(Number,'c',function(x){x=fb(x,1);return Math.ceil(this/x)*x});
-df(Number,'d',function(x){x=fb(x,0);return String.fromCharCode(this+x)});
+df(Number,'d',function(x){x=fb(x,0);return String.fromCodePoint(this+x)});
 df(Number,'e',function(x){return this*Math.pow(10,x)});
 df(Number,'f',function(x){x=fb(x,1);return Math.floor(this/x)*x});
 df(Number,'g',function(){return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});
@@ -342,7 +342,7 @@ Math.S = Math.SQRT_2;
 Math.T = Math.PI * 2;
 
 // String compression
-shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCharCode(char) }).join('') };
+shoco.c = function (str) { return Array.prototype.map.call(shoco.compress(str), function (char) { return String.fromCodePoint(char) }).join('') };
 shoco.d = function (str) { return shoco.decompress(new Uint8Array( ( str.constructor == Array ? str[0] : str ).split('').map(function (char) {return char.charCodeAt(0)})))};
 
 void(0);
@@ -471,10 +471,10 @@ function deparen(snippet) {
 var rp, program;
 
 var Japt = {
-	
+
 	stdout: null,
 	stderr: null,
-	
+
 	clear_output: function() {
 		if (isnode) {
 			// Not sure how to do this... Would console.log("\033c") work?
@@ -491,7 +491,7 @@ var Japt = {
 			}
 		}
 	},
-	
+
 	output: function(x) {
 		Japt.implicit_output = false;
 		if (isnode) {
@@ -502,13 +502,13 @@ var Japt = {
 			alert ("Error: Japt.stdout must be sent to an HTMLElement");
 		}
 	},
-	
+
 	stop: function() {
 		for (var i = 0; i < Japt.intervals.length; i++)
 			clearInterval(Japt.intervals[i]);
 		Japt.intervals = [];
 	},
-	
+
 	error: function(msg) {
 		if (isnode) {
 			process.stderr.write(msg);
@@ -519,7 +519,7 @@ var Japt = {
 			alert ("Error: Japt.stderr must be sent to an HTMLElement");
 		}
 	},
-	
+
 	evalInput: function(input) {
 		if (input.constructor === Array) return input;
 		var input_mode = "next", current, processed = [], level = 0;
@@ -610,15 +610,15 @@ var Japt = {
 		}
 		return processed;
 	},
-	
+
 	strings: [],
 	use_safe: false,
 	is_safe: false,
 	implicit_output: true,
-	
+
 	run: function(code, input, safe, before, onsuccess, onerror) {
 		Japt.clear_output();
-		
+
 		input = Japt.evalInput(input);
 		A = 10,
 		B = 11,
@@ -657,9 +657,9 @@ var Japt = {
 		X = 3 in N ? N[3] : 0,
 		Y = 4 in N ? N[4] : 0,
 		Z = 5 in N ? N[5] : 0;
-		
+
 		Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.flags = input.flags || {};
-		
+
 		code = Japt.transpile(code);
 		if (!Japt.is_safe) {
 			if (onerror) onerror(new Error("Raw JS cannot be used in safe mode"));
@@ -687,7 +687,7 @@ var Japt = {
 				return program.cache[id] = eval(code);
 			};
 			var result;
-			
+
 			if (Japt.flags.m || Japt.flags.d || Japt.flags.e || Japt.flags.f || Japt.flags.æ) {
 				if (Japt.flags.d) result = false;
 				else if (Japt.flags.e) result = true;
@@ -728,32 +728,32 @@ var Japt = {
 			} else {
 				result = program(U,V,W,X,Y,Z);
 			}
-			
+
 			if (Japt.flags.hasOwnProperty('h')) result = result.g(-1);
 			else if (Japt.flags.hasOwnProperty('g')) result = result.g(Japt.flags.g === true ? 0 : Japt.flags.g);
-			
+
 			if (Japt.flags.hasOwnProperty('!')) result = !result;
 			else if (Japt.flags.hasOwnProperty('¡')) result = !!result;
-			
+
 			if (Japt.flags.N) result = +result;
-			
+
 			if (Japt.flags.P && result instanceof Array) result = result.join("");
 			else if (Japt.flags.Q) result = JSON.stringify(result);
 			else if (Japt.flags.R && result instanceof Array) result = result.join("\n");
 			else if (Japt.flags.S && result instanceof Array) result = result.join(" ");
-			
+
 			if (Japt.flags.x) result = result.x();
-			
+
 			if (onsuccess) onsuccess(result);
 		} catch (e) {
 			if (onerror) onerror(e);
 		}
 	},
-	
+
 	transpile: function(code) {
 		Japt.strings = [];
 		Japt.intervals = [];
-	
+
 		function pretranspile(code) {
 			var level = 0,  // Current number of parentheses or curly braces that we're inside
 				extrabraces = Array(20).fill(0),
@@ -766,7 +766,7 @@ var Japt = {
 				lines = [],
 				strchars = Array(20).fill(""),
 				internary = false;
-			
+
 			for (; i < code.length; ++i) {
 				var char = code[i];
 				if (level === 0) {
@@ -915,13 +915,13 @@ var Japt = {
 			lines.push(subtranspile(newcode));
 			return lines.join("");
 		}
-		
+
 		function subtranspile(code) {
 			var level = 0,  // Current number of parentheses or curly braces that we're inside
 				i = 0,
 				outp = "",  // Temporary output
 				extraparen = false;
-			
+
 			for (i = 0; i < code.length; ++i) {
 				var char = code[i],
 					opMatch = code.slice(i).match(/^(===|!==|==|!=|>>>|>>|<<|&&|\|\||>=|<=|\+(?!\+)|-(?!-)|\.(?!\d)|[*%^&|<>,])(?!=)/),
@@ -941,7 +941,7 @@ var Japt = {
 					code = code.slice(0,i)+'2'+code.slice(i);
 				else if ((outp === "" || outp.slice(-1) === ";") && /[a-zà-ÿ*/%^|&<=>?]/.test(char))
 					outp += "U";
-				
+
 				if (char === "\"") {
 					var tms = code.slice(i).match(/"(\d+)"/)[0];
 					outp += tms;
@@ -1034,14 +1034,14 @@ var Japt = {
 					outp += char;
 				}
 			}
-			
+
 			outp = fixParens(outp);
-			
+
 			return outp;
 		}
-		
+
 		var outp = pretranspile(code);
-		
+
 		outp = outp
 			.replace(/(\+\+|--)[A-Z]|[A-Z](\+\+|--)/g, function(s) { Japt.strings.push("(" + s + ")"); return "\"" + (Japt.strings.length - 1) + "\""; })
 			.replace(/[,;]/g, "$& ")
@@ -1052,7 +1052,7 @@ var Japt = {
 		outp = outp.replace(/"(\d+)"/g,function(_,a){return Japt.strings[+a]});
 		return outp;
 	},
-	
+
 	eval: function(code) {
 		return eval(Japt.transpile(code));
 	}

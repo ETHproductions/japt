@@ -11,7 +11,7 @@ Object.defineProperty(isnode ? global : window, "K", {
 		return fb(_K, new Date());
 	},
 	set: function(x) {
-		return _K = x; 
+		return _K = x;
 	}
 });
 
@@ -50,13 +50,13 @@ function regexify(string, flags) {
 		// you dirty rotten liar
 		return string;
 	string = String(string);
-	
+
 	if (flags !== "") {
 		flags = String(fb(flags, ""));
 		if (!flags.contains("g"))
 			flags += "g";
 	}
-	
+
 	var regex = "", inCharClass = false;
 	for(var i = 0; i < string.length; i++) {
 		var char = string[i];
@@ -104,7 +104,7 @@ function regexify(string, flags) {
 			regex += char;
 		}
 	}
-	
+
 	return RegExp(regex, flags);
 }
 
@@ -123,18 +123,18 @@ function regexify2(string) {
 	var end = string.lastIndexOf("/");
 	var flags = string.slice(end + 1);
 	string = string.slice(1, end);
-	
+
 	if (flags.contains("g"))
 		flags = flags.replace("g", "");
 	else
 		flags += "g";
-	
+
 	var dotAll = false;
 	if (flags.contains("s")) {
 		dotAll = true;
 		flags = flags.replace("s", "");
 	}
-	
+
 	var regex = "", inCharClass = false, parens = 0;
 	for(var i = 0; i < string.length; i++) {
 		var char = string[i];
@@ -198,13 +198,13 @@ function regexify2(string) {
 			regex += char;
 		}
 	}
-	
+
 	if (inCharClass) regex += "]";
 	while (parens > 0) {
 		regex += ")";
 		parens -= 1;
 	}
-	
+
 	return RegExp(regex, flags);
 }
 
@@ -218,11 +218,11 @@ function saferegex(object, flags) {
 function functify(operator, argument) {
 	if (typeof operator === "function")
 		return operator;
-	
+
 	var hasArg = id(argument),
 		func = "f=function(a,b){return ",
 		isMethod = /^!?[a-zà-öø-ÿ]$/.test(operator);
-	
+
 	if (isMethod) {
 		if (operator[0] !== "!")
 			func += "a." + operator + (hasArg ? "(b)" : "()");
@@ -236,7 +236,7 @@ function functify(operator, argument) {
 			func += "b" + operator.slice(1) + "a";
 	}
 	func += "}";
-	
+
 	return eval(func);
 }
 
@@ -244,11 +244,11 @@ function functify(operator, argument) {
 function functify2(operator, argument) {
 	if (typeof operator === "function")
 		return operator;
-	
+
 	var hasArg = id(argument) && argument !== true,
 		func = "(function(a, b) { return ",
 		isMethod = /^!?[a-zà-öø-ÿ]$/.test(operator);
-	
+
 	if (isMethod) {
 		if (operator[0] !== "!")
 			func += "a." + operator + (hasArg ? "(" + str(argument) + ")" : argument === true ? "(b)" : "()");
@@ -262,7 +262,7 @@ function functify2(operator, argument) {
 			func += (hasArg ? str(argument) : "b") + operator.slice(1) + "a";
 	}
 	func += "; })";
-	
+
 	return eval(func);
 }
 
@@ -300,7 +300,7 @@ function clone(x) {
 	return x;
 }
 
-var pairs_1_3 = { 
+var pairs_1_3 = {
 	// Unicode shortcuts
 	// Using \u<hex> to avoid encoding incompatibilities
 	"@":    "XYZ{",
@@ -354,7 +354,7 @@ var pairs_1_3 = {
 	"\xDF": "$rp$(" // ß - 223
 };
 
-var pairs_2_0 = { 
+var pairs_2_0 = {
 	// A new list of Unicode shortcuts
 	// Using \u<hex> to avoid encoding incompatibilities
 	"@":	  "XYZ{",
@@ -414,18 +414,18 @@ function perm (arr, len) {
 		return [[]];
 	if (arr.length < 2)
 		return [x];
-	
+
 	var id = len + ';' + str(arr);
 	if (permcache[id])
 		return permcache[id];
-	
+
 	var result = [];
 	for (var index = 0; index < arr.length; index++)
 		if (index === arr.indexOf(arr[index]))
 			perm(arr.slice(0, index).concat(arr.slice(index + 1)), len - 1).map(function(b) {
 				result.push([arr[index]].concat(b));
 			});
-	
+
 	return permcache[id] = result;
 }
 
@@ -435,25 +435,25 @@ function comb(arr, len) {
 		return [[]];
 	if (arr.length < 1 && !isNaN(len))
 		return [];
-	
+
 	var id = len + ';' + str(arr);
 	if (combcache[id])
 		return ccache[id];
-	
+
 	var result = [];
 	for (var index = 0; index < arr.length; index++)
 		if (index === arr.indexOf(arr[index]))
 			comb(arr.slice(index + 1), len - 1).map(function(b) {
 				result.push([arr[index]].concat(b));
 			});
-	
+
 	if (isNaN(len)) result.push([]);
 	return combcache[id] = result;
 }
 
 if (!id(String.prototype.repeat)) String.prototype.repeat = function(len) {
 	len = Math.trunc(fb(len, 1));
-	
+
 	var i = Math.pow(2, Math.floor(Math.log2(len)));
 	var str = '';
 	while (i >= 1) {
@@ -477,7 +477,7 @@ if (!id(Array.prototype.sortBy)) Array.prototype.sortBy = function(func) {
 		return this.sort();
 	if (typeof func !== "function")
 		throw new TypeError("Array.prototype.sortBy expects a function");
-	
+
 	return this.sort(function(a, b) {
 		a = func(a);
 		b = func(b);
@@ -623,7 +623,7 @@ df(String.prototype, {
 			var z = clone(x).sortBy(function(x) {
 				return -x.length;
 			}).map(regescape).join("|");
-			
+
 			var result = this.match(RegExp(z, y ? 'gi' : 'g')) || [];
 			return result.reduce(function(prev, curr) {
 				var i = x.indexOf(curr);
@@ -771,7 +771,7 @@ df(String.prototype, {
 		var s = this;
 		return x.some(function(a) { return s.contains(a); });
 	},
-	
+
 	pad: function(x, y, a) {
 		var s = String(this), z;
 		if (/\n/.test(s))
@@ -841,9 +841,14 @@ df(Array.prototype, {
 		return this.some(x);
 	},
 	e: function (x, y) {
-		x = fb(x, Boolean);
-		x = functify(x, y);
-		return this.every(x);
+		if (x instanceof Array) {
+			return this.length === x.length && this.every(function(a, b){ return a == x[b]; });
+		}
+		else {
+			x = fb(x, Boolean);
+			x = functify(x, y);
+			return this.every(x);
+		}
 	},
 	f: function (x, y) {
 		if (x instanceof Array) {
@@ -1290,7 +1295,7 @@ df(Number.prototype, {
 	},
 	d: function (x) {
 		x = fb(x, 0);
-		return String.fromCharCode(this + x);
+		return String.fromCodePoint(this + x);
 	},
 	e: function (x) {
 		return this * Math.pow(10, x);
@@ -1338,7 +1343,7 @@ df(Number.prototype, {
 	k: function () {
 		var n = +this,
 			f = [];
-		
+
 		for (var r = 2; r <= Math.sqrt(n); r += r % 2 + 1) {
 			while (n % r === 0) {
 				f.push(r);
@@ -1347,7 +1352,7 @@ df(Number.prototype, {
 		}
 		if (n > 1) // True unless n is divisible by its largest factor more than once
 			f.push(n);
-		
+
 		return f;
 	},
 	l: function () {
@@ -1372,7 +1377,7 @@ df(Number.prototype, {
 			f = functify2(x, y), x = y = undefined;
 		if (typeof y === "function")
 			f = y, y = undefined;
-		
+
 		var z = +this;
 		y = y || 1;
 		if (!id(x))
@@ -1383,7 +1388,7 @@ df(Number.prototype, {
 			_ = x, x = z, z = _;
 		if (s & 1)
 			x++;
-		
+
 		var r = [],
 			i = 0;
 		if (y > 0)
@@ -1392,7 +1397,7 @@ df(Number.prototype, {
 		else
 			for ( ; z < x; x += y )
 				r.push(x);
-		
+
 		if (typeof f === "function")
 			return r.map(f);
 		return r;
@@ -1482,13 +1487,13 @@ df(Number.prototype, {
 			return [];
 		var n = Math.abs(this);
 		var a = [];
-		
+
 		for (var i = 1; i < Math.sqrt(n); ++i)
 			if(n % i === 0)
 				a.push(i, n / i);
 		if (i * i === n)
 			a.push(i);
-		
+
 		a.n();
 		if (x)
 			a.pop();
@@ -1601,7 +1606,7 @@ df(Date, {
 	i: function (x, y) { return this[ts(x) + "FullYear"](y || 0); },
 	j: function (x, y) { return this[ts(x) + "Time"](y || 0); },
 	k: function () { return this.getTimezoneOffset(); },
-	
+
 	s: function (x) {
 		return this["to" + [
 			"",
@@ -1629,21 +1634,21 @@ function bij (num, radix) {
 	radix = fb(radix, 10);
 	if (radix % 1 || radix < 2)
 		return result;
-	
+
 	if (num < 0) result = "-", num = -num - 1;
-	
+
 	var c = 0, x = 1;
 	while (num >= x) {
 		c++;
 		num -= x;
 		x *= radix;
 	}
-	
+
 	for (var i = 0; i < c; i++) {
 		result = (num % radix) + result;
 		num = Math.trunc(num / radix);
 	}
-	
+
 	return result;
 }
 
@@ -1768,7 +1773,7 @@ Math.T = Math.PI * 2;
 // String compression
 shoco.c = function (str) {
 	return Array.prototype.map.call(shoco.compress(str), function (char) {
-		return String.fromCharCode(char);
+		return String.fromCodePoint(char);
 	}).join('');
 };
 
@@ -1890,10 +1895,10 @@ function deparen(snippet) {
 var rp, program;
 
 var Japt = {
-	
+
 	stdout: null,
 	stderr: null,
-	
+
 	clear_output: function() {
 		if (isnode) {
 			// Not sure how to do this... Would console.log("\033c") work?
@@ -1910,7 +1915,7 @@ var Japt = {
 			}
 		}
 	},
-	
+
 	output: function(x) {
 		Japt.implicit_output = false;
 		if (isnode) {
@@ -1921,13 +1926,13 @@ var Japt = {
 			alert ("Error: Japt.stdout must be sent to an HTMLElement");
 		}
 	},
-	
+
 	stop: function() {
 		for (var i = 0; i < Japt.intervals.length; i++)
 			clearInterval(Japt.intervals[i]);
 		Japt.intervals = [];
 	},
-	
+
 	error: function(msg) {
 		if (isnode) {
 			process.stderr.write(msg);
@@ -1938,7 +1943,7 @@ var Japt = {
 			alert ("Error: Japt.stderr must be sent to an HTMLElement");
 		}
 	},
-	
+
 	evalInput: function(input) {
 		if (input.constructor === Array) return input;
 		var input_mode = "next", current, processed = [], level = 0;
@@ -2029,15 +2034,15 @@ var Japt = {
 		}
 		return processed;
 	},
-	
+
 	strings: [],
 	use_safe: false,
 	is_safe: false,
 	implicit_output: true,
-	
+
 	run: function(code, input, safe, before, onsuccess, onerror) {
 		Japt.clear_output();
-		
+
 		input = Japt.evalInput(input);
 		A = 10,
 		B = 11,
@@ -2076,9 +2081,9 @@ var Japt = {
 		X = 3 in N ? N[3] : 0,
 		Y = 4 in N ? N[4] : 0,
 		Z = 5 in N ? N[5] : 0;
-		
+
 		Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.flags = input.flags || {};
-		
+
 		code = Japt.transpile(code);
 		if (!Japt.is_safe) {
 			if (onerror) onerror(new Error("Raw JS cannot be used in safe mode"));
@@ -2106,7 +2111,7 @@ var Japt = {
 				return program.cache[id] = eval(code);
 			};
 			var result;
-			
+
 			if (Japt.flags.m || Japt.flags.d || Japt.flags.e || Japt.flags.f || Japt.flags.æ) {
 				if (Japt.flags.d) result = false;
 				else if (Japt.flags.e) result = true;
@@ -2147,32 +2152,32 @@ var Japt = {
 			} else {
 				result = program(U,V,W,X,Y,Z);
 			}
-			
+
 			if (Japt.flags.hasOwnProperty('h')) result = result.g(-1);
 			else if (Japt.flags.hasOwnProperty('g')) result = result.g(Japt.flags.g === true ? 0 : Japt.flags.g);
-			
+
 			if (Japt.flags.hasOwnProperty('!')) result = !result;
 			else if (Japt.flags.hasOwnProperty('¡')) result = !!result;
-			
+
 			if (Japt.flags.N) result = +result;
-			
+
 			if (Japt.flags.P && result instanceof Array) result = result.join("");
 			else if (Japt.flags.Q) result = JSON.stringify(result);
 			else if (Japt.flags.R && result instanceof Array) result = result.join("\n");
 			else if (Japt.flags.S && result instanceof Array) result = result.join(" ");
-			
+
 			if (Japt.flags.x) result = result.x();
-			
+
 			if (onsuccess) onsuccess(result);
 		} catch (e) {
 			if (onerror) onerror(e);
 		}
 	},
-	
+
 	transpile: function(code) {
 		Japt.strings = [];
 		Japt.intervals = [];
-	
+
 		function pretranspile(code) {
 			var level = 0,  // Current number of parentheses or curly braces that we're inside
 				extrabraces = Array(20).fill(0),
@@ -2355,7 +2360,7 @@ var Japt = {
 			lines.push(subtranspile(newcode));
 			return lines.join("");
 		}
-		
+
 		function subtranspile(code) {
 			var level = 0,  // Current number of parentheses or curly braces that we're inside
 				i = 0,
@@ -2479,9 +2484,9 @@ var Japt = {
 
 			return outp;
 		}
-		
+
 		var outp = pretranspile(code);
-		
+
 		outp = outp
 			.replace(/(\+\+|--)[A-Z]|[A-Z](\+\+|--)/g, function(s) { Japt.strings.push("(" + s + ")"); return "\"" + (Japt.strings.length - 1) + "\""; })
 			.replace(/[,;]/g, "$& ")
@@ -2493,7 +2498,7 @@ var Japt = {
 		outp = outp.replace(/"(\d+)"/g, function(_, a) { return Japt.strings[+a]; });
 		return outp;
 	},
-	
+
 	eval: function(code) {
 		return eval(Japt.transpile(code));
 	}

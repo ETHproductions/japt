@@ -841,9 +841,14 @@ df(Array.prototype, {
 		return this.some(x);
 	},
 	e: function (x, y) {
-		x = fb(x, Boolean);
-		x = functify(x, y);
-		return this.every(x);
+		if (x instanceof Array) {
+			return this.length === x.length && this.every(function(a, b){ return a == x[b]; });
+		}
+		else {
+			x = fb(x, Boolean);
+			x = functify(x, y);
+			return this.every(x);
+		}
 	},
 	f: function (x, y) {
 		if (x instanceof Array) {

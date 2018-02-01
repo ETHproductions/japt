@@ -948,7 +948,7 @@ df(Array.prototype, {
 	},
 	r: function (x, y) {
 		x = functify2(x, true);
-		return this.reduce(x, fb(y, typeof this[0] === "number" ? 0 : ""));
+		return id(y) ? this.reduce(x, y) : this.reduce(x);
 	},
 	s: function (x, y) {
 		y = fb(y, this.length);

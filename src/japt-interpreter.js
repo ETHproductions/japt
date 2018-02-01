@@ -201,7 +201,7 @@ df(Array,'n',function(x){x=functify(fb(x,function(x,y){return(x>y)-(x<y)}));retu
 df(Array,'o',function(x){if(id(x)){for(var a=[],x=Math.trunc(x);x>0;--x)a.push(this.pop());return a}else return this.pop()});
 df(Array,'p',function(){for(var i of [].slice.call(arguments))this.push(i);return this});
 df(Array,'q',function(x){return this.join(x||"")});
-df(Array,'r',function(x,y){x=functify(x,0);return this.reduce(function(q,r,s){return x(q,r,s)},y||(typeof this[0]=="number"?0:""))});
+df(Array,'r',function(x,y){x=functify(x,0);return id(y)?this.reduce(x,y):this.reduce(x)});
 df(Array,'s',function(x,y){y=fb(y,this.length);return this.slice(x,y)});
 df(Array,'t',function(x,y){y=fb(y,this.length);return this.slice(x,x+y)});
 df(Array,'u',function(){for(var i of [].slice.call(arguments))this.unshift(i);return this});

@@ -983,12 +983,20 @@ df(Array.prototype, {
 	},
 	y: function (x, y) {
 		if (id(x)) {
-			var z = this.y().m(x, y);
-			if (z.every(function(q) {
+			var z = this.y(),
+				a = z.m(function(c) { return c.f(id) })
+					 .m(x, y);
+			if (a.every(function(q) {
 				return typeof q === "string" || q instanceof Array;
 			}))
-				z = z.y();
-			return z;
+				return z = z.m(function(c, i) {
+					var j = 0;
+					return c.m(function() {
+						return a[i][j++];
+					});
+				}).y();
+			else
+				return a;
 		}
 		var t = "string" === typeof this[0],
 			n = t ? this.map(function(t) { return t.split(""); }) : this,

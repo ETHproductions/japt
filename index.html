@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Japt interpreter</title>
 <link rel="stylesheet" type="text/css" href="../style/style.css">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -64,7 +64,7 @@
   var defv = "1.4.5";
   var v = defv;
   var code, input;
-  
+
   function escapedBtoA(text) {
     return btoa(
       text.replace(/./g,function(x){
@@ -74,11 +74,11 @@
       })
     );
   }
-  
+
   function escapedAtoB(text) {
     return atob(text).replace(/\\u[0-9A-Fa-f]{4}/g,function(x){return String.fromCharCode(parseInt(x.slice(2),16))});
   }
-  
+
   function splitAddress() {
     var args=location.search.match(/[&?](code|input|v)=([^&]|&(?!(code|input|v)=))*/g);
     if (args) for (var q in args) {
@@ -125,7 +125,7 @@
     var script = document.createElement('script');
     script.setAttribute("src", "https://rawgit.com/ETHproductions/japt/" + (realv === 'v2' ? 'master' : realv) + file);
     document.getElementsByTagName('head')[0].appendChild(script);
-	
+
     var docs = document.getElementById('docs');
     function addDocs(header, text) {
       docs.innerHTML = header;
@@ -138,7 +138,7 @@
         })
         .replace(/arrow:([a-z-]+)/gi, '<a class="arrow"; id="toggle-$1"; onclick="toggleTab(\'$1\')" style="background-color:#3E2">▼</a>');
     }
-    
+
     var versionText;
     function addMaster (x) {
       return function () {
@@ -149,7 +149,7 @@
         });
       }
     }
-    
+
     if (iscommit) {
       versionText = "<p>You're using Japt " + (isv2 ? "v2 " : "") + "<a target='_blank' href='https://github.com/ETHproductions/japt/tree/" + realv + "'>commit " + realv.slice(0, 7) + "</a>.</p>";
       getWebpage('https://rawgit.com/ETHproductions/Japt/' + realv + '/docs/' + (isv2 ? 'v2.html' : 'master.html'), function (response) {
@@ -185,7 +185,7 @@
     request.open("GET", url);
     request.send();
   }
-  
+
   function setup() {
 	if(typeof code !== "undefined" && !document.getElementById("code").value) document.getElementById("code").value = code;
     if(typeof input !== "undefined" && !document.getElementById("input").value) document.getElementById("input").value = input;
@@ -195,27 +195,27 @@
 	}
     update();
   }
-  
+
   function update() {
     var code = document.getElementById("code").value, encoding = "ISO-8859-1";
     if (/[^\x00-\xff]/.test(code)) code = unescape(encodeURI(code)), encoding = "UTF-8";
     document.getElementById('bytes').innerHTML = code.length + " byte" + (code.length === 1 ? "" : "s") + " in " + encoding;
     document.getElementById('js-code').value = (window.Japt || window).transpile(document.getElementById('code').value);
   }
-  
+
   function getURL() {
     var code = escapedBtoA(document.getElementById("code").value);
     var input = escapedBtoA(document.getElementById("input").value);
     document.getElementById("output").value = "https://ethproductions.github.io/japt/?v="+v+"&code="+code+"&input="+input;
   }
-  
+
   function toggleTab(tab) {
     var style = document.getElementById(tab).style;
 	if (style.display == "none") style.display = "block"; else style.display = "none";
 	var text = document.getElementById("toggle-" + tab);
 	if (text.innerHTML == "▼") text.innerHTML="▲"; else text.innerHTML = "▼";
   }
-  
+
   function toggleAll(src) {
     var arrows = document.getElementsByClassName("arrow");
     for (var i in arrows) {
@@ -225,7 +225,7 @@
     }
     src.innerHTML = (src.innerHTML[0] === "▼" ? "▲ Collapse all" : "▼ Expand all");
   }
-  
+
   function onrun() {
     var start;
     if (window.Japt) {
@@ -250,7 +250,7 @@
       document.getElementById('time').innerHTML = '(took ' + ((new Date - start) / 1e3).toFixed(3) + ' seconds)';
     }
   }
-  
+
   splitAddress();
   var int = setInterval(function(){if(window.Japt || window.run) setup(), clearInterval(int)}, 100);
 </script>

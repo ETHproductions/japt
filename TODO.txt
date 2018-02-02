@@ -37,17 +37,26 @@ Completed:
 1.4.5  Ë -> `mDEF{D`
 1.4.5  Ì -> `gJ `
 1.4.5  N.z(n=2) -> integer division
+1.4.5  F.a(n=0) -> smallest integer >= n where F(n) is truthy
+1.4.5  F.c(n=0) -> closest integer to n where F(n) is truthy
+1.4.5  A.ò(-n) -> work backwards from end of array ([1,2,3,4,5]ò2n -> [[1],[2,3],[4,5]])
 1.4.5  S.ù(n,s=" ") -> right-align S to n chars with filler s
 1.4.5  S.ú -> S.ù, but left-aligned
 1.4.5  S.û -> S.ù, but center-aligned
 1.4.5  A.ù -> right-align all items
 1.4.5  A.ú -> A.ù, but left-aligned
 1.4.5  A.û -> A.ù, but center-aligned
+1.4.5  Move _ from %w class to %W
+1.4.5  S.c(n) -> codePointAt instead of charCodeAt (thanks @PeterShaggyNoble!)
+1.4.5  N.d(n=0) -> fromCodePoint(N+n) (thanks again Shaggy!)
+1.4.5  A.e(a) -> workaround for A == a (thanks once more Shaggy!)
+
 
 2.0.0  Clean up code
 2.0.0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
 2.0.0  Add single-class regexes with `\` (i.e. `Uf\w` == `Uf/\w/`)
 2.0.0  Have each method control its own regex flags (modifying regexify() and various methods)
+2.0.0  R.t(x) -> R.test(x)
 
 Planned:
 1.4.5  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
@@ -82,6 +91,15 @@ Planned:
 1.4.5  F.?(f,n) -> like F.a(f,n), but until falsy
 1.4.5  F.w(f)? -> while F(), f()?
 1.4.5  N.c/f/r(f) -> ceil/floor/round to next integer that satisfies f (ignoring original number?)
+1.4.5  Combine A.ø(a/x) into A.d()? Only problem is strings
+1.4.5  A.ė(x) -> number of instances of x in A?
+1.4.5  A.c(f) -> A.m(f), but flatten the result
+1.4.5  Have A/S.i() not wrap around? Same for .h()? .j()?
+1.4.5  A.g(n,n,...) -> A.g(n).g(n)...
+1.4.5  A.g(a) -> items at indices ([5,8,1,4,2]g[0,3,1] -> [5,4,8])
+1.4.5  S.f() should return [] if the result is null
+1.4.5  A.?(f) -> notall, i.e. opposite of every (A.e(f))?
+1.4.5  A.?(f) -> none, i.e. opposite of some (A.d(f))?
 
 
 2.0.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)

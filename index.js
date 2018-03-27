@@ -104,7 +104,7 @@ function tab(string, start = 0, end = string.length, shiftKey = false) {
 			section = section.replace(/[^\n -~]/g, function(x){ return tab(x); });
 	}
 	else {
-		section = section.replace(/./g, function(x){ return alts[x] || x; })
+		section = section.replace(/[^]/g, function(x){ return alts[x] || x; })
 	}
 	return string.slice(0, start) + section + string.slice(end);
 }

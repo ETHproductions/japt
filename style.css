@@ -1,0 +1,8 @@
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+textarea {
+  font-family: 'Inconsolata', Consolas, monospace;
+  width: 80%;
+}

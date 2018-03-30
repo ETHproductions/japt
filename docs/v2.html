@@ -7,7 +7,7 @@
 
 <h3>Variables & functions</h3>
 <p>`A-Z` are pre-defined variables. See the Variables table for more info.</p>
-<p>`a-z` are various methods, and transpile to e.g. `.a(`. See the Functions tables below.</p>
+<p>`a-z` are various methods, and transpile to e.g. `.a(`. See the Methods tables below.</p>
 <p>`ABC{` starts an anonymous function with parameters `A`, `B`, and `C`. Equivalent to `function(A,B,C){`.</p>
 <p>`@` is equivalent to `XYZ{`, and `_` is equivalent to `Z{Z`.</p>
 <p>If `a-z` is the first item in a function call, it is transpiled to `function(c){return c.(letter)()}`.</p>
@@ -298,7 +298,7 @@
 <h3>`.ö()`</h3>
 <p>Returns a random character of `this`.</p>
 <h3>`.ö(n)`</h3>
-<p>Returns an array of `ceil(n)` random characters of `this` (with replacement).</p>
+<p>Returns a string of `ceil(n)` random characters of `this` (with replacement).</p>
 <h3>`.ö(x)`</h3>
 <p>Returns a random permutation of `this`.</p>
 <h3>`.ø(s)`</h3>
@@ -450,8 +450,10 @@
 <p>Returns a random element of `this`.</p>
 <h3>`.ö(n)`</h3>
 <p>Returns an array of `ceil(n)` random elements of `this` (with replacement).</p>
-<h3>`.ö(x)`</h3>
+<h3>`.ö(s)`</h3>
 <p>Returns a random permutation of `this`.</p>
+<h3>`.ö(f)`</h3>
+<p>Returns a random item from `this` which satisfies `f`.</p>
 <h3>`.ø(a)`</h3>
 <p>Returns `true` if `this` contains any element of `a`; `false` otherwise.</p>
 <h3>`.ø(x)`</h3>

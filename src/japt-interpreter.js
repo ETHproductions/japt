@@ -64,63 +64,10 @@ var pairs_1_3 = {
 	"\xCA": "l ",   // Ê - 202
 	"\xCB": "mDEF{D",// Ë - 203
 	"\xCC": "gJ ",   // Ì - 204
+	"\xCD": "n2 ",   // Í - 205
 	"\xD0": "$new Date$(", // Ð - 208
 	"\xD7": "r*1 ", // × - 215
 	"\xDF": "$rp$(" // ß - 223
-};
-
-var pairs_2_0 = {
-	// A new list of Unicode shortcuts
-	// Using \u<hex> to avoid encoding incompatibilities
-	"@":	  "XYZ{",
-	"_":	  "Z{Z",
-	"\xA1": "!=",   // ¡ - 161
-	"\xA2": "==",   // ¢ - 162
-	"\xA3": "<=",   // £ - 163
-	"\xA4": ">=",   // ¤ - 164
-	"\xA5": "===",  // ¥ - 165
-	"\xA6": "!==",  // ¦ - 166
-	"\xA7": "+=",   // § - 167
-	"\xA8": "++",   // ¨ - 168
-	"\xA9": "&&",   // © - 169
-	"\xAA": "||",   // ª - 170
-	"\xAB": "<<",   // « - 171
-	"\xAC": "&&!",  // ¬ - 172
-//	"\xAD": "",	  //	 173 is an unprintable
-	"\xAE": "-=",   // ® - 174
-	"\xAF": "--",   // ¯ - 175
-	"\xB0": "|=",   // ° - 176
-	"\xB1": "~~",   // ± - 177
-	"\xB2": "p2 ",  // ² - 178
-	"\xB3": "p3 ",  // ³ - 179
-	"\xB4": "&=",   // ´ - 180
-	"\xB5": "^=",   // µ - 181
-	"\xB6": "%=",   // ¶ - 182
-	"\xB7": ">>>",  // · - 183
-	"\xB8": ") ",   // ¸ - 184
-	"\xB9": ">>>0", // ¹ - 185
-	"\xBA": "((",   // º - 186
-	"\xBB": ">>",   // » - 187
-	"\xBC": ".25",  // ¼ - 188
-	"\xBD": ".5",   // ½ - 189
-	"\xBE": ".75",  // ¾ - 190
-	"\xBF": " ?",	  // ¿ - 191
-	"\xC0": " :",   // À - 192
-	"\xC1": "} ",   // Á - 193
-	"\xC2": "+1",   // Â - 194
-	"\xC3": "-1",   // Ã - 195
-	"\xC4": "*2",   // Ä - 199
-	"\xC5": "/2",   // Å - 197
-	"\xC6": "%2",   // Æ - 198
-	"\xC7": "&1",   // Ç - 199
-	"\xC8": "|1",   // È - 200
-	"\xC9": "^1",	  // É - 201
-	"\xCA": "|0",   // Ê - 202
-	"\xCB": "$new ",// Ë - 203
-	"\xCD": "))",   // Ì - 204
-	"\xCE": "$while(",//Í- 205
-	"\xCF": "$for(",// Î - 206
-	"\xD0": "$new Date$(" // Ð - 208
 };
 
 var pcache = {};
@@ -232,7 +179,7 @@ df(Array,'\xF1',function(x,y){x=functify(fb(x,function(z){return z}),y);return t
 df(Array,'\xF2',function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){if(x>0)for(;i<this.length;i+=x)a.push(this.slice(i,i+x));else if(x<0)for(i=this.length;i>0;i+=x)a.unshift(this.slice(Math.max(i+x,0),i));}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)&&a.push([])}return a;});
 df(Array,'\xF3',function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i++)a[i%x]=a[i%x]||[],a[i%x].push(this[i]);}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)||a.push([])}return a;});
 df(Array,'\xF4',function(x,y){if(this.length===0)return[];x=functify(fb(x,function(z){return!z}),y);var a=[],i=0;for(a.push([]);i<this.length;i++)x(this[i],fb(y,i),this)?a.push([]):a.g(-1).push(this[i]);return a;});
-df(Array,'\xF6',function(x){if(!id(x))return this[Math.random()*this.length|0];var b=[];if(isNaN(x))for(var a=this.slice();a.length>0;)b.push(a.splice(Math.random()*a.length|0,1)[0]);else for(var i=+x;i>0;i--)b.push(this[Math.random()*this.length|0]);return b});
+df(Array,'\xF6',function(x){if(!id(x))return this[Math.random()*this.length|0];if(typeof x==="function")return this.filter(x)['\xF6']();var b=[];if(isNaN(x))for(var a=this.slice();a.length>0;)b.push(a.splice(Math.random()*a.length|0,1)[0]);else for(var i=+x;i>0;i--)b.push(this[Math.random()*this.length|0]);return b});
 df(Array,'\xF8',function(x){if(!id(x))return false;if(!(x instanceof Array))x=[x];return this.some(function(a){return x.contains(a)})});
 df(Array,'pad',function(x,y,a){var z,q=this.map(function(c){return c instanceof Array?c:String(c)});if(!id(x))x=" ";if(!id(y)){if(typeof x==="number")y=x,x=" ";else y=q.reduce(function(p,c){return p.w(c.length)},0);}if(typeof x==="number"&&typeof y!=="number")z=x,x=y,y=z;return q.map(function(z){return z.pad(x,y,a)})});
 df(Array,'\xF9',function(x,y){return this.pad(x,y,1)});

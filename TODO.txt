@@ -36,6 +36,7 @@ Completed:
 1.4.5  Ê -> `l `
 1.4.5  Ë -> `mDEF{D`
 1.4.5  Ì -> `gJ `
+1.4.5  Í -> `n2 `
 1.4.5  N.z(n=2) -> integer division
 1.4.5  F.a(n=0) -> smallest integer >= n where F(n) is truthy
 1.4.5  F.c(n=0) -> closest integer to n where F(n) is truthy
@@ -50,6 +51,7 @@ Completed:
 1.4.5  S.c(n) -> codePointAt instead of charCodeAt (thanks @PeterShaggyNoble!)
 1.4.5  N.d(n=0) -> fromCodePoint(N+n) (thanks again Shaggy!)
 1.4.5  A.e(a) -> workaround for A == a (thanks once more Shaggy!)
+1.4.5  A.ö(f) -> random item that satisfies f
 
 
 2.0.0  Clean up code
@@ -57,6 +59,7 @@ Completed:
 2.0.0  Add single-class regexes with `\` (i.e. `Uf\w` == `Uf/\w/`)
 2.0.0  Have each method control its own regex flags (modifying regexify() and various methods)
 2.0.0  R.t(x) -> R.test(x)
+
 
 Planned:
 1.4.5  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
@@ -71,8 +74,9 @@ Planned:
 1.4.5  A.?(x,n) -> insert x at every n'th position
 1.4.5  S.?(s) -> interleave
 1.4.5  A.?(a) -> interleave
-1.4.5  S.u(x)? -> uppercase first character
-1.4.5  S.v(x)? -> title case
+1.4.5  S.u(s)? -> uppercase first character
+1.4.5  S.v(s)? -> match case
+1.4.5  S.v(n)? -> title case
 1.4.5  S.w(s?) -> reverse and mirror ()[]{}<>\/
 1.4.5  S.w(n?) -> mirror ()[]{}<>\/
 1.4.5  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
@@ -107,6 +111,7 @@ Planned:
 2.0.0  Completely redesign online interpreter (see: https://hackmd.io/CwQzGYDMHYFYFoBGA2ApgDnsaH4E5pxl4AmAYzPBDkUr2SA=#)
 2.0.0  Outsource eval() to Worker
 
+See everything planned: https://hackmd.io/Olgzu4-USxWNavDPeyWCNg
 2.0.0  Use new encoding (https://github.com/ETHproductions/japt/issues/28)
 2.0.0  Add characters that represent `U`, `X`, and `Z` in strings
 2.0.0  Add constants that return the inputs

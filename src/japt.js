@@ -44,74 +44,6 @@ function df(target, properties) {
 	Object.defineProperties(target, properties);
 }
 
-// Converts a string to a regex, Japt-style
-function regexify(string, flags) {
-	if (string instanceof RegExp)
-		// you dirty rotten liar
-		return string;
-	string = String(string);
-
-	if (flags !== "") {
-		flags = String(fb(flags, ""));
-		if (!flags.contains("g"))
-			flags += "g";
-	}
-
-	var regex = "", inCharClass = false;
-	for(var i = 0; i < string.length; i++) {
-		var char = string[i];
-		if (char === "%") {
-			string = string.slice(0, i + 1) + "\\" + string.slice(i + 1);
-		}
-		else if (char === "\\") {
-			char = string[++i];
-			if (char === "A")
-				regex += inCharClass ? "A-Z" : "[A-Z]";
-			else if (char === "a")
-				regex += inCharClass ? "a-z" : "[a-z]";
-			else if (char === "c")
-				regex += inCharClass ? "B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z" : "[B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z]";
-			else if (char === "C")
-				regex += inCharClass ? "\\W0-9AaEeIiOoUu_" : "[^B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z]";
-			else if (char === "l")
-				regex += inCharClass ? "A-Za-z" : "[A-Za-z]";
-			else if (char === "L")
-				regex += inCharClass ? "\\W_\\d" : "[^A-Za-z]";
-			else if (char === "w")
-				regex += inCharClass ? "A-Za-z0-9" : "[A-Za-z0-9]";
-			else if (char === "W")
-				regex += inCharClass ? "\\W_" : "[^A-Za-z0-9]";
-			else if (char === "p")
-				regex += inCharClass ? " -~" : "[ -~]";
-			else if (char === "P")
-				regex += inCharClass ? "\\x00-\\x1f\\x7f-\\uffff" : "[^ -~]";
-			else if (char === "q")
-				regex += inCharClass ? "\\n -~" : "[\\n -~]";
-			else if (char === "Q")
-				regex += inCharClass ? "\\x00-\\x09\\x0b-\\x1f\\x7f-\\uffff" : "[^\\n -~]";
-			else if (char === "v")
-				regex += inCharClass ? "AaEeIiOoUu" : "[AaEeIiOoUu]";
-			else if (char === "V")
-				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_" : "[^AaEeIiOoUu]";
-			else if (char === "y")
-				regex += inCharClass ? "AaEeIiOoUuYy" : "[AaEeIiOoUuYy]";
-			else if (char === "Y")
-				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_" : "[^AaEeIiOoUuYy]";
-			else
-				regex += "\\" + char;
-		}
-		else {
-			if (char === "[")
-				inCharClass = true;
-			else if (char === "]")
-				inCharClass = false;
-			regex += char;
-		}
-	}
-
-	return RegExp(regex, flags);
-}
-
 // Converts a regex string to a regex literal, Japt-style
 function regexify2(string) {
 	if (string.length === 1) {
@@ -172,6 +104,10 @@ function regexify2(string) {
 				regex += inCharClass ? "AaEeIiOoUuYy" : "[AaEeIiOoUuYy]";
 			else if (char === "Y")
 				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_" : "[^AaEeIiOoUuYy]";
+			else if (char === "c")
+				regex += inCharClass ? "B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z" : "[B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z]";
+			else if (char === "C")
+				regex += inCharClass ? "\\W0-9AaEeIiOoUu_" : "[^B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z]";
 			else
 				regex += "\\" + char;
 		}

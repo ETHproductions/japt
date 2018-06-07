@@ -300,7 +300,7 @@ function perm (arr, len) {
 	if (len === 0)
 		return [[]];
 	if (arr.length < 2)
-		return [x];
+		return [arr];
 
 	var id = len + ';' + str(arr);
 	if (permcache[id])
@@ -325,7 +325,7 @@ function comb(arr, len) {
 
 	var id = len + ';' + str(arr);
 	if (combcache[id])
-		return ccache[id];
+		return combcache[id];
 
 	var result = [];
 	for (var index = 0; index < arr.length; index++)
@@ -660,7 +660,7 @@ df(String.prototype, {
 	},
 
 	pad: function(x, y, a) {
-		var s = String(this), z;
+		var s = String(this);
 		if (/\n/.test(s))
 			return s.q("\n").pad(x, y, a).q("\n");
 		if (!id(x))
@@ -869,14 +869,15 @@ df(Array.prototype, {
 		}, 0);
 	},
 	y: function (x, y) {
+		var z, a;
 		if (id(x)) {
-			var z = this.y(),
-				a = z.m(function(c) { return c.f(id) })
-					 .m(x, y);
+			z = this.y();
+			a = z.m(function(c) { return c.f(id); }).m(x, y);
+			
 			if (a.every(function(q) {
 				return typeof q === "string" || q instanceof Array;
 			}))
-				return z = z.m(function(c, i) {
+				return z.m(function(c, i) {
 					var j = 0;
 					return c.m(function() {
 						return a[i][j++];
@@ -886,10 +887,9 @@ df(Array.prototype, {
 				return a;
 		}
 		var t = "string" === typeof this[0],
-			n = t ? this.map(function(t) { return t.split(""); }) : this,
-			x, y,
-			z = n.reduce(function(p, q){ return Math.max(p, q.length); }, 0),
-			a = [];
+			n = t ? this.map(function(t) { return t.split(""); }) : this;
+		z = n.reduce(function(p, q){ return Math.max(p, q.length); }, 0),
+		a = [];
 		for (y = 0; y < z; y++)
 			a[y] = t ? Array(n.length).fill(" ") : [];
 		for (y = 0; y < n.length; y++)
@@ -919,7 +919,7 @@ df(Array.prototype, {
 		}
 		if (q)
 			return a;
-		return a.map(function(x){return x.q()});
+		return a.map(function(x) { return x.q(); });
 	},
 	à: function (x) {
 		var f = function(y, z, a) {
@@ -1275,7 +1275,7 @@ df(Number.prototype, {
 		if (typeof y === "function")
 			f = y, y = undefined;
 
-		var z = +this;
+		var z = +this, _;
 		y = y || 1;
 		if (!id(x))
 			x = z, z = 0;
@@ -1414,7 +1414,7 @@ df(Number.prototype, {
 			x = x.q();
 		if (x instanceof Array)
 			return this.ì(x.length).m(function(y) { return x[y]; });
-		var n = Math.trunc(this);
+		var n = Math.trunc(this), a;
 		x = Math.trunc(fb(x, 10));
 		if (x > 0) {
 			if (x === 1) {
@@ -1424,7 +1424,7 @@ df(Number.prototype, {
 					return n.o().ç(1);
 			}
 			else {
-				for (var a = []; n != 0; n = Math.trunc(n / x))
+				for (a = []; n !== 0; n = Math.trunc(n / x))
 					a.unshift(n % x);
 				return a;
 			}
@@ -1435,7 +1435,7 @@ df(Number.prototype, {
 			}
 			else {
 				x = -x;
-				for (var a = []; n != 0; n = Math.trunc(n < 0 ? -(n - x + 1) / x : -n / x))
+				for (a = []; n != 0; n = Math.trunc(n < 0 ? -(n - x + 1) / x : -n / x))
 					a.unshift(pm(n, x));
 				return a;
 			}
@@ -1492,8 +1492,8 @@ function ts (x) {
 	return ["get", "set", "getUTC", "setUTC"].g(x);
 }
 df(Date, {
-	a: function (x, y) { return this[ts(x) + "Milliseconds"](y || 0)},
-	b: function (x, y) { return this[ts(x) + "Seconds"](y || 0)},
+	a: function (x, y) { return this[ts(x) + "Milliseconds"](y || 0); },
+	b: function (x, y) { return this[ts(x) + "Seconds"](y || 0); },
 	c: function (x, y) { return this[ts(x) + "Minutes"](y || 0); },
 	d: function (x, y) { return this[ts(x) + "Hours"](y || 0); },
 	e: function (x, y) { return this[ts(x) + "Day"](y || 0); },
@@ -1571,7 +1571,7 @@ df(Function.prototype, {
 		else
 			s = Number(x), x = function(q) { return q; };
 		for(var i = 0; i < 1e8; ++i) {
-			j = x(bij(i, 10), i);
+			var j = x(bij(i, 10), i);
 			if (this(j, i))
 				return j;
 		}
@@ -1632,7 +1632,7 @@ Math.a = Math.atan2;
 // Fibonacci
 Math.g = function (n) {
 	var sqrt5 = Math.sqrt(5),
-		phi = (1 + f) / 2;
+		phi = (1 + sqrt5) / 2;
 	return Math.round((Math.pow(phi, n) - Math.pow(-phi, -n)) / sqrt5);
 };
 
@@ -1848,7 +1848,7 @@ var Japt = {
 		if (!input) return processed;
 		input = (input + " ").split("");
 		for(var index = 0; index < input.length; ++index) {
-			char = input[index];
+			var char = input[index];
 			switch (input_mode) {
 				case "next":
 					if (/[0-9.-]/.test(char)) {
@@ -2399,6 +2399,6 @@ var Japt = {
 	eval: function(code) {
 		return eval(Japt.transpile(code));
 	}
-}
+};
 
 if (isnode) module.exports = Japt;

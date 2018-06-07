@@ -1,0 +1,13 @@
+{
+	"boss": true,
+	"evil": true,
+	"expr": true,
+	"laxbreak": true,
+	"loopfunc": true,
+	"browser": true,
+	"node": true,
+	"nonstandard": true,
+	"globals": {
+		"alert": true
+	}
+}

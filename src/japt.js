@@ -888,7 +888,7 @@ df(Array.prototype, {
 		}
 		var t = "string" === typeof this[0],
 			n = t ? this.map(function(t) { return t.split(""); }) : this;
-		z = n.reduce(function(p, q){ return Math.max(p, q.length); }, 0),
+		z = n.reduce(function(p, q){ return Math.max(p, q.length); }, 0);
 		a = [];
 		for (y = 0; y < z; y++)
 			a[y] = t ? Array(n.length).fill(" ") : [];
@@ -2338,6 +2338,24 @@ var Japt = {
 						outp += letters.split("").join(",").replace(/M,/g, "M.");
 						--i;
 					}
+				}
+				else if (isChar(char, "?")) {
+					outp += "?";
+					var temp = "";
+					for (level = 1, ++i; level > 0 && i < code.length; i++) {
+						if (code[i] === "?") {
+							++level;
+						} else if (code[i] === ":") {
+							--level;
+						}
+						temp += code[i];
+					}
+					if (temp.slice(-1) !== ":")
+						temp += ":";
+					else i--;
+					var tr = subtranspile(temp.slice(0,-1));
+
+					outp += tr + ":";
 				}
 				else if (char === " ") {
 					outp += ")";

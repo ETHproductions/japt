@@ -944,6 +944,24 @@ var Japt = {
 						--i;
 					}
 				}
+				else if (isChar(char, "?")) {
+					outp += "?";
+					var temp = "";
+					for (level = 1, ++i; level > 0 && i < code.length; i++) {
+						if (code[i] === "?") {
+							++level;
+						} else if (code[i] === ":") {
+							--level;
+						}
+						temp += code[i];
+					}
+					if (temp.slice(-1) !== ":")
+						temp += ":";
+					else i--;
+					var tr = subtranspile(temp.slice(0,-1));
+
+					outp += tr + ":";
+				}
 				else if (char === " ") {
 					outp += ")";
 				}

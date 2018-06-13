@@ -960,7 +960,7 @@ var Japt = {
 					else i--;
 					var tr = subtranspile(temp.slice(0,-1));
 
-					outp += tr + ":";
+					outp += "(" + tr + "):";
 				}
 				else if (char === " ") {
 					outp += ")";

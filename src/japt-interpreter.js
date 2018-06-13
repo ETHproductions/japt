@@ -958,9 +958,10 @@ var Japt = {
 					if (temp.slice(-1) !== ":")
 						temp += ":";
 					else i--;
-					var tr = subtranspile(temp.slice(0,-1));
+					
+					var tr = subtranspile("(" + temp.slice(0,-1) + ")");
 
-					outp += "(" + tr + "):";
+					outp += deparen(tr) + ":";
 				}
 				else if (char === " ") {
 					outp += ")";

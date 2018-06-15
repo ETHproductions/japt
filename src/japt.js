@@ -714,7 +714,7 @@ df(Array.prototype, {
 		for (var i = 0; i < this.length; i++) {
 			if (this[i] instanceof Array) {
 				var q = this[i].c();
-				for (var j in q)
+				for (var j = 0; j < q.length; j++)
 					f.push(q[j]);
 			}
 			else

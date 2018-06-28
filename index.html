@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Japt interpreter</title>
-<link rel="stylesheet" type="text/css" href="https://ethproductions.github.io/style/style.css">
+<link rel="stylesheet" type="text/css" href="../style/style.css">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
 </head>
@@ -122,7 +122,7 @@
 	}
     document.getElementsByTagName("title")[0].innerHTML = "Japt " + (isv2 && iscommit ? "v2 " + v.slice(2, 9) : v.slice(0, 7)) + " interpreter"
     var script = document.createElement('script');
-    script.setAttribute("src", "/src/japt.js");
+    script.setAttribute("src", "https://rawgit.com/ETHproductions/japt/" + (realv === 'v2' ? 'master' : realv) + file);
     document.getElementsByTagName('head')[0].appendChild(script);
 
     var docs = document.getElementById('docs');

@@ -20,7 +20,7 @@ function noFunc(x) {
 	Japt.error("No such function: " + x);
 }
 
-// Detects whether the variable is defined
+// Is-defined: detects whether the variable is defined
 function id(x) {
 	return typeof x !== "undefined";
 }
@@ -873,7 +873,7 @@ df(Array.prototype, {
 		var z, a;
 		if (id(x)) {
 			z = this.y();
-			a = z.m(function(c) { return c.f(id); }).m(x, y);
+			a = z.m(function(c) { return c instanceof Array ? c.f(id) : c; }).m(x, y);
 			
 			if (a.every(function(q) {
 				return typeof q === "string" || q instanceof Array;

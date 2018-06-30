@@ -875,9 +875,7 @@ df(Array.prototype, {
 			z = this.y();
 			a = z.m(function(c) { return c instanceof Array ? c.f(id) : c; }).m(x, y);
 			
-			if (a.every(function(q) {
-				return typeof q === "string" || q instanceof Array;
-			}))
+			if (a.every(function(q) { return q instanceof Array; }))
 				return z.m(function(c, i) {
 					var j = 0;
 					return c.m(function() {

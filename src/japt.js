@@ -883,6 +883,8 @@ df(Array.prototype, {
 						return a[i][j++];
 					});
 				}).y();
+			else if (a.every(function(q) { return q instanceof String || typeof q === "string"; }))
+				return a.y();
 			else
 				return a;
 		}

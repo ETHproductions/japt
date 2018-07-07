@@ -90,7 +90,7 @@ df(String,'d',function(x){
 	if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
 	else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(regexify(f,'g'),a[i+1]);},this)}});
 df(String,'e',function(x,y,z){x=eval(regexify(x,fb(z,'')).toString().replace(/[a-z]*$/,function(s){return s.replace('g','')}));var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t});
-df(String,'f',function(x,y){return this.match(regexify(x,y))});
+df(String,'f',function(x,y){return this.match(regexify(x,y))||[]});
 df(String,'g',function(x){var l=this.length;x=pm(fb(x,0),l);return this[x]});
 df(String,'h',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x+y.length)});
 df(String,'i',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x)});

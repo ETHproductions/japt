@@ -446,7 +446,7 @@ df(String.prototype, {
 		return t;
 	},
 	f: function (x) {
-		return this.match(saferegex(x), 'g');
+		return this.match(saferegex(x), 'g') || [];
 	},
 	g: function (x) {
 		x = fb(x, 0);

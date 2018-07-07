@@ -1053,6 +1053,25 @@ df(Array.prototype, {
 		x = fb(x, [0]);
 		return this.map(function(_, i) { return x[i % x.length]; });
 	},
+	ï: function (x, y) {
+		if (!(x instanceof Array)) {
+			if (y instanceof Array) {
+				var tmp = y;
+				y = x;
+				x = tmp;
+			}
+			else {
+				y = x;
+				x = this.slice();
+			}
+		}
+		y = functify2(fb(y, function(a, b) { return [a, b]; }), true);
+		var r = [];
+		for (var i = 0; i < this.length; i++)
+			for (var j = 0; j < x.length; j++)
+				r.push(y(this[i], x[j], i * x.length + j));
+		return r;
+	},
 	ñ: function (x, y) {
 		x = functify2(fb(x, function (z) { return z; }), y);
 		return this.sort(function(a, b, i) {

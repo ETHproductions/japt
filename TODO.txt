@@ -57,6 +57,8 @@ Completed:
 1.4.5  Î -> `g `
 1.4.5  Ï -> `XYZ{Y`
 1.4.5  Ñ -> `*2`
+1.4.5  F.f(f?) -> first non-negative integer returning falsy value
+1.4.5  A.ï(a?,f?) -> Cartesian product
 
 
 2.0.0  Clean up code

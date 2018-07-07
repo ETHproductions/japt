@@ -62,6 +62,7 @@ Completed:
 
 1.4.6  S.f() should return [] if the result is null
 1.4.6  A.g(n,n,...) -> A.g(n).g(n)...
+1.4.6  A.g(a) -> items at indices ([5,8,1,4,2]g[0,3,1] -> [5,4,8])
 
 
 2.0a0  Clean up code
@@ -91,7 +92,6 @@ Planned:
 1.4.6  A.?() -> all subslices
 1.4.6  A.?() -> keys/indices (like Jelly's `J`)
 1.4.6  A.c(f) -> A.m(f), but flatten the result
-1.4.6  A.g(a) -> items at indices ([5,8,1,4,2]g[0,3,1] -> [5,4,8])
 1.4.6  A.g(n,f) -> map item at index
 1.4.6  A.o(f) -> map last item
 

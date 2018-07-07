@@ -766,12 +766,15 @@ df(Array.prototype, {
 		}
 	},
 	g: function () {
-		var curr = this;
+		var curr = this, x;
 		for (var i = 0; typeof arguments[i] === "number"; i++) {
-			var x = arguments[i];
-			x = fb(x, 0);
-			x = pm(x, curr.length);
+			x = pm(arguments[i], curr.length);
 			curr = curr[x];
+		}
+		if (arguments[i] instanceof Array) {
+			x = arguments[i];
+			curr = x.map(function(j) { return curr.g(j); });
+			i++;
 		}
 		if (i === 0) {
 			curr = curr[0];

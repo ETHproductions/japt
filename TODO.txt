@@ -52,6 +52,11 @@ Completed:
 1.4.5  N.d(n=0) -> fromCodePoint(N+n) (thanks again Shaggy!)
 1.4.5  A.e(a) -> workaround for A == a (thanks once more Shaggy!)
 1.4.5  A.ö(f) -> random item that satisfies f
+1.4.5  Add %c (consonant) and %C (non-consonant) character classes
+1.4.5  Balance parens within ?:
+1.4.5  Î -> `g `
+1.4.5  Ï -> `XYZ{Y`
+1.4.5  Ñ -> `*2`
 
 
 2.0.0  Clean up code

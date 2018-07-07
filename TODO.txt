@@ -61,72 +61,72 @@ Completed:
 1.4.5  A.ï(a?,f?) -> Cartesian product
 
 
-2.0.0  Clean up code
-2.0.0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
-2.0.0  Add single-class regexes with `\` (i.e. `Uf\w` == `Uf/\w/`)
-2.0.0  Have each method control its own regex flags (modifying regexify() and various methods)
-2.0.0  R.t(x) -> R.test(x)
-
-
-Planned:
-1.4.5  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
-1.4.5  A.ù(n,a=[0]) -> right-align A to n items with filler a
-1.4.5  A.ù(n,x) -> right-align A to n items with filler [x]
-1.4.5  X.?(f,n=1) -> run X through f, n times (default function: output with newline?)
-1.4.5  A.n(s) -> sort the items in A by their alphabetical order in s
-1.4.5  A.n(a) -> sort A by the order the items appear in a?
-1.4.5  A.?(f) -> all truthy indices
-1.4.5  S.?(f) -> all truthy indices
-1.4.5  S.?(s,n) -> insert s at every n'th position
-1.4.5  A.?(x,n) -> insert x at every n'th position
-1.4.5  S.?(s) -> interleave
-1.4.5  A.?(a) -> interleave
-1.4.5  S.u(s)? -> uppercase first character
-1.4.5  S.v(s)? -> match case
-1.4.5  S.v(n)? -> title case
-1.4.5  S.w(s?) -> reverse and mirror ()[]{}<>\/
-1.4.5  S.w(n?) -> mirror ()[]{}<>\/
-1.4.5  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
-1.4.5  ? -> `w `?
-1.4.5  ? -> `c `?
-1.4.5  ? -> `y `?
-1.4.5  A.?(s) -> keys/indices (like Jelly's `J`)
-1.4.5  A.?() -> fill range ([1,5,3,3,4] -> [1,2,3,4,5,4,3,3,4])
-1.4.5  A.?(f) -> minimum
-1.4.5  A.?(f) -> maximum
-1.4.5  Auto-finish arrays []
-1.4.5  Auto-start functions? {}
-1.4.5  Auto-finish/fill a?b:c
-1.4.5  S.?() -> all substrings
-1.4.5  A.?() -> all subslices
-1.4.5  F.?(f,n) -> like F.a(f,n), but until falsy
-1.4.5  F.w(f)? -> while F(), f()?
-1.4.5  N.c/f/r(f) -> ceil/floor/round to next integer that satisfies f (ignoring original number?)
-1.4.5  Combine A.ø(a/x) into A.d()? Only problem is strings
-1.4.5  A.ė(x) -> number of instances of x in A?
-1.4.5  A.c(f) -> A.m(f), but flatten the result
-1.4.5  Have A/S.i() not wrap around? Same for .h()? .j()?
-1.4.5  A.g(n,n,...) -> A.g(n).g(n)...
-1.4.5  A.g(a) -> items at indices ([5,8,1,4,2]g[0,3,1] -> [5,4,8])
-1.4.5  S.f() should return [] if the result is null
-1.4.5  A.?(f) -> notall, i.e. opposite of every (A.e(f))?
-1.4.5  A.?(f) -> none, i.e. opposite of some (A.d(f))?
-
+2.0a0  Clean up code
+2.0a0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
+2.0a0  Add single-class regexes with `\` (i.e. `Uf\w` == `Uf/\w/`)
+2.0a0  Have each method control its own regex flags (modifying regexify() and various methods)
+2.0a0  R.t(x) -> R.test(x)
 
 2.0.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)
 2.0.0  Command-line-ify
 2.0.0  Completely redesign online interpreter (see: https://hackmd.io/CwQzGYDMHYFYFoBGA2ApgDnsaH4E5pxl4AmAYzPBDkUr2SA=#)
 2.0.0  Outsource eval() to Worker
-
-See everything planned: https://hackmd.io/Olgzu4-USxWNavDPeyWCNg
+2.0.0  Use arguments instead of parsing an input
 2.0.0  Use new encoding (https://github.com/ETHproductions/japt/issues/28)
+2.0.0  Use non-ASCII chars for strings and regexes (“” for strings, ‹› for regexes?)
+
+
+Planned:
+1.4.6  S.f() should return [] if the result is null
+1.4.6  A.n(s) -> sort the items in A by their alphabetical order in s
+1.4.6  A.n(a) -> sort A by the order the items appear in a?
+1.4.6  A.?(f) -> all truthy indices
+1.4.6  S.?(f) -> all truthy indices
+1.4.6  A.?(f) -> minimum
+1.4.6  A.?(f) -> maximum
+1.4.6  S.?() -> all substrings
+1.4.6  A.?() -> all subslices
+1.4.6  A.?() -> keys/indices (like Jelly's `J`)
+1.4.6  A.c(f) -> A.m(f), but flatten the result
+1.4.6  A.g(n,n,...) -> A.g(n).g(n)...
+1.4.6  A.g(a) -> items at indices ([5,8,1,4,2]g[0,3,1] -> [5,4,8])
+
+1.4.?  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
+1.4.?  A.ù(n,a=[0]) -> right-align A to n items with filler a
+1.4.?  A.ù(n,x) -> right-align A to n items with filler [x]
+1.4.?  X.?(f,n=1) -> run X through f, n times (default function: output with newline?)
+1.4.?  S.?(s,n) -> insert s at every n'th position
+1.4.?  A.?(x,n) -> insert x at every n'th position
+1.4.?  S.?(s) -> interleave
+1.4.?  A.?(a) -> interleave
+1.4.?  S.u(s)? -> uppercase first character
+1.4.?  S.v(s)? -> match case
+1.4.?  S.v(n)? -> title case
+1.4.?  S.w(s?) -> reverse and mirror ()[]{}<>\/
+1.4.?  S.w(n?) -> mirror ()[]{}<>\/
+1.4.?  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
+1.4.?  ? -> `w `?
+1.4.?  ? -> `c `?
+1.4.?  ? -> `y `?
+1.4.?  A.?() -> fill range ([1,5,3,3,4] -> [1,2,3,4,5,4,3,3,4])
+1.4.?  Auto-finish arrays []
+1.4.?  Auto-start functions? {}
+1.4.?  Auto-finish/fill a?b:c
+1.4.?  F.w(f)? -> while F(), f()?
+1.4.?  N.c/f/r(f) -> ceil/floor/round to next integer that satisfies f (ignoring original number?)
+1.4.?  Combine A.ø(a/x) into A.d()? Only problem is strings
+1.4.?  A.ė(x) -> number of instances of x in A? Also has problem with strings
+1.4.?  Have A/S.i() not wrap around? Same for .h()? .j()?
+1.4.?  A.?(f) -> notall, i.e. opposite of every (A.e(f))?
+1.4.?  A.?(f) -> none, i.e. opposite of some (A.d(f))?
+
+
+See everything planned for v2: https://hackmd.io/Olgzu4-USxWNavDPeyWCNg
 2.0.0  Add characters that represent `U`, `X`, and `Z` in strings
 2.0.0  Add constants that return the inputs
 2.0.0  Add a variable that's pre-defined to the raw input
-2.0.0  Use non-ASCII chars for strings and regexes (“” for strings, ‹› for regexes?)
 2.0.0  Use ‹› for interpolation in strings and regexes
-2.0.0  Use some non-ASCII chars for interpolating U, V, W, X, Y, and Z
-2.0.0  Use some non-ASCII char for interpolating the next value (e.g. if it were @, "my@string"1+2 -> "my3string")
+2.0.0  Use some non-ASCII char for interpolating the next (prev?) value (e.g. if it were @, "my@string"1+2 -> "my3string")
 2.0.0  Use ⁺ and ⁻ for unary plus and minus, ₊ and ₋ for increment and decrement, make + and - always binary operators
 2.0.0  Add custom string compressor (https://github.com/ETHproductions/japt/issues/29)
 

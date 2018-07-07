@@ -30,47 +30,58 @@
 
 <h3>Miscellaneous</h3>
 <p>`$...$` is evaluated as pure JS.</p>
-<p>Any of ``"`$`` left out at the end of the program is auto-inserted.</p>
+<p>Any of ``"`$/`` left out at the end of the program is auto-inserted.</p>
 <p>`ß` is a function that runs the program again with given inputs.</p>
+<p>`/` is parsed as the start of a regex. Use `÷` for division.</p>
 </div>
 
 <h2>arrow:regex Regexes</h2>
 <div id="regex" style="display:none">
 <h3>Using regexes</h3>
-<p>Some methods require a regex, or a string like a regex. Pure regexes are extremely hard to use because the transpiler doesn't set them aside, like it does with strings. This creates several problems:</p>
-<p>- 1. The transpiler thinks a slash is a division sign.<br>
-- 2. If you try putting flags on the regex, the transpiler will see them as function calls.<br>
-- 3. Good luck successfully getting the transpiler to not mess with the contents of the regex.</p>
-<p>Instead, use a string. Strings can be used just like regexes, with a couple extra rules:</p>
-<p>- Flags need to be passed in a separate string. In most methods that require regexes, the `g` flag is on by default. Pass in an empty string to remove it.<br>
-- Backslashes `\` need to be doubled, or just replaced with `%`. This means that to get a literal `%`, you must use `%%`.</p>
-<p>You can use JavaScript's character classes, e.g. `%w`. A few classes have been added to make regexes golfier. Here's a reference for what the common classes match:</p>
+<p>A regex matches the syntax `/regex/flags`. These work for the most part just like they do in JS, with a few exceptions:</p>
+<ul>
+  <li>Missing parentheses/square brackets at the edges of the regex will be automatically added.</li>
+  <li>If a `+`, `*`, or `?` would cause a syntax error, a `.` is placed before it.</li>
+  <li>The `g` flag makes the regex *not* match globally.</li>
+  <li>The `s` (`dotAll`) flag from other regex versions has been implemented. This makes `.` match all characters, including newlines.</li>
+  <li>A few extra character classes have been added. A list of the most common built-in classes and the added classes:</li>
+</ul>
 <table class="code-table">
   <tr><td style="width:50px"><b>Class</b></td><td><b>Chars</b></td></tr>
-  <tr><td>%w</td><td>A-Za-z0-9</td></tr>
-  <tr><td>%W</td><td>Anything else</td></tr>
-  <tr><td>%d</td><td>0-9</td></tr>
-  <tr><td>%D</td><td>Anything else</td></tr>
-  <tr><td>%s</td><td>Whitespace</td></tr>
-  <tr><td>%S</td><td>Anything else</td></tr>
-  <tr><td>%n</td><td>Newline</td></tr>
-  <tr><td>%t</td><td>Tab</td></tr>
-  <tr><td>%b</td><td>Edge of a word</td></tr>
-  <tr><td>%B</td><td>Non-edge</td></tr>
-  <tr><td>%a</td><td>a-z</td></tr>
-  <tr><td>%A</td><td>A-Z</td></tr>
-  <tr><td>%l</td><td>A-Za-z</td></tr>
-  <tr><td>%L</td><td>Anything else</td></tr>
-  <tr><td>%p</td><td>Printable ASCII</td></tr>
-  <tr><td>%P</td><td>Anything else</td></tr>
-  <tr><td>%q</td><td>Printable + newline</td></tr>
-  <tr><td>%Q</td><td>Anything else</td></tr>
-  <tr><td>%v</td><td>AEIOUaeiou</td></tr>
-  <tr><td>%V</td><td>Anything else</td></tr>
-  <tr><td>%y</td><td>AEIOUYaeiouy</td></tr>
-  <tr><td>%Y</td><td>Anything else</td></tr>
-  <tr><td>%c</td><td>Consonants + Yy</td></tr>
-  <tr><td>%C</td><td>Anything else</td></tr>
+  <tr><td>\w</td><td>A-Za-z0-9</td></tr>
+  <tr><td>\W</td><td>Anything else</td></tr>
+  <tr><td>\d</td><td>0-9</td></tr>
+  <tr><td>\D</td><td>Anything else</td></tr>
+  <tr><td>\s</td><td>Whitespace</td></tr>
+  <tr><td>\S</td><td>Anything else</td></tr>
+  <tr><td>\n</td><td>Newline</td></tr>
+  <tr><td>\t</td><td>Tab</td></tr>
+  <tr><td>\b</td><td>Edge of a word</td></tr>
+  <tr><td>\B</td><td>Non-edge</td></tr>
+  <tr><td>\a</td><td>a-z</td></tr>
+  <tr><td>\A</td><td>A-Z</td></tr>
+  <tr><td>\l</td><td>A-Za-z</td></tr>
+  <tr><td>\L</td><td>Anything else</td></tr>
+  <tr><td>\p</td><td>Printable ASCII</td></tr>
+  <tr><td>\P</td><td>Anything else</td></tr>
+  <tr><td>\q</td><td>Printable + newline</td></tr>
+  <tr><td>\Q</td><td>Anything else</td></tr>
+  <tr><td>\v</td><td>AEIOUaeiou</td></tr>
+  <tr><td>\V</td><td>Anything else</td></tr>
+  <tr><td>\y</td><td>AEIOUYaeiouy</td></tr>
+  <tr><td>\Y</td><td>Anything else</td></tr>
+  <tr><td>\c</td><td>Consonants + Yy</td></tr>
+  <tr><td>\C</td><td>Anything else</td></tr>
+</table>
+<p>Note: because `/` is parsed as the start of a regex, `÷` is used for division.</p>
+<p>If you have a regex that's just a single class, you can omit the outer slashes. This means that e.g. `/\v/` can be shortened to `\v`. There are a few special shortcuts as well:</p>
+<table class="code-table">
+  <tr><td style="width:50px"><b>Shortcut</b></td><td><b>Transpiled</b></td></tr>
+  <tr><td>\.</td><td>/./g</td></tr>
+  <tr><td>\^</td><td>/[^]/g</td></tr>
+  <tr><td>\*</td><td>/.*/g</td></tr>
+  <tr><td>\+</td><td>/.+/g</td></tr>
+  <tr><td>\?</td><td>/.?/g</td></tr>
 </table>
 </div>
 
@@ -104,22 +115,6 @@
   <tr><td>X</td><td>4th input</td></tr>
   <tr><td>Y</td><td>5th input</td></tr>
   <tr><td>Z</td><td>6th input</td></tr>
-</table>
-
-<p>If the first character in the program is `;`, the following vars are changed:</p>
-<table class="code-table">
-  <tr><td style="width:50px"><b>Var</b></td><td><b>Value</b></td></tr>
-  <tr><td>A</td><td>[]</td></tr>
-  <tr><td>B</td><td>ALPHABET</td></tr>
-  <tr><td>C</td><td>alphabet</td></tr>
-  <tr><td>D</td><td>QWERTY</td></tr>
-  <tr><td>E</td><td>"[a-z]"</td></tr>
-  <tr><td>F</td><td>"[A-Za-z]"</td></tr>
-  <tr><td>G</td><td>36</td></tr>
-  <tr><td>H</td><td>65</td></tr>
-  <tr><td>I</td><td>91</td></tr>
-  <tr><td>J</td><td>","</td></tr>
-  <tr><td>L</td><td>"."</td></tr>
 </table>
 </div>
 
@@ -345,7 +340,7 @@
 <h3>`.e(f)`</h3>
 <p>Maps each item in `this` through `f`, then returns `true` if all are truthy, and `false` otherwise.</p>
 <h3>`.e(a)`</h3>
-<p>Returns `true` if the length of `this` is equal to the length of `a` and each element in `this` is equal to the corresponing element in `a`, and `false` otherwise.</p>
+<p>Returns `true` if the length of `this``is equal to the length of `a` and every element in `this` is equal to the corresponing element in `a`, and `false` otherwise.</p>
 <h3>`.f(f)`</h3>
 <p>Selects the items in `this` that return truthily to `f`.</p>
 <h3>`.f(a)`</h3>
@@ -365,7 +360,7 @@
 <h3>`.k(f)`</h3>
 <p>Selects the items in `this` that return falsily to `f`.</p>
 <h3>`.k(x)`</h3>
-<p>Removes all occurances of `x` from `this`.</p>
+<p>Removes `x` from `this`.</p>
 <h3>`.l()`</h3>
 <p>Returns the length of `this`.</p>
 <h3>`.m(f)`</h3>
@@ -469,18 +464,6 @@
 <p>Returns `true` if `this` contains any element of `a`; `false` otherwise.</p>
 <h3>`.ø(x)`</h3>
 <p>Returns `true` if `this` contains `x`; `false` otherwise.</p>
-<h3>`.ù(s=" ")`</h3>
-<p>Left-pads each item in `this` to the length of the longest with `s`.</p>
-<h3>`.ù(s=" ",n)`</h3>
-<p>Left-pads each item in `this` to length `n` with `s`.</p>
-<h3>`.ú(s=" ")`</h3>
-<p>Right-pads each item in `this` to the length of the longest with `s`.</p>
-<h3>`.ú(s=" ",n)`</h3>
-<p>Right-pads each item in `this` to length `n` with `s`.</p>
-<h3>`.û(s=" ")`</h3>
-<p>Center-pads each item in `this` to the length of the longest with `s`.</p>
-<h3>`.û(s=" ",n)`</h3>
-<p>Center-pads each item in `this` to length `n` with `s`.</p>
 </div>
 
 <h2>arrow:number-funcs Number methods</h2>

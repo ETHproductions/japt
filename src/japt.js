@@ -810,8 +810,8 @@ df(Array.prototype, {
 		}
 		if (x instanceof Array)
 			return this.filter(function(a) { return !x.contains(a); });
-		this.splice(this.indexOf(x), 1);
-		return this;
+		
+		return this.filter(function(a) { return a !== x; });
 	},
 	l: function () {
 		return this.length;

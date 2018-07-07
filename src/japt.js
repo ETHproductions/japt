@@ -765,10 +765,18 @@ df(Array.prototype, {
 			return this.filter(x);
 		}
 	},
-	g: function (x) {
-		x = fb(x, 0);
-		x = pm(x, this.length);
-		return this[x];
+	g: function () {
+		var curr = this;
+		for (var i = 0; typeof arguments[i] === "number"; i++) {
+			var x = arguments[i];
+			x = fb(x, 0);
+			x = pm(x, curr.length);
+			curr = curr[x];
+		}
+		if (i === 0) {
+			curr = curr[0];
+		}
+		return curr;
 	},
 	h: function (x, y) {
 		if (!id(y)) {

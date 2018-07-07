@@ -58,7 +58,10 @@ Completed:
 1.4.5  Ï -> `XYZ{Y`
 1.4.5  Ñ -> `*2`
 1.4.5  F.f(f?) -> first non-negative integer returning falsy value
-1.4.5  A.ï(a?,f?) -> Cartesian product
+1.4.5  A.ï(a,f?) -> Cartesian product
+
+1.4.6  S.f() should return [] if the result is null
+1.4.6  A.g(n,n,...) -> A.g(n).g(n)...
 
 
 2.0a0  Clean up code
@@ -77,7 +80,7 @@ Completed:
 
 
 Planned:
-1.4.6  S.f() should return [] if the result is null
+1.4.6  S.ï(s,f?) -> Cartesian product
 1.4.6  A.n(s) -> sort the items in A by their alphabetical order in s
 1.4.6  A.n(a) -> sort A by the order the items appear in a?
 1.4.6  A.?(f) -> all truthy indices
@@ -88,8 +91,9 @@ Planned:
 1.4.6  A.?() -> all subslices
 1.4.6  A.?() -> keys/indices (like Jelly's `J`)
 1.4.6  A.c(f) -> A.m(f), but flatten the result
-1.4.6  A.g(n,n,...) -> A.g(n).g(n)...
 1.4.6  A.g(a) -> items at indices ([5,8,1,4,2]g[0,3,1] -> [5,4,8])
+1.4.6  A.g(n,f) -> map item at index
+1.4.6  A.o(f) -> map last item
 
 1.4.?  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
 1.4.?  A.ù(n,a=[0]) -> right-align A to n items with filler a

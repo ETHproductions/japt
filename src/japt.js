@@ -1592,6 +1592,19 @@ df(Function.prototype, {
 				return j;
 		}
 	},
+	f: function (x, y) {
+		x = fb(x, function(q) { return q; });
+		var s = 0;
+		if (isNaN(x))
+			x = functify(x, y);
+		else
+			s = Number(x), x = function(q) { return q; };
+		for(var i = 0; i < 1e8; ++i ) {
+			var j = x(i + s, i);
+			if (!this(j, i))
+				return j;
+		}
+	},
 	g: function (n, a) {
 		if (n instanceof Array) {
 			var tmp = a;

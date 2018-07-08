@@ -1083,6 +1083,21 @@ df(Array.prototype, {
 				r.push(y(this[i], x[j], i * x.length + j));
 		return r;
 	},
+	ð: function (x, y) {
+		x = fb(x, Boolean);
+		if (x instanceof Array) {
+			y = x;
+			x = function(a) { return y.contains(a); };
+		}
+		else
+			x = functify2(x, y);
+		var a = [];
+		for (var i = 0; i < this.length; i++) {
+			if (x(this[i], i, this))
+				a.push(i);
+		}
+		return a;
+	},
 	ñ: function (x, y) {
 		x = functify2(fb(x, function (z) { return z; }), y);
 		return this.sort(function(a, b, i) {

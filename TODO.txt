@@ -63,6 +63,7 @@ Completed:
 1.4.6  S.f() should return [] if the result is null
 1.4.6  A.g(n,n,...) -> A.g(n).g(n)...
 1.4.6  A.g(a) -> items at indices ([5,8,1,4,2]g[0,3,1] -> [5,4,8])
+1.4.6  A.ð(f) -> all truthy indices
 
 
 2.0a0  Clean up code
@@ -84,8 +85,7 @@ Planned:
 1.4.6  S.ï(s,f?) -> Cartesian product
 1.4.6  A.n(s) -> sort the items in A by their alphabetical order in s
 1.4.6  A.n(a) -> sort A by the order the items appear in a?
-1.4.6  A.?(f) -> all truthy indices
-1.4.6  S.?(f) -> all truthy indices
+1.4.6  S.ð(r/s) -> all occurances
 1.4.6  A.?(f) -> minimum
 1.4.6  A.?(f) -> maximum
 1.4.6  S.?() -> all substrings

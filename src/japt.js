@@ -1925,12 +1925,24 @@ var Japt = {
 					}
 					break;
 				case "flag":
-					if (/\S/.test(char)) {
+					if (char === '"') {
+						current += char;
+						for (index++; input[index] !== '"' && index < input.length; index++) {
+							current += input[index];
+						}
+						current += '"';
+					} else if (/\S/.test(char)) {
 						current += char;
 					} else {
 						var flag = "", value = true;
 						for (var i = 0; i < current.length; i++) {
-							if (/[^\de.+-]/.test(current[i]) || (current[i] === "e" && flag === "")) processed.flags[flag = current[i]] = value = true;
+							if (current[i] === '"') {
+								value = "";
+								for (i++; current[i] !== '"' && i < current.length; i++) {
+									value += current[i];
+								}
+							}
+							else if (/[^\de.+-]/.test(current[i]) || (current[i] === "e" && flag === "")) processed.flags[flag = current[i]] = value = true;
 							else if (value === true) value = current[i];
 							else value += current[i];
 							processed.flags[flag] = value;
@@ -2076,7 +2088,16 @@ var Japt = {
 				else if (!Japt.flags.æ) result = [];
 				U = typeof U === "number" ? U.o() : U.s();
 				for (var i = 0; i < U.length; i++) {
-					var temp = program(U[i], fb(N[1], i), fb(N[2], U),X,Y,Z);
+					var temp;
+					try {
+						temp = program(U[i],fb(N[1],i),fb(N[2],U),X,Y,Z);
+					} catch (e) {
+						if (Japt.flags.hasOwnProperty('E')) {
+							result = Japt.flags.E === true ? "" : Japt.flags.E;
+							break;
+						}
+						else throw e;
+					}
 					if (Japt.flags.æ) {
 						if (temp) {
 							result = Japt.flags.m ? temp : U[i];
@@ -2108,7 +2129,15 @@ var Japt = {
 					result = result.q();
 				}
 			} else {
-				result = program(U,V,W,X,Y,Z);
+				try {
+					result = program(U,V,W,X,Y,Z);
+				}
+				catch (e) {
+					if (Japt.flags.hasOwnProperty('E')) {
+						result = Japt.flags.E === true ? "" : Japt.flags.E;
+					}
+					else throw e;
+				}
 			}
 
 			if (Japt.flags.hasOwnProperty('h')) result = result.g(-1);
@@ -2125,6 +2154,8 @@ var Japt = {
 			else if (Japt.flags.S && result instanceof Array) result = result.join(" ");
 
 			if (Japt.flags.x) result = result.x();
+			
+			if (Japt.flags.hasOwnProperty('F') && !result) result = Japt.flags.F;
 
 			if (onsuccess) onsuccess(result);
 		} catch (e) {

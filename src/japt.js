@@ -639,6 +639,17 @@ df(String.prototype, {
 			return z instanceof Array ? z.q() : String(z);
 		}).q();
 	},
+	ï: function (x, y) {
+		if (!id(x))
+			x = function(a, b) { return a + b; };
+		else {
+			if (typeof x === "string" && !/^(?:&&|\|\||\*\*|<<|>>>?|[!=]==?|[+\-*/÷%&|^<=>a-zà-ÿ])$/g.test(x))
+				x = x.q();
+			if (!id(y))
+				y = function(a, b) { return a + b; };
+		}
+		return this.q().ï(x, y);
+	},
 	ò: function (x) {
 		return this.q().ò(x).map(function(a) { return a.q(); });
 	},
@@ -1232,7 +1243,7 @@ df(Number.prototype, {
 			return min;
 		if (this > max)
 			return max;
-		return this;
+		return +this;
 	},
 	c: function (x) {
 		x = fb(x, 1);

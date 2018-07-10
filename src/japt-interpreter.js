@@ -124,6 +124,7 @@ df(String,'\xEA',function(x){return typeof x==="string"?this==this.w():this+this
 df(String,'\xEB',function(x,y){return this.q()['\xEB'](x,y).q()});
 df(String,'\xED',function(x,y){return this.q()['\xED'](id(x)?x.constructor===String?x.q():x:undefined,y).map(function(z){return z instanceof Array?z.q():String(z)}).q()});
 df(String,'\xEE',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]});});
+df(String,'\xEF',function(x,y){if(typeof x==="string"&&!/^(?:&&|\|\||\*\*|<<|>>>?|[!=]==?|[+\-*/÷%&|^<=>a-z\xE0-\xF6\xF7-\xFF])$/g.test(x))x=x.q();return this.q()['\xEF'](fb(x,function(a,b){return a+b}),fb(y,function(a,b){return a+b}))});
 df(String,'\xF2',function(x){return this.q()['\xF2'](x).map(function(a){return a.q()})});
 df(String,'\xF3',function(x){return this.q()['\xF3'](x).map(function(a){return a.q()})});
 df(String,'\xF4',function(x,y){return this.q()['\xF4'](x,y).map(function(a){return a.q()})});
@@ -192,7 +193,7 @@ df(Array,'\xFA',function(x,y){return this.pad(x,y,-1)});
 df(Array,'\xFB',function(x,y){return this.pad(x,y,0)});
 
 df(Number,'a',function(x){x=fb(x,0);return Math.abs(this-x)});
-df(Number,'b',function(x,y){return this<x?x:this>y?y:this});
+df(Number,'b',function(x,y){return this<x?x:this>y?y:+this});
 df(Number,'c',function(x){x=fb(x,1);return Math.ceil(this/x)*x});
 df(Number,'d',function(x){x=fb(x,0);return String.fromCodePoint(this+x)});
 df(Number,'e',function(x){return this*Math.pow(10,x)});

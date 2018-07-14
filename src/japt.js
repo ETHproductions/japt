@@ -835,7 +835,15 @@ df(Array.prototype, {
 		
 		return this.filter(function(a) { return a !== x; });
 	},
-	l: function () {
+	l: function (x, y) {
+		if (id(x)) {
+			if (typeof x === "number") {
+				y = x;
+				x = function(a) { return a === y; };
+			}
+			x = functify2(x, y);
+			return this.filter(function(a, b, c) { return x(a.l(), fb(y, b), a); });
+		}
 		return this.length;
 	},
 	m: function (x, y) {

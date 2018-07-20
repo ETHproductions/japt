@@ -398,11 +398,20 @@ df(String.prototype, {
 	a: function (x, y) {
 		if (typeof x === "function" || id(y))
 			return this.q().a(x, y);
+		else if (x instanceof RegExp) {
+			var index = -1, match;
+			while (match = x.exec(this)) {
+				index = match.index;
+			}
+			return index;
+		}
 		return this.lastIndexOf(x);
 	},
 	b: function (x, y) {
 		if (typeof x === "function" || id(y))
 			return this.q().b(x,y);
+		else if (x instanceof RegExp)
+			return this.search(x);
 		return this.indexOf(x);
 	},
 	c: function(x, y) {
@@ -598,7 +607,7 @@ df(String.prototype, {
 		return this.q().á(x).map(function(y) { return y.q(); });
 	},
 	â: function (x) {
-		return this.search(x);
+		return this.q().â(x).q();
 	},
 	ã: function (x,y) {
 		return this.q().ã(x, y).map(function(a) { return a.q(); });

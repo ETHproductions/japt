@@ -98,6 +98,7 @@ Planned:
 1.4.6  A.o(f) -> map last item
 1.4.6  S.ñ(f) -> sort chars
 1.4.6  S.?() -> deduplicate
+1.4.6  S/A.ã(f?) -> all subsections
 
 1.4.?  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
 1.4.?  A.ù(n,a=[0]) -> right-align A to n items with filler a

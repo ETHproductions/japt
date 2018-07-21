@@ -818,9 +818,9 @@ df(Array.prototype, {
 			var y = arguments[i + 1];
 			x = functify(arguments[i], y);
 			if (i === 0)
-				return x(this, y);
+				return x(this);
 			
-			prev[index] = x(curr, y);
+			prev[index] = x(curr);
 			return this;
 		}
 		if (i === 0) {
@@ -890,11 +890,17 @@ df(Array.prototype, {
 		x = functify2(fb(x, function(x, y) { return (x > y) - (x < y); }), true);
 		return this.sort(x);
 	},
-	o: function (x) {
-		if (id(x)) {
+	o: function (x, y) {
+		if (typeof x === "number") {
 			for (var a = []; x > 0; --x)
 				a.push(this.pop());
 			return a;
+		}
+		else if (typeof x === "string" || typeof x === "function") {
+			x = functify2(x, y);
+			if (this.length > 0)
+				this.push(x(this.pop()));
+			return this;
 		}
 		else
 			return this.pop();
@@ -924,7 +930,18 @@ df(Array.prototype, {
 			this.unshift(arguments[i]);
 		return this;
 	},
-	v: function () {
+	v: function (x, y) {
+		if (typeof x === "number") {
+			for (var a = []; x > 0; --x)
+				a.push(this.shift());
+			return a;
+		}
+		else if (typeof x === "string" || typeof x === "function") {
+			x = functify2(x, y);
+			if (this.length > 0)
+				this[0] = x(this[0]);
+			return this;
+		}
 		return this.shift();
 	},
 	w: function () {

@@ -389,6 +389,8 @@
 <p>Sorts `this` by passing each pair of items through `f`. If `f(x,y)&lt;0`, `x` is sorted to the left; if `f(x,y)>0`, `y` is sorted to the left.</p>
 <h3>`.o(n=1)`</h3>
 <p>Removes the last `n` items in `this` and returns them.</p>
+<h3>`.o(f)`</h3>
+<p>Maps the last item in `this` through `f`.</p>
 <h3>`.p(x)`</h3>
 <p>Pushes `x` to `this`.</p>
 <h3>`.q(s="")`</h3>
@@ -401,8 +403,10 @@
 <p>Returns `this.slice(n₁,n₁+n₂)`.</p>
 <h3>`.u(x)`</h3>
 <p>Adds `x` to the beginning of `this`.</p>
-<h3>`.v()`</h3>
-<p>Removes the first item of `this` and returns it.</p>
+<h3>`.v(n=1)`</h3>
+<p>Removes the first `n` items of `this` and returns them.</p>
+<h3>`.v(f)`</h3>
+<p>Maps the first item in `this` through `f`.</p>
 <h3>`.w()`</h3>
 <p>Returns `this.reverse()`.</p>
 <h3>`.x(f?)`</h3>

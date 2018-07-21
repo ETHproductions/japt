@@ -150,14 +150,14 @@ df(Array,'k',function(x,y){if(!id(x)||typeof x==="function"||(typeof x==="string
 df(Array,'l',function(x,y){if(id(x)){if(typeof x==="number")y=x,x=function(a){return a===y};x=functify(x,y);return this.filter(function(a,b,c){return x(a.l(),fb(y,b),a)})}return this.length});
 df(Array,'m',function(x,y){x=functify(x,y);return this.map(function(q,r,s){return x(q,fb(y,r),s)})});
 df(Array,'n',function(x){x=functify(fb(x,function(x,y){return(x>y)-(x<y)}));return this.sort(x)});
-df(Array,'o',function(x){if(id(x)){for(var a=[],x=Math.trunc(x);x>0;--x)a.push(this.pop());return a}else return this.pop()});
+df(Array,'o',function(x,y){if(typeof x==="number"){for(var a=[],x=Math.trunc(x);x>0;--x)a.push(this.pop());return a}else if(["string","function"].contains(typeof x)){x=functify(x,y);if(this.length>0)this.push(x(this.pop(),y));return this}else return this.pop()});
 df(Array,'p',function(){for(var i of [].slice.call(arguments))this.push(i);return this});
 df(Array,'q',function(x){return this.join(x||"")});
 df(Array,'r',function(x,y){x=functify(x,0);return id(y)?this.reduce(x,y):this.reduce(x)});
 df(Array,'s',function(x,y){y=fb(y,this.length);return this.slice(x,y)});
 df(Array,'t',function(x,y){y=fb(y,this.length);return this.slice(x,x+y)});
 df(Array,'u',function(){for(var i of [].slice.call(arguments))this.unshift(i);return this});
-df(Array,'v',function(){return this.shift()});
+df(Array,'v',function(x,y){if(typeof x==="number"){for(var a=[],x=Math.trunc(x);x>0;--x)a.push(this.shift());return a}else if(["string","function"].contains(typeof x)){x=functify(x,y);if(this.length>0)this[0]=x(this[0],y);return this}else return this.shift()});
 df(Array,'w',function(){return this.reverse()});
 df(Array,'x',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.reduce(function(a,b,i,z){b=x(b,fb(y,i),z);return a+(isNaN(+b)?parseFloat(b)||0:+b)},0)});
 df(Array,'y',function(x,y){if(id(x)){var z=this.y(),a=z.m(function(c){return c instanceof Array?c.f(id):c}).m(x,y);if(a.every(function(q){return typeof q instanceof Array}))z=z.m(function(c,i){var j=0;return c.m(function(){return a[i][j++]})}).y();else if(a.every(function(q){return q instanceof String||typeof q==="string"}))z=a.y();else z=a;return z}var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a});

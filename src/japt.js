@@ -457,8 +457,12 @@ df(String.prototype, {
 	f: function (x) {
 		return this.match(saferegex(x), 'g') || [];
 	},
-	g: function (x) {
+	g: function (x, y) {
 		x = fb(x, 0);
+		if (typeof x === "string" || typeof x === "function") {
+			x = functify(x, y);
+			return x(this + "", y);
+		}
 		x = pm(x, this.length);
 		return this[x];
 	},
@@ -799,18 +803,28 @@ df(Array.prototype, {
 		}
 	},
 	g: function () {
-		var curr = this, x;
+		var curr = this, x, prev, index;
 		for (var i = 0; typeof arguments[i] === "number"; i++) {
 			x = pm(arguments[i], curr.length);
+            prev = curr;
+            index = x;
 			curr = curr[x];
 		}
 		if (arguments[i] instanceof Array) {
 			x = arguments[i];
-			curr = x.map(function(j) { return curr.g(j); });
-			i++;
+			return x.map(function(j) { return curr.g(j); });
+		}
+        else if (typeof arguments[i] === "function" || typeof arguments[i] === "string") {
+			var y = arguments[i + 1];
+			x = functify(arguments[i], y);
+			if (i === 0)
+				return x(this, y);
+			
+			prev[index] = x(curr, y);
+			return this;
 		}
 		if (i === 0) {
-			curr = curr[0];
+			return curr[0];
 		}
 		return curr;
 	},
@@ -1290,7 +1304,11 @@ df(Number.prototype, {
 		x = fb(x, 1);
 		return Math.floor(this / x) * x;
 	},
-	g: function () {
+	g: function (x, y) {
+		if (typeof x === "string" || typeof x === "function") {
+			x = functify(x, y);
+			return x(+this, y);
+		}
 		if (isNaN(this))
 			return NaN;
 		if (this < 0)

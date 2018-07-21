@@ -68,6 +68,8 @@ Completed:
 1.4.6  A.l(f) -> filter by length
 1.4.6  A.l(n) -> items with length
 1.4.6  S.ð(r/s) -> all occurances (including overlapping)
+1.4.6  A.g(n,f) -> map item at index
+1.4.6  A/S/N.g(f) -> map `this` (short for e.g. [U].m(f))
 
 
 2.0a0  Clean up code
@@ -96,7 +98,8 @@ Planned:
 1.4.6  A.?() -> all subslices
 1.4.6  A.?() -> keys/indices (like Jelly's `J`)
 1.4.6  A.c(f) -> A.m(f), but flatten the result
-1.4.6  A.g(n,f) -> map item at index
+1.4.6  A.g(a,f) -> map items at indices
+1.4.6  A.v(f) -> map first item
 1.4.6  A.o(f) -> map last item
 1.4.6  S.ñ(f) -> sort chars
 1.4.6  S/A.ã(f?) -> all subsections

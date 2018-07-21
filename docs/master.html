@@ -208,6 +208,8 @@
 <p>Returns `this.match(r/s)`, or an empty array if there are no matches.</p>
 <h3>`.g(n=0)`</h3>
 <p>Returns the char at index `n` in `this`.</p>
+<h3>`.g(f)`</h3>
+<p>Returns the result of running `this` through `f`.</p>
 <h3>`.h(n,s)` or `i(s,n=0)`</h3>
 <p>Sets the chars starting at index `n` in `this` to `s`.</p>
 <h3>`.i(n,s)` or `i(s,n=0)`</h3>
@@ -361,9 +363,13 @@
 <h3>`.g(n=0)`</h3>
 <p>Returns the item at index `n` in `this`.</p>
 <h3>`.g(n,n,...)`</h3>
-<p>Returns the item at the given multidimensional index.</p>
+<p>Returns the item at the given multi-dimensional index.</p>
+<h3>`.g(n,n,...,f)`</h3>
+<p>Maps the item at the given multi-dimensional index through `f`.</p>
 <h3>`.g(a)`</h3>
 <p>Returns the items at the given indices.</p>
+<h3>`.g(f)`</h3>
+<p>Returns the result of running `this` through `f`.</p>
 <h3>`.h(n,x)` or `i(a,n=0)`</h3>
 <p>Sets the item at index `n` in `this` to `x`.</p>
 <h3>`.i(n,x)` or `i(a,n=0)`</h3>
@@ -517,6 +523,8 @@
 <p>Returns `this` rounded down to the nearest multiple of `n`.</p>
 <h3>`.g()`</h3>
 <p>Returns the sign of `this`; `-1` for negative values, `1` for positive, `0` for `0`, and `NaN` for `NaN`.</p>
+<h3>`.g(f)`</h3>
+<p>Returns the result of running `this` through `f`.</p>
 <h3>`.h(n=1)`</h3>
 <p>Returns `this` rounded to `n` significant decimals.</p>
 <h3>`.i(f)`</h3>

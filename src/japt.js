@@ -659,6 +659,19 @@ df(String.prototype, {
 		}
 		return this.q().ï(x, y);
 	},
+	ð: function (x, y) {
+		var indices = [], match;
+		x = saferegex(x, y ? 'gi' : 'g');
+		
+		for (var i = 0; i < this.length; i++) {
+			x.lastIndex = i;
+			match = x.exec(this);
+			if (match && match.index === i)
+				indices.push(i);
+		}
+		
+		return indices;
+	},
 	ò: function (x) {
 		return this.q().ò(x).map(function(a) { return a.q(); });
 	},

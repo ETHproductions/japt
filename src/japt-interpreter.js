@@ -125,6 +125,7 @@ df(String,'\xEB',function(x,y){return this.q()['\xEB'](x,y).q()});
 df(String,'\xED',function(x,y){return this.q()['\xED'](id(x)?x.constructor===String?x.q():x:undefined,y).map(function(z){return z instanceof Array?z.q():String(z)}).q()});
 df(String,'\xEE',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]});});
 df(String,'\xEF',function(x,y){if(typeof x==="string"&&!/^(?:&&|\|\||\*\*|<<|>>>?|[!=]==?|[+\-*/÷%&|^<=>a-z\xE0-\xF6\xF7-\xFF])$/g.test(x))x=x.q();return this.q()['\xEF'](fb(x,function(a,b){return a+b}),fb(y,function(a,b){return a+b}))});
+df(String,'\xF0',function(x,y){var a=[],m;x=regexify(x,y?'gi':'g');for(var i=0;i<this.length;i++){x.lastIndex=i;m=x.exec(this);if(m&&m.index==i)a.push(i)}return a});
 df(String,'\xF2',function(x){return this.q()['\xF2'](x).map(function(a){return a.q()})});
 df(String,'\xF3',function(x){return this.q()['\xF3'](x).map(function(a){return a.q()})});
 df(String,'\xF4',function(x,y){return this.q()['\xF4'](x,y).map(function(a){return a.q()})});

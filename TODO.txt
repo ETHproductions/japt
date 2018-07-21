@@ -67,6 +67,7 @@ Completed:
 1.4.6  S.ï(s,f?) -> Cartesian product
 1.4.6  A.l(f) -> filter by length
 1.4.6  A.l(n) -> items with length
+1.4.6  S.ð(r/s) -> all occurances (including overlapping)
 
 
 2.0a0  Clean up code
@@ -74,6 +75,8 @@ Completed:
 2.0a0  Add single-class regexes with `\` (i.e. `Uf\w` == `Uf/\w/`)
 2.0a0  Have each method control its own regex flags (modifying regexify() and various methods)
 2.0a0  R.t(x) -> R.test(x)
+
+2.0a1  S.â() -> deduplicate chars
 
 2.0.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)
 2.0.0  Command-line-ify
@@ -87,7 +90,6 @@ Completed:
 Planned:
 1.4.6  A.n(s) -> sort the items in A by their alphabetical order in s
 1.4.6  A.n(a) -> sort A by the order the items appear in a?
-1.4.6  S.ð(r/s) -> all occurances
 1.4.6  A.?(f) -> minimum
 1.4.6  A.?(f) -> maximum
 1.4.6  S.?() -> all substrings
@@ -97,7 +99,6 @@ Planned:
 1.4.6  A.g(n,f) -> map item at index
 1.4.6  A.o(f) -> map last item
 1.4.6  S.ñ(f) -> sort chars
-1.4.6  S.?() -> deduplicate
 1.4.6  S/A.ã(f?) -> all subsections
 
 1.4.?  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's

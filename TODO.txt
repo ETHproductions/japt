@@ -73,6 +73,7 @@ Completed:
 1.4.6  A.o(f) -> map last item
 1.4.6  A.v(f) -> map first item
 1.4.6  A.v(n) -> first n items
+1.4.6  S.ñ(f) -> sort chars
 
 
 2.0a0  Clean up code
@@ -102,7 +103,6 @@ Planned:
 1.4.6  A.?() -> keys/indices (like Jelly's `J`)
 1.4.6  A.c(f) -> A.m(f), but flatten the result
 1.4.6  A.g(a,f) -> map items at indices
-1.4.6  S.ñ(f) -> sort chars
 1.4.6  S/A.ã(f?) -> all subsections
 
 1.4.?  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's

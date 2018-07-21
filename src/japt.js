@@ -676,6 +676,9 @@ df(String.prototype, {
 		
 		return indices;
 	},
+	ñ: function (x, y) {
+		return this.q().ñ(x, y).q();
+	},
 	ò: function (x) {
 		return this.q().ò(x).map(function(a) { return a.q(); });
 	},

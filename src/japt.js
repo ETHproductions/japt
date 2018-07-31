@@ -988,27 +988,30 @@ df(Array.prototype, {
 	},
 	z: function (n) {
 		n = pm(fb(n, 1), 4) || 4;
-		var q = this[0] instanceof Array,
-			l = this.reduce(function(p, x) {
-				return Math.max(p, x instanceof Array ? x.length : String(x).length);
-			}, 0),
-			a = this.map(function(x) {
-				if (x instanceof Array)
-					return x.concat(Array(l - x.length).fill(q ? 0 : " "));
-				return " ".p(l).h(x);
+		var q = this.every(function(x) { return x instanceof Array }),
+			a = this.map(function(x) { return q ? x : x instanceof Array ? x.q() : String(x) }),
+			l = a.reduce(function(p, x) {
+				return Math.max(p, x.length);
+			}, 0);
+		a = a.map(function(x) {
+				while (x.length < l) {
+					if (q) x.push(0);
+					else   x += " ";
+				}
+				return x;
 			});
 		for ( ; n > 0; --n ) {
 			var b = [];
 			for (var y = 0; y < a.length; y++)
 				for (var x = 0; x < a[y].length; x++) {
-					b[x] = b[x] || [];
-					b[x][l - y - 1] = a[y][x];
+					b[x] = b[x] || Array(a.length);
+					b[x][a.length - y - 1] = a[y][x];
 				}
 			a = b;
 		}
-		if (q)
-			return a;
-		return a.map(function(x) { return x.q(); });
+		if (!q)
+			a = a.map(function(x) { return x.q(); });
+		return a;
 	},
 	à: function (x) {
 		var f = function(y, z, a) {

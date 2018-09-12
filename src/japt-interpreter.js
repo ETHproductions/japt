@@ -918,7 +918,7 @@ var Japt = {
 					opLength = nextIsOp ? opMatch[0].length : 0;
 				if (char === ";" && i === 0)
 					outp += "newvars()";
-				else if (isChar(char, "`'\"A-Z\\(\\[{") && isChar(outp.slice(-1), "`'\"A-Z0-9\\)\\]}"))
+				else if (isChar(char, "`'\"A-Z\\(\\[{!~") && isChar(outp.slice(-1), "`'\"A-Z0-9\\)\\]}"))
 					outp += ",";
 				else if (isChar(char, "0-9") && isChar(outp.slice(-1), "`'\"A-Z\\)\\]}"))
 					outp += ",";

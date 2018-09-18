@@ -1201,7 +1201,7 @@ df(Array.prototype, {
 					a.unshift(this.slice(Math.max(i + x, 0), i));
 		}
 		else {
-			x = functify2(fb(x, function(z) { return z; }), 0);
+			x = functify2(fb(x, function(z) { return z; }));
 			a.push(this[0]);
 			for (i = 1; i < this.length; i++) {
 				if (!x(this[i - 1], this[i], this))
@@ -1224,7 +1224,7 @@ df(Array.prototype, {
 			}
 		}
 		else {
-			x = functify2(fb(x, function(z) { return z; }), 0);
+			x = functify2(fb(x, function(z) { return z; }));
 			for (a.push([this[0]]), i = 1; i < this.length; i++) {
 				if(!x(this[i - 1], this[i], this))
 					a.push([]);

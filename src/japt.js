@@ -1180,11 +1180,11 @@ df(Array.prototype, {
 	},
 	ñ: function (x, y) {
 		x = functify2(fb(x, function (z) { return z; }), y);
-		return this.sort(function(a, b, i) {
-			a = x(a, i);
-			b = x(b, i);
-			return (a > b) - (a < b);
+		var r = this.map(function(a, i) { return { value: a, key: x(a, i) }; });
+		r.sort(function(a, b) {
+			return (a.key > b.key) - (a.key < b.key);
 		});
+		return r.map(function(a) { return a.value; });
 	},
 	ò: function (x) {
 		if (this.length === 0)

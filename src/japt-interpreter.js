@@ -310,7 +310,7 @@ function newvars() {
 	B = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 	C = "abcdefghijklmnopqrstuvwxyz",
 	D = "QWERTYUIOP\nASDFGHJKL\nZXCVBNM",
-	E = "[a-z]",
+	E = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
 	F = "[A-Za-z]",
 	G = 36,
 	H = 65,

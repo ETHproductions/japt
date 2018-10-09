@@ -74,6 +74,10 @@ Completed:
 1.4.6  A.v(f) -> map first item
 1.4.6  A.v(n) -> first n items
 1.4.6  S.ñ(f) -> sort chars
+1.4.6  Ò -> `-~`
+1.4.6  Ó -> `~-`
+1.4.6  Ô -> `w `
+1.4.6  Õ -> `y `
 
 
 2.0a0  Clean up code
@@ -119,9 +123,7 @@ Planned:
 1.4.?  S.w(s?) -> reverse and mirror ()[]{}<>\/
 1.4.?  S.w(n?) -> mirror ()[]{}<>\/
 1.4.?  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
-1.4.?  ? -> `w `?
 1.4.?  ? -> `c `?
-1.4.?  ? -> `y `?
 1.4.?  A.?() -> fill range ([1,5,3,3,4] -> [1,2,3,4,5,4,3,3,4])
 1.4.?  Auto-finish arrays []
 1.4.?  Auto-start functions? {}

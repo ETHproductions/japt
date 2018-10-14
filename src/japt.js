@@ -2249,7 +2249,7 @@ var Japt = {
 
 			if (Japt.flags.x) result = result.x();
 			
-			if (Japt.flags.hasOwnProperty('F') && !result) result = Japt.flags.F;
+			if (Japt.flags.hasOwnProperty('F') && !result) result = Japt.flags.F === true ? "" : Japt.flags.F;
 
 			if (onsuccess) onsuccess(result);
 		} catch (e) {

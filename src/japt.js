@@ -1204,9 +1204,9 @@ df(Array.prototype, {
 		}
 		else {
 			x = functify2(fb(x, function(z) { return z; }));
-			a.push(this[0]);
+			a.push([this[0]]);
 			for (i = 1; i < this.length; i++) {
-				if (!x(this[i - 1], this[i], this))
+				if (x(this[i - 1], this[i], this))
 					a.push([]);
 				a.g(-1).push(this[i]);
 			}
@@ -1227,7 +1227,8 @@ df(Array.prototype, {
 		}
 		else {
 			x = functify2(fb(x, function(z) { return z; }));
-			for (a.push([this[0]]), i = 1; i < this.length; i++) {
+			a.push([this[0]]);
+			for (i = 1; i < this.length; i++) {
 				if(!x(this[i - 1], this[i], this))
 					a.push([]);
 				a.g(-1).push(this[i]);
@@ -1301,6 +1302,13 @@ df(Array.prototype, {
 	},
 	û: function(x, y) {
 		return this.pad(x, y, 0);
+	},
+	ü: function(x, y) {
+		x = functify2(fb(x, function(a) { return a; }), y);
+		var a = this.map(function(c, i) { return { key: x(c, fb(y, i), a), value: c }; });
+		a = a.ñ(function(c) { return c.key; });
+		a = a.ó(function(c, d) { return c.key == d.key; });
+		return a.map(function(b) { return b.map(function(c) { return c.value; }); });
 	}
 });
 

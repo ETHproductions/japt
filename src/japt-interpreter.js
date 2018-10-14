@@ -197,6 +197,7 @@ df(Array,'pad',function(x,y,a){var z,q=this.map(function(c){return c instanceof 
 df(Array,'\xF9',function(x,y){return this.pad(x,y,1)});
 df(Array,'\xFA',function(x,y){return this.pad(x,y,-1)});
 df(Array,'\xFB',function(x,y){return this.pad(x,y,0)});
+df(Array,'\xFC',function(x,y){x=functify(fb(x,function(a){return a}),y);return this.map(function(c,i){return{k:x(c,fb(y,i),this),v:c}})['\xF1'](function(c){return c.k})['\xF3'](function(c,d){return c.k==d.k}).map(function(b){return b.map(function(c){return c.v})})});
 
 df(Number,'a',function(x){x=fb(x,0);return Math.abs(this-x)});
 df(Number,'b',function(x,y){return this<x?x:this>y?y:+this});

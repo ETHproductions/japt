@@ -32,6 +32,8 @@ function fb(x, y) {
 
 // Positive modulo (like Python's %)
 function pm(x, y) {
+	if (y === 0)
+		return 0;
 	return (  // Puts x in the range
 		x % y // (-y, +y)
 		+ y   // ( 0, 2y)

@@ -78,6 +78,7 @@ Completed:
 1.4.6  Ó -> `~-`
 1.4.6  Ô -> `w `
 1.4.6  Õ -> `y `
+1.4.6  A.ü(f?) -> group by value
 
 
 2.0a0  Clean up code

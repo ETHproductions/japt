@@ -172,7 +172,7 @@ df(Array,'\xE0',function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)
 df(Array,'\xE1',function(x){var p=[],u=[],f=function(z){var c,i;for(i=0;i<z.length;i++){c=z.splice(i,1)[0];u.push(c);if(z.length===0)p.push(u.slice());f(z);z.splice(i,0,c);u.pop()}return p};var l;return f(this).map(function(z){return z.slice(0,x||z.length)})["\xE2"]()});
 //df(Array,'\xE0',function(x){x=fb(x,NaN);return comb(this,x)});
 //df(Array,'\xE1',function(x){x=fb(x,1/0);return perm(this,x)});
-df(Array,'\xE2',function(x){var a=[];x=this.concat(fb(x,[]));for(var i=0;i<x.length;i++)if(a.indexOf(x[i])<0)a.push(x[i]);return a});
+df(Array,'\xE2',function(x){var a=[];x=this.concat(fb(x,[]));for(var i=0;i<x.length;i++)if(a.findIndex(function(q){return str(q)==str(x[i])})<0)a.push(x[i]);return a});
 df(Array,'\xE3',function(x,y){x=fb(x,2);var a=[];if(id(y))a[0]=this.slice(0,x-1),a[0].unshift(y);for(var i=0;i<=this.length-x;i++)a.push(this.slice(i,i+x));return a});
 df(Array,'\xE4',function(x,y){x=functify(x,0);return this['\xE3'](2,y).map(function(z){return z.reduce(x)})});
 df(Array,'\xE5',function(x,y){x=functify(x,0);var a=[];this.reduce(function(q,r,s){var t=x(q,r,s);a.push(t);return t},y||(typeof this[0]=="number"?0:""));return a});
@@ -205,7 +205,7 @@ df(Number,'c',function(x){x=fb(x,1);return Math.ceil(this/x)*x});
 df(Number,'d',function(x){x=fb(x,0);return String.fromCodePoint(this+x)});
 df(Number,'e',function(x){return this*Math.pow(10,x)});
 df(Number,'f',function(x){x=fb(x,1);return Math.floor(this/x)*x});
-df(Number,'g',function(x,y){if(["string","function"].contains(typeof x))return functify(x,y)(+this,y);return this.toString()=="NaN"?"NaN":this<0?-1:this>0?1:0});
+df(Number,'g',function(x,y){if(["function"].contains(typeof x))return functify(x,y)(+this,y);if(typeof x=="string"||x instanceof Array)return x.g(+this);x=fb(x,0);return isNaN(this)||isNaN(x)?"NaN":this<x?-1:this>x?1:this-x});
 df(Number,'h',function(x){x=fb(x,1);return this.toPrecision(x)});
 df(Number,'i',function(x){return Japt.intervals[Japt.intervals.length]=setInterval(x,this)});
 df(Number,'j',function(x){if(id(x))return this.y(x)==1;var n=+this;if(n===2)return true;if(n%1||n<2||n%2===0)return false;for(var i=3,s=Math.sqrt(n);i<=s;i+=2)if(n%i===0)return false;return true});

@@ -1061,7 +1061,7 @@ df(Array.prototype, {
 		var a = [];
 		x = this.concat(fb(x, []));
 		for (var i = 0; i < x.length; i++)
-			if (a.indexOf(x[i]) < 0)
+			if (a.findIndex(function(z) { return str(z) === str(x[i]); }) < 0)
 				a.push(x[i]);
 		return a;
 	},
@@ -1342,17 +1342,23 @@ df(Number.prototype, {
 		return Math.floor(this / x) * x;
 	},
 	g: function (x, y) {
-		if (typeof x === "string" || typeof x === "function") {
+		if (typeof x === "function") {
 			x = functify(x, y);
 			return x(+this, y);
 		}
-		if (isNaN(this))
-			return NaN;
-		if (this < 0)
-			return -1;
-		if (this > 0)
-			return 1;
-		return +this;
+		else if (typeof x === "string" || x instanceof Array) {
+			return x.g(+this);
+		}
+		else {
+			x = fb(x, 0);
+			if (isNaN(this) || isNaN(x))
+				return NaN;
+			if (this < x)
+				return -1;
+			if (this > x)
+				return 1;
+			return this - x;
+		}
 	},
 	h: function (x) {
 		x = fb(x, 1);

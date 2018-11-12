@@ -487,7 +487,6 @@ df(String.prototype, {
 		return this.substring(0, x) + y + this.substring(x + y.length);
 	},
 	i: function (x, y) {
-		var l = this.length;
 		if (!id(y)) {
 			y = x;
 			x = 0;
@@ -497,7 +496,7 @@ df(String.prototype, {
 			x = y;
 			y = tmp;
 		}
-		x = pm(x, l);
+		x = pm(x, this.length + 1);
 		return this.substring(0, x) + y + this.substring(x);
 	},
 	j: function (x, y) {
@@ -861,7 +860,7 @@ df(Array.prototype, {
 			x = y;
 			y = z;
 		}
-		x = pm(x, this.length);
+		x = pm(x, this.length + 1);
 		this.splice(x, 0, y);
 		return this;
 	},

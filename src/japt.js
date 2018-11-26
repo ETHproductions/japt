@@ -1765,7 +1765,7 @@ df(Function.prototype, {
 		}
 		return a.g(n);
 	},
-	s: function (n, a) {
+	h: function (n, a) {
 		if (n instanceof Array) {
 			var tmp = a;
 			a = n;

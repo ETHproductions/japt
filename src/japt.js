@@ -2259,17 +2259,17 @@ var Japt = {
 			if (Japt.flags.hasOwnProperty('h')) result = result.g(-1);
 			else if (Japt.flags.hasOwnProperty('g')) result = result.g(Japt.flags.g === true ? 0 : Japt.flags.g);
 
-			if (Japt.flags.hasOwnProperty('!')) result = !result;
-			else if (Japt.flags.hasOwnProperty('¡')) result = !!result;
-
-			if (Japt.flags.N) result = +result;
-
 			if (Japt.flags.P && result instanceof Array) result = result.join("");
 			else if (Japt.flags.Q) result = JSON.stringify(result);
 			else if (Japt.flags.R && result instanceof Array) result = result.join("\n");
 			else if (Japt.flags.S && result instanceof Array) result = result.join(" ");
 
 			if (Japt.flags.x) result = result.x();
+
+			if (Japt.flags.hasOwnProperty('!')) result = !result;
+			else if (Japt.flags.hasOwnProperty('¡')) result = !!result;
+
+			if (Japt.flags.N) result = +result;
 			
 			if (Japt.flags.hasOwnProperty('F') && !result) result = Japt.flags.F === true ? "" : Japt.flags.F;
 

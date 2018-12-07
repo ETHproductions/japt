@@ -833,17 +833,21 @@ var Japt = {
 					}
 					else if (char === ":" && internary) {
 						internary = false;
-						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
 						currstr += "\"";
+						if (strchars[level] === "`") currstr = currstr.replace(/"(?:\\.|[^"])*"$/, function(a) {
+							return JSON.stringify(shoco.d(eval(a)));
+						});
 						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
 						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
 						newcode += "'" + currstr + "':";
 						currstr = strchars[level];
 					}
 					else if (char === strchars[level]) {
-						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/,function(_,a){return"\""+shoco.d(a)});
-						level--;
 						currstr += "\"";
+						if (strchars[level] === "`") currstr = currstr.replace(/"(?:\\.|[^"])*"$/, function(a) {
+							return JSON.stringify(shoco.d(eval(a)));
+						});
+						level--;
 						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
 						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
 						newcode += "'" + currstr + "'";
@@ -853,7 +857,9 @@ var Japt = {
 					}
 					else if (char === "{") {
 						currstr += "\"";
-						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)"$/,function(_,a){return"\""+shoco.d(a)+"\""});
+						if (strchars[level] === "`") currstr = currstr.replace(/"(?:\\.|[^"])*"$/, function(a) {
+							return JSON.stringify(shoco.d(eval(a)));
+						});
 						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
 						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
 						level++;

@@ -2152,7 +2152,7 @@ var Japt = {
 			q: function(x) { Japt.clear_output(); if(id(x)) Japt.output(x); },
 			c: shoco.c,
 			d: shoco.d,
-			g: function(s, x, y) { if(!/^(?:[a-z]+:)?\/\//.test(s)) s = "https://" + s; if(!isnode) fetch(s).then(function(x) { return x.text() }).then(functify(x, y)); else console.log("O.g() is not yet supported in Node") },
+			g: function(s, x, y) { Japt.implicit_output = false; if(!/^(?:[a-z]+:)?\/\//.test(s)) s = "https://" + s; if(!isnode) fetch(s).then(function(x) { Japt.implicit_output = true; return x.text(); }).then(functify(x, y)).then(function(x) { if (Japt.implicit_output) Japt.output(x); }); else console.log("O.g() is not yet supported in Node"); },
 			v: function(x) { var r = ""; try{ r = eval(Japt.transpile(x)); } catch(e) { Japt.error(e); } return r; },
 			x: function(x) { if (Japt.use_safe) throw "O.x() cannot be used in safe mode"; var r = ""; try{ r = eval(x); } catch(e) { Japt.error(e); } return r; }
 		},

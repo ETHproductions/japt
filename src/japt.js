@@ -2294,7 +2294,8 @@ var Japt = {
 				line = 0,
 				lines = [],
 				strchars = Array(20).fill(""),
-				internary = false;
+				internary = false,
+				inCharClass = [];
 
 			for (; i < code.length; ++i) {
 				var char = code[i];
@@ -2311,31 +2312,11 @@ var Japt = {
 						newcode += "\"" + Japt.strings.length + "\"";
 						Japt.strings.push(regexify2(code[++i] || "\\"));
 					}
-					else if (isChar(char, "\"`")) {
+					else if (isChar(char, "\"`/")) {
 						level++;
 						internary = newcode.slice(-1) === "?";
 						strchars[level] = char;
 						currstr = "\"";
-					}
-					else if (char === "/") {
-						currstr = "/";
-						for (var inCharClass = false; ++i < code.length; ) {
-							if (code[i] === "/" && !inCharClass) break;
-							currstr += code[i];
-							if (code[i] === "\\") currstr += code[++i];
-							else if (code[i] === "[") inCharClass = true;
-							else if (code[i] === "]") inCharClass = false;
-						}
-						currstr += "/";
-						for ( ; ++i < code.length; ) {
-							if (!isChar(code[i], "gimsux") || currstr.lastIndexOf(code[i]) > currstr.lastIndexOf("/")) {
-								i--;
-								break;
-							}
-							currstr += code[i];
-						}
-						newcode += "\"" + Japt.strings.length + "\"";
-						Japt.strings.push(regexify2(currstr));
 					}
 					else if (char === "'") {
 						if (code[++i] === "\\") {
@@ -2385,7 +2366,17 @@ var Japt = {
 				}
 				else if (level === 1) {
 					if (char === "\\") {
-						currstr += "\\" + (code[++i] || (i--, "\\"));
+						i++;
+						if (strchars[level] === "/") {
+							if (code[i] === "\\" || (!code[i] && i--))
+								currstr += "\\\\\\\\";
+							else if (code[i] === "/")
+								currstr += "\\/";
+							else
+								currstr += "\\\\" + code[i];
+						}
+						else
+							currstr += "\\" + (code[i] || (i--, "\\"));
 					}
 					else if (char === ":" && internary) {
 						internary = false;
@@ -2398,15 +2389,42 @@ var Japt = {
 						newcode += "'" + currstr + "':";
 						currstr = strchars[level];
 					}
-					else if (char === strchars[level]) {
+					else if (char === strchars[level] && !inCharClass[level]) {
 						currstr += "\"";
 						if (strchars[level] === "`") currstr = currstr.replace(/"(?:\\.|[^"])*"$/, function(a) {
 							return JSON.stringify(shoco.d(eval(a)));
 						});
-						level--;
+						
 						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
 						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
-						newcode += "'" + currstr + "'";
+						
+						if (strchars[level] === "/") {
+							var flags = "";
+							while (isChar(code[i + 1], "gimsu") && flags.indexOf(code[i + 1]) === -1)
+								flags += code[++i];
+							
+							if (flags.indexOf("g") === -1)
+								flags = "g" + flags;
+							else
+								flags = flags.replace("g", "");
+							
+							if (flags) {
+								currstr += ",\"" + flags + "\"";
+								Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
+								currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
+							}
+						}
+						
+						newcode += "'RegExp(" + currstr + ")'";
+						level--;
+					}
+					else if (strchars[level] === "/" && char === "[") {
+						inCharClass[level] = true;
+						currstr += "[";
+					}
+					else if (inCharClass[level] && char === "]") {
+						inCharClass[level] = false;
+						currstr += "]";
 					}
 					else if (char === "\"") {
 						currstr += "\\\"";
@@ -2416,6 +2434,7 @@ var Japt = {
 						if (strchars[level] === "`") currstr = currstr.replace(/"(?:\\.|[^"])*"$/, function(a) {
 							return JSON.stringify(shoco.d(eval(a)));
 						});
+						
 						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
 						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
 						level++;
@@ -2436,7 +2455,7 @@ var Japt = {
 					}
 					else {
 						currbraces += char;
-						if (isChar(char, "\"`")) {
+						if (isChar(char, "\"`/")) {
 							level++;
 							strchars[level] = char;
 						}
@@ -2457,7 +2476,13 @@ var Japt = {
 					if (char === "\\") {
 						currbraces += (code[++i] || (i--, "\\"));
 					}
-					else if (char === strchars[level]) {
+					else if (strchars[level] === "/" && char === "[") {
+						inCharClass[level] = true;
+					}
+					else if (inCharClass[level] && char === "]") {
+						inCharClass[level] = false;
+					}
+					else if (char === strchars[level] && !inCharClass[level]) {
 						level--;
 					}
 					else if (char === "{") {
@@ -2465,7 +2490,7 @@ var Japt = {
 					}
 				}
 				if (i + 1 === code.length && level > 0) {
-					code += level % 2 ? strchars[level] : "}";
+					code += level % 2 ? inCharClass[level] ? "]" : strchars[level] : "}";
 				}
 			}
 			lines.push(subtranspile(newcode));

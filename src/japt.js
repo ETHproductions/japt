@@ -2415,7 +2415,7 @@ var Japt = {
 							}
 						}
 						
-						newcode += "'RegExp(" + currstr + ")'";
+						newcode += strchars[level] === "/" ? "'RegExp(" + currstr + ")'" : "'" + currstr + "'";
 						level--;
 					}
 					else if (strchars[level] === "/" && char === "[") {

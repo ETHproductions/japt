@@ -939,7 +939,8 @@ var Japt = {
 					code = code.slice(0,i)+'1'+code.slice(i);
 				else if (isChar(outp.slice(-1), "*%") && isChar(char, " \\)\\]};"))
 					code = code.slice(0,i)+'2'+code.slice(i);
-				else if ((outp === "" || outp.slice(-1) === ";") && /[a-zà-ÿ+\-*/%^|&<=>?]/.test(char))
+				else if ((outp === "" || outp.slice(-1) === ";")
+						 && (/[a-zà-ÿ+*/%^|&<=>?]/.test(char) || (char === "-" && !isChar(code[i + 1], "-~"))))
 					outp += "U";
 
 				if (char === "\"") {

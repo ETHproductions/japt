@@ -1833,8 +1833,14 @@ Math.e = Math.exp;
 Math.l = Math.log;
 Math.m = Math.log2;
 Math.n = Math.log10;
-Math.h = Math.hypot = Math.hypot || function () {
+Math.hypot = Math.hypot || function () {
 	return Math.sqrt([].reduce.call(arguments, function(a, b) { return a + b * b; }));
+};
+Math.h = function () {
+	var a = [];
+	for (var i in arguments)
+		a = a.concat(arguments[i]);
+	return Math.hypot.apply(null, a);
 };
 
 Math.P = Math.PI;

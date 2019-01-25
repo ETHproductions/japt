@@ -777,7 +777,12 @@ df(Array.prototype, {
 	},
 	e: function (x, y) {
 		if (x instanceof Array) {
-			return this.length === x.length && this.every(function(a, b){ return a == x[b]; });
+			return this.length === x.length && this.every(function(a, b){
+				if (a instanceof Array)
+					return a.e(x[b]);
+				else
+					return a == x[b];
+			});
 		}
 		else {
 			x = fb(x, Boolean);

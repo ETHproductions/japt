@@ -782,6 +782,14 @@ df(Array.prototype, {
 		}
 		if (arguments[i] instanceof Array) {
 			x = arguments[i];
+			if (typeof arguments[i + 1] === "function" || typeof arguments[i + 1] === "string") {
+				var f = functify(arguments[i + 1], arguments[i + 2]);
+				for (var j = 0; j < x.length; j++) {
+					this[x[j]] = f(this[x[j]], x[j]);
+				}
+				return this;
+			}
+			
 			return x.map(function(j) { return curr.g(j); });
 		}
 		else if (typeof arguments[i] === "function" || typeof arguments[i] === "string") {
@@ -790,7 +798,7 @@ df(Array.prototype, {
 			if (i === 0)
 				return x(this);
 			
-			prev[index] = x(curr);
+			prev[index] = x(curr, index);
 			return this;
 		}
 		if (i === 0) {

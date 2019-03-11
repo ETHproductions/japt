@@ -79,6 +79,8 @@ Completed:
 1.4.6  Ô -> `w `
 1.4.6  Õ -> `y `
 1.4.6  A.ü(f?) -> group by value
+1.4.6  Update A.à(n?) and A.á(n?) to non-recursive algorithms
+1.4.6  A.g(a,f) -> map items at indices
 
 
 2.0a0  Clean up code
@@ -107,13 +109,12 @@ Planned:
 1.4.6  A.?() -> all subslices
 1.4.6  A.?() -> keys/indices (like Jelly's `J`)
 1.4.6  A.c(f) -> A.m(f), but flatten the result
-1.4.6  A.g(a,f) -> map items at indices
 1.4.6  S/A.ã(f?) -> all subsections
+1.4.6  F.?(n) -> first n integers that return truthily to F
 
 1.4.?  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
 1.4.?  A.ù(n,a=[0]) -> right-align A to n items with filler a
 1.4.?  A.ù(n,x) -> right-align A to n items with filler [x]
-1.4.?  X.?(f,n=1) -> run X through f, n times (default function: output with newline?)
 1.4.?  S.?(s,n) -> insert s at every n'th position
 1.4.?  A.?(x,n) -> insert x at every n'th position
 1.4.?  S.?(s) -> interleave
@@ -124,18 +125,20 @@ Planned:
 1.4.?  S.w(s?) -> reverse and mirror ()[]{}<>\/
 1.4.?  S.w(n?) -> mirror ()[]{}<>\/
 1.4.?  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
-1.4.?  ? -> `c `?
-1.4.?  A.?() -> fill range ([1,5,3,3,4] -> [1,2,3,4,5,4,3,3,4])
-1.4.?  Auto-finish arrays []
-1.4.?  Auto-start functions? {}
-1.4.?  Auto-finish/fill a?b:c
-1.4.?  F.w(f)? -> while F(), f()?
+1.4.?  A.?() -> fill ranges ([1,5,3,3,4] -> [1,2,3,4,5,4,3,3,4])
+1.4.?  A.?(f) -> notall, i.e. opposite of every (A.e(f))?
+1.4.?  A.?(f) -> none, i.e. opposite of some (A.d(f))?
+1.4.?  A.?(a) -> mixed base conversion (e.g. [2,3,45]x[24,60] = 45 + 3*60 + 2*60*24 = 3305 [2d 3h 45m = 3305m])
 1.4.?  N.c/f/r(f) -> ceil/floor/round to next integer that satisfies f (ignoring original number?)
+1.4.?  X.?(f,n=1) -> run X through f, n times (default function: output with newline?)
+1.4.?  F.w(f)? -> while F(), f()?
 1.4.?  Combine A.ø(a/x) into A.d()? Only problem is strings
 1.4.?  A.ė(x) -> number of instances of x in A? Also has problem with strings
 1.4.?  Have A/S.i() not wrap around? Same for .h()? .j()?
-1.4.?  A.?(f) -> notall, i.e. opposite of every (A.e(f))?
-1.4.?  A.?(f) -> none, i.e. opposite of some (A.d(f))?
+1.4.?  ? -> `c `?
+1.4.?  Auto-finish arrays []
+1.4.?  Auto-start functions? {}
+1.4.?  Auto-finish/fill a?b:c
 
 
 See everything planned for v2: https://hackmd.io/Olgzu4-USxWNavDPeyWCNg

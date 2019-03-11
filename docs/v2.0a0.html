@@ -40,110 +40,110 @@
 <h3>Using regexes</h3>
 <p>A regex matches the syntax `/regex/flags`. These work for the most part just like they do in JS, with a few exceptions:</p>
 <ul>
-  <li>Missing parentheses/square brackets at the edges of the regex will be automatically added.</li>
-  <li>If a `+`, `*`, or `?` would cause a syntax error, a `.` is placed before it.</li>
-  <li>The `g` flag makes the regex *not* match globally.</li>
-  <li>The `s` (`dotAll`) flag from other regex versions has been implemented. This makes `.` match all characters, including newlines.</li>
-  <li>A few extra character classes have been added. A list of the most common built-in classes and the added classes:</li>
+	<li>Missing parentheses/square brackets at the edges of the regex will be automatically added.</li>
+	<li>If a `+`, `*`, or `?` would cause a syntax error, a `.` is placed before it.</li>
+	<li>The `g` flag makes the regex *not* match globally.</li>
+	<li>The `s` (`dotAll`) flag from other regex versions has been implemented. This makes `.` match all characters, including newlines.</li>
+	<li>A few extra character classes have been added. A list of the most common built-in classes and the added classes:</li>
 </ul>
 <table class="code-table">
-  <tr><td style="width:50px"><b>Class</b></td><td><b>Chars</b></td></tr>
-  <tr><td>\w</td><td>A-Za-z0-9</td></tr>
-  <tr><td>\W</td><td>Anything else</td></tr>
-  <tr><td>\d</td><td>0-9</td></tr>
-  <tr><td>\D</td><td>Anything else</td></tr>
-  <tr><td>\s</td><td>Whitespace</td></tr>
-  <tr><td>\S</td><td>Anything else</td></tr>
-  <tr><td>\n</td><td>Newline</td></tr>
-  <tr><td>\t</td><td>Tab</td></tr>
-  <tr><td>\b</td><td>Edge of a word</td></tr>
-  <tr><td>\B</td><td>Non-edge</td></tr>
-  <tr><td>\a</td><td>a-z</td></tr>
-  <tr><td>\A</td><td>A-Z</td></tr>
-  <tr><td>\l</td><td>A-Za-z</td></tr>
-  <tr><td>\L</td><td>Anything else</td></tr>
-  <tr><td>\p</td><td>Printable ASCII</td></tr>
-  <tr><td>\P</td><td>Anything else</td></tr>
-  <tr><td>\q</td><td>Printable + newline</td></tr>
-  <tr><td>\Q</td><td>Anything else</td></tr>
-  <tr><td>\v</td><td>AEIOUaeiou</td></tr>
-  <tr><td>\V</td><td>Anything else</td></tr>
-  <tr><td>\y</td><td>AEIOUYaeiouy</td></tr>
-  <tr><td>\Y</td><td>Anything else</td></tr>
-  <tr><td>\c</td><td>Consonants + Yy</td></tr>
-  <tr><td>\C</td><td>Anything else</td></tr>
+	<tr><td style="width:50px"><b>Class</b></td><td><b>Chars</b></td></tr>
+	<tr><td>\w</td><td>A-Za-z0-9</td></tr>
+	<tr><td>\W</td><td>Anything else</td></tr>
+	<tr><td>\d</td><td>0-9</td></tr>
+	<tr><td>\D</td><td>Anything else</td></tr>
+	<tr><td>\s</td><td>Whitespace</td></tr>
+	<tr><td>\S</td><td>Anything else</td></tr>
+	<tr><td>\n</td><td>Newline</td></tr>
+	<tr><td>\t</td><td>Tab</td></tr>
+	<tr><td>\b</td><td>Edge of a word</td></tr>
+	<tr><td>\B</td><td>Non-edge</td></tr>
+	<tr><td>\a</td><td>a-z</td></tr>
+	<tr><td>\A</td><td>A-Z</td></tr>
+	<tr><td>\l</td><td>A-Za-z</td></tr>
+	<tr><td>\L</td><td>Anything else</td></tr>
+	<tr><td>\p</td><td>Printable ASCII</td></tr>
+	<tr><td>\P</td><td>Anything else</td></tr>
+	<tr><td>\q</td><td>Printable + newline</td></tr>
+	<tr><td>\Q</td><td>Anything else</td></tr>
+	<tr><td>\v</td><td>AEIOUaeiou</td></tr>
+	<tr><td>\V</td><td>Anything else</td></tr>
+	<tr><td>\y</td><td>AEIOUYaeiouy</td></tr>
+	<tr><td>\Y</td><td>Anything else</td></tr>
+	<tr><td>\c</td><td>Consonants + Yy</td></tr>
+	<tr><td>\C</td><td>Anything else</td></tr>
 </table>
 <p>Note: because `/` is parsed as the start of a regex, `÷` is used for division.</p>
 <p>If you have a regex that's just a single class, you can omit the outer slashes. This means that e.g. `/\v/` can be shortened to `\v`. There are a few special shortcuts as well:</p>
 <table class="code-table">
-  <tr><td style="width:50px"><b>Shortcut</b></td><td><b>Transpiled</b></td></tr>
-  <tr><td>\.</td><td>/./g</td></tr>
-  <tr><td>\^</td><td>/[^]/g</td></tr>
-  <tr><td>\*</td><td>/.*/g</td></tr>
-  <tr><td>\+</td><td>/.+/g</td></tr>
-  <tr><td>\?</td><td>/.?/g</td></tr>
+	<tr><td style="width:50px"><b>Shortcut</b></td><td><b>Transpiled</b></td></tr>
+	<tr><td>\.</td><td>/./g</td></tr>
+	<tr><td>\^</td><td>/[^]/g</td></tr>
+	<tr><td>\*</td><td>/.*/g</td></tr>
+	<tr><td>\+</td><td>/.+/g</td></tr>
+	<tr><td>\?</td><td>/.?/g</td></tr>
 </table>
 </div>
 
 <h2>arrow:variables Variables</h2>
 <div id="variables" style="display:none">
 <table class="code-table">
-  <tr><td style="width:50px"><b>Var</b></td><td><b>Value</b></td></tr>
-  <tr><td>A</td><td>10</td></tr>
-  <tr><td>B</td><td>11</td></tr>
-  <tr><td>C</td><td>12</td></tr>
-  <tr><td>D</td><td>13</td></tr>
-  <tr><td>E</td><td>14</td></tr>
-  <tr><td>F</td><td>15</td></tr>
-  <tr><td>G</td><td>16</td></tr>
-  <tr><td>H</td><td>32</td></tr>
-  <tr><td>I</td><td>64</td></tr>
-  <tr><td>J</td><td>-1</td></tr>
-  <tr><td>K</td><td>new Date()</td></tr>
-  <tr><td>L</td><td>100</td></tr>
-  <tr><td>M</td><td>Math</td></tr>
-  <tr><td>N</td><td>input</td></tr>
-  <tr><td>O</td><td>shoco</td></tr>
-  <tr><td>P</td><td>""</td></tr>
-  <tr><td>Q</td><td>"\""</td></tr>
-  <tr><td>R</td><td>"\n"</td></tr>
-  <tr><td>S</td><td>"&nbsp;"</td></tr>
-  <tr><td>T</td><td>0</td></tr>
-  <tr><td>U</td><td>1st input</td></tr>
-  <tr><td>V</td><td>2nd input</td></tr>
-  <tr><td>W</td><td>3rd input</td></tr>
-  <tr><td>X</td><td>4th input</td></tr>
-  <tr><td>Y</td><td>5th input</td></tr>
-  <tr><td>Z</td><td>6th input</td></tr>
+	<tr><td style="width:50px"><b>Var</b></td><td><b>Value</b></td></tr>
+	<tr><td>A</td><td>10</td></tr>
+	<tr><td>B</td><td>11</td></tr>
+	<tr><td>C</td><td>12</td></tr>
+	<tr><td>D</td><td>13</td></tr>
+	<tr><td>E</td><td>14</td></tr>
+	<tr><td>F</td><td>15</td></tr>
+	<tr><td>G</td><td>16</td></tr>
+	<tr><td>H</td><td>32</td></tr>
+	<tr><td>I</td><td>64</td></tr>
+	<tr><td>J</td><td>-1</td></tr>
+	<tr><td>K</td><td>new Date()</td></tr>
+	<tr><td>L</td><td>100</td></tr>
+	<tr><td>M</td><td>Math</td></tr>
+	<tr><td>N</td><td>input</td></tr>
+	<tr><td>O</td><td>shoco</td></tr>
+	<tr><td>P</td><td>""</td></tr>
+	<tr><td>Q</td><td>"\""</td></tr>
+	<tr><td>R</td><td>"\n"</td></tr>
+	<tr><td>S</td><td>"&nbsp;"</td></tr>
+	<tr><td>T</td><td>0</td></tr>
+	<tr><td>U</td><td>1st input</td></tr>
+	<tr><td>V</td><td>2nd input</td></tr>
+	<tr><td>W</td><td>3rd input</td></tr>
+	<tr><td>X</td><td>4th input</td></tr>
+	<tr><td>Y</td><td>5th input</td></tr>
+	<tr><td>Z</td><td>6th input</td></tr>
 </table>
 </div>
 
 <h2>arrow:O-funcs `O` methods</h2>
 <div id="O-funcs" style="display:none">
 <table class="code-table">
-  <tr><td style="width:50px"><b>Func</b></td><td><b>Value</b></td></tr>
-  <tr><td>a</td><td>alert</td></tr>
-  <tr><td>c</td><td>compress</td></tr>
-  <tr><td>d</td><td>decompress</td></tr>
-  <tr><td>l</td><td>console.log</td></tr>
-  <tr><td>o</td><td>output</td></tr>
-  <tr><td>p</td><td>output + "\n"</td></tr>
-  <tr><td>q</td><td>clear output</td></tr>
-  <tr><td>v</td><td>eval Japt</td></tr>
-  <tr><td>x</td><td>eval JS</td></tr>
+	<tr><td style="width:50px"><b>Func</b></td><td><b>Value</b></td></tr>
+	<tr><td>a</td><td>alert</td></tr>
+	<tr><td>c</td><td>compress</td></tr>
+	<tr><td>d</td><td>decompress</td></tr>
+	<tr><td>l</td><td>console.log</td></tr>
+	<tr><td>o</td><td>output</td></tr>
+	<tr><td>p</td><td>output + "\n"</td></tr>
+	<tr><td>q</td><td>clear output</td></tr>
+	<tr><td>v</td><td>eval Japt</td></tr>
+	<tr><td>x</td><td>eval JS</td></tr>
 </table>
 </div>
 
 <h2>arrow:M-vars `M` variables</h2>
 <div id="M-vars" style="display:none">
 <table class="code-table">
-  <tr><td style="width:50px"><b>Var</b></td><td><b>Value</b></td></tr>
-  <tr><td>E</td><td>Euler's constant (2.71828...)</td></tr>
-  <tr><td>P</td><td>pi (3.14159...)</td></tr>
-  <tr><td>Q</td><td>golden ratio (1.61803...)</td></tr>
-  <tr><td>R</td><td>sqrt(1/2)</td></tr>
-  <tr><td>S</td><td>sqrt(2)</td></tr>
-  <tr><td>T</td><td>tau (pi * 2)</td></tr>
+	<tr><td style="width:50px"><b>Var</b></td><td><b>Value</b></td></tr>
+	<tr><td>E</td><td>Euler's constant (2.71828...)</td></tr>
+	<tr><td>P</td><td>pi (3.14159...)</td></tr>
+	<tr><td>Q</td><td>golden ratio (1.61803...)</td></tr>
+	<tr><td>R</td><td>sqrt(1/2)</td></tr>
+	<tr><td>S</td><td>sqrt(2)</td></tr>
+	<tr><td>T</td><td>tau (pi * 2)</td></tr>
 </table>
 </div>
 
@@ -587,7 +587,7 @@
 <h3>`.c(n=0)`</h3>
 <p>Like `.a()`, but with all integers, in the order n, n - 1, n + 1, n - 2, n + 2, n - 3...</p>
 <h3>`.f(f?)`</h3>
-  <p>Like `.a()`, but looks for a <i>falsy</i> return value.</p>
+<p>Like `.a()`, but looks for a <i>falsy</i> return value.</p>
 <h3>`.g(n=U,a=[0,1])`</h3>
 <p>Repeatedly appends `this(a.g(-1), i, a)` to `a`, then returns the `n`th item in `a`.</p>
 </div>
@@ -597,11 +597,11 @@
 <p>You can use `K` to get `new Date()`, or `Ð` to call `new Date(`.</p>
 <p>If you give these methods a number as a first parameter, it will change the `get` part of the function according to the following table:</p>
 <table class="code-table">
-  <tr><td style="width:50px"><b>Input</b></td><td><b>Function</b></td></tr>
-  <tr><td>0</td><td>get</td></tr>
-  <tr><td>1</td><td>set</td></tr>
-  <tr><td>2</td><td>getUTC</td></tr>
-  <tr><td>3</td><td>setUTC</td></tr>
+	<tr><td style="width:50px"><b>Input</b></td><td><b>Function</b></td></tr>
+	<tr><td>0</td><td>get</td></tr>
+	<tr><td>1</td><td>set</td></tr>
+	<tr><td>2</td><td>getUTC</td></tr>
+	<tr><td>3</td><td>setUTC</td></tr>
 </table>
 <p>See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Getter" target="_blank">MDN</a> for more information on these methods.</p>
 <h3>`.a()`</h3>
@@ -670,55 +670,55 @@
 <h2>arrow:unicode-shortcuts Unicode shortcuts</h2>
 <div id="unicode-shortcuts" style="display:none">
 <table class="code-table">
-  <tr><td style="width:50px"><b>Char</b></td><td><b>Value</b></td></tr>
-  <tr><td>¡</td><td>Um@</td></tr>
-  <tr><td>¢</td><td>Us2&nbsp;</td></tr>
-  <tr><td>£</td><td>m@</td></tr>
-  <tr><td>¤</td><td>s2&nbsp;</td></tr>
-  <tr><td>¥</td><td>==</td></tr>
-  <tr><td>¦</td><td>!=</td></tr>
-  <tr><td>§</td><td>&lt;=</td></tr>
-  <tr><td>¨</td><td>&gt;=</td></tr>
-  <tr><td>©</td><td>&amp;&amp;</td></tr>
-  <tr><td>ª</td><td>||</td></tr>
-  <tr><td>«</td><td>&amp;&amp;!</td></tr>
-  <tr><td>¬</td><td>q&nbsp;</td></tr>
-  <tr><td>®</td><td>m_</td></tr>
-  <tr><td>¯</td><td>s0,</td></tr>
-  <tr><td>°</td><td>++</td></tr>
-  <tr><td>±</td><td>+=</td></tr>
-  <tr><td>²</td><td>p2&nbsp;</td></tr>
-  <tr><td>³</td><td>p3&nbsp;</td></tr>
-  <tr><td>´</td><td>--</td></tr>
-  <tr><td>µ</td><td>-=</td></tr>
-  <tr><td>¶</td><td>===</td></tr>
-  <tr><td>·</td><td>qR&nbsp;</td></tr>
-  <tr><td>¸</td><td>qS&nbsp;</td></tr>
-  <tr><td>¹</td><td>)&nbsp;</td></tr>
-  <tr><td>º</td><td>((</td></tr>
-  <tr><td>»</td><td>(((</td></tr>
-  <tr><td>¼</td><td>.25</td></tr>
-  <tr><td>½</td><td>.5</td></tr>
-  <tr><td>¾</td><td>.75</td></tr>
-  <tr><td>À</td><td>!==</td></tr>
-  <tr><td>Á</td><td>>>></td></tr>
-  <tr><td>Â</td><td>~~</td></tr>
-  <tr><td>Ã</td><td>}&nbsp;</td></tr>
-  <tr><td>Ä</td><td>+1</td></tr>
-  <tr><td>Å</td><td>s1&nbsp;</td></tr>
-  <tr><td>Æ</td><td>o@</td></tr>
-  <tr><td>Ç</td><td>o_</td></tr>
-  <tr><td>È</td><td>XYZ{X</td></tr>
-  <tr><td>É</td><td>-1</td></tr>
-  <tr><td>Ê</td><td>l </td></tr>
-  <tr><td>Ë</td><td>mDEF{D</td></tr>
-  <tr><td>Ì</td><td>gJ </td></tr>
-  <tr><td>Í</td><td>n2 </td></tr>
-  <tr><td>Î</td><td>g </td></tr>
-  <tr><td>Ï</td><td>XYZ{Y</td></tr>
-  <tr><td>Ð</td><td>$new Date($</td></tr>
-  <tr><td>Ñ</td><td>*2</td></tr>
-  <tr><td>×</td><td>r*1&nbsp;</td></tr>
+	<tr><td style="width:50px"><b>Char</b></td><td><b>Value</b></td></tr>
+	<tr><td>¡</td><td>Um@</td></tr>
+	<tr><td>¢</td><td>Us2&nbsp;</td></tr>
+	<tr><td>£</td><td>m@</td></tr>
+	<tr><td>¤</td><td>s2&nbsp;</td></tr>
+	<tr><td>¥</td><td>==</td></tr>
+	<tr><td>¦</td><td>!=</td></tr>
+	<tr><td>§</td><td>&lt;=</td></tr>
+	<tr><td>¨</td><td>&gt;=</td></tr>
+	<tr><td>©</td><td>&amp;&amp;</td></tr>
+	<tr><td>ª</td><td>||</td></tr>
+	<tr><td>«</td><td>&amp;&amp;!</td></tr>
+	<tr><td>¬</td><td>q&nbsp;</td></tr>
+	<tr><td>®</td><td>m_</td></tr>
+	<tr><td>¯</td><td>s0,</td></tr>
+	<tr><td>°</td><td>++</td></tr>
+	<tr><td>±</td><td>+=</td></tr>
+	<tr><td>²</td><td>p2&nbsp;</td></tr>
+	<tr><td>³</td><td>p3&nbsp;</td></tr>
+	<tr><td>´</td><td>--</td></tr>
+	<tr><td>µ</td><td>-=</td></tr>
+	<tr><td>¶</td><td>===</td></tr>
+	<tr><td>·</td><td>qR&nbsp;</td></tr>
+	<tr><td>¸</td><td>qS&nbsp;</td></tr>
+	<tr><td>¹</td><td>)&nbsp;</td></tr>
+	<tr><td>º</td><td>((</td></tr>
+	<tr><td>»</td><td>(((</td></tr>
+	<tr><td>¼</td><td>.25</td></tr>
+	<tr><td>½</td><td>.5</td></tr>
+	<tr><td>¾</td><td>.75</td></tr>
+	<tr><td>À</td><td>!==</td></tr>
+	<tr><td>Á</td><td>>>></td></tr>
+	<tr><td>Â</td><td>~~</td></tr>
+	<tr><td>Ã</td><td>}&nbsp;</td></tr>
+	<tr><td>Ä</td><td>+1</td></tr>
+	<tr><td>Å</td><td>s1&nbsp;</td></tr>
+	<tr><td>Æ</td><td>o@</td></tr>
+	<tr><td>Ç</td><td>o_</td></tr>
+	<tr><td>È</td><td>XYZ{X</td></tr>
+	<tr><td>É</td><td>-1</td></tr>
+	<tr><td>Ê</td><td>l </td></tr>
+	<tr><td>Ë</td><td>mDEF{D</td></tr>
+	<tr><td>Ì</td><td>gJ </td></tr>
+	<tr><td>Í</td><td>n2 </td></tr>
+	<tr><td>Î</td><td>g </td></tr>
+	<tr><td>Ï</td><td>XYZ{Y</td></tr>
+	<tr><td>Ð</td><td>$new Date($</td></tr>
+	<tr><td>Ñ</td><td>*2</td></tr>
+	<tr><td>×</td><td>r*1&nbsp;</td></tr>
 </table>
 </div>
 

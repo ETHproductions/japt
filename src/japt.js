@@ -776,15 +776,15 @@ df(Array.prototype, {
 		var curr = this, x, prev, index;
 		for (var i = 0; typeof arguments[i] === "number"; i++) {
 			x = pm(arguments[i], curr.length);
-            prev = curr;
-            index = x;
+			prev = curr;
+			index = x;
 			curr = curr[x];
 		}
 		if (arguments[i] instanceof Array) {
 			x = arguments[i];
 			return x.map(function(j) { return curr.g(j); });
 		}
-        else if (typeof arguments[i] === "function" || typeof arguments[i] === "string") {
+		else if (typeof arguments[i] === "function" || typeof arguments[i] === "string") {
 			var y = arguments[i + 1];
 			x = functify(arguments[i], y);
 			if (i === 0)
@@ -955,8 +955,8 @@ df(Array.prototype, {
 	},
 	z: function (n) {
 		n = pm(fb(n, 1), 4) || 4;
-		var q = this.every(function(x) { return x instanceof Array }),
-			a = this.map(function(x) { return q ? x : x instanceof Array ? x.q() : String(x) }),
+		var q = this.every(function(x) { return x instanceof Array; }),
+			a = this.map(function(x) { return q ? x : x instanceof Array ? x.q() : String(x); }),
 			l = a.reduce(function(p, x) {
 				return Math.max(p, x.length);
 			}, 0);
@@ -1017,7 +1017,7 @@ df(Array.prototype, {
 			}
 		}
 		return result;
-    },
+	},
 	â: function (x) {
 		var a = [];
 		x = this.concat(fb(x, []));

@@ -304,49 +304,6 @@ var pairs_1_3 = {
 	"\xDF": "$rp$(" // ß - 223
 };
 
-var permcache = {};
-function perm (arr, len) {
-	if (len === 0)
-		return [[]];
-	if (arr.length < 2)
-		return [arr];
-
-	var id = len + ';' + str(arr);
-	if (permcache[id])
-		return permcache[id];
-
-	var result = [];
-	for (var index = 0; index < arr.length; index++)
-		if (index === arr.indexOf(arr[index]))
-			perm(arr.slice(0, index).concat(arr.slice(index + 1)), len - 1).map(function(b) {
-				result.push([arr[index]].concat(b));
-			});
-
-	return permcache[id] = result;
-}
-
-var combcache = {};
-function comb(arr, len) {
-	if (len === 0)
-		return [[]];
-	if (arr.length < 1 && !isNaN(len))
-		return [];
-
-	var id = len + ';' + str(arr);
-	if (combcache[id])
-		return combcache[id];
-
-	var result = [];
-	for (var index = 0; index < arr.length; index++)
-		if (index === arr.indexOf(arr[index]))
-			comb(arr.slice(index + 1), len - 1).map(function(b) {
-				result.push([arr[index]].concat(b));
-			});
-
-	if (isNaN(len)) result.push([]);
-	return combcache[id] = result;
-}
-
 if (!id(String.prototype.repeat)) String.prototype.repeat = function(len) {
 	len = Math.trunc(fb(len, 1));
 
@@ -1023,44 +980,44 @@ df(Array.prototype, {
 			a = a.map(function(x) { return x.q(); });
 		return a;
 	},
-	à: function (x) {
-		var f = function(y, z, a) {
-			if (y.length === 0 && z.length === 0)
-				return;
-			if (z.length === 0)
-				a.push(y);
-			else {
-				var n = y.slice(0);
-				n.push(z[0]);
-				f(n, z.slice(1), a);
-				f(y, z.slice(1), a);
+	à: function (outlen) {
+		var inlen = this.length,
+			combs = [[]];
+		for (var i = 0; i < inlen; i++) {
+			var item = this[i], oldcombs = combs;
+			combs = [];
+			for (var j = 0; j < oldcombs.length; j++) {
+				var combination = oldcombs[j].slice();
+				combination.push(item);
+				if (!id(outlen) || combination.length <= outlen)
+					combs.push(combination);
+				if (!id(outlen) || oldcombs[j].length > outlen - (inlen - i))
+					combs.push(oldcombs[j]);
 			}
-			return a;
-		};
-		return f([], this, []).filter(function(z) { return !id(x) || z.length === x; });
+		}
+		return combs;
 	},
-	//df(Array,'à',function(x){var a=[[]],s=[];for(var i=0;i<this.length;++i){var l=a.length;for(var j=0;j<l;j++){var b=a[j].concat([this[i]]);if(s.indexOf(str(b))<0)a.push(b),s.push(str(b));}}return a},
-	á: function (x) {
-		var p = [],
-			u = [],
-			f = function(z) {
-				var c, i;
-				for (i = 0; i < z.length; i++) {
-					c = z.splice(i, 1)[0];
-					u.push(c);
-					if (z.length === 0)
-						p.push(u.slice());
-					f(z);
-					z.splice(i, 0, c);
-					u.pop();
+	á: function (outlen) {
+		var inlen = this.length,
+			result = [this.slice()];
+
+		for (var i = 0; i < fb(outlen, inlen - 1); i++) {
+			var oldresult = result;
+			result = [];
+			for (var orindex = 0; orindex < oldresult.length; orindex++) {
+				var oldperm = oldresult[orindex];
+				for (var j = i; j < inlen; j++) {
+					var newperm = oldperm.slice();
+					var swapitem = newperm.splice(j, 1)[0];
+					newperm.splice(i, 0, swapitem);
+					if (i + 1 === outlen)
+						newperm = newperm.slice(0, outlen);
+					result.push(newperm);
 				}
-				return p;
-			},
-			l;
-		return f(this).map(function(z) { return z.slice(0, x || z.length); }).â();
-	},
-	//à: function(x){x=fb(x,NaN);return comb(this,x)},
-	//á: function(x){x=fb(x,1/0);return perm(this,x)},
+			}
+		}
+		return result;
+    },
 	â: function (x) {
 		var a = [];
 		x = this.concat(fb(x, []));

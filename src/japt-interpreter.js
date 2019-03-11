@@ -77,16 +77,12 @@ var pairs_1_3 = {
 	"\xDF": "$rp$(" // ß - 223
 };
 
-var pcache = {};
-function perm(x,l){if(l===0)return[[]];if(x.length<2)return[x];var id=l+';'+str(x);if(pcache[id])return pcache[id];var a=[];for(var i in x)if(+i===x.indexOf(x[i]))perm([].concat(x.slice(0,i),x.slice(+i+1)),l-1).map(function(b){a.push([x[i]].concat(b))});return pcache[id]=a}
-var ccache = {};
-function comb(x,l){if(l===0)return[[]];if(x.length<1&&l)return[];var id=l+';'+str(x);if(ccache[id])return ccache[id];var a=[];for(var i=0;i<x.length;++i)if(i===x.indexOf(x[i]))comb(x.slice(i+1),l-1).map(function(b){a.push([x[i]].concat(b))});if(!l)a.push([]);return ccache[id]=a}
-
 String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)};
 String.prototype.contains = String.prototype.contains || function(x){return-1<this.indexOf(x)};
 Array.prototype.contains = Array.prototype.contains || function(x){return-1<this.indexOf(x)};
 Math.trunc = Math.trunc || function(x){return isNaN(x)?NaN:x<0?Math.ceil(x):Math.floor(x)};
 Math.approx = function(x,p){p=fb(p,5);for(var y=1;Math.abs(x-Math.round(x))>Math.pow(10,-p);)x*=10,y*=10;return Math.round(x)/y};
+
 df(String,'a',function(x,y){return typeof x=="function"||id(y)?this.q().a(x,y):this.lastIndexOf(x)});
 df(String,'b',function(x,y){return typeof x=="function"||id(y)?this.q().b(x,y):this.indexOf(x)});
 df(String,'c',function(x,y){x=fb(x,0);if(typeof x==="number")return this.charCodeAt(pm(x,this.length));x=functify(x,y);return this.m(function(a,b,c){var z=x(a.charCodeAt(0),fb(y,b),c);return typeof z==="number"?z.d():z})});
@@ -167,11 +163,8 @@ df(Array,'w',function(){return this.reverse()});
 df(Array,'x',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.reduce(function(a,b,i,z){b=x(b,fb(y,i),z);return a+(isNaN(+b)?parseFloat(b)||0:+b)},0)});
 df(Array,'y',function(x,y){if(id(x)){var z=this.y(),a=z.m(function(c){return c instanceof Array?c.f(id):c}).m(x,y);if(a.every(function(q){return typeof q instanceof Array}))z=z.m(function(c,i){var j=0;return c.m(function(){return a[i][j++]})}).y();else if(a.every(function(q){return q instanceof String||typeof q==="string"}))z=a.y();else z=a;return z}var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a});
 df(Array,'z',function(n){n=pm(fb(n,1),4)||4;var q=this.every(function(x){return x instanceof Array}),l=this.reduce(function(p,x){return Math.max(p,(x instanceof Array?x:String(x)).length)},0),a=this.map(function(x){return q?x.concat(Array(l-x.length).fill(0)):" ".p(l).h(x instanceof Array?x.q():x)});for(;n>0;--n){var b=[];for(var y=0;y<a.length;y++)for(var x=0;x<a[y].length;x++)b[x]=b[x]||[],b[x][a.length-y-1]=a[y][x];a=b}return q?a:a.map(function(x){return x.q()})});
-df(Array,'\xE0',function(x){var f=function(y,z,a){if(y.length===0&&z.length===0)return;if(z.length===0){a.push(y)}else{var n=y.slice(0);n.push(z[0]);f(n,z.slice(1),a);f(y,z.slice(1),a)}return a};return f([],this,[]).filter(function(z){return x?z.length===x:1})});
-//df(Array,'\xE0',function(x){var a=[[]],s=[];for(var i=0;i<this.length;++i){var l=a.length;for(var j=0;j<l;j++){var b=a[j].concat([this[i]]);if(s.indexOf(str(b))<0)a.push(b),s.push(str(b));}}return a});
-df(Array,'\xE1',function(x){var p=[],u=[],f=function(z){var c,i;for(i=0;i<z.length;i++){c=z.splice(i,1)[0];u.push(c);if(z.length===0)p.push(u.slice());f(z);z.splice(i,0,c);u.pop()}return p};var l;return f(this).map(function(z){return z.slice(0,x||z.length)})["\xE2"]()});
-//df(Array,'\xE0',function(x){x=fb(x,NaN);return comb(this,x)});
-//df(Array,'\xE1',function(x){x=fb(x,1/0);return perm(this,x)});
+df(Array,'\xE0',function(x){for(var r=this.length,t=[[]],n=0;n<r;n++){var e=this[n],i=t;t=[];for(var s=0;s<i.length;s++){var a=i[s].slice();a.push(e);if(!id(x)||a.length<=x)t.push(a);if(!id(x)||i[s].length>x-(r-n))t.push(i[s])}}return t});
+df(Array,'\xE1',function(x){for(var i=this.length,s=[this.slice()],e=0;e<fb(x,i-1);e++){var c=s,l=0;for(s=[];l<c.length;l++)for(var a=c[l],f=e;f<i;f++){var n=a.slice(),t=n.splice(f,1)[0];n.splice(e,0,t);if(e+1===x)n=n.slice(0,x),s.push(n)}}return s});
 df(Array,'\xE2',function(x){var a=[];x=this.concat(fb(x,[]));for(var i=0;i<x.length;i++)if(a.findIndex(function(q){return str(q)==str(x[i])})<0)a.push(x[i]);return a});
 df(Array,'\xE3',function(x,y){x=fb(x,2);var a=[];if(id(y))a[0]=this.slice(0,x-1),a[0].unshift(y);for(var i=0;i<=this.length-x;i++)a.push(this.slice(i,i+x));return a});
 df(Array,'\xE4',function(x,y){x=functify(x,0);return this['\xE3'](2,y).map(function(z){return z.reduce(x)})});

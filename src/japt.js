@@ -156,7 +156,23 @@ function saferegex(object, flags) {
 	return RegExp(regescape(object), flags);
 }
 
-// Converts an operator/method and an argument to a function, Japt-style
+/* Converts an operator/method to a function, Japt-style
+ * Setup:
+ *   f = functify(op or method, sample argument)
+ * Usage:
+ *   f(a, b[, c])
+ * 
+ * This version does not hardcode the second argument into the output.
+ *   If the output needs two args, such as for .reduce, use 0 for second arg.
+ * The output must be called with the correct second and third args.
+ * In most cases involving arrays or strings, the call should be like so:
+**   f(item, fb(second arg, index), array)
+ * 
+ * If sample argument is undefined, and the first arg is a method with no "!",
+ *   the method will be called on 'a' with no arguments.
+ * In all other cases, the method or operator will be called on 'a' with the
+ *   given argument 'b' (arguments swapped for "!" on method/operator).
+ */
 function functify(operator, argument) {
 	if (typeof operator === "function")
 		return operator;
@@ -182,7 +198,34 @@ function functify(operator, argument) {
 	return eval(func);
 }
 
-// Converts an operator/method and an argument to a function, Japt-style
+/* Converts an operator/method and optional argument to a function, Japt-style
+ * Setup:
+ *   f = functify(op or method, default)
+ *   f = functify(op or method, true)
+ * Usage:
+ *   f(a, b)
+ *
+ * This version will insert a predefined second argument into the function.
+ *   E.g. functify2("+", 2) -> function(a, b) { return a + 2; }
+ * Use true as second arg for a method/operator accepting two args at call time.
+ *   E.g. functify2("p", true) -> function(a, b) { return a.p(b); }
+ * Call the resulting function with the target/LHS and argument/RHS.
+**   For most array/string-related uses, use f(item, index, array/string).
+ * Note that when used in a method definition, the first argument will often be
+ *   a 3-arg function, which is returned unaltered regardless of the second arg.
+ * 
+ * If the first argument is a method and does not start with "!":
+ *   true      -> a.x(b)
+ *   undefined -> a.x()
+ *   any other -> a.x(default)
+ * If the first argument is a method and starts with "!":
+ *   true      -> b.x(a)
+ *   undefined -> U.x(a)
+ *   any other -> default.x(a)
+ * If the first argument is an operator: (both swapped for "!" on operator)
+ *   undefined/true -> a x b
+ *   anything else  -> a x argument
+ */
 function functify2(operator, argument) {
 	if (typeof operator === "function")
 		return operator;
@@ -575,7 +618,7 @@ df(String.prototype, {
 	â: function (x) {
 		return this.q().â(x).q();
 	},
-	ã: function (x,y) {
+	ã: function (x, y) {
 		return this.q().ã(x, y).map(function(a) { return a.q(); });
 	},
 	ä: function (x, y) {
@@ -1035,15 +1078,19 @@ df(Array.prototype, {
 		return a;
 	},
 	ã: function (x, y) {
-		x = fb(x, 2);
-		var a = [];
+		var a = [], f = function (x) { return x; };
+		if (typeof x === "function" || typeof x === "string") {
+			f = functify2(x, y);
+			x = y = undefined;
+		}
 		if (id(y)) {
 			a[0] = this.slice(0, x - 1);
 			a[0].unshift(y);
 		}
-		for (var i = 0; i <= this.length - x; i++)
-			a.push(this.slice(i, i + x));
-		return a;
+		for (var i = fb(x, 1); i <= fb(x, this.length); i++)
+			for (var j = 0; j <= this.length - i; j++)
+				a.push(this.slice(j, j + i));
+		return a.map(f);
 	},
 	ä: function (x, y) {
 		x = functify2(x, true);

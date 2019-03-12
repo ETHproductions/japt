@@ -81,6 +81,8 @@ Completed:
 1.4.6  A.ü(f?) -> group by value
 1.4.6  Update A.à(n?) and A.á(n?) to non-recursive algorithms
 1.4.6  A.g(a,f) -> map items at indices
+1.4.6  S.ã(f?) -> all substrings
+1.4.6  A.ã(f?) -> all subslices
 
 
 2.0a0  Clean up code
@@ -105,11 +107,8 @@ Planned:
 1.4.6  A.n(a) -> sort A by the order the items appear in a?
 1.4.6  A.?(f) -> minimum
 1.4.6  A.?(f) -> maximum
-1.4.6  S.?() -> all substrings
-1.4.6  A.?() -> all subslices
 1.4.6  A.?() -> keys/indices (like Jelly's `J`)
 1.4.6  A.c(f) -> A.m(f), but flatten the result
-1.4.6  S/A.ã(f?) -> all subsections
 1.4.6  F.?(n) -> first n integers that return truthily to F
 
 1.4.?  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's

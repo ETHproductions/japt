@@ -265,10 +265,12 @@
 <p>Returns all unique permutations of `this`. If `n` is specified, returns the unique permutations of length `n`.</p>
 <h3>`.â(r/s)`</h3>
 <p>Returns `this.search(r/s)`.</p>
-<h3>`.ã(n=2,a?)`</h3>
-<p>Returns an array of all subsections of `this` of length `n`. If `a` is specified, it is concatenated to the beginning beforehand.</p>
+<h3>`.ã(n,a?)`</h3>
+<p>Returns an array of all subsections of `this` of length `n`. If `a` is specified, it is prepended to the array beforehand.</p>
+<h3>`.ã(f?)`</h3>
+<p>Returns an array of all (non-empty) subsections of `this`, mapping each through `f`.</p>
 <h3>`.ä(f,a?)`</h3>
-<p>Takes `this.ã()` and maps each item `[x,y]` with `f(x,y,x+y)`. If `a` is specified, it is concatenated to the beginning beforehand.</p>
+<p>Takes each consecutive pair of items `x,y` in `this` and maps to `f(x,y,x+y)`. If `a` is specified, it is prepended to the array beforehand.</p>
 <h3>`.å(f)`</h3>
 <p>Cumulative reduce; like `q r`, but returns an array of each intermediate value.</p>
 <h3>`.ç(s=" ")`</h3>
@@ -431,10 +433,12 @@
 <p>Returns all unique items of `this`, in original order.</p>
 <h3>`.â(a)`</h3>
 <p>Setwise union; returns all unique items of `this` concatenated with `a`, in original order.</p>
-<h3>`.ã(n=2,a?)`</h3>
-<p>Returns an array of all subsections of `this` of length `n`. If `a` is specified, it is concatenated to the beginning beforehand.</p>
+<h3>`.ã(n,a?)`</h3>
+<p>Returns an array of all subsections of `this` of length `n`. If `a` is specified, it is prepended to the array beforehand.</p>
+<h3>`.ã(f?)`</h3>
+<p>Returns an array of all (non-empty) subsections of `this`, mapping each through `f`.</p>
 <h3>`.ä(f,a?)`</h3>
-<p>Takes `this.ã()` and reduces each item with `f`. If `a` is specified, it is concatenated to the beginning beforehand.</p>
+<p>Takes each consecutive pair of items `x,y` in `this` and maps to `f(x,y,x+y)`. If `a` is specified, it is prepended to the array beforehand.</p>
 <h3>`.å(f)`</h3>
 <p>Cumulative reduce; like `r`, but returns an array of each intermediate value.</p>
 <h3>`.æ(f)`</h3>

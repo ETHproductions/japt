@@ -200,10 +200,10 @@ function functify(operator, argument) {
 
 /* Converts an operator/method and optional argument to a function, Japt-style
  * Setup:
- *   f = functify(op or method, default)
- *   f = functify(op or method, true)
+ *   f = functify2(op or method, default)
+ *   f = functify2(op or method, true)
  * Usage:
- *   f(a, b)
+ *   f(a, b, c)
  *
  * This version will insert a predefined second argument into the function.
  *   E.g. functify2("+", 2) -> function(a, b) { return a + 2; }
@@ -786,7 +786,7 @@ df(Array.prototype, {
 		}
 		else {
 			x = fb(x, Boolean);
-			x = functify(x, y);
+			x = functify2(x, y);
 			return this.every(x);
 		}
 	},
@@ -811,7 +811,7 @@ df(Array.prototype, {
 		}
 		else {
 			x = fb(x, Boolean);
-			x = functify(x, y);
+			x = functify2(x, y);
 			return this.filter(x);
 		}
 	},
@@ -826,7 +826,7 @@ df(Array.prototype, {
 		if (arguments[i] instanceof Array) {
 			x = arguments[i];
 			if (typeof arguments[i + 1] === "function" || typeof arguments[i + 1] === "string") {
-				var f = functify(arguments[i + 1], arguments[i + 2]);
+				var f = functify2(arguments[i + 1], arguments[i + 2]);
 				for (var j = 0; j < x.length; j++) {
 					this[x[j]] = f(this[x[j]], x[j]);
 				}
@@ -837,7 +837,7 @@ df(Array.prototype, {
 		}
 		else if (typeof arguments[i] === "function" || typeof arguments[i] === "string") {
 			var y = arguments[i + 1];
-			x = functify(arguments[i], y);
+			x = functify2(arguments[i], y);
 			if (i === 0)
 				return x(this);
 			
@@ -1720,7 +1720,7 @@ df(Function.prototype, {
 		x = fb(x, function(q) { return q; });
 		var s = 0;
 		if (isNaN(x))
-			x = functify(x, y);
+			x = functify2(x, y);
 		else
 			s = Number(x), x = function(q) { return q; };
 		for(var i = 0; i < 1e8; ++i ) {
@@ -1733,7 +1733,7 @@ df(Function.prototype, {
 		x = fb(x, function(q) { return q; });
 		var s = 0;
 		if (isNaN(x))
-			x = functify(x, y);
+			x = functify2(x, y);
 		else
 			s = Number(x), x = function(q) { return q; };
 		for(var i = 0; i < 1e8; ++i) {
@@ -1746,7 +1746,7 @@ df(Function.prototype, {
 		x = fb(x, function(q) { return q; });
 		var s = 0;
 		if (isNaN(x))
-			x = functify(x, y);
+			x = functify2(x, y);
 		else
 			s = Number(x), x = function(q) { return q; };
 		for(var i = 0, index = 0; i < 1e8; ++index, i = i < 0 ? -i : ~i) {
@@ -1759,7 +1759,7 @@ df(Function.prototype, {
 		x = fb(x, function(q) { return q; });
 		var s = 0;
 		if (isNaN(x))
-			x = functify(x, y);
+			x = functify2(x, y);
 		else
 			s = Number(x), x = function(q) { return q; };
 		for(var i = 0; i < 1e8; ++i ) {
@@ -2175,7 +2175,7 @@ var Japt = {
 			q: function(x) { Japt.clear_output(); if(id(x)) Japt.output(x); },
 			c: shoco.c,
 			d: shoco.d,
-			g: function(s, x, y) { Japt.implicit_output = false; if(!/^(?:[a-z]+:)?\/\//.test(s)) s = "https://" + s; if(!isnode) fetch(s).then(function(x) { Japt.implicit_output = true; return x.text(); }).then(functify(x, y)).then(function(x) { if (Japt.implicit_output) Japt.output(x); }); else console.log("O.g() is not yet supported in Node"); },
+			g: function(s, x, y) { Japt.implicit_output = false; if(!/^(?:[a-z]+:)?\/\//.test(s)) s = "https://" + s; if(!isnode) fetch(s).then(function(x) { Japt.implicit_output = true; return x.text(); }).then(functify2(x, y)).then(function(x) { if (Japt.implicit_output) Japt.output(x); }); else console.log("O.g() is not yet supported in Node"); },
 			v: function(x) { var r = ""; try{ r = eval(Japt.transpile(x)); } catch(e) { Japt.error(e); } return r; },
 			x: function(x) { if (Japt.use_safe) throw "O.x() cannot be used in safe mode"; var r = ""; try{ r = eval(x); } catch(e) { Japt.error(e); } return r; }
 		},

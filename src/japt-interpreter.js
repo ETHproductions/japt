@@ -77,9 +77,9 @@ var pairs_1_3 = {
 	"\xDF": "$rp$(" // ß - 223
 };
 
-String.prototype.repeat = String.prototype.repeat || function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)};
-String.prototype.contains = String.prototype.contains || function(x){return-1<this.indexOf(x)};
-Array.prototype.contains = Array.prototype.contains || function(x){return-1<this.indexOf(x)};
+String.prototype.repeat || df(String,'repeat',function(x){x=fb(x,1);if(x<0)return'';return Array(x+1).join(this)});
+String.prototype.includes || df(String,'includes',function(x){return-1<this.indexOf(x)});
+Array.prototype.includes || df(Array,'includes',function(x){return-1<this.indexOf(x)});
 Math.trunc = Math.trunc || function(x){return isNaN(x)?NaN:x<0?Math.ceil(x):Math.floor(x)};
 Math.approx = function(x,p){p=fb(p,5);for(var y=1;Math.abs(x-Math.round(x))>Math.pow(10,-p);)x*=10,y*=10;return Math.round(x)/y};
 
@@ -91,15 +91,15 @@ df(String,'d',function(x){
 	else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(regexify(f,'g'),a[i+1]);},this)}});
 df(String,'e',function(x,y,z){x=eval(regexify(x,fb(z,'')).toString().replace(/[a-z]*$/,function(s){return s.replace('g','')}));var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t});
 df(String,'f',function(x,y){return this.match(regexify(x,y))||[]});
-df(String,'g',function(x,y){if(["string","function"].contains(typeof x))return functify(x,y)(this+"",y);var l=this.length;x=pm(fb(x,0),l);return this[x]});
+df(String,'g',function(x,y){if(["string","function"].includes(typeof x))return functify(x,y)(this+"",y);var l=this.length;x=pm(fb(x,0),l);return this[x]});
 df(String,'h',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);return this.substring(0,x)+y+this.substring(x+y.length)});
 df(String,'i',function(x,y){var z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,this.length+1);return this.substring(0,x)+y+this.substring(x)});
 df(String,'j',function(x,y){y=fb(y,1);return this.substring(0,x)+this.substring(x+y)});
-df(String,'k',function(x,y){if(["<",">"].contains(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return!x(a,fb(y,b),c)}).q()};return this.replace(regexify('['+x+']',y?'g':'gi'),"")});
+df(String,'k',function(x,y){if(["<",">"].includes(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return!x(a,fb(y,b),c)}).q()};return this.replace(regexify('['+x+']',y?'g':'gi'),"")});
 df(String,'l',function(){return this.length});
 df(String,'m',function(x,y,z){if(typeof x==="string")return this.q(z).m(x,y).q(z);return this.q(y).m(x).q(y)});
 df(String,'n',function(x,y){if(typeof x==="string")x=x.q();if(x instanceof Array){x=x.map(String);return(this.match(RegExp(clone(x)['\xF1']('l').w().map(regescape).join("|"),y?'gi':'g'))||[]).reduce(function(p,c){var i=x.indexOf(c);if(i<0&&y)i=x.findIndex(function(z){return z.v()==c.v()});if(i<0)return NaN;return p*x.length+i},0)}x=x||10;if(x==10)return parseFloat(this);else return parseInt(this,x)});
-df(String,'o',function(x,y){if(["<",">"].contains(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return x(a,fb(y,b),c)}).q()};return this.replace(regexify('[^'+x+']',y?'g':'gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
+df(String,'o',function(x,y){if(["<",">"].includes(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return x(a,fb(y,b),c)}).q()};return this.replace(regexify('[^'+x+']',y?'g':'gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
 df(String,'p',function(x,y){x=fb(x,2);return typeof x==="number"?this.repeat(x):this+[this].m(x,y)});
 df(String,'q',function(x){x=fb(x,"");return this.split(x)});
 df(String,'r',function(x,y,z){y=fb(y,"");return this.replace(regexify(x,z),y)});
@@ -131,7 +131,7 @@ df(String,'\xF2',function(x){return this.q()['\xF2'](x).map(function(a){return a
 df(String,'\xF3',function(x){return this.q()['\xF3'](x).map(function(a){return a.q()})});
 df(String,'\xF4',function(x,y){return this.q()['\xF4'](x,y).map(function(a){return a.q()})});
 df(String,'\xF6',function(x){if(!id(x))return this[Math.random()*this.length|0];return this.q()['\xF6'](x).q()});
-df(String,'\xF8',function(x){if(!id(x))return false;if(!(x instanceof Array))x=[x];var s=this;return x.some(function(a){return s.contains(a)})});
+df(String,'\xF8',function(x){if(!id(x))return false;if(!(x instanceof Array))x=[x];var s=this;return x.some(function(a){return s.includes(a)})});
 df(String,'pad',function(x,y,a){var s=String(this),z;if(/\n/.test(s))return s.q("\n").pad(x,y,a).q("\n");if(!id(x))return s;if(typeof x==="number"&&typeof y!=="number")z=x,x=y,y=z;x=fb(x,' ');if(s.length<y){if(a===1)s=(y-s.length)['\xEE'](x)+s;else if(a===-1)s=y['\xEE'](x).h(s);else	s=y['\xEE'](x).h(s,(y-s.length)/2)}return s});
 df(String,'\xF9',function(x,y){return this.pad(x,y,1)});
 df(String,'\xFA',function(x,y){return this.pad(x,y,-1)});
@@ -143,22 +143,22 @@ df(Array,'c',function(x){if(id(x))return this.concat(x);var f=[];for(var i of th
 df(Array,'d',function(x,y){x=fb(x,function(y){return!!y});x=functify(x,y);return this.some(function(a,b,c){return x(a,fb(y,b),c)})});
 df(Array,'e',function(x,y){if(x instanceof Array){return this.length===x.length&&this.every(function(a,b){return a instanceof Array?a.e(x[b]):a==x[b]})}else{x=fb(x,function(y){return!!y});x=functify(x,y);return this.every(function(a,b,c){return x(a,fb(y,b),c)})}});
 df(Array,'f',function(x,y){if(x instanceof Array){y=fb(y,0)%3;if(y===2)return this.filter(function(q){var a=x.indexOf(q);if(~a)x.splice(a,1);return~a});else if(y===1)return this.filter(function(q,i,a){return~x.indexOf(q)&&a.indexOf(q)===i});else return this.filter(function(q){return~x.indexOf(q)})}x=fb(x,function(y){return!!y});x=functify(x,y);return this.filter(function(a,b,c){return x(a,fb(y,b),c)})});
-df(Array,'g',function(){for(var a=this,i=0,x,y,p,c;x=arguments[i],typeof x==="number";i++)x=pm(x,a.length),p=a,c=x,a=a[x];if(x instanceof Array)if (typeof arguments[i+1]==="function"||typeof arguments[i+1]==="string"){for(var f=functify(arguments[i+1],arguments[i+2]),j=0;j<x.length;j++)this[x[j]]=f(this[x[j]],x[j]);return this}else return x.map(function(j){return a.g(j)});else if(["string","function"].contains(typeof x)){y=arguments[i+1],x=functify(x,y);if(i===0)return x(this,y);p[c]=x(a,y);return this}if(i===0)return a[0];return a});
+df(Array,'g',function(){for(var a=this,i=0,x,y,p,c;x=arguments[i],typeof x==="number";i++)x=pm(x,a.length),p=a,c=x,a=a[x];if(x instanceof Array)if (typeof arguments[i+1]==="function"||typeof arguments[i+1]==="string"){for(var f=functify(arguments[i+1],arguments[i+2]),j=0;j<x.length;j++)this[x[j]]=f(this[x[j]],x[j]);return this}else return x.map(function(j){return a.g(j)});else if(["string","function"].includes(typeof x)){y=arguments[i+1],x=functify(x,y);if(i===0)return x(this,y);p[c]=x(a,y);return this}if(i===0)return a[0];return a});
 df(Array,'h',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);this[x]=y;return this});
 df(Array,'i',function(x,y){var z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,this.length+1);this.splice(x,0,y);return this});
 df(Array,'j',function(x,y){y=fb(y,1);return this.splice(x,y)});
-df(Array,'k',function(x,y){if(!id(x)||typeof x==="function"||(typeof x==="string"&&id(y))){x=functify(fb(x,function(z){return z}),y);return this.filter(function(a,b,c){return!x(a,fb(y,b),c)})}if(x instanceof Array)return this.filter(function(a){return!x.contains(a)});return this.filter(function(z){return x!==z})});
+df(Array,'k',function(x,y){if(!id(x)||typeof x==="function"||(typeof x==="string"&&id(y))){x=functify(fb(x,function(z){return z}),y);return this.filter(function(a,b,c){return!x(a,fb(y,b),c)})}if(x instanceof Array)return this.filter(function(a){return!x.includes(a)});return this.filter(function(z){return x!==z})});
 df(Array,'l',function(x,y){if(id(x)){if(typeof x==="number")y=x,x=function(a){return a===y};x=functify(x,y);return this.filter(function(a,b,c){return x(a.l(),fb(y,b),a)})}return this.length});
 df(Array,'m',function(x,y){x=functify(x,y);return this.map(function(q,r,s){return x(q,fb(y,r),s)})});
 df(Array,'n',function(x){x=functify(fb(x,function(x,y){return(x>y)-(x<y)}));return this.sort(x)});
-df(Array,'o',function(x,y){if(typeof x==="number"){for(var a=[],x=Math.trunc(x);x>0;--x)a.push(this.pop());return a}else if(["string","function"].contains(typeof x)){x=functify(x,y);if(this.length>0)this.push(x(this.pop(),y));return this}else return this.pop()});
+df(Array,'o',function(x,y){if(typeof x==="number"){for(var a=[],x=Math.trunc(x);x>0;--x)a.push(this.pop());return a}else if(["string","function"].includes(typeof x)){x=functify(x,y);if(this.length>0)this.push(x(this.pop(),y));return this}else return this.pop()});
 df(Array,'p',function(){for(var i of [].slice.call(arguments))this.push(i);return this});
 df(Array,'q',function(x){return this.join(x||"")});
 df(Array,'r',function(x,y){x=functify(x,0);return id(y)?this.reduce(x,y):this.reduce(x)});
 df(Array,'s',function(x,y){y=fb(y,this.length);return this.slice(x,y)});
 df(Array,'t',function(x,y){y=fb(y,this.length);return this.slice(x,x+y)});
 df(Array,'u',function(){for(var i of [].slice.call(arguments))this.unshift(i);return this});
-df(Array,'v',function(x,y){if(typeof x==="number"){for(var a=[],x=Math.trunc(x);x>0;--x)a.push(this.shift());return a}else if(["string","function"].contains(typeof x)){x=functify(x,y);if(this.length>0)this[0]=x(this[0],y);return this}else return this.shift()});
+df(Array,'v',function(x,y){if(typeof x==="number"){for(var a=[],x=Math.trunc(x);x>0;--x)a.push(this.shift());return a}else if(["string","function"].includes(typeof x)){x=functify(x,y);if(this.length>0)this[0]=x(this[0],y);return this}else return this.shift()});
 df(Array,'w',function(){return this.reverse()});
 df(Array,'x',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.reduce(function(a,b,i,z){b=x(b,fb(y,i),z);return a+(isNaN(+b)?parseFloat(b)||0:+b)},0)});
 df(Array,'y',function(x,y){if(id(x)){var z=this.y(),a=z.m(function(c){return c instanceof Array?c.f(id):c}).m(x,y);if(a.every(function(q){return typeof q instanceof Array}))z=z.m(function(c,i){var j=0;return c.m(function(){return a[i][j++]})}).y();else if(a.every(function(q){return q instanceof String||typeof q==="string"}))z=a.y();else z=a;return z}var t="string"==typeof this[0],n=t?this.map(function(t){return t.split("")}):this,x,y,z=n.reduce(function(p,q){return Math.max(p,q.length)},0),a=[];for(y=0;y<z;y++)a[y]=t?Array(n.length).fill(" "):[];for(y=0;y<n.length;y++)for(x=0;x<n[y].length;x++)a[x][y]=n[y][x];return t?a.map(function(r){var i=0;return r.join("")}):a});
@@ -166,7 +166,7 @@ df(Array,'z',function(n){n=pm(fb(n,1),4)||4;var q=this.every(function(x){return 
 df(Array,'\xE0',function(x){for(var r=this.length,t=[[]],n=0;n<r;n++){var e=this[n],i=t;t=[];for(var s=0;s<i.length;s++){var a=i[s].slice();a.push(e);if(!id(x)||a.length<=x)t.push(a);if(!id(x)||i[s].length>x-(r-n))t.push(i[s])}}return t});
 df(Array,'\xE1',function(x){for(var i=this.length,s=[this.slice()],e=0;e<fb(x,i-1);e++){var c=s,l=0;for(s=[];l<c.length;l++)for(var a=c[l],f=e;f<i;f++){var n=a.slice(),t=n.splice(f,1)[0];n.splice(e,0,t);if(e+1===x)n=n.slice(0,x),s.push(n)}}return s});
 df(Array,'\xE2',function(x){var a=[];x=this.concat(fb(x,[]));for(var i=0;i<x.length;i++)if(a.findIndex(function(q){return str(q)==str(x[i])})<0)a.push(x[i]);return a});
-df(Array,'\xE3',function(x,y){var a=[],f,z;if(["string","function"].contains(typeof x))f=functify(x,z=y),x=y=undefined;if(id(y))a[0]=this.slice(0,x-1),a[0].unshift(y);for(var i=fb(x,1);i<=fb(x,this.length);i++)for(var j=0;j<=this.length-i;j++)a.push(this.slice(j,j+i));if(f)a=a.map(function(a,b,c){return f(a,fb(z,b),c)});return a});
+df(Array,'\xE3',function(x,y){var a=[],f,z;if(["string","function"].includes(typeof x))f=functify(x,z=y),x=y=undefined;if(id(y))a[0]=this.slice(0,x-1),a[0].unshift(y);for(var i=fb(x,1);i<=fb(x,this.length);i++)for(var j=0;j<=this.length-i;j++)a.push(this.slice(j,j+i));if(f)a=a.map(function(a,b,c){return f(a,fb(z,b),c)});return a});
 df(Array,'\xE4',function(x,y){x=functify(x,0);return this['\xE3'](2,y).map(function(z){return z.reduce(x)})});
 df(Array,'\xE5',function(x,y){x=functify(x,0);var a=[];this.reduce(function(q,r,s){var t=x(q,r,s);a.push(t);return t},y||(typeof this[0]=="number"?0:""));return a});
 df(Array,'\xE6',function(x,y){x=functify(fb(x,function(q){return!!q}),y);for(var i=0;i<this.length;i++)if(x(this[i],fb(y,i)))return this[i]});
@@ -179,13 +179,13 @@ df(Array,'\xEC',function(x){if(typeof x==="string")x=x.q();x=fb(x,10);return thi
 df(Array,'\xED',function(x,y){var i=0,z;if(!(x instanceof Array)){if(y instanceof Array)z=y,y=x,x=z;else for(y=x,x=[];i<this.length;i++)x[i]=i}y=functify(fb(y,function(a,b){return[a,b]}),0);return this.map(function(a,b,c){return y(a,x[b],c)})});
 df(Array,'\xEE',function(x){x=fb(x,[0]);return this.map(function(_,i){return x[i%x.length]});});
 df(Array,'\xEF',function(x,y){var z,r=[],i,j;if(!(x instanceof Array)){if(y instanceof Array)z=y,y=x,x=z;else y=x,x=this.slice()}y=functify(fb(y,function(a,b){return[a,b]}),0);for(i=0;i<this.length;i++)for(j=0;j<x.length;j++)r.push(y(this[i],x[j],i*x.length+j));return r});
-df(Array,'\xF0',function(x,y){x=fb(x,Boolean);if(x instanceof Array)y=x,x=function(a){return y.contains(a)};x=functify(x,y);for(var a=[],i=0;i<this.length;i++)if(x(this[i],fb(y,i),this))a.push(i);return a});
+df(Array,'\xF0',function(x,y){x=fb(x,Boolean);if(x instanceof Array)y=x,x=function(a){return y.includes(a)};x=functify(x,y);for(var a=[],i=0;i<this.length;i++)if(x(this[i],fb(y,i),this))a.push(i);return a});
 df(Array,'\xF1',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.map(function(a,i){return{v:a,k:x(a,fb(y,i))}}).sort(function(a,b){return(a.k>b.k)-(a.k<b.k)}).map(function(a){return a.v})});
 df(Array,'\xF2',function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){if(x>0)for(;i<this.length;i+=x)a.push(this.slice(i,i+x));else if(x<0)for(i=this.length;i>0;i+=x)a.unshift(this.slice(Math.max(i+x,0),i));}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)&&a.push([])}return a;});
 df(Array,'\xF3',function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i++)a[i%x]=a[i%x]||[],a[i%x].push(this[i]);}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)||a.push([])}return a;});
 df(Array,'\xF4',function(x,y){if(this.length===0)return[];x=functify(fb(x,function(z){return!z}),y);var a=[],i=0;for(a.push([]);i<this.length;i++)x(this[i],fb(y,i),this)?a.push([]):a.g(-1).push(this[i]);return a;});
 df(Array,'\xF6',function(x){if(!id(x))return this[Math.random()*this.length|0];if(typeof x==="function")return this.filter(x)['\xF6']();var b=[];if(isNaN(x))for(var a=this.slice();a.length>0;)b.push(a.splice(Math.random()*a.length|0,1)[0]);else for(var i=+x;i>0;i--)b.push(this[Math.random()*this.length|0]);return b});
-df(Array,'\xF8',function(x){if(!id(x))return false;if(!(x instanceof Array))x=[x];return this.some(function(a){return x.contains(a)})});
+df(Array,'\xF8',function(x){if(!id(x))return false;if(!(x instanceof Array))x=[x];return this.some(function(a){return x.includes(a)})});
 df(Array,'pad',function(x,y,a){var z,q=this.map(function(c){return c instanceof Array?c:String(c)});if(!id(x))x=" ";if(!id(y)){if(typeof x==="number")y=x,x=" ";else y=q.reduce(function(p,c){return p.w(c.length)},0);}if(typeof x==="number"&&typeof y!=="number")z=x,x=y,y=z;return q.map(function(z){return z.pad(x,y,a)})});
 df(Array,'\xF9',function(x,y){return this.pad(x,y,1)});
 df(Array,'\xFA',function(x,y){return this.pad(x,y,-1)});
@@ -198,7 +198,7 @@ df(Number,'c',function(x){x=fb(x,1);return Math.ceil(this/x)*x});
 df(Number,'d',function(x){x=fb(x,0);return String.fromCodePoint(this+x)});
 df(Number,'e',function(x){return this*Math.pow(10,x)});
 df(Number,'f',function(x){x=fb(x,1);return Math.floor(this/x)*x});
-df(Number,'g',function(x,y){if(["function"].contains(typeof x))return functify(x,y)(+this,y);if(typeof x=="string"||x instanceof Array)return x.g(+this);x=fb(x,0);return isNaN(this)||isNaN(x)?"NaN":this<x?-1:this>x?1:this-x});
+df(Number,'g',function(x,y){if(["function"].includes(typeof x))return functify(x,y)(+this,y);if(typeof x=="string"||x instanceof Array)return x.g(+this);x=fb(x,0);return isNaN(this)||isNaN(x)?"NaN":this<x?-1:this>x?1:this-x});
 df(Number,'h',function(x){x=fb(x,1);return this.toPrecision(x)});
 df(Number,'i',function(x){return Japt.intervals[Japt.intervals.length]=setInterval(x,this)});
 df(Number,'j',function(x){if(id(x))return this.y(x)==1;var n=+this;if(n===2)return true;if(n%1||n<2||n%2===0)return false;for(var i=3,s=Math.sqrt(n);i<=s;i+=2)if(n%i===0)return false;return true});
@@ -979,7 +979,7 @@ var Japt = {
 						else i--;
 						var tr = subtranspile(temp.slice(0,-1));
 
-						if (tr.contains(";"))
+						if (tr.includes(";"))
 							tr = tr.slice(0, tr.lastIndexOf(";") + 1) + "return " + tr.slice(tr.lastIndexOf(";") + 1);
 						else
 							tr = "return " + tr;

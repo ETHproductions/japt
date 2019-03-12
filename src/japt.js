@@ -62,13 +62,13 @@ function regexify2(string) {
 	var flags = string.slice(end + 1);
 	string = string.slice(1, end);
 
-	if (flags.contains("g"))
+	if (flags.includes("g"))
 		flags = flags.replace("g", "");
 	else
 		flags += "g";
 
 	var dotAll = false;
-	if (flags.contains("s")) {
+	if (flags.includes("s")) {
 		dotAll = true;
 		flags = flags.replace("s", "");
 	}
@@ -347,7 +347,7 @@ var pairs_1_3 = {
 	"\xDF": "$rp$(" // ß - 223
 };
 
-if (!id(String.prototype.repeat)) String.prototype.repeat = function(len) {
+if (!id(String.prototype.repeat)) df(String.prototype, { repeat: function(len) {
 	len = Math.trunc(fb(len, 1));
 
 	var i = Math.pow(2, Math.floor(Math.log2(len)));
@@ -358,17 +358,17 @@ if (!id(String.prototype.repeat)) String.prototype.repeat = function(len) {
 		i /= 2;
 	}
 	return str;
-};
+}});
 
-if (!id(String.prototype.contains)) String.prototype.contains = function(str) {
+if (!id(String.prototype.includes)) df(String.prototype, { includes: function(str) {
 	return this.indexOf(str) > -1;
-};
+}});
 
-if (!id(Array.prototype.contains)) Array.prototype.contains = function(item) {
+if (!id(Array.prototype.includes)) df(Array.prototype, { includes: function(item) {
 	return this.indexOf(item) > -1;
-};
+}});
 
-if (!id(Array.prototype.sortBy)) Array.prototype.sortBy = function(func) {
+if (!id(Array.prototype.sortBy)) df(Array.prototype, { sortBy: function(func) {
 	if (typeof func === "undefined")
 		return this.sort();
 	if (typeof func !== "function")
@@ -379,7 +379,7 @@ if (!id(Array.prototype.sortBy)) Array.prototype.sortBy = function(func) {
 		b = func(b);
 		return (a > b) - (a < b);
 	});
-};
+}});
 
 if (!id(Math.trunc)) Math.trunc = function(n) {
 	if (isNaN(n))
@@ -504,7 +504,7 @@ df(String.prototype, {
 		return this.substring(0, x) + this.substring(x + y);
 	},
 	k: function (x, y) {
-		if (["<", ">"].contains(x) || typeof x === "function") {
+		if (["<", ">"].includes(x) || typeof x === "function") {
 			x = functify2(x, y);
 			return this.q().filter(function(a, b, c){
 				return !x(a, b, c);
@@ -551,7 +551,7 @@ df(String.prototype, {
 			return parseInt(this, x);
 	},
 	o: function (x, y) {
-		if (["<", ">"].contains(x) || typeof x === "function") {
+		if (["<", ">"].includes(x) || typeof x === "function") {
 			x = functify2(x, id(y) ? String(y) : y);
 			return this.q().filter(x).q();
 		}
@@ -704,7 +704,7 @@ df(String.prototype, {
 		if (!(x instanceof Array))
 			x = [x];
 		var s = this;
-		return x.some(function(a) { return s.contains(a); });
+		return x.some(function(a) { return s.includes(a); });
 	},
 
 	pad: function(x, y, a) {
@@ -795,18 +795,18 @@ df(Array.prototype, {
 			y = fb(y, 0) % 3;
 			if (y === 2)
 				return this.filter(function(q) {
-					var a = x.contains(q);
+					var a = x.includes(q);
 					if (a)
 						x.splice(x.indexOf(q), 1);
 					return a;
 				});
 			else if (y === 1)
 				return this.filter(function(q, i, a) {
-					return x.contains(q) && a.indexOf(q) === i;
+					return x.includes(q) && a.indexOf(q) === i;
 				});
 			else
 				return this.filter(function(q) {
-					return x.contains(q);
+					return x.includes(q);
 				});
 		}
 		else {
@@ -888,7 +888,7 @@ df(Array.prototype, {
 			return this.filter(function(a, b, c) { return !x(a, b, c); });
 		}
 		if (x instanceof Array)
-			return this.filter(function(a) { return !x.contains(a); });
+			return this.filter(function(a) { return !x.includes(a); });
 		
 		return this.filter(function(a) { return a !== x; });
 	},
@@ -1187,7 +1187,7 @@ df(Array.prototype, {
 		x = fb(x, Boolean);
 		if (x instanceof Array) {
 			y = x;
-			x = function(a) { return y.contains(a); };
+			x = function(a) { return y.includes(a); };
 		}
 		else
 			x = functify2(x, y);
@@ -1287,7 +1287,7 @@ df(Array.prototype, {
 			return false;
 		if (!(x instanceof Array))
 			x = [x];
-		return this.some(function(a) { return x.contains(a); });
+		return this.some(function(a) { return x.includes(a); });
 	},
 	pad: function(x, y, a) {
 		var q = this.map(function(c) {
@@ -2587,7 +2587,7 @@ var Japt = {
 						else i--;
 						var tr = subtranspile(temp.slice(0,-1));
 
-						if (tr.contains(";"))
+						if (tr.includes(";"))
 							tr = tr.slice(0, tr.lastIndexOf(";") + 2) + "return " + tr.slice(tr.lastIndexOf(";") + 2);
 						else
 							tr = "return " + tr;

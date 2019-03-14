@@ -755,20 +755,20 @@ df(Array.prototype, {
 			return this.map(x).indexOf(true);
 		return this.indexOf(x);
 	},
-	c: function (x) {
-		if (id(x))
-			return this.concat(x);
-		var f = [];
-		for (var i = 0; i < this.length; i++) {
-			if (this[i] instanceof Array) {
-				var q = this[i].c();
-				for (var j = 0; j < q.length; j++)
-					f.push(q[j]);
-			}
-			else
-				f.push(this[i]);
-		}
-		return f;
+	c: function (x, y) {
+		if (x === 0)
+			return this;
+		var f = function (q) { if (q instanceof Array) q = q.c(x - 1); return q; },
+			a = this.slice(), r = [];
+		if (typeof x === "function" || typeof x === "string")
+			f = functify2(x, y);
+		else if (x instanceof Array)
+			return a.concat(x);
+		
+		for (var i = 0; i < a.length; i++)
+			r = r.concat(f(a[i], i, a));
+		
+		return r;
 	},
 	d: function (x, y) {
 		x = fb(x, Boolean);

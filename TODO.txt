@@ -83,6 +83,8 @@ Completed:
 1.4.6  A.g(a,f) -> map items at indices
 1.4.6  S.ã(f?) -> all substrings
 1.4.6  A.ã(f?) -> all subslices
+1.4.6  A.c(f) -> A.m(f), but flatten the result
+1.4.6  A.c(n) -> Flatten n levels
 
 
 2.0a0  Clean up code
@@ -103,12 +105,13 @@ Completed:
 
 
 Planned:
+1.4.6  S.n/A.ì(n,n) -> convert from base n1 to base n2
+1.4.6  S.n/A.ì(n,f) -> convert from base n, apply, convert back to base n
+1.4.6  S.n/A.ì(n,n,f) -> convert from base n1, apply, convert to base n2
+1.4.6  N.s/ì(n,f) -> convert to base n, apply, convert back from base n
 1.4.6  A.n(s) -> sort the items in A by their alphabetical order in s
 1.4.6  A.n(a) -> sort A by the order the items appear in a?
-1.4.6  A.?(f) -> minimum
-1.4.6  A.?(f) -> maximum
-1.4.6  A.?() -> keys/indices (like Jelly's `J`)
-1.4.6  A.c(f) -> A.m(f), but flatten the result
+1.4.6  A.ð(?) -> keys/indices (like Jelly's `J`)
 1.4.6  F.?(n) -> first n integers that return truthily to F
 
 1.4.?  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
@@ -124,6 +127,8 @@ Planned:
 1.4.?  S.w(s?) -> reverse and mirror ()[]{}<>\/
 1.4.?  S.w(n?) -> mirror ()[]{}<>\/
 1.4.?  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
+1.4.?  A.?(f) -> minimum
+1.4.?  A.?(f) -> maximum
 1.4.?  A.?() -> fill ranges ([1,5,3,3,4] -> [1,2,3,4,5,4,3,3,4])
 1.4.?  A.?(f) -> notall, i.e. opposite of every (A.e(f))?
 1.4.?  A.?(f) -> none, i.e. opposite of some (A.d(f))?

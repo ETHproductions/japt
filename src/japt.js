@@ -2517,7 +2517,7 @@ var Japt = {
 				}
 			}
 			lines.push(subtranspile(newcode));
-			return lines.join("");
+			return lines.join("\n");
 		}
 
 		function subtranspile(code) {
@@ -2666,7 +2666,7 @@ var Japt = {
 
 		outp = outp
 			.replace(/(\+\+|--)[A-Z]|[A-Z](\+\+|--)/g, function(s) { Japt.strings.push("(" + s + ")"); return "\"" + (Japt.strings.length - 1) + "\""; })
-			.replace(/[,;]/g, "$& ")
+			.replace(/[,;](?!\n)/g, "$& ")
 			.replace(/[}]/g, " $&")
 			.replace(/[{?:]|&&|\|\||(?:\*\*|==|<<|>>>?|!=|[+\-*/÷%&|^<=>])=?/g, " $& ")
 			.replace(/ +/g, " ")

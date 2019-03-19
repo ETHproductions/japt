@@ -99,7 +99,7 @@ df(String,'k',function(x,y){if(["<",">"].includes(x)||typeof x==="function"){x=f
 df(String,'l',function(){return this.length});
 df(String,'m',function(x,y,z){if(typeof x==="string")return this.q(z).m(x,y).q(z);return this.q(y).m(x).q(y)});
 df(String,'n',function(x,y){if(typeof x==="string")x=x.q();if(x instanceof Array){x=x.map(String);return(this.match(RegExp(clone(x)['\xF1']('l').w().map(regescape).join("|"),y?'gi':'g'))||[]).reduce(function(p,c){var i=x.indexOf(c);if(i<0&&y)i=x.findIndex(function(z){return z.v()==c.v()});if(i<0)return NaN;return p*x.length+i},0)}x=x||10;if(x==10)return parseFloat(this);else return parseInt(this,x)});
-df(String,'o',function(x,y){if(["<",">"].includes(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return x(a,fb(y,b),c)}).q()};return this.replace(regexify('[^'+x+']',y?'g':'gi'),"")}); // Removes all but specified characters. Similar to TeaScript's O function
+df(String,'o',function(x,y){if(["<",">"].includes(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return x(a,fb(y,b),c)}).q()};return this.replace(regexify('[^'+regescape(x)+']',y?'g':'gi'),"")});
 df(String,'p',function(x,y){x=fb(x,2);return typeof x==="number"?this.repeat(x):this+[this].m(x,y)});
 df(String,'q',function(x){x=fb(x,"");return this.split(x)});
 df(String,'r',function(x,y,z){y=fb(y,"");return this.replace(regexify(x,z),y)});

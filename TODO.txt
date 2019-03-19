@@ -23,36 +23,138 @@ Completed:
 1.4.5  N.ì(a) -> convert to array (9ì['c7] -> [7,"c","c",7])
 1.4.5  A.ì(s) -> convert to number ([7'c'c7]ì"c7" -> 9)
 1.4.5  N.ì(s) -> convert to array (9ì"c7" -> ["7","c","c","7"])
+1.4.5  S.í(s) -> pair strings, like A.í(a)
+1.4.5  Add %p (printable), %P, %q (printable + newline), and %Q character classes
+1.4.5  N.a(n) -> absolute difference
+1.4.5  N.j(n) -> coprime
+1.4.5  N.y(n=2) -> GCD
+1.4.5  F.g(n,a=[0,1]) -> Generate n'th item of sequence (repeatedly appending this(a.g(-1), i, a) to a)
+1.4.5  S.y(f) -> map columns
+1.4.5  A.y(f) -> map columns
+1.4.5  N.s(f) -> Number(f(String(N)))
+1.4.5  N.ì(f) -> Number(f(digits(N)))
+1.4.5  Ê -> `l `
+1.4.5  Ë -> `mDEF{D`
+1.4.5  Ì -> `gJ `
+1.4.5  Í -> `n2 `
+1.4.5  N.z(n=2) -> integer division
+1.4.5  F.a(n=0) -> smallest integer >= n where F(n) is truthy
+1.4.5  F.c(n=0) -> closest integer to n where F(n) is truthy
+1.4.5  A.ò(-n) -> work backwards from end of array ([1,2,3,4,5]ò2n -> [[1],[2,3],[4,5]])
+1.4.5  S.ù(n,s=" ") -> right-align S to n chars with filler s
+1.4.5  S.ú -> S.ù, but left-aligned
+1.4.5  S.û -> S.ù, but center-aligned
+1.4.5  A.ù -> right-align all items
+1.4.5  A.ú -> A.ù, but left-aligned
+1.4.5  A.û -> A.ù, but center-aligned
+1.4.5  Move _ from %w class to %W
+1.4.5  S.c(n) -> codePointAt instead of charCodeAt (thanks @PeterShaggyNoble!)
+1.4.5  N.d(n=0) -> fromCodePoint(N+n) (thanks again Shaggy!)
+1.4.5  A.e(a) -> workaround for A == a (thanks once more Shaggy!)
+1.4.5  A.ö(f) -> random item that satisfies f
+1.4.5  Add %c (consonant) and %C (non-consonant) character classes
+1.4.5  Balance parens within ?:
+1.4.5  Î -> `g `
+1.4.5  Ï -> `XYZ{Y`
+1.4.5  Ñ -> `*2`
+1.4.5  F.f(f?) -> first non-negative integer returning falsy value
+1.4.5  A.ï(a,f?) -> Cartesian product
+
+1.4.6  S.f() should return [] if the result is null
+1.4.6  A.g(n,n,...) -> A.g(n).g(n)...
+1.4.6  A.g(a) -> items at indices ([5,8,1,4,2]g[0,3,1] -> [5,4,8])
+1.4.6  A.ð(f) -> all truthy indices
+1.4.6  S.ï(s,f?) -> Cartesian product
+1.4.6  A.l(f) -> filter by length
+1.4.6  A.l(n) -> items with length
+1.4.6  S.ð(r/s) -> all occurances (including overlapping)
+1.4.6  A.g(n,f) -> map item at index
+1.4.6  A/S/N.g(f) -> map `this` (short for e.g. [U].m(f))
+1.4.6  A.o(f) -> map last item
+1.4.6  A.v(f) -> map first item
+1.4.6  A.v(n) -> first n items
+1.4.6  S.ñ(f) -> sort chars
+1.4.6  Ò -> `-~`
+1.4.6  Ó -> `~-`
+1.4.6  Ô -> `w `
+1.4.6  Õ -> `y `
+1.4.6  A.ü(f?) -> group by value
+1.4.6  Update A.à(n?) and A.á(n?) to non-recursive algorithms
+1.4.6  A.g(a,f) -> map items at indices
+1.4.6  S.ã(f?) -> all substrings
+1.4.6  A.ã(f?) -> all subslices
+1.4.6  A.c(f) -> A.m(f), but flatten the result
+1.4.6  A.c(n) -> Flatten n levels
+
+
+2.0a0  Clean up code
+2.0a0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
+2.0a0  Add single-class regexes with `\` (i.e. `Uf\w` == `Uf/\w/`)
+2.0a0  Have each method control its own regex flags (modifying regexify() and various methods)
+2.0a0  R.t(x) -> R.test(x)
+
+2.0a1  S.â() -> deduplicate chars
+
+2.0.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)
+2.0.0  Command-line-ify
+2.0.0  Completely redesign online interpreter (see: https://hackmd.io/CwQzGYDMHYFYFoBGA2ApgDnsaH4E5pxl4AmAYzPBDkUr2SA=#)
+2.0.0  Outsource eval() to Worker
+2.0.0  Use arguments instead of parsing an input
+2.0.0  Use new encoding (https://github.com/ETHproductions/japt/issues/28)
+2.0.0  Use non-ASCII chars for strings and regexes (“” for strings, ‹› for regexes?)
+
 
 Planned:
-1.4.5  X.?(f) -> run X through f  (default function: output with newline?)
-1.4.5  S.?(n,s=" ") -> pad S to n chars with filler s
-1.4.5  A.n(s) -> sort the items in A by their alphabetical order in s
-1.4.5  A.n(a) -> sort A by the order the items appear in a?
-1.4.5  A.?(f) -> all truthy indices
-1.4.5  S.?(f) -> all truthy indices
-1.4.5  S.?(s,n) -> insert s at every n'th position
-1.4.5  A.?(x,n) -> insert x at every n'th position
-1.4.5  S.?(s) -> interleave
-1.4.5  A.?(a) -> interleave
-1.4.5  S.u(x)? -> uppercase first character
-1.4.5  S.v(x)? -> title case
-1.4.5  S.w(n%3==1?) -> reverse and mirror ()[]{}<>\/
-1.4.5  S.w(n%3==2?) -> mirror ()[]{}<>\/
-1.4.5  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
-1.4.5  ? -> `w `?
-1.4.5  ? -> `c `?
-1.4.5  ? -> `gJ `
-1.4.5  Have each method control its own regex flags (modifying regexify() and various methods)
-1.4.5  Add some character that looks at the next byte and inserts a predefined value
+1.4.6  S.n/A.ì(n,n) -> convert from base n1 to base n2
+1.4.6  S.n/A.ì(n,f) -> convert from base n, apply, convert back to base n
+1.4.6  S.n/A.ì(n,n,f) -> convert from base n1, apply, convert to base n2
+1.4.6  N.s/ì(n,f) -> convert to base n, apply, convert back from base n
+1.4.6  A.n(s) -> sort the items in A by their alphabetical order in s
+1.4.6  A.n(a) -> sort A by the order the items appear in a?
+1.4.6  A.ð(?) -> keys/indices (like Jelly's `J`)
+1.4.6  F.?(n) -> first n integers that return truthily to F
 
-1.5.0  Clean up code
-1.5.0  Outsource all output functions (so the client controls what happens with the output, rather than Japt itself)
+1.4.?  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
+1.4.?  A.ù(n,a=[0]) -> right-align A to n items with filler a
+1.4.?  A.ù(n,x) -> right-align A to n items with filler [x]
+1.4.?  S.?(s,n) -> insert s at every n'th position
+1.4.?  A.?(x,n) -> insert x at every n'th position
+1.4.?  S.?(s) -> interleave
+1.4.?  A.?(a) -> interleave
+1.4.?  S.u(s)? -> uppercase first character
+1.4.?  S.v(s)? -> match case
+1.4.?  S.v(n)? -> title case
+1.4.?  S.w(s?) -> reverse and mirror ()[]{}<>\/
+1.4.?  S.w(n?) -> mirror ()[]{}<>\/
+1.4.?  S.?(s) -> transliterate (like S.d(s) but makes all replacements at once)
+1.4.?  A.?(f) -> minimum
+1.4.?  A.?(f) -> maximum
+1.4.?  A.?() -> fill ranges ([1,5,3,3,4] -> [1,2,3,4,5,4,3,3,4])
+1.4.?  A.?(f) -> notall, i.e. opposite of every (A.e(f))?
+1.4.?  A.?(f) -> none, i.e. opposite of some (A.d(f))?
+1.4.?  A.?(a) -> mixed base conversion (e.g. [2,3,45]x[24,60] = 45 + 3*60 + 2*60*24 = 3305 [2d 3h 45m = 3305m])
+1.4.?  N.c/f/r(f) -> ceil/floor/round to next integer that satisfies f (ignoring original number?)
+1.4.?  X.?(f,n=1) -> run X through f, n times (default function: output with newline?)
+1.4.?  F.w(f)? -> while F(), f()?
+1.4.?  Combine A.ø(a/x) into A.d()? Only problem is strings
+1.4.?  A.ė(x) -> number of instances of x in A? Also has problem with strings
+1.4.?  Have A/S.i() not wrap around? Same for .h()? .j()?
+1.4.?  ? -> `c `?
+1.4.?  Auto-finish arrays []
+1.4.?  Auto-start functions? {}
+1.4.?  Auto-finish/fill a?b:c
 
-2.0.0  Use new encoding (https://github.com/ETHproductions/japt/issues/28)
-2.0.0  Add custom string compressor (https://github.com/ETHproductions/japt/issues/29)
+
+See everything planned for v2: https://hackmd.io/Olgzu4-USxWNavDPeyWCNg
 2.0.0  Add characters that represent `U`, `X`, and `Z` in strings
-2.0.0  Introduce a true regex syntax (use slashes for regex and ÷ for division?)
-2.0.0  Add single-class regexes with `\` (i.e. `Uf\w` == `Uf/\w/`)
-2.0.0  Use ⁺ and ⁻ for unary plus and minus, make + and - always binary operators
-2.0.0  Turn l into a property? (i.e. `Ul +1` -> `Ul+1`)
+2.0.0  Add constants that return the inputs
+2.0.0  Add a variable that's pre-defined to the raw input
+2.0.0  Use ‹› for interpolation in strings and regexes
+2.0.0  Use some non-ASCII char for interpolating the next (prev?) value (e.g. if it were @, "my@string"1+2 -> "my3string")
+2.0.0  Use ⁺ and ⁻ for unary plus and minus, ₊ and ₋ for increment and decrement, make + and - always binary operators
+2.0.0  Add custom string compressor (https://github.com/ETHproductions/japt/issues/29)
+
+2.0.0  Add function that takes next byte and uses it to apply reverse and/or palindromize with options
+
+2.0.0  Make mini-regexes take as many chars as is reasonable (i.e. \d+ -> /\d+/g, \d^m -> /^\d/gm)
+2.0.0  Properties (i.e. `Ul +1` -> `UĿ+1` or similar)

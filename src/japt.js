@@ -11,7 +11,7 @@ Object.defineProperty(isnode ? global : window, "K", {
 		return fb(_K, new Date());
 	},
 	set: function(x) {
-		return _K = x; 
+		return _K = x;
 	}
 });
 
@@ -20,7 +20,7 @@ function noFunc(x) {
 	Japt.error("No such function: " + x);
 }
 
-// Detects whether the variable is defined
+// Is-defined: detects whether the variable is defined
 function id(x) {
 	return typeof x !== "undefined";
 }
@@ -32,6 +32,8 @@ function fb(x, y) {
 
 // Positive modulo (like Python's %)
 function pm(x, y) {
+	if (y === 0)
+		return 0;
 	return (  // Puts x in the range
 		x % y // (-y, +y)
 		+ y   // ( 0, 2y)
@@ -44,66 +46,6 @@ function df(target, properties) {
 	Object.defineProperties(target, properties);
 }
 
-// Converts a string to a regex, Japt-style
-function regexify(string, flags) {
-	if (string instanceof RegExp)
-		// you dirty rotten liar
-		return string;
-	string = String(string);
-	
-	if (flags !== "") {
-		flags = String(fb(flags, ""));
-		if (!flags.contains("g"))
-			flags += "g";
-	}
-	
-	var regex = "", inCharClass = false;
-	for(var i = 0; i < string.length; i++) {
-		var char = string[i];
-		if (char === "%") {
-			string = string.slice(0, i + 1) + "\\" + string.slice(i + 1);
-		}
-		else if (char === "\\") {
-			char = string[++i];
-			if (char === "A")
-				regex += inCharClass ? "A-Z" : "[A-Z]";
-			else if (char === "a")
-				regex += inCharClass ? "a-z" : "[a-z]";
-			else if (char === "l")
-				regex += inCharClass ? "A-Za-z" : "[A-Za-z]";
-			else if (char === "L")
-				regex += inCharClass ? "\\W_\\d" : "[^A-Za-z]";
-			else if (char === "p")
-				regex += inCharClass ? " -~" : "[ -~]";
-			else if (char === "P")
-				regex += inCharClass ? "\\x00-\\x1f\\x7f-\\uffff" : "[^ -~]";
-			else if (char === "q")
-				regex += inCharClass ? "\\n -~" : "[\\n -~]";
-			else if (char === "Q")
-				regex += inCharClass ? "\\x00-\\x09\\x0b-\\x1f\\x7f-\\uffff" : "[^\\n -~]";
-			else if (char === "v")
-				regex += inCharClass ? "AaEeIiOoUu" : "[AaEeIiOoUu]";
-			else if (char === "V")
-				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_" : "[^AaEeIiOoUu]";
-			else if (char === "y")
-				regex += inCharClass ? "AaEeIiOoUuYy" : "[AaEeIiOoUuYy]";
-			else if (char === "Y")
-				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_" : "[^AaEeIiOoUuYy]";
-			else
-				regex += "\\" + char;
-		}
-		else {
-			if (char === "[")
-				inCharClass = true;
-			else if (char === "]")
-				inCharClass = false;
-			regex += char;
-		}
-	}
-	
-	return RegExp(regex, flags);
-}
-
 // Converts a regex string to a regex literal, Japt-style
 function regexify2(string) {
 	if (string.length === 1) {
@@ -111,6 +53,7 @@ function regexify2(string) {
 			"\n": /\n/g,
 			"*": /.*/g,
 			"+": /.+/g,
+			"?": /.?/g,
 			".": /./g,
 			"^": /[^]/g
 		}[string] || regexify2("/\\" + string + "/");
@@ -118,18 +61,18 @@ function regexify2(string) {
 	var end = string.lastIndexOf("/");
 	var flags = string.slice(end + 1);
 	string = string.slice(1, end);
-	
-	if (flags.contains("g"))
+
+	if (flags.includes("g"))
 		flags = flags.replace("g", "");
 	else
 		flags += "g";
-	
+
 	var dotAll = false;
-	if (flags.contains("s")) {
+	if (flags.includes("s")) {
 		dotAll = true;
 		flags = flags.replace("s", "");
 	}
-	
+
 	var regex = "", inCharClass = false, parens = 0;
 	for(var i = 0; i < string.length; i++) {
 		var char = string[i];
@@ -143,6 +86,10 @@ function regexify2(string) {
 				regex += inCharClass ? "A-Za-z" : "[A-Za-z]";
 			else if (char === "L")
 				regex += inCharClass ? "\\W_\\d" : "[^A-Za-z]";
+			else if (char === "w")
+				regex += inCharClass ? "A-Za-z0-9" : "[A-Za-z0-9]";
+			else if (char === "W")
+				regex += inCharClass ? "\\W_" : "[^A-Za-z0-9]";
 			else if (char === "p")
 				regex += inCharClass ? " -~" : "[ -~]";
 			else if (char === "P")
@@ -159,6 +106,10 @@ function regexify2(string) {
 				regex += inCharClass ? "AaEeIiOoUuYy" : "[AaEeIiOoUuYy]";
 			else if (char === "Y")
 				regex += inCharClass ? "\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_" : "[^AaEeIiOoUuYy]";
+			else if (char === "c")
+				regex += inCharClass ? "B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z" : "[B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z]";
+			else if (char === "C")
+				regex += inCharClass ? "\\W0-9AaEeIiOoUu_" : "[^B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z]";
 			else
 				regex += "\\" + char;
 		}
@@ -189,13 +140,13 @@ function regexify2(string) {
 			regex += char;
 		}
 	}
-	
+
 	if (inCharClass) regex += "]";
 	while (parens > 0) {
 		regex += ")";
 		parens -= 1;
 	}
-	
+
 	return RegExp(regex, flags);
 }
 
@@ -205,15 +156,31 @@ function saferegex(object, flags) {
 	return RegExp(regescape(object), flags);
 }
 
-// Converts an operator/method and an argument to a function, Japt-style
+/* Converts an operator/method to a function, Japt-style
+ * Setup:
+ *   f = functify(op or method, sample argument)
+ * Usage:
+ *   f(a, b[, c])
+ * 
+ * This version does not hardcode the second argument into the output.
+ *   If the output needs two args, such as for .reduce, use 0 for second arg.
+ * The output must be called with the correct second and third args.
+ * In most cases involving arrays or strings, the call should be like so:
+**   f(item, fb(second arg, index), array)
+ * 
+ * If sample argument is undefined, and the first arg is a method with no "!",
+ *   the method will be called on 'a' with no arguments.
+ * In all other cases, the method or operator will be called on 'a' with the
+ *   given argument 'b' (arguments swapped for "!" on method/operator).
+ */
 function functify(operator, argument) {
 	if (typeof operator === "function")
 		return operator;
-	
+
 	var hasArg = id(argument),
 		func = "f=function(a,b){return ",
 		isMethod = /^!?[a-zà-öø-ÿ]$/.test(operator);
-	
+
 	if (isMethod) {
 		if (operator[0] !== "!")
 			func += "a." + operator + (hasArg ? "(b)" : "()");
@@ -227,19 +194,46 @@ function functify(operator, argument) {
 			func += "b" + operator.slice(1) + "a";
 	}
 	func += "}";
-	
+
 	return eval(func);
 }
 
-// Converts an operator/method and an argument to a function, Japt-style
+/* Converts an operator/method and optional argument to a function, Japt-style
+ * Setup:
+ *   f = functify2(op or method, default)
+ *   f = functify2(op or method, true)
+ * Usage:
+ *   f(a, b, c)
+ *
+ * This version will insert a predefined second argument into the function.
+ *   E.g. functify2("+", 2) -> function(a, b) { return a + 2; }
+ * Use true as second arg for a method/operator accepting two args at call time.
+ *   E.g. functify2("p", true) -> function(a, b) { return a.p(b); }
+ * Call the resulting function with the target/LHS and argument/RHS.
+**   For most array/string-related uses, use f(item, index, array/string).
+ * Note that when used in a method definition, the first argument will often be
+ *   a 3-arg function, which is returned unaltered regardless of the second arg.
+ * 
+ * If the first argument is a method and does not start with "!":
+ *   true      -> a.x(b)
+ *   undefined -> a.x()
+ *   any other -> a.x(default)
+ * If the first argument is a method and starts with "!":
+ *   true      -> b.x(a)
+ *   undefined -> U.x(a)
+ *   any other -> default.x(a)
+ * If the first argument is an operator: (both swapped for "!" on operator)
+ *   undefined/true -> a x b
+ *   anything else  -> a x argument
+ */
 function functify2(operator, argument) {
 	if (typeof operator === "function")
 		return operator;
-	
+
 	var hasArg = id(argument) && argument !== true,
 		func = "(function(a, b) { return ",
 		isMethod = /^!?[a-zà-öø-ÿ]$/.test(operator);
-	
+
 	if (isMethod) {
 		if (operator[0] !== "!")
 			func += "a." + operator + (hasArg ? "(" + str(argument) + ")" : argument === true ? "(b)" : "()");
@@ -253,7 +247,7 @@ function functify2(operator, argument) {
 			func += (hasArg ? str(argument) : "b") + operator.slice(1) + "a";
 	}
 	func += "; })";
-	
+
 	return eval(func);
 }
 
@@ -273,7 +267,7 @@ function str(x) {
 
 // Escapes all special regex characters so they can be used in a regex
 function regescape(s) {
-	return String(s).replace(/[()[\]{}\-+*^$|\\/.]/g, "\\$&");
+	return String(s).replace(/[()[\]{}\-+*?^$|\\/.]/g, "\\$&");
 }
 
 // Deep-clones an object (note: does not work on arbitrary objects)
@@ -291,7 +285,7 @@ function clone(x) {
 	return x;
 }
 
-var pairs_1_3 = { 
+var pairs_1_3 = {
 	// Unicode shortcuts
 	// Using \u<hex> to avoid encoding incompatibilities
 	"@":    "XYZ{",
@@ -337,111 +331,25 @@ var pairs_1_3 = {
 	"\xC7": "o_",   // Ç - 199
 	"\xC8": "XYZ{X",// È - 200
 	"\xC9": "-1",   // É - 201
+	"\xCA": "l ",   // Ê - 202
+	"\xCB": "mDEF{D",// Ë - 203
+	"\xCC": "gJ ",  // Ì - 204
+	"\xCD": "n2 ",  // Í - 205
+	"\xCE": "g ",   // Î - 206
+	"\xCF": "XYZ{Y",// Ï - 207
 	"\xD0": "$new Date$(", // Ð - 208
+	"\xD1": "*2",   // Ñ - 209
+	"\xD2": "-~",   // Ò - 210
+	"\xD3": "~-",   // Ó - 211
+	"\xD4": "w ",   // Ô - 212
+	"\xD5": "y ",   // Õ - 213
 	"\xD7": "r*1 ", // × - 215
 	"\xDF": "$rp$(" // ß - 223
 };
 
-var pairs_2_0 = { 
-	// A new list of Unicode shortcuts
-	// Using \u<hex> to avoid encoding incompatibilities
-	"@":	  "XYZ{",
-	"_":	  "Z{Z",
-	"\xA1": "!=",   // ¡ - 161
-	"\xA2": "==",   // ¢ - 162
-	"\xA3": "<=",   // £ - 163
-	"\xA4": ">=",   // ¤ - 164
-	"\xA5": "===",  // ¥ - 165
-	"\xA6": "!==",  // ¦ - 166
-	"\xA7": "+=",   // § - 167
-	"\xA8": "++",   // ¨ - 168
-	"\xA9": "&&",   // © - 169
-	"\xAA": "||",   // ª - 170
-	"\xAB": "<<",   // « - 171
-	"\xAC": "&&!",  // ¬ - 172
-//	"\xAD": "",	  //	 173 is an unprintable
-	"\xAE": "-=",   // ® - 174
-	"\xAF": "--",   // ¯ - 175
-	"\xB0": "|=",   // ° - 176
-	"\xB1": "~~",   // ± - 177
-	"\xB2": "p2 ",  // ² - 178
-	"\xB3": "p3 ",  // ³ - 179
-	"\xB4": "&=",   // ´ - 180
-	"\xB5": "^=",   // µ - 181
-	"\xB6": "%=",   // ¶ - 182
-	"\xB7": ">>>",  // · - 183
-	"\xB8": ") ",   // ¸ - 184
-	"\xB9": ">>>0", // ¹ - 185
-	"\xBA": "((",   // º - 186
-	"\xBB": ">>",   // » - 187
-	"\xBC": ".25",  // ¼ - 188
-	"\xBD": ".5",   // ½ - 189
-	"\xBE": ".75",  // ¾ - 190
-	"\xBF": " ?",	  // ¿ - 191
-	"\xC0": " :",   // À - 192
-	"\xC1": "} ",   // Á - 193
-	"\xC2": "+1",   // Â - 194
-	"\xC3": "-1",   // Ã - 195
-	"\xC4": "*2",   // Ä - 199
-	"\xC5": "/2",   // Å - 197
-	"\xC6": "%2",   // Æ - 198
-	"\xC7": "&1",   // Ç - 199
-	"\xC8": "|1",   // È - 200
-	"\xC9": "^1",	  // É - 201
-	"\xCA": "|0",   // Ê - 202
-	"\xCB": "$new ",// Ë - 203
-	"\xCD": "))",   // Ì - 204
-	"\xCE": "$while(",//Í- 205
-	"\xCF": "$for(",// Î - 206
-	"\xD0": "$new Date$(" // Ð - 208
-};
-
-var permcache = {};
-function perm (arr, len) {
-	if (len === 0)
-		return [[]];
-	if (arr.length < 2)
-		return [x];
-	
-	var id = len + ';' + str(arr);
-	if (permcache[id])
-		return permcache[id];
-	
-	var result = [];
-	for (var index = 0; index < arr.length; index++)
-		if (index === arr.indexOf(arr[index]))
-			perm(arr.slice(0, index).concat(arr.slice(index + 1)), len - 1).map(function(b) {
-				result.push([arr[index]].concat(b));
-			});
-	
-	return permcache[id] = result;
-}
-
-var combcache = {};
-function comb(arr, len) {
-	if (len === 0)
-		return [[]];
-	if (arr.length < 1 && !isNaN(len))
-		return [];
-	
-	var id = len + ';' + str(arr);
-	if (combcache[id])
-		return ccache[id];
-	
-	var result = [];
-	for (var index = 0; index < arr.length; index++)
-		if (index === arr.indexOf(arr[index]))
-			comb(arr.slice(index + 1), len - 1).map(function(b) {
-				result.push([arr[index]].concat(b));
-			});
-	
-	if (isNaN(len)) result.push([]);
-	return combcache[id] = result;
-}
-
-if (!id(String.prototype.repeat)) String.prototype.repeat = function(len) {
+if (!id(String.prototype.repeat)) df(String.prototype, { repeat: function(len) {
 	len = Math.trunc(fb(len, 1));
-	
+
 	var i = Math.pow(2, Math.floor(Math.log2(len)));
 	var str = '';
 	while (i >= 1) {
@@ -450,28 +358,28 @@ if (!id(String.prototype.repeat)) String.prototype.repeat = function(len) {
 		i /= 2;
 	}
 	return str;
-};
+}});
 
-if (!id(String.prototype.contains)) String.prototype.contains = function(str) {
+if (!id(String.prototype.includes)) df(String.prototype, { includes: function(str) {
 	return this.indexOf(str) > -1;
-};
+}});
 
-if (!id(Array.prototype.contains)) Array.prototype.contains = function(item) {
+if (!id(Array.prototype.includes)) df(Array.prototype, { includes: function(item) {
 	return this.indexOf(item) > -1;
-};
+}});
 
-if (!id(Array.prototype.sortBy)) Array.prototype.sortBy = function(func) {
+if (!id(Array.prototype.sortBy)) df(Array.prototype, { sortBy: function(func) {
 	if (typeof func === "undefined")
 		return this.sort();
 	if (typeof func !== "function")
 		throw new TypeError("Array.prototype.sortBy expects a function");
-	
+
 	return this.sort(function(a, b) {
 		a = func(a);
 		b = func(b);
 		return (a > b) - (a < b);
 	});
-};
+}});
 
 if (!id(Math.trunc)) Math.trunc = function(n) {
 	if (isNaN(n))
@@ -496,11 +404,20 @@ df(String.prototype, {
 	a: function (x, y) {
 		if (typeof x === "function" || id(y))
 			return this.q().a(x, y);
+		else if (x instanceof RegExp) {
+			var index = -1, match;
+			while (match = x.exec(this)) {
+				index = match.index;
+			}
+			return index;
+		}
 		return this.lastIndexOf(x);
 	},
 	b: function (x, y) {
 		if (typeof x === "function" || id(y))
 			return this.q().b(x,y);
+		else if (x instanceof RegExp)
+			return this.search(x);
 		return this.indexOf(x);
 	},
 	c: function(x, y) {
@@ -544,10 +461,14 @@ df(String.prototype, {
 		return t;
 	},
 	f: function (x) {
-		return this.match(saferegex(x), 'g');
+		return this.match(saferegex(x), 'g') || [];
 	},
-	g: function (x) {
+	g: function (x, y) {
 		x = fb(x, 0);
+		if (typeof x === "string" || typeof x === "function") {
+			x = functify(x, y);
+			return x(this + "", y);
+		}
 		x = pm(x, this.length);
 		return this[x];
 	},
@@ -566,7 +487,6 @@ df(String.prototype, {
 		return this.substring(0, x) + y + this.substring(x + y.length);
 	},
 	i: function (x, y) {
-		var l = this.length;
 		if (!id(y)) {
 			y = x;
 			x = 0;
@@ -576,7 +496,7 @@ df(String.prototype, {
 			x = y;
 			y = tmp;
 		}
-		x = pm(x, l);
+		x = pm(x, this.length + 1);
 		return this.substring(0, x) + y + this.substring(x);
 	},
 	j: function (x, y) {
@@ -584,7 +504,7 @@ df(String.prototype, {
 		return this.substring(0, x) + this.substring(x + y);
 	},
 	k: function (x, y) {
-		if (["<", ">"].contains(x) || typeof x === "function") {
+		if (["<", ">"].includes(x) || typeof x === "function") {
 			x = functify2(x, y);
 			return this.q().filter(function(a, b, c){
 				return !x(a, b, c);
@@ -611,12 +531,14 @@ df(String.prototype, {
 			var z = clone(x).sortBy(function(x) {
 				return -x.length;
 			}).map(regescape).join("|");
-			
+
 			var result = this.match(RegExp(z, y ? 'gi' : 'g')) || [];
 			return result.reduce(function(prev, curr) {
-				var i = x.findIndex(function(z) {
-					return z.v() === curr.v();
-				});
+				var i = x.indexOf(curr);
+				if (i < 0 && y)
+					i = x.findIndex(function(z) {
+						return z.v() === curr.v();
+					});
 				if (i < 0)
 					return NaN;
 				return prev * x.length + i;
@@ -629,7 +551,7 @@ df(String.prototype, {
 			return parseInt(this, x);
 	},
 	o: function (x, y) {
-		if (["<", ">"].contains(x) || typeof x === "function") {
+		if (["<", ">"].includes(x) || typeof x === "function") {
 			x = functify2(x, id(y) ? String(y) : y);
 			return this.q().filter(x).q();
 		}
@@ -678,8 +600,11 @@ df(String.prototype, {
 			return this.trimLeft();
 		return this.trim();
 	},
-	y: function () {
-		return this.split("\n").y().join("\n");
+	y: function (x, y) {
+		var z = this.split("\n").y();
+		if (id(x))
+			z = z.m(x, y).y();
+		return z.join("\n");
 	},
 	z: function (n) {
 		return this.split("\n").z(n).join("\n");
@@ -691,9 +616,9 @@ df(String.prototype, {
 		return this.q().á(x).map(function(y) { return y.q(); });
 	},
 	â: function (x) {
-		return this.search(x);
+		return this.q().â(x).q();
 	},
-	ã: function (x,y) {
+	ã: function (x, y) {
 		return this.q().ã(x, y).map(function(a) { return a.q(); });
 	},
 	ä: function (x, y) {
@@ -732,6 +657,33 @@ df(String.prototype, {
 			return z instanceof Array ? z.q() : String(z);
 		}).q();
 	},
+	ï: function (x, y) {
+		if (!id(x))
+			x = function(a, b) { return a + b; };
+		else {
+			if (typeof x === "string" && !/^(?:&&|\|\||\*\*|<<|>>>?|[!=]==?|[+\-*/÷%&|^<=>a-zà-ÿ])$/g.test(x))
+				x = x.q();
+			if (!id(y))
+				y = function(a, b) { return a + b; };
+		}
+		return this.q().ï(x, y);
+	},
+	ð: function (x, y) {
+		var indices = [], match;
+		x = saferegex(x, y ? 'gi' : 'g');
+		
+		for (var i = 0; i < this.length; i++) {
+			x.lastIndex = i;
+			match = x.exec(this);
+			if (match && match.index === i)
+				indices.push(i);
+		}
+		
+		return indices;
+	},
+	ñ: function (x, y) {
+		return this.q().ñ(x, y).q();
+	},
 	ò: function (x) {
 		return this.q().ò(x).map(function(a) { return a.q(); });
 	},
@@ -752,8 +704,40 @@ df(String.prototype, {
 		if (!(x instanceof Array))
 			x = [x];
 		var s = this;
-		return x.some(function(a) { return s.contains(a); });
-	}
+		return x.some(function(a) { return s.includes(a); });
+	},
+
+	pad: function(x, y, a) {
+		var s = String(this);
+		if (/\n/.test(s))
+			return s.q("\n").pad(x, y, a).q("\n");
+		if (!id(x))
+			return s;
+		if (typeof x === "number" && typeof y !== "number") {
+			var z = x;
+			x = y;
+			y = z;
+		}
+		x = fb(x, ' ');
+		if (s.length < y) {
+			if (a === 1)
+				s = (y - s.length).î(x) + s;
+			else if (a === -1)
+				s = y.î(x).h(s);
+			else
+				s = y.î(x).h(s, (y - s.length) / 2);
+		}
+		return s;
+	},
+	ù: function (x, y) {
+		return this.pad(x, y, 1);
+	},
+	ú: function (x, y) {
+		return this.pad(x, y, -1);
+	},
+	û: function (x, y) {
+		return this.pad(x, y, 0);
+	},
 });
 
 df(Array.prototype, {
@@ -771,20 +755,20 @@ df(Array.prototype, {
 			return this.map(x).indexOf(true);
 		return this.indexOf(x);
 	},
-	c: function (x) {
-		if (id(x))
-			return this.concat(x);
-		var f = [];
-		for (var i in this) {
-			if (this[i] instanceof Array) {
-				var q = this[i].c();
-				for (var j in q)
-					f.push(q[j]);
-			}
-			else
-				f.push(this[i]);
-		}
-		return f;
+	c: function (x, y) {
+		if (x === 0)
+			return this;
+		var f = function (q) { if (q instanceof Array) q = q.c(x - 1); return q; },
+			a = this.slice(), r = [];
+		if (typeof x === "function" || typeof x === "string")
+			f = functify2(x, y);
+		else if (x instanceof Array)
+			return a.concat(x);
+		
+		for (var i = 0; i < a.length; i++)
+			r = r.concat(f(a[i], i, a));
+		
+		return r;
 	},
 	d: function (x, y) {
 		x = fb(x, Boolean);
@@ -792,39 +776,78 @@ df(Array.prototype, {
 		return this.some(x);
 	},
 	e: function (x, y) {
-		x = fb(x, Boolean);
-		x = functify(x, y);
-		return this.every(x);
+		if (x instanceof Array) {
+			return this.length === x.length && this.every(function(a, b){
+				if (a instanceof Array)
+					return a.e(x[b]);
+				else
+					return a == x[b];
+			});
+		}
+		else {
+			x = fb(x, Boolean);
+			x = functify2(x, y);
+			return this.every(x);
+		}
 	},
 	f: function (x, y) {
 		if (x instanceof Array) {
 			y = fb(y, 0) % 3;
 			if (y === 2)
 				return this.filter(function(q) {
-					var a = x.contains(q);
+					var a = x.includes(q);
 					if (a)
 						x.splice(x.indexOf(q), 1);
 					return a;
 				});
 			else if (y === 1)
 				return this.filter(function(q, i, a) {
-					return x.contains(q) && a.indexOf(q) === i;
+					return x.includes(q) && a.indexOf(q) === i;
 				});
 			else
 				return this.filter(function(q) {
-					return x.contains(q);
+					return x.includes(q);
 				});
 		}
 		else {
 			x = fb(x, Boolean);
-			x = functify(x, y);
+			x = functify2(x, y);
 			return this.filter(x);
 		}
 	},
-	g: function (x) {
-		x = fb(x, 0);
-		x = pm(x, this.length);
-		return this[x];
+	g: function () {
+		var curr = this, x, prev, index;
+		for (var i = 0; typeof arguments[i] === "number"; i++) {
+			x = pm(arguments[i], curr.length);
+			prev = curr;
+			index = x;
+			curr = curr[x];
+		}
+		if (arguments[i] instanceof Array) {
+			x = arguments[i];
+			if (typeof arguments[i + 1] === "function" || typeof arguments[i + 1] === "string") {
+				var f = functify2(arguments[i + 1], arguments[i + 2]);
+				for (var j = 0; j < x.length; j++) {
+					this[x[j]] = f(this[x[j]], x[j]);
+				}
+				return this;
+			}
+			
+			return x.map(function(j) { return curr.g(j); });
+		}
+		else if (typeof arguments[i] === "function" || typeof arguments[i] === "string") {
+			var y = arguments[i + 1];
+			x = functify2(arguments[i], y);
+			if (i === 0)
+				return x(this);
+			
+			prev[index] = x(curr, index);
+			return this;
+		}
+		if (i === 0) {
+			return curr[0];
+		}
+		return curr;
 	},
 	h: function (x, y) {
 		if (!id(y)) {
@@ -850,7 +873,7 @@ df(Array.prototype, {
 			x = y;
 			y = z;
 		}
-		x = pm(x, this.length);
+		x = pm(x, this.length + 1);
 		this.splice(x, 0, y);
 		return this;
 	},
@@ -865,11 +888,19 @@ df(Array.prototype, {
 			return this.filter(function(a, b, c) { return !x(a, b, c); });
 		}
 		if (x instanceof Array)
-			return this.filter(function(a) { return !x.contains(a); });
-		this.splice(this.indexOf(x), 1);
-		return this;
+			return this.filter(function(a) { return !x.includes(a); });
+		
+		return this.filter(function(a) { return a !== x; });
 	},
-	l: function () {
+	l: function (x, y) {
+		if (id(x)) {
+			if (typeof x === "number") {
+				y = x;
+				x = function(a) { return a === y; };
+			}
+			x = functify2(x, y);
+			return this.filter(function(a, b, c) { return x(a.l(), fb(y, b), a); });
+		}
 		return this.length;
 	},
 	m: function (x, y) {
@@ -880,11 +911,17 @@ df(Array.prototype, {
 		x = functify2(fb(x, function(x, y) { return (x > y) - (x < y); }), true);
 		return this.sort(x);
 	},
-	o: function (x) {
-		if (id(x)) {
+	o: function (x, y) {
+		if (typeof x === "number") {
 			for (var a = []; x > 0; --x)
 				a.push(this.pop());
 			return a;
+		}
+		else if (typeof x === "string" || typeof x === "function") {
+			x = functify2(x, y);
+			if (this.length > 0)
+				this.push(x(this.pop()));
+			return this;
 		}
 		else
 			return this.pop();
@@ -899,7 +936,7 @@ df(Array.prototype, {
 	},
 	r: function (x, y) {
 		x = functify2(x, true);
-		return this.reduce(x, fb(y, typeof this[0] === "number" ? 0 : ""));
+		return id(y) ? this.reduce(x, y) : this.reduce(x);
 	},
 	s: function (x, y) {
 		y = fb(y, this.length);
@@ -914,7 +951,18 @@ df(Array.prototype, {
 			this.unshift(arguments[i]);
 		return this;
 	},
-	v: function () {
+	v: function (x, y) {
+		if (typeof x === "number") {
+			for (var a = []; x > 0; --x)
+				a.push(this.shift());
+			return a;
+		}
+		else if (typeof x === "string" || typeof x === "function") {
+			x = functify2(x, y);
+			if (this.length > 0)
+				this[0] = x(this[0]);
+			return this;
+		}
 		return this.shift();
 	},
 	w: function () {
@@ -927,12 +975,28 @@ df(Array.prototype, {
 			return a + (isNaN(+b) ? parseFloat(b) || 0 : +b);
 		}, 0);
 	},
-	y: function () {
+	y: function (x, y) {
+		var z, a;
+		if (id(x)) {
+			z = this.y();
+			a = z.m(function(c) { return c instanceof Array ? c.f(id) : c; }).m(x, y);
+			
+			if (a.every(function(q) { return q instanceof Array; }))
+				return z.m(function(c, i) {
+					var j = 0;
+					return c.m(function() {
+						return a[i][j++];
+					});
+				}).y();
+			else if (a.every(function(q) { return q instanceof String || typeof q === "string"; }))
+				return a.y();
+			else
+				return a;
+		}
 		var t = "string" === typeof this[0],
-			n = t ? this.map(function(t) { return t.split(""); }) : this,
-			x, y,
-			z = n.reduce(function(p, q){ return Math.max(p, q.length); }, 0),
-			a = [];
+			n = t ? this.map(function(t) { return t.split(""); }) : this;
+		z = n.reduce(function(p, q){ return Math.max(p, q.length); }, 0);
+		a = [];
 		for (y = 0; y < z; y++)
 			a[y] = t ? Array(n.length).fill(" ") : [];
 		for (y = 0; y < n.length; y++)
@@ -941,76 +1005,92 @@ df(Array.prototype, {
 		return t ? a.map(function(r) { return r.join(""); }) : a;
 	},
 	z: function (n) {
-		if (typeof n !== "number")
-			n = 1;
-		n = pm(n, 4);
-		var f = function (l) {
-			return l.w();
-		};
-		if (n === 1)
-			return this.y().map(f);
-		if (n === 2)
-			return this.w().map(f);
-		if (n === 3)
-			return this.map(f).y();
-		return this;
-	},
-	à: function (x) {
-		var f = function(y, z, a) {
-			if (y.length === 0 && z.length === 0)
-				return;
-			if (z.length === 0)
-				a.push(y);
-			else {
-				var n = y.slice(0);
-				n.push(z[0]);
-				f(n, z.slice(1), a);
-				f(y, z.slice(1), a);
-			}
-			return a;
-		};
-		return f([], this, []).filter(function(z) { return !id(x) || z.length === x; });
-	},
-	//df(Array,'à',function(x){var a=[[]],s=[];for(var i=0;i<this.length;++i){var l=a.length;for(var j=0;j<l;j++){var b=a[j].concat([this[i]]);if(s.indexOf(str(b))<0)a.push(b),s.push(str(b));}}return a},
-	á: function (x) {
-		var p = [],
-			u = [],
-			f = function(z) {
-				var c, i;
-				for (i = 0; i < z.length; i++) {
-					c = z.splice(i, 1)[0];
-					u.push(c);
-					if (z.length === 0)
-						p.push(u.slice());
-					f(z);
-					z.splice(i, 0, c);
-					u.pop();
+		n = pm(fb(n, 1), 4) || 4;
+		var q = this.every(function(x) { return x instanceof Array; }),
+			a = this.map(function(x) { return q ? x : x instanceof Array ? x.q() : String(x); }),
+			l = a.reduce(function(p, x) {
+				return Math.max(p, x.length);
+			}, 0);
+		a = a.map(function(x) {
+				while (x.length < l) {
+					if (q) x.push(0);
+					else   x += " ";
 				}
-				return p;
-			},
-			l;
-		return f(this).map(function(z) { return z.slice(0, x || z.length); }).â();
+				return x;
+			});
+		for ( ; n > 0; --n ) {
+			var b = [];
+			for (var y = 0; y < a.length; y++)
+				for (var x = 0; x < a[y].length; x++) {
+					b[x] = b[x] || Array(a.length);
+					b[x][a.length - y - 1] = a[y][x];
+				}
+			a = b;
+		}
+		if (!q)
+			a = a.map(function(x) { return x.q(); });
+		return a;
 	},
-	//à: function(x){x=fb(x,NaN);return comb(this,x)},
-	//á: function(x){x=fb(x,1/0);return perm(this,x)},
+	à: function (outlen) {
+		var inlen = this.length,
+			combs = [[]];
+		for (var i = 0; i < inlen; i++) {
+			var item = this[i], oldcombs = combs;
+			combs = [];
+			for (var j = 0; j < oldcombs.length; j++) {
+				var combination = oldcombs[j].slice();
+				combination.push(item);
+				if (!id(outlen) || combination.length <= outlen)
+					combs.push(combination);
+				if (!id(outlen) || oldcombs[j].length > outlen - (inlen - i))
+					combs.push(oldcombs[j]);
+			}
+		}
+		return combs;
+	},
+	á: function (outlen) {
+		var inlen = this.length,
+			result = [this.slice()];
+
+		for (var i = 0; i < fb(outlen, inlen - 1); i++) {
+			var oldresult = result;
+			result = [];
+			for (var orindex = 0; orindex < oldresult.length; orindex++) {
+				var oldperm = oldresult[orindex];
+				for (var j = i; j < inlen; j++) {
+					var newperm = oldperm.slice();
+					var swapitem = newperm.splice(j, 1)[0];
+					newperm.splice(i, 0, swapitem);
+					if (i + 1 === outlen)
+						newperm = newperm.slice(0, outlen);
+					result.push(newperm);
+				}
+			}
+		}
+		return result;
+	},
 	â: function (x) {
 		var a = [];
 		x = this.concat(fb(x, []));
 		for (var i = 0; i < x.length; i++)
-			if (a.indexOf(x[i]) < 0)
+			if (a.findIndex(function(z) { return str(z) === str(x[i]); }) < 0)
 				a.push(x[i]);
 		return a;
 	},
 	ã: function (x, y) {
-		x = fb(x, 2);
-		var a = [];
+		var a = [], f = function (x) { return x; };
+		if (typeof x === "function" || typeof x === "string") {
+			f = functify2(x, y);
+			x = y = undefined;
+		}
 		if (id(y)) {
 			a[0] = this.slice(0, x - 1);
 			a[0].unshift(y);
 		}
-		for (var i = 0; i <= this.length - x; i++)
-			a.push(this.slice(i, i + x));
-		return a;
+		for (var i = fb(x, 1); i <= fb(x, this.length); i++)
+			for (var j = 0; j <= this.length - i; j++)
+				a.push(this.slice(j, j + i));
+		return a.map(f);
 	},
 	ä: function (x, y) {
 		x = functify2(x, true);
@@ -1084,13 +1164,47 @@ df(Array.prototype, {
 		x = fb(x, [0]);
 		return this.map(function(_, i) { return x[i % x.length]; });
 	},
+	ï: function (x, y) {
+		if (!(x instanceof Array)) {
+			if (y instanceof Array) {
+				var tmp = y;
+				y = x;
+				x = tmp;
+			}
+			else {
+				y = x;
+				x = this.slice();
+			}
+		}
+		y = functify2(fb(y, function(a, b) { return [a, b]; }), true);
+		var r = [];
+		for (var i = 0; i < this.length; i++)
+			for (var j = 0; j < x.length; j++)
+				r.push(y(this[i], x[j], i * x.length + j));
+		return r;
+	},
+	ð: function (x, y) {
+		x = fb(x, Boolean);
+		if (x instanceof Array) {
+			y = x;
+			x = function(a) { return y.includes(a); };
+		}
+		else
+			x = functify2(x, y);
+		var a = [];
+		for (var i = 0; i < this.length; i++) {
+			if (x(this[i], i, this))
+				a.push(i);
+		}
+		return a;
+	},
 	ñ: function (x, y) {
 		x = functify2(fb(x, function (z) { return z; }), y);
-		return this.sort(function(a, b, i) {
-			a = x(a, i);
-			b = x(b, i);
-			return (a > b) - (a < b);
+		var r = this.map(function(a, i) { return { value: a, key: x(a, i) }; });
+		r.sort(function(a, b) {
+			return (a.key > b.key) - (a.key < b.key);
 		});
+		return r.map(function(a) { return a.value; });
 	},
 	ò: function (x) {
 		if (this.length === 0)
@@ -1099,14 +1213,18 @@ df(Array.prototype, {
 		var a = [],
 			i = 0;
 		if (typeof x === "number") {
-			for ( ; i < this.length; i += x)
-				a.push(this.slice(i, i + x));
+			if (x > 0)
+				for ( ; i < this.length; i += x)
+					a.push(this.slice(i, i + x));
+			else if (x < 0)
+				for (i = this.length; i > 0; i += x)
+					a.unshift(this.slice(Math.max(i + x, 0), i));
 		}
 		else {
-			x = functify2(fb(x, function(z) { return z; }), 0);
-			a.push(this[0]);
+			x = functify2(fb(x, function(z) { return z; }));
+			a.push([this[0]]);
 			for (i = 1; i < this.length; i++) {
-				if (!x(this[i - 1], this[i], this))
+				if (x(this[i - 1], this[i], this))
 					a.push([]);
 				a.g(-1).push(this[i]);
 			}
@@ -1126,8 +1244,9 @@ df(Array.prototype, {
 			}
 		}
 		else {
-			x = functify2(fb(x, function(z) { return z; }), 0);
-			for (a.push([this[0]]), i = 1; i < this.length; i++) {
+			x = functify2(fb(x, function(z) { return z; }));
+			a.push([this[0]]);
+			for (i = 1; i < this.length; i++) {
 				if(!x(this[i - 1], this[i], this))
 					a.push([]);
 				a.g(-1).push(this[i]);
@@ -1152,6 +1271,8 @@ df(Array.prototype, {
 	ö: function (x) {
 		if (!id(x))
 			return this[Math.random() * this.length | 0];
+		if (typeof x === "function")
+			return this.filter(x).ö();
 		var b = [];
 		if (isNaN(x))
 			for (var a = clone(this); a.length > 0; )
@@ -1166,7 +1287,46 @@ df(Array.prototype, {
 			return false;
 		if (!(x instanceof Array))
 			x = [x];
-		return this.some(function(a) { return x.contains(a); });
+		return this.some(function(a) { return x.includes(a); });
+	},
+	pad: function(x, y, a) {
+		var q = this.map(function(c) {
+			return c instanceof Array ? c : String(c);
+		});
+		if (!id(x)) {
+			x = " ";
+		}
+		if (!id(y)) {
+			if (typeof x === "number") {
+				y = x;
+				x = " ";
+			}
+			else {
+				y = q.reduce(function(p, c) { return p.w(c.length); }, 0);
+			}
+		}
+		if (typeof x === "number" && typeof y !== "number") {
+			var z = x;
+			x = y;
+			y = z;
+		}
+		return q.map(function(z) { return z.pad(x, y, a); });
+	},
+	ù: function(x, y) {
+		return this.pad(x, y, 1);
+	},
+	ú: function(x, y) {
+		return this.pad(x, y, -1);
+	},
+	û: function(x, y) {
+		return this.pad(x, y, 0);
+	},
+	ü: function(x, y) {
+		x = functify2(fb(x, function(a) { return a; }), y);
+		var a = this.map(function(c, i) { return { key: x(c, fb(y, i), a), value: c }; });
+		a = a.ñ(function(c) { return c.key; });
+		a = a.ó(function(c, d) { return c.key == d.key; });
+		return a.map(function(b) { return b.map(function(c) { return c.value; }); });
 	}
 });
 
@@ -1180,14 +1340,15 @@ df(Number.prototype, {
 			return min;
 		if (this > max)
 			return max;
-		return this;
+		return +this;
 	},
 	c: function (x) {
 		x = fb(x, 1);
 		return Math.ceil(this / x) * x;
 	},
-	d: function () {
-		return String.fromCharCode(this);
+	d: function (x) {
+		x = fb(x, 0);
+		return String.fromCodePoint(this + x);
 	},
 	e: function (x) {
 		return this * Math.pow(10, x);
@@ -1196,14 +1357,24 @@ df(Number.prototype, {
 		x = fb(x, 1);
 		return Math.floor(this / x) * x;
 	},
-	g: function () {
-		if (isNaN(this))
-			return NaN;
-		if (this < 0)
-			return -1;
-		if (this > 0)
-			return 1;
-		return +this;
+	g: function (x, y) {
+		if (typeof x === "function") {
+			x = functify(x, y);
+			return x(+this, y);
+		}
+		else if (typeof x === "string" || x instanceof Array) {
+			return x.g(+this);
+		}
+		else {
+			x = fb(x, 0);
+			if (isNaN(this) || isNaN(x))
+				return NaN;
+			if (this < x)
+				return -1;
+			if (this > x)
+				return 1;
+			return this - x;
+		}
 	},
 	h: function (x) {
 		x = fb(x, 1);
@@ -1235,7 +1406,7 @@ df(Number.prototype, {
 	k: function () {
 		var n = +this,
 			f = [];
-		
+
 		for (var r = 2; r <= Math.sqrt(n); r += r % 2 + 1) {
 			while (n % r === 0) {
 				f.push(r);
@@ -1244,7 +1415,7 @@ df(Number.prototype, {
 		}
 		if (n > 1) // True unless n is divisible by its largest factor more than once
 			f.push(n);
-		
+
 		return f;
 	},
 	l: function () {
@@ -1269,8 +1440,8 @@ df(Number.prototype, {
 			f = functify2(x, y), x = y = undefined;
 		if (typeof y === "function")
 			f = y, y = undefined;
-		
-		var z = +this;
+
+		var z = +this, _;
 		y = y || 1;
 		if (!id(x))
 			x = z, z = 0;
@@ -1280,7 +1451,7 @@ df(Number.prototype, {
 			_ = x, x = z, z = _;
 		if (s & 1)
 			x++;
-		
+
 		var r = [],
 			i = 0;
 		if (y > 0)
@@ -1289,7 +1460,7 @@ df(Number.prototype, {
 		else
 			for ( ; z < x; x += y )
 				r.push(x);
-		
+
 		if (typeof f === "function")
 			return r.map(f);
 		return r;
@@ -1306,7 +1477,12 @@ df(Number.prototype, {
 		x = fb(x, 1);
 		return Math.round(this / x) * x;
 	},
-	s: function (x) {
+	s: function (x, y) {
+		if (typeof x === "function"
+			|| (typeof x === "string"
+				&& (id(y) ? /^!?.$/.test(x) : x.length === 1)
+			   ))
+			return Number(functify(x, y)(this.s(), y));
 		if (typeof x === "string")
 			x = x.q();
 		if (x instanceof Array)
@@ -1329,7 +1505,7 @@ df(Number.prototype, {
 	},
 	v: function (x) {
 		x = fb(x, 2);
-		if (this % x === 0)
+		if (x == 0 || this % x === 0)
 			return 1;
 		return 0;
 	},
@@ -1346,6 +1522,10 @@ df(Number.prototype, {
 		while (x && y)
 			z = x, x = y, y = Math.approx(z % y);
 		return x;
+	},
+	z: function (x) {
+		x = fb(x, 2);
+		return Math.trunc(this / x);
 	},
 	à: function (x) {
 		var n = Math.trunc(this);
@@ -1370,13 +1550,13 @@ df(Number.prototype, {
 			return [];
 		var n = Math.abs(this);
 		var a = [];
-		
+
 		for (var i = 1; i < Math.sqrt(n); ++i)
 			if(n % i === 0)
 				a.push(i, n / i);
 		if (i * i === n)
 			a.push(i);
-		
+
 		a.n();
 		if (x)
 			a.pop();
@@ -1386,18 +1566,48 @@ df(Number.prototype, {
 		x = String(fb(x, " "));
 		return x.p(+this);
 	},
-	ì: function (x) {
+	ì: function (x, y) {
+		if (typeof x === "function"
+			|| (typeof x === "string"
+				&& (id(y) ? /^!?.$/.test(x) : x.length === 1)
+			   )) {
+			var z = functify(x, y)(this.ì(), y);
+			if (z instanceof Array)
+				z = z.ì();
+			return Number(z);
+		}
 		if (typeof x === "string")
 			x = x.q();
 		if (x instanceof Array)
 			return this.ì(x.length).m(function(y) { return x[y]; });
-		var n = Math.trunc(this);
-		x = Math.floor(fb(x, 10));
-		if (x < 2)
+		var n = Math.trunc(this), a;
+		x = Math.trunc(fb(x, 10));
+		if (x > 0) {
+			if (x === 1) {
+				if (n < 0)
+					return (-n).o().ç(-1);
+				else
+					return n.o().ç(1);
+			}
+			else {
+				for (a = []; n !== 0; n = Math.trunc(n / x))
+					a.unshift(n % x);
+				return a;
+			}
+		}
+		else if (x < 0) {
+			if (x === -1) {
+				return (n > 0 ? n * 2 - 1 : -n * 2).o().î([1, 0]);
+			}
+			else {
+				x = -x;
+				for (a = []; n != 0; n = Math.trunc(n < 0 ? -(n - x + 1) / x : -n / x))
+					a.unshift(pm(n, x));
+				return a;
+			}
+		}
+		else
 			return [];
-		for (var a = []; n != 0; n = Math.trunc(n / x))
-			a.unshift(n % x);
-		return a;
 	},
 	î: function (x) {
 		return " ".p(+this).î(x);
@@ -1448,8 +1658,8 @@ function ts (x) {
 	return ["get", "set", "getUTC", "setUTC"].g(x);
 }
 df(Date, {
-	a: function (x, y) { return this[ts(x) + "Milliseconds"](y || 0)},
-	b: function (x, y) { return this[ts(x) + "Seconds"](y || 0)},
+	a: function (x, y) { return this[ts(x) + "Milliseconds"](y || 0); },
+	b: function (x, y) { return this[ts(x) + "Seconds"](y || 0); },
 	c: function (x, y) { return this[ts(x) + "Minutes"](y || 0); },
 	d: function (x, y) { return this[ts(x) + "Hours"](y || 0); },
 	e: function (x, y) { return this[ts(x) + "Day"](y || 0); },
@@ -1459,7 +1669,7 @@ df(Date, {
 	i: function (x, y) { return this[ts(x) + "FullYear"](y || 0); },
 	j: function (x, y) { return this[ts(x) + "Time"](y || 0); },
 	k: function () { return this.getTimezoneOffset(); },
-	
+
 	s: function (x) {
 		return this["to" + [
 			"",
@@ -1487,48 +1697,104 @@ function bij (num, radix) {
 	radix = fb(radix, 10);
 	if (radix % 1 || radix < 2)
 		return result;
-	
+
 	if (num < 0) result = "-", num = -num - 1;
-	
+
 	var c = 0, x = 1;
 	while (num >= x) {
 		c++;
 		num -= x;
 		x *= radix;
 	}
-	
+
 	for (var i = 0; i < c; i++) {
 		result = (num % radix) + result;
 		num = Math.trunc(num / radix);
 	}
-	
+
 	return result;
 }
 
 df(Function.prototype, {
 	a: function (x, y) {
-		x = functify2(fb(x, function(q) { return q; }), y);
-		for (var i = 0; i < 1e8; ++i) {
-			var j = x(i, i);
-			if (this(j))
+		x = fb(x, function(q) { return q; });
+		var s = 0;
+		if (isNaN(x))
+			x = functify2(x, y);
+		else
+			s = Number(x), x = function(q) { return q; };
+		for(var i = 0; i < 1e8; ++i ) {
+			var j = x(i + s, i);
+			if (this(j, i))
 				return j;
 		}
 	},
 	b: function (x, y) {
-		x = functify2(fb(x, function(q){ return q; }), y);
-		for (var i = 0; i < 1e8; ++i) {
-			j = x(bij(i, 10), i);
-			if (this(j))
+		x = fb(x, function(q) { return q; });
+		var s = 0;
+		if (isNaN(x))
+			x = functify2(x, y);
+		else
+			s = Number(x), x = function(q) { return q; };
+		for(var i = 0; i < 1e8; ++i) {
+			var j = x(bij(i, 10), i);
+			if (this(j, i))
 				return j;
 		}
 	},
 	c: function (x, y) {
-		x = functify2(fb(x, function(q){ return q; }), y);
-		for (var i = 0, index = 0; i < 1e8; ++index, i = i < 0 ? -i : ~i) {
-			var j = x(i, index);
-			if(this(j))
+		x = fb(x, function(q) { return q; });
+		var s = 0;
+		if (isNaN(x))
+			x = functify2(x, y);
+		else
+			s = Number(x), x = function(q) { return q; };
+		for(var i = 0, index = 0; i < 1e8; ++index, i = i < 0 ? -i : ~i) {
+			var j = x(i + s, index);
+			if(this(j, index))
 				return j;
 		}
+	},
+	f: function (x, y) {
+		x = fb(x, function(q) { return q; });
+		var s = 0;
+		if (isNaN(x))
+			x = functify2(x, y);
+		else
+			s = Number(x), x = function(q) { return q; };
+		for(var i = 0; i < 1e8; ++i ) {
+			var j = x(i + s, i);
+			if (!this(j, i))
+				return j;
+		}
+	},
+	g: function (n, a) {
+		if (n instanceof Array) {
+			var tmp = a;
+			a = n;
+			n = tmp;
+		}
+		n = fb(n, U);
+		a = fb(a, [0, 1]);
+		for (var i = a.length; i <= n; ++i) {
+			var j = this(fb(a.g(-1), -1), i, clone(a));
+			a.push(j);
+		}
+		return a.g(n);
+	},
+	h: function (n, a) {
+		if (n instanceof Array) {
+			var tmp = a;
+			a = n;
+			n = tmp;
+		}
+		n = fb(n, U);
+		a = fb(a, [0, 1]);
+		for (var i = a.length; i <= n; ++i) {
+			var j = this(fb(a.g(-1), -1), i, clone(a));
+			a.push(j);
+		}
+		return a.t(0,n);
 	}
 });
 
@@ -1559,7 +1825,7 @@ Math.a = Math.atan2;
 // Fibonacci
 Math.g = function (n) {
 	var sqrt5 = Math.sqrt(5),
-		phi = (1 + f) / 2;
+		phi = (1 + sqrt5) / 2;
 	return Math.round((Math.pow(phi, n) - Math.pow(-phi, -n)) / sqrt5);
 };
 
@@ -1584,8 +1850,14 @@ Math.e = Math.exp;
 Math.l = Math.log;
 Math.m = Math.log2;
 Math.n = Math.log10;
-Math.h = Math.hypot = Math.hypot || function () {
+Math.hypot = Math.hypot || function () {
 	return Math.sqrt([].reduce.call(arguments, function(a, b) { return a + b * b; }));
+};
+Math.h = function () {
+	var a = [];
+	for (var i in arguments)
+		a = a.concat(arguments[i]);
+	return Math.hypot.apply(null, a);
 };
 
 Math.P = Math.PI;
@@ -1597,7 +1869,7 @@ Math.T = Math.PI * 2;
 // String compression
 shoco.c = function (str) {
 	return Array.prototype.map.call(shoco.compress(str), function (char) {
-		return String.fromCharCode(char);
+		return String.fromCodePoint(char);
 	}).join('');
 };
 
@@ -1674,13 +1946,13 @@ function fixParens(code) {
 }
 
 function isSingle(snippet) {
-	snippet = snippet.replace(/^[+-~!]*/, "");
+	snippet = snippet.replace(/^[+\-~! ]*/, "");
 	var parens = 0, braces = 0, char;
 	for (var i = 0; i < snippet.length; i++) {
 		char = snippet[i];
 		if (char === "\"") {
 			for ( ; ++i < snippet.length - 1; ) {
-				char = snippet[i]
+				char = snippet[i];
 				if (char === "\"") break;
 				else if (char === "\\") i++;
 			}
@@ -1695,6 +1967,13 @@ function isSingle(snippet) {
 		}
 	}
 	return true;
+}
+
+function makeSingle(snippet) {
+	snippet = deparen(snippet);
+	if(!isSingle(snippet))
+		snippet = "(" + snippet + ")";
+	return snippet;
 }
 
 function isParen(snippet) {
@@ -1712,10 +1991,10 @@ function deparen(snippet) {
 var rp, program;
 
 var Japt = {
-	
+
 	stdout: null,
 	stderr: null,
-	
+
 	clear_output: function() {
 		if (isnode) {
 			// Not sure how to do this... Would console.log("\033c") work?
@@ -1732,7 +2011,7 @@ var Japt = {
 			}
 		}
 	},
-	
+
 	output: function(x) {
 		Japt.implicit_output = false;
 		if (isnode) {
@@ -1743,13 +2022,13 @@ var Japt = {
 			alert ("Error: Japt.stdout must be sent to an HTMLElement");
 		}
 	},
-	
+
 	stop: function() {
 		for (var i = 0; i < Japt.intervals.length; i++)
 			clearInterval(Japt.intervals[i]);
 		Japt.intervals = [];
 	},
-	
+
 	error: function(msg) {
 		if (isnode) {
 			process.stderr.write(msg);
@@ -1760,7 +2039,7 @@ var Japt = {
 			alert ("Error: Japt.stderr must be sent to an HTMLElement");
 		}
 	},
-	
+
 	evalInput: function(input) {
 		if (input.constructor === Array) return input;
 		var input_mode = "next", current, processed = [], level = 0;
@@ -1768,7 +2047,7 @@ var Japt = {
 		if (!input) return processed;
 		input = (input + " ").split("");
 		for(var index = 0; index < input.length; ++index) {
-			char = input[index];
+			var char = input[index];
 			switch (input_mode) {
 				case "next":
 					if (/[0-9.-]/.test(char)) {
@@ -1784,12 +2063,24 @@ var Japt = {
 					}
 					break;
 				case "flag":
-					if (/\S/.test(char)) {
+					if (char === '"') {
+						current += char;
+						for (index++; input[index] !== '"' && index < input.length; index++) {
+							current += input[index];
+						}
+						current += '"';
+					} else if (/\S/.test(char)) {
 						current += char;
 					} else {
 						var flag = "", value = true;
 						for (var i = 0; i < current.length; i++) {
-							if (/[^\de.+-]/.test(current[i]) || (current[i] === "e" && flag === "")) processed.flags[flag = current[i]] = value = true;
+							if (current[i] === '"') {
+								value = "";
+								for (i++; current[i] !== '"' && i < current.length; i++) {
+									value += current[i];
+								}
+							}
+							else if (/[^\de.+-]/.test(current[i]) || (current[i] === "e" && flag === "")) processed.flags[flag = current[i]] = value = true;
 							else if (value === true) value = current[i];
 							else value += current[i];
 							processed.flags[flag] = value;
@@ -1851,15 +2142,15 @@ var Japt = {
 		}
 		return processed;
 	},
-	
+
 	strings: [],
 	use_safe: false,
 	is_safe: false,
 	implicit_output: true,
-	
+
 	run: function(code, input, safe, before, onsuccess, onerror) {
 		Japt.clear_output();
-		
+
 		input = Japt.evalInput(input);
 		A = 10,
 		B = 11,
@@ -1884,6 +2175,7 @@ var Japt = {
 			q: function(x) { Japt.clear_output(); if(id(x)) Japt.output(x); },
 			c: shoco.c,
 			d: shoco.d,
+			g: function(s, x, y) { Japt.implicit_output = false; if(!/^(?:[a-z]+:)?\/\//.test(s)) s = "https://" + s; if(!isnode) fetch(s).then(function(x) { Japt.implicit_output = true; return x.text(); }).then(functify2(x, y)).then(function(x) { if (Japt.implicit_output) Japt.output(x); }); else console.log("O.g() is not yet supported in Node"); },
 			v: function(x) { var r = ""; try{ r = eval(Japt.transpile(x)); } catch(e) { Japt.error(e); } return r; },
 			x: function(x) { if (Japt.use_safe) throw "O.x() cannot be used in safe mode"; var r = ""; try{ r = eval(x); } catch(e) { Japt.error(e); } return r; }
 		},
@@ -1898,9 +2190,9 @@ var Japt = {
 		X = 3 in N ? N[3] : 0,
 		Y = 4 in N ? N[4] : 0,
 		Z = 5 in N ? N[5] : 0;
-		
+
 		Japt.use_safe = fb(safe, false), Japt.is_safe = true, Japt.implicit_output = true, Japt.flags = input.flags || {};
-		
+
 		code = Japt.transpile(code);
 		if (!Japt.is_safe) {
 			if (onerror) onerror(new Error("Raw JS cannot be used in safe mode"));
@@ -1928,14 +2220,23 @@ var Japt = {
 				return program.cache[id] = eval(code);
 			};
 			var result;
-			
+
 			if (Japt.flags.m || Japt.flags.d || Japt.flags.e || Japt.flags.f || Japt.flags.æ) {
 				if (Japt.flags.d) result = false;
 				else if (Japt.flags.e) result = true;
 				else if (!Japt.flags.æ) result = [];
 				U = typeof U === "number" ? U.o() : U.s();
 				for (var i = 0; i < U.length; i++) {
-					var temp = program(U[i], fb(N[1], i), fb(N[2], U),X,Y,Z);
+					var temp;
+					try {
+						temp = program(U[i],fb(N[1],i),fb(N[2],U),X,Y,Z);
+					} catch (e) {
+						if (Japt.flags.hasOwnProperty('E')) {
+							result = Japt.flags.E === true ? "" : Japt.flags.E;
+							break;
+						}
+						else throw e;
+					}
 					if (Japt.flags.æ) {
 						if (temp) {
 							result = Japt.flags.m ? temp : U[i];
@@ -1967,34 +2268,44 @@ var Japt = {
 					result = result.q();
 				}
 			} else {
-				result = program(U,V,W,X,Y,Z);
+				try {
+					result = program(U,V,W,X,Y,Z);
+				}
+				catch (e) {
+					if (Japt.flags.hasOwnProperty('E')) {
+						result = Japt.flags.E === true ? "" : Japt.flags.E;
+					}
+					else throw e;
+				}
 			}
-			
+
 			if (Japt.flags.hasOwnProperty('h')) result = result.g(-1);
 			else if (Japt.flags.hasOwnProperty('g')) result = result.g(Japt.flags.g === true ? 0 : Japt.flags.g);
-			
-			if (Japt.flags.hasOwnProperty('!')) result = !result;
-			else if (Japt.flags.hasOwnProperty('¡')) result = !!result;
-			
-			if (Japt.flags.N) result = +result;
-			
+
 			if (Japt.flags.P && result instanceof Array) result = result.join("");
 			else if (Japt.flags.Q) result = JSON.stringify(result);
 			else if (Japt.flags.R && result instanceof Array) result = result.join("\n");
 			else if (Japt.flags.S && result instanceof Array) result = result.join(" ");
-			
+
 			if (Japt.flags.x) result = result.x();
+
+			if (Japt.flags.hasOwnProperty('!')) result = !result;
+			else if (Japt.flags.hasOwnProperty('¡')) result = !!result;
+
+			if (Japt.flags.N) result = +result;
 			
+			if (Japt.flags.hasOwnProperty('F') && !result) result = Japt.flags.F === true ? "" : Japt.flags.F;
+
 			if (onsuccess) onsuccess(result);
 		} catch (e) {
 			if (onerror) onerror(e);
 		}
 	},
-	
+
 	transpile: function(code) {
 		Japt.strings = [];
 		Japt.intervals = [];
-	
+
 		function pretranspile(code) {
 			var level = 0,  // Current number of parentheses or curly braces that we're inside
 				extrabraces = Array(20).fill(0),
@@ -2005,7 +2316,9 @@ var Japt = {
 				i = 0,
 				line = 0,
 				lines = [],
-				strchars = Array(20).fill("");
+				strchars = Array(20).fill(""),
+				internary = false,
+				inCharClass = [];
 
 			for (; i < code.length; ++i) {
 				var char = code[i];
@@ -2022,30 +2335,11 @@ var Japt = {
 						newcode += "\"" + Japt.strings.length + "\"";
 						Japt.strings.push(regexify2(code[++i] || "\\"));
 					}
-					else if (isChar(char, "\"`")) {
+					else if (isChar(char, "\"`/")) {
 						level++;
+						internary = newcode.slice(-1) === "?";
 						strchars[level] = char;
 						currstr = "\"";
-					}
-					else if (char === "/") {
-						currstr = "/";
-						for (var inCharClass = false; ++i < code.length; ) {
-							if (code[i] === "/" && !inCharClass) break;
-							currstr += code[i];
-							if (code[i] === "\\") currstr += code[++i];
-							else if (code[i] === "[") inCharClass = true;
-							else if (code[i] === "]") inCharClass = false;
-						}
-						currstr += "/";
-						for ( ; ++i < code.length; ) {
-							if (!isChar(code[i], "gimsux") || currstr.lastIndexOf(code[i]) > currstr.lastIndexOf("/")) {
-								i--;
-								break;
-							}
-							currstr += code[i];
-						}
-						newcode += "\"" + Japt.strings.length + "\"";
-						Japt.strings.push(regexify2(currstr));
 					}
 					else if (char === "'") {
 						if (code[++i] === "\\") {
@@ -2095,22 +2389,75 @@ var Japt = {
 				}
 				else if (level === 1) {
 					if (char === "\\") {
-						currstr += "\\" + code[++i];
+						i++;
+						if (strchars[level] === "/") {
+							if (code[i] === "\\" || (!code[i] && i--))
+								currstr += "\\\\\\\\";
+							else if (code[i] === "/")
+								currstr += "\\/";
+							else
+								currstr += "\\\\" + code[i];
+						}
+						else
+							currstr += "\\" + (code[i] || (i--, "\\"));
 					}
-					else if (char === strchars[level]) {
-						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)$/, function(_, a) { return "\"" + shoco.d(a); });
-						level--;
+					else if (char === ":" && internary) {
+						internary = false;
 						currstr += "\"";
+						if (strchars[level] === "`") currstr = currstr.replace(/"(?:\\.|[^"])*"$/, function(a) {
+							return JSON.stringify(shoco.d(eval(a)));
+						});
 						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
 						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
-						newcode += "'" + currstr + "'";
+						newcode += "'" + currstr + "':";
+						currstr = strchars[level];
+					}
+					else if (char === strchars[level] && !inCharClass[level]) {
+						currstr += "\"";
+						if (strchars[level] === "`") currstr = currstr.replace(/"(?:\\.|[^"])*"$/, function(a) {
+							return JSON.stringify(shoco.d(eval(a)));
+						});
+						
+						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
+						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
+						
+						if (strchars[level] === "/") {
+							var flags = "";
+							while (isChar(code[i + 1], "gimsu") && flags.indexOf(code[i + 1]) === -1)
+								flags += code[++i];
+							
+							if (flags.indexOf("g") === -1)
+								flags = "g" + flags;
+							else
+								flags = flags.replace("g", "");
+							
+							if (flags) {
+								currstr += ",\"" + flags + "\"";
+								Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
+								currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
+							}
+						}
+						
+						newcode += strchars[level] === "/" ? "'RegExp(" + currstr + ")'" : "'" + currstr + "'";
+						level--;
+					}
+					else if (strchars[level] === "/" && char === "[") {
+						inCharClass[level] = true;
+						currstr += "[";
+					}
+					else if (inCharClass[level] && char === "]") {
+						inCharClass[level] = false;
+						currstr += "]";
 					}
 					else if (char === "\"") {
 						currstr += "\\\"";
 					}
 					else if (char === "{") {
 						currstr += "\"";
-						if (strchars[level] === "`") currstr = currstr.replace(/"((?:\\.|[^"])*)"$/, function(_, a) { return "\"" + shoco.d(a) + "\""; });
+						if (strchars[level] === "`") currstr = currstr.replace(/"(?:\\.|[^"])*"$/, function(a) {
+							return JSON.stringify(shoco.d(eval(a)));
+						});
+						
 						Japt.strings.push(currstr.match(/"(?:\\.|[^"])*"$/)[0]);
 						currstr = currstr.replace(/"(?:\\.|[^"])*"$/, "\"" + (Japt.strings.length - 1) + "\"");
 						level++;
@@ -2127,12 +2474,11 @@ var Japt = {
 					if (level === 2 && extrabraces[level] === 0 && char === "}") {
 						level--;
 						var transpiled = pretranspile(currbraces);
-						var transparen = !isSingle(transpiled);
-						currstr += "+" + (transparen ? "(" : "") + deparen(transpiled) + (transparen ? ")" : "") + "+\"";
+						currstr += "+" + makeSingle(transpiled) + "+\"";
 					}
 					else {
 						currbraces += char;
-						if (isChar(char, "\"`")) {
+						if (isChar(char, "\"`/")) {
 							level++;
 							strchars[level] = char;
 						}
@@ -2151,9 +2497,15 @@ var Japt = {
 				else {
 					currbraces += char;
 					if (char === "\\") {
-						currbraces += code[++i];
+						currbraces += (code[++i] || (i--, "\\"));
 					}
-					else if (char === strchars[level]) {
+					else if (strchars[level] === "/" && char === "[") {
+						inCharClass[level] = true;
+					}
+					else if (inCharClass[level] && char === "]") {
+						inCharClass[level] = false;
+					}
+					else if (char === strchars[level] && !inCharClass[level]) {
 						level--;
 					}
 					else if (char === "{") {
@@ -2161,13 +2513,13 @@ var Japt = {
 					}
 				}
 				if (i + 1 === code.length && level > 0) {
-					code += level % 2 ? strchars[level] : "}";
+					code += level % 2 ? inCharClass[level] ? "]" : strchars[level] : "}";
 				}
 			}
 			lines.push(subtranspile(newcode));
-			return lines.join("");
+			return lines.join("\n");
 		}
-		
+
 		function subtranspile(code) {
 			var level = 0,  // Current number of parentheses or curly braces that we're inside
 				i = 0,
@@ -2179,9 +2531,7 @@ var Japt = {
 					opMatch = code.slice(i).match(/^(===|!==|==|!=|>>>|>>|<<|&&|\|\||>=|<=|\+(?!\+)|-(?!-)|\.(?!\d)|[*÷%^&|<>,])(?!=)/),
 					nextIsOp = !!opMatch,
 					opLength = nextIsOp ? opMatch[0].length : 0;
-				if (char === ";" && i === 0)
-					outp += "newvars()";
-				else if (isChar(char, "`'\"A-Z\\(\\[{") && isChar(outp.slice(-1), "`'\"A-Z0-9\\)\\]}"))
+				if ((isChar(char, "`'\"A-Z\\(\\[{~") || (char === "!" && code[i + 1] !== "=")) && isChar(outp.slice(-1), "`'\"A-Z0-9\\)\\]}"))
 					outp += ",";
 				else if (isChar(char, "0-9") && isChar(outp.slice(-1), "`'\"A-Z\\)\\]}"))
 					outp += ",";
@@ -2191,7 +2541,8 @@ var Japt = {
 					code = code.slice(0,i)+'1'+code.slice(i);
 				else if (isChar(outp.slice(-1), "*%") && isChar(char, " \\)\\]};"))
 					code = code.slice(0,i)+'2'+code.slice(i);
-				else if ((outp === "" || outp.slice(-1) === ";") && /[a-zà-ÿ*/%^|&<=>?]/.test(char))
+				else if ((outp === "" || outp.slice(-1) === ";")
+						 && (/[a-zà-ÿ+*/%^|&<=>?]/.test(char) || (char === "-" && !isChar(code[i + 1], "-~"))))
 					outp += "U";
 
 				if (char === "\"") {
@@ -2199,11 +2550,19 @@ var Japt = {
 					outp += tms;
 					i += tms.length - 1;
 				}
-				else if (isChar(char, "$'")) {
-					for(++i; i < code.length; ++i) {
-						if (code[i] === char) break;
+				else if (char === "$") {
+					for (++i; i < code.length; ++i) {
+						if (code[i] === "$") break;
 						outp += code[i];
 					}
+				}
+				else if (char === "'") {
+					var temp = "";
+					for (++i; i < code.length; ++i) {
+						if (code[i] === "'") break;
+						temp += code[i];
+					}
+					outp += isSingle(temp) ? temp : "(" + temp + ")";
 				}
 				else if (isChar(char, "A-Z{")) {
 					var letters = "";
@@ -2228,7 +2587,7 @@ var Japt = {
 						else i--;
 						var tr = subtranspile(temp.slice(0,-1));
 
-						if (tr.contains(";"))
+						if (tr.includes(";"))
 							tr = tr.slice(0, tr.lastIndexOf(";") + 2) + "return " + tr.slice(tr.lastIndexOf(";") + 2);
 						else
 							tr = "return " + tr;
@@ -2240,6 +2599,25 @@ var Japt = {
 						outp += letters.split("").join(",").replace(/M,/g, "M.");
 						--i;
 					}
+				}
+				else if (isChar(char, "?")) {
+					outp += "?";
+					var temp = "";
+					for (level = 1, ++i; level > 0 && i < code.length; i++) {
+						if (code[i] === "?") {
+							++level;
+						} else if (code[i] === ":") {
+							--level;
+						}
+						temp += code[i];
+					}
+					if (temp.slice(-1) !== ":")
+						temp += ":";
+					else i--;
+					
+					var tr = subtranspile("(" + temp.slice(0,-1) + ")");
+
+					outp += deparen(tr) + ":";
 				}
 				else if (char === " ") {
 					outp += ")";
@@ -2283,12 +2661,12 @@ var Japt = {
 
 			return outp;
 		}
-		
+
 		var outp = pretranspile(code);
-		
+
 		outp = outp
 			.replace(/(\+\+|--)[A-Z]|[A-Z](\+\+|--)/g, function(s) { Japt.strings.push("(" + s + ")"); return "\"" + (Japt.strings.length - 1) + "\""; })
-			.replace(/[,;]/g, "$& ")
+			.replace(/[,;](?!\n)/g, "$& ")
 			.replace(/[}]/g, " $&")
 			.replace(/[{?:]|&&|\|\||(?:\*\*|==|<<|>>>?|!=|[+\-*/÷%&|^<=>])=?/g, " $& ")
 			.replace(/ +/g, " ")
@@ -2297,10 +2675,10 @@ var Japt = {
 		outp = outp.replace(/"(\d+)"/g, function(_, a) { return Japt.strings[+a]; });
 		return outp;
 	},
-	
+
 	eval: function(code) {
 		return eval(Japt.transpile(code));
 	}
-}
+};
 
 if (isnode) module.exports = Japt;

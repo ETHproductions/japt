@@ -79,7 +79,7 @@ If you need a string made of a single char, you can type an apostrophe, then the
 
 Thanks to the power of the regex, you can use ES6's string interpolation in Japt! Anything inside curly braces in a string is evaluated as actual code. For example, `"abc{U}xyz"`: transpiles to `"abc"+(U)+"xyz"`. If you need to use actual curly braces in the string, just precede the left brace with a backslash, like so: `"abc\{U}xyz"`
 
-Need to return one of two different strings, using `a?b:c` syntax? No problem! You can omit the two middle quotation marks. E.g. `U==1?"abc":"xyz"` can be shortened to `U==1?"abc:xyz"`. But what's that? One of the strings already contains a colon? Well, there's a remedy for that, too! Just precede the colon with a backslash. `U==1?"abc\:123:xyz"` transpiles to `U==1?"abc:123":"xyz"`. (Note: this feature does not currently work.)
+Need to return one of two different strings, using `a?b:c` syntax? No problem! You can omit the two middle quotation marks. E.g. `U==1?"abc":"xyz"` can be shortened to `U==1?"abc:xyz"`. But what's that? One of the strings already contains a colon? Well, there's a remedy for that, too! Just precede the colon with a backslash. `U==1?"abc\:123:xyz"` transpiles to `U==1?"abc:123":"xyz"`.
 
 Oh, and one more thing: if you have a string literal at the end of a program, you can leave out the final quotation mark, and the interpreter will automatically insert it for you.
 

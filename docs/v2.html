@@ -224,9 +224,15 @@
 <h3>`.n(n=10)`</h3>
 <p>Returns `parseInt(this,n)`.</p>
 <h3>`.n(s)`</h3>
-<p>Returns `this` converted from base `s` to decimal (`"baab"n"ab" -> "1001"n2 -> 9).</p>
+<p>Converts `this` from base `s` to decimal (`"baab"n"ab" -> "1001"n2 -> 9`).</p>
 <h3>`.n(a)`</h3>
-<p>Returns `this` converted from base `a` to decimal (`"baab"n['a'b] -> "1001"n2 -> 9).</p>
+<p>Converts `this` from base `a` to decimal (`"baab"n['a'b] -> "1001"n2 -> 9`).</p>
+<h3>`.n(x,f)`</h3>
+<p>Converts `this` from base `x` to decimal, maps through `f`, then converts back to base `x`.</p>
+<h3>`.n(x,x)`</h3>
+<p>Converts `this` from base `x₁` to base `x₂`.</p>
+<h3>`.n(x,x,f)`</h3>
+<p>Converts `this` from base `x₁` to decimal, maps through `f`, then converts to base `x₂`.</p>
 <h3>`.o(s,x?)`</h3>
 <p>Removes all characters not in `s` from `this`, case-insensitive unless `x` is truthy.</p>
 <h3>`.o(f)`</h3>
@@ -462,9 +468,15 @@
 <h3>`.ì(n=10)`</h3>
 <p>Converts `this` from an array of base-`n` digits into an integer.</p>
 <h3>`.ì(a)`</h3>
-<p>Converts `this` from an array of base-`a` digits into an integer (`['c,7,7,'c]ì[7,'c] -> [1,0,0,1]ì2 -> 9`).</p>
+<p>Converts `this` from base-`a` to an integer (`['c,7,7,'c]ì[7,'c] -> [1,0,0,1]ì2 -> 9`).</p>
 <h3>`.ì(s)`</h3>
-<p>Converts `this` from an array of base-`s` digits into an integer (`['c,7,7,'c]ì"7c" -> [1,0,0,1]ì2 -> 9`).</p>
+<p>Converts `this` from base-`s` to an integer (`['c,7,7,'c]ì"7c" -> [1,0,0,1]ì2 -> 9`).</p>
+<h3>`.ì(x,f)`</h3>
+<p>Converts `this` from base `x` to an integer, maps through `f`, then converts back to base `x`.</p>
+<h3>`.ì(x,x)`</h3>
+<p>Converts `this` from base `x₁` to base `x₂`.</p>
+<h3>`.ì(x,x,f)`</h3>
+<p>Converts `this` from base `x₁` to an integer, maps through `f`, then converts to base `x₂`.</p>
 <h3>`.í(a?)`</h3>
 <p>Pairs each item in `this` with the corresponding item in `a`. If no `a` is given, uses the index instead.</p>
 <h3>`.í(a?,f)`</h3>
@@ -582,8 +594,8 @@
 <p>Returns `this` converted to a base-`s` string (`9s"ab" -> "baab"`).</p>
 <h3>`.s(a)`</h3>
 <p>Returns `this` converted to a base-`a` string (`9s["ab""tr"] -> "trababtr"`).</p>
-<h3>`.s(f)`</h3>
-<p>Converts `this` to a string, runs it through `f`, and then converts back to a number.</p>
+<h3>`.s(x,f)`</h3>
+<p>Converts `this` to a base-`x` string, runs it through `f`, and then converts back to base `x`.</p>
 <h3>`.t(f)`</h3>
 <p>Runs `f` after `this` milliseconds.</p>
 <h3>`.t(s)`</h3>
@@ -614,8 +626,8 @@
 <p>Returns an array of the base-`a` digits of `this` (9ì["ab"7] -> [7,"ab","ab",7]).</p>
 <h3>`.ì(s)`</h3>
 <p>Returns an array of the base-`s` digits of `this` (9ì"ab" -> ["b","a","a","b"]).</p>
-<h3>`.ì(f)`</h3>
-<p>Converts `this` to an array of digits, runs it through `f`, and then converts back to a number.</p>
+<h3>`.ì(x,f)`</h3>
+<p>Converts `this` to an array of base-`x` digits, runs it through `f`, and then converts back to base `x`.</p>
 <h3>`.î(s=" ")`</h3>
 <p>Repeats `s` until it reaches length `this`. `5î"ab" -> "ababa"`</p>
 <h3>`.ò(n,n=1)`</h3>

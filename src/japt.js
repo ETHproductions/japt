@@ -30,6 +30,14 @@ function fb(x, y) {
 	return id(x) ? x : y;
 }
 
+// Is-type: returns whether x is of type t ("string", "number", "function", etc. or an array of these)
+function is(x, t) {
+	var xt = {}.toString.call(x).slice(8, -1);
+	if (!(t instanceof Array)) t = [t];
+	t = t.map(function(q) { q = typeof q === "function" ? q.name : String(q); return q.toLowerCase(); });
+	return t.includes(xt.toLowerCase());
+}
+
 // Positive modulo (like Python's %)
 function pm(x, y) {
 	if (y === 0)
@@ -254,6 +262,19 @@ function functify2(operator, argument) {
 // Returns whether the character is in a specified range
 function isChar(char, chars) {
 	return RegExp('^[' + chars + ']$').test(char);
+}
+
+// Returns 1 for method, 2 for operator or 0 for neither.
+function isMethodOrOp(str) {
+	if (str[0] === "!") str = str.slice(1);
+	if (/^[a-zà-öø-ÿ]$/.test(str))
+		return 1;
+	if (["+", "-", "*", "/", "%", "&", "|", "^", "<<", ">>", ">>>",
+		 "+=","-=","*=","/=","%=","&=","|=","^=","<<=",">>=",">>>=",
+		 "==", "===", "=", "<", "<=", ">", ">=", "&&", "||",
+		 "", "~", ",", "?", ":"].includes(str))
+		return 2;
+	return 0;
 }
 
 // Stringifies an object in a good-looking way
@@ -523,32 +544,45 @@ df(String.prototype, {
 			return this.q(z).m(x,y).q(z);
 		return this.q(y).m(x).q(y);
 	},
-	n: function (x, y) {
-		if (typeof x === "string")
-			x = x.q();
-		if (x instanceof Array) {
-			x = x.map(String);
-			var z = clone(x).sortBy(function(x) {
-				return -x.length;
+	n: function () {
+		var n, frombase, tobase, args = [].slice.apply(arguments);
+		
+		if (typeof args[0] === "string")
+			args[0] = args[0].q();
+		if (args[0] instanceof Array) {
+			frombase = args.shift().map(String);
+			var reg = clone(frombase).sortBy(function(s) {
+				return -s.length;
 			}).map(regescape).join("|");
 
-			var result = this.match(RegExp(z, y ? 'gi' : 'g')) || [];
-			return result.reduce(function(prev, curr) {
-				var i = x.indexOf(curr);
-				if (i < 0 && y)
-					i = x.findIndex(function(z) {
-						return z.v() === curr.v();
-					});
-				if (i < 0)
+			var result = this.match(RegExp(reg, 'g')) || [];
+			n = result.reduce(function(prev, curr) {
+				var digit = frombase.indexOf(curr);
+				if (digit < 0)
 					return NaN;
-				return prev * x.length + i;
+				return prev * frombase.length + digit;
 			}, 0);
 		}
-		x = x || 10;
-		if (x === 10)
-			return parseFloat(this);
-		else
-			return parseInt(this, x);
+		else if (typeof args[0] === "number" || args[0] === undefined) {
+			frombase = args.shift() || 10;
+			if (frombase === 10)
+				n = parseFloat(this);
+			else
+				n = parseInt(this, frombase);
+		}
+		
+		if (typeof args[0] === "number")
+			tobase = args.shift();
+		
+		if (typeof args[0] === "function" || typeof args[0] === "string") {
+			var map = functify2(args.shift(), args.shift());
+			n = map(n);
+			n = n.s(fb(tobase, frombase));
+		}
+		else if (id(tobase))
+			n = n.s(tobase);
+		
+		return n;
 	},
 	o: function (x, y) {
 		if (["<", ">"].includes(x) || typeof x === "function") {
@@ -1135,13 +1169,42 @@ df(Array.prototype, {
 		y = fb(y, 0);
 		return this.slice(y).filter(function(a, b) { return b % x === 0; });
 	},
-	ì: function (x) {
-		if (typeof x === "string")
-			x = x.q();
-		x = fb(x,10);
-		return this.reduce(function(a, b) {
-			return x instanceof Array ? a * x.length + x.indexOf(b) : a * x + parseFloat(b);
-		}, 0);
+	ì: function () {
+		var n, frombase, tobase, args = [].slice.apply(arguments), explicitFrom = false;
+		
+		if (is(args[0], String) && !isMethodOrOp(args[0]))
+			args[0] = args[0].q();
+		if (is(args[0], Array)) {
+			frombase = args.shift();
+			explicitFrom = true;
+			n = this.reduce(function(prev, curr) {
+				var digit = frombase.indexOf(String(curr));
+				if (digit < 0)
+					return NaN;
+				return prev * frombase.length + digit;
+			}, 0);
+		}
+		else if (is(args[0], [Number, String, undefined])) {
+			explicitFrom = typeof args[0] === "number";
+			frombase = explicitFrom ? args.shift() || 10 : 10;
+			n = this.reduce(function(prev, curr) {
+				return prev * frombase + parseFloat(curr);
+			}, 0);
+		}
+		
+		if (explicitFrom && is(args[0], [Number, String, Array])) {
+			tobase = args.shift();
+		}
+		
+		if (is(args[0], [Function, String])) {
+			var f = functify2(args.shift(), args.shift());
+			n = f(n).ì(fb(tobase, frombase));
+		}
+		else if (id(tobase)) {
+			n = n.ì(tobase);
+		}
+		
+		return n;
 	},
 	í: function (x, y) {
 		if (!(x instanceof Array)) {
@@ -1477,18 +1540,24 @@ df(Number.prototype, {
 		x = fb(x, 1);
 		return Math.round(this / x) * x;
 	},
-	s: function (x, y) {
-		if (typeof x === "function"
-			|| (typeof x === "string"
-				&& (id(y) ? /^!?.$/.test(x) : x.length === 1)
-			   ))
-			return Number(functify(x, y)(this.s(), y));
-		if (typeof x === "string")
-			x = x.q();
-		if (x instanceof Array)
-			return this.ì(x).q();
-		x = fb(x, 10);
-		return this.toString(x);
+	s: function () {
+		var n, base, args = [].slice.apply(arguments);
+		
+		if (is(args[0], String) && !isMethodOrOp(args[0]))
+			args[0] = args[0].q();
+		if (is(args[0], Array))
+			n = this.ì(base = args.shift()).q();
+		else if (is(args[0], Number))
+			n = this.toString(base = args.shift());
+		else
+			n = this.toString();
+		
+		if (is(args[0], [Function, String])) {
+			var f = functify2(args.shift(), args.shift());
+			n = f(n).n(base);
+		}
+		
+		return n;
 	},
 	t: function (x) {
 		if (typeof x !== "function") {
@@ -1566,48 +1635,55 @@ df(Number.prototype, {
 		x = String(fb(x, " "));
 		return x.p(+this);
 	},
-	ì: function (x, y) {
-		if (typeof x === "function"
-			|| (typeof x === "string"
-				&& (id(y) ? /^!?.$/.test(x) : x.length === 1)
-			   )) {
-			var z = functify(x, y)(this.ì(), y);
+	ì: function () {
+		var n, base, a, args = [].slice.apply(arguments);
+		
+		if (is(args[0], String) && !isMethodOrOp(args[0]))
+			args[0] = args[0].q();
+		if (is(args[0], Array)) {
+			base = args.shift();
+			n = this.ì(base.length).m(function(y) { return base[y]; });
+		}
+		else {
+			base = Math.trunc(is(args[0], Number) ? args.shift() || 10 : 10);
+			n = Math.trunc(this);
+			if (base > 0) {
+				if (base === 1) {
+					if (n < 0)
+						n = (-n).o().ç(-1);
+					else
+						n = n.o().ç(1);
+				}
+				else {
+					for (a = []; n !== 0; n = Math.trunc(n / base))
+						a.unshift(n % base);
+					n = a;
+				}
+			}
+			else if (base < 0) {
+				if (base === -1) {
+					return (n > 0 ? n * 2 - 1 : -n * 2).o().î([1, 0]);
+				}
+				else {
+					base *= -1;
+					for (a = []; n != 0; n = Math.trunc(n < 0 ? -(n - base + 1) / base : -n / base))
+						a.unshift(pm(n, base));
+					n = a;
+				}
+			}
+			else
+				n = [];
+		}
+		
+		if (is(args[0], [Function, String])) {
+			var f = functify(args.shift(), args.shift());
+			var z = f(n);
 			if (z instanceof Array)
-				z = z.ì();
-			return Number(z);
+				z = z.ì(base);
+			n = Number(z);
 		}
-		if (typeof x === "string")
-			x = x.q();
-		if (x instanceof Array)
-			return this.ì(x.length).m(function(y) { return x[y]; });
-		var n = Math.trunc(this), a;
-		x = Math.trunc(fb(x, 10));
-		if (x > 0) {
-			if (x === 1) {
-				if (n < 0)
-					return (-n).o().ç(-1);
-				else
-					return n.o().ç(1);
-			}
-			else {
-				for (a = []; n !== 0; n = Math.trunc(n / x))
-					a.unshift(n % x);
-				return a;
-			}
-		}
-		else if (x < 0) {
-			if (x === -1) {
-				return (n > 0 ? n * 2 - 1 : -n * 2).o().î([1, 0]);
-			}
-			else {
-				x = -x;
-				for (a = []; n != 0; n = Math.trunc(n < 0 ? -(n - x + 1) / x : -n / x))
-					a.unshift(pm(n, x));
-				return a;
-			}
-		}
-		else
-			return [];
+		
+		return n;
 	},
 	î: function (x) {
 		return " ".p(+this).î(x);

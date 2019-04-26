@@ -30,7 +30,7 @@ function fb(x, y) {
 	return id(x) ? x : y;
 }
 
-// Is-type: returns whether x is of type t ("string", "number", "function", etc. or an array of these)
+// Is-type: returns whether x is of type t (String, Number, Function, etc. or an array of these)
 function is(x, t) {
 	var xt = {}.toString.call(x).slice(8, -1);
 	if (!(t instanceof Array)) t = [t];
@@ -266,6 +266,7 @@ function isChar(char, chars) {
 
 // Returns 1 for method, 2 for operator or 0 for neither.
 function isMethodOrOp(str) {
+	if (!is(str, String)) return 0;
 	if (str[0] === "!") str = str.slice(1);
 	if (/^[a-zà-öø-ÿ]$/.test(str))
 		return 1;
@@ -545,12 +546,13 @@ df(String.prototype, {
 		return this.q(y).m(x).q(y);
 	},
 	n: function () {
-		var n, frombase, tobase, args = [].slice.apply(arguments);
+		var n, frombase, tobase, args = [].slice.apply(arguments), explicitFrom = false;
 		
-		if (typeof args[0] === "string")
+		if (is(args[0], String) && !isMethodOrOp(args[0]))
 			args[0] = args[0].q();
-		if (args[0] instanceof Array) {
+		if (is(args[0], Array)) {
 			frombase = args.shift().map(String);
+			explicitFrom = true;
 			var reg = clone(frombase).sortBy(function(s) {
 				return -s.length;
 			}).map(regescape).join("|");
@@ -563,24 +565,26 @@ df(String.prototype, {
 				return prev * frombase.length + digit;
 			}, 0);
 		}
-		else if (typeof args[0] === "number" || args[0] === undefined) {
-			frombase = args.shift() || 10;
+		else if (is(args[0], [Number, String, undefined])) {
+			explicitFrom = typeof args[0] === "number";
+			frombase = explicitFrom ? args.shift() || 10 : 10;
 			if (frombase === 10)
 				n = parseFloat(this);
 			else
 				n = parseInt(this, frombase);
 		}
 		
-		if (typeof args[0] === "number")
+		if (explicitFrom && is(args[0], [Number, String, Array]) && !isMethodOrOp(args[0])) {
 			tobase = args.shift();
-		
-		if (typeof args[0] === "function" || typeof args[0] === "string") {
-			var map = functify2(args.shift(), args.shift());
-			n = map(n);
-			n = n.s(fb(tobase, frombase));
 		}
-		else if (id(tobase))
+		
+		if (is(args[0], [Function, String])) {
+			var f = functify2(args.shift(), args.shift());
+			n = f(n).s(fb(tobase, frombase));
+		}
+		else if (id(tobase)) {
 			n = n.s(tobase);
+		}
 		
 		return n;
 	},
@@ -1175,7 +1179,7 @@ df(Array.prototype, {
 		if (is(args[0], String) && !isMethodOrOp(args[0]))
 			args[0] = args[0].q();
 		if (is(args[0], Array)) {
-			frombase = args.shift();
+			frombase = args.shift().map(String);
 			explicitFrom = true;
 			n = this.reduce(function(prev, curr) {
 				var digit = frombase.indexOf(String(curr));
@@ -1184,7 +1188,7 @@ df(Array.prototype, {
 				return prev * frombase.length + digit;
 			}, 0);
 		}
-		else if (is(args[0], [Number, String, undefined])) {
+		else {
 			explicitFrom = typeof args[0] === "number";
 			frombase = explicitFrom ? args.shift() || 10 : 10;
 			n = this.reduce(function(prev, curr) {
@@ -1192,7 +1196,7 @@ df(Array.prototype, {
 			}, 0);
 		}
 		
-		if (explicitFrom && is(args[0], [Number, String, Array])) {
+		if (explicitFrom && is(args[0], [Number, String, Array]) && !isMethodOrOp(args[0])) {
 			tobase = args.shift();
 		}
 		
@@ -1676,7 +1680,7 @@ df(Number.prototype, {
 		}
 		
 		if (is(args[0], [Function, String])) {
-			var f = functify(args.shift(), args.shift());
+			var f = functify2(args.shift(), args.shift());
 			var z = f(n);
 			if (z instanceof Array)
 				z = z.ì(base);

@@ -2,11 +2,13 @@ var A,B,C,D,E,F,G,H,I,J,_K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z; // Japt variables
 function noFunc(x){alert("No such function: "+x)} // Runs whenever the program contains a non-existant function call
 function id(x){return(typeof x)!=="undefined"} // Detects whether the variable is defined
 function fb(x,y){return id(x)?x:y} // Fallback: returns x if x is defined, y otherwise
+function is(x,t){if(!(t instanceof Array))t=[t];t=t.map(function(q){return(typeof q==="function"?q.name:String(q)).toLowerCase()});return t.includes({}.toString.call(x).slice(8,-1).toLowerCase())} // Is-type: returns whether x is of type t (String, Number, Function, etc. or an array of these)
 function pm(x,y){return(x%y+y)%y||0} // Positive modulo
 function df(o,n,f){Object.defineProperty(o.prototype,n,{enumerable:false,configurable:false,writable:true,value:f})}
 function regexify(x,y){if(x instanceof RegExp)return x;x+="";y=fb(y,null);var z="",i=0,a=!1;for(;i<x.length;i++)x[i]=="%"?x=x.slice(0,i+1)+"\\"+x.slice(i+1):z+=(x[i]=="\\"?(i++,x[i]=="A"?a?"A-Z":"[A-Z]":x[i]=="a"?a?"a-z":"[a-z]":x[i]=="l"?a?"A-Za-z":"[A-Za-z]":x[i]=="L"?a?"\\W_\\d":"[^A-Za-z]":x[i]=="w"?a?"A-Za-z0-9":"[A-Za-z0-9]":x[i]=="W"?a?"\\W_":"[^A-Za-z0-9]":x[i]=="V"?a?"\\W0-9B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z_":"[^AaEeIiOoUu]":x[i]=="v"?a?"AaEeIiOoUu":"[AaEeIiOoUu]":x[i]=="Y"?a?"\\W0-9B-DF-HJ-NP-TV-XZb-df-hj-np-tv-xz_":"[^AaEeIiOoUuYy]":x[i]=="y"?a?"AaEeIiOoUuYy":"[AaEeIiOoUuYy]":x[i]=="c"?a?"B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z":"[B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z]":x[i]=="C"?a?"\\W0-9AaEeIiOoUu_":"[^B-DF-HJ-NP-TV-Zb-df-hj-np-tv-z]":x[i]=="P"?a?"\\x00-\\x1f\\x7f-\\xuffff":"[^ -~]":x[i]=="p"?a?" -~":"[ -~]":x[i]=="Q"?a?"\\x00-\\x09\\x0b-\\x1f\\x7f-\\xuffff":"[^\\n -~]":x[i]=="q"?a?"\\n -~":"[\\n -~]":"\\"+x[i]):x[i]=="["?(a=!0,"["):x[i]=="]"?(a=!1,"]"):x[i]);return RegExp(z,y===""?"":(y||"").replace(/g/g,"")+"g")}
 function functify(x,y){if((typeof x)==="function")return x;var z=id(y),func="f=function(a,b){return ";if(/^!?[a-zà-ÿ]$/.test(x))func+=(x[0]!=="!"?"a."+x+(z?"(b)":"()"):z?"b."+x.slice(1)+"(a)":"");else func+=(x.slice(0,2)=="!="?"a"+x+"b":x[0]!=="!"?"a"+x+"b":"b"+x.slice(1)+"a");func+="}";return eval(func)}
-function isChar(str,char){return RegExp('^['+char+']$').test(str);}
+function isChar(str,char){return RegExp('^['+char+']$').test(str)}
+function isMethodOrOp(str){if(!is(str,String))return 0;if(str[0]==="!")str=str.slice(1);return/^[a-zà-öø-ÿ]$/.test(str)?1:["+","-","*","/","%","&","|","^","<<",">>",">>>","+=","-=","*=","/=","%=","&=","|=","^=","<<=",">>=",">>>=","==","===","=","<","<=",">",">=","&&","||","","~",",","?",":"].includes(str)?2:0}
 function str(x){return x instanceof Array?'['+x.map(str).join()+']':x instanceof String||typeof x==="string"?'"'+x.replace(/"/g,"\\\"")+'"':x+""}
 function regescape(s){s=String(s);return s.replace(/[()[\]{}\-+*?^$|\\/.]/g,"\\$&")}
 function clone(x){return x instanceof Array?x.slice():x}
@@ -86,9 +88,7 @@ Math.approx = function(x,p){p=fb(p,5);for(var y=1;Math.abs(x-Math.round(x))>Math
 df(String,'a',function(x,y){return typeof x=="function"||id(y)?this.q().a(x,y):this.lastIndexOf(x)});
 df(String,'b',function(x,y){return typeof x=="function"||id(y)?this.q().b(x,y):this.indexOf(x)});
 df(String,'c',function(x,y){x=fb(x,0);if(typeof x==="number")return this.charCodeAt(pm(x,this.length));x=functify(x,y);return this.m(function(a,b,c){var z=x(a.charCodeAt(0),fb(y,b),c);return typeof z==="number"?z.d():z})});
-df(String,'d',function(x){
-	if(arguments.length<2){return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this)}
-	else{return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(regexify(f,'g'),a[i+1]);},this)}});
+df(String,'d',function(x){if(arguments.length<2)return(typeof x=="object"?x[0]:x).match(/[\S\s]{1,2}/g).reduce(function(o,f){return o.split(f[0]).join(f[1])},this);else return[].reduce.call(arguments,function(o,f,i,a){return i%2?o:o.replace(regexify(f,'g'),a[i+1])},this)});
 df(String,'e',function(x,y,z){x=eval(regexify(x,fb(z,'')).toString().replace(/[a-z]*$/,function(s){return s.replace('g','')}));var t=this,u;for(var i=1e8;i--&&t!==u;)u=t,t=t.replace(x,y||"");return t});
 df(String,'f',function(x,y){return this.match(regexify(x,y))||[]});
 df(String,'g',function(x,y){if(["string","function"].includes(typeof x))return functify(x,y)(this+"",y);var l=this.length;x=pm(fb(x,0),l);return this[x]});
@@ -98,7 +98,7 @@ df(String,'j',function(x,y){y=fb(y,1);return this.substring(0,x)+this.substring(
 df(String,'k',function(x,y){if(["<",">"].includes(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return!x(a,fb(y,b),c)}).q()};return this.replace(regexify('['+regescape(x)+']',y?'g':'gi'),"")});
 df(String,'l',function(){return this.length});
 df(String,'m',function(x,y,z){if(typeof x==="string")return this.q(z).m(x,y).q(z);return this.q(y).m(x).q(y)});
-df(String,'n',function(x,y){if(typeof x==="string")x=x.q();if(x instanceof Array){x=x.map(String);return(this.match(RegExp(clone(x)['\xF1']('l').w().map(regescape).join("|"),y?'gi':'g'))||[]).reduce(function(p,c){var i=x.indexOf(c);if(i<0&&y)i=x.findIndex(function(z){return z.v()==c.v()});if(i<0)return NaN;return p*x.length+i},0)}x=x||10;if(x==10)return parseFloat(this);else return parseInt(this,x)});
+df(String,'n',function(){var n,c,d,A=[].slice.apply(arguments),e=0;if(is(A[0],String)&&!isMethodOrOp(A[0]))A[0]=A[0].q();if(is(A[0],Array)){c=A.shift().map(String);e=1;var r=clone(c).sortBy(function(s){return-s.length;}).map(regescape).join("|");var q=this.match(RegExp(r,'g'))||[];n=q.reduce(function(prev,curr){var digit=c.indexOf(curr);if(digit<0)return NaN;return prev*c.length+digit;},0);}else{e=typeof A[0]==="number";c=e?A.shift()||10:10;if(c===10)n=parseFloat(this);else n=parseInt(this,c);}if(e&&is(A[0],[Number,String,Array])&&!isMethodOrOp(A[0])){d=A.shift();}if(is(A[0],[Function,String])){var x=A.shift(),y=A.shift(),f=functify(x,y);n=f(n,y).s(fb(d,c));}else if(id(d)){n=n.s(d);}return n;});
 df(String,'o',function(x,y){if(["<",">"].includes(x)||typeof x==="function"){x=functify(x,y);return this.q().filter(function(a,b,c){return x(a,fb(y,b),c)}).q()};return this.replace(regexify('[^'+regescape(x)+']',y?'g':'gi'),"")});
 df(String,'p',function(x,y){x=fb(x,2);return typeof x==="number"?this.repeat(x):this+[this].m(x,y)});
 df(String,'q',function(x){x=fb(x,"");return this.split(x)});
@@ -117,13 +117,13 @@ df(String,'\xE2',function(x){return this.search(x)});
 df(String,'\xE3',function(x,y){return this.q()['\xE3'](x,y).map(function(a){return a.q()})});
 df(String,'\xE4',function(x,y){x=functify(x);return this.q()['\xE3'](2,y).map(function(a){return x(a[0],a[1],a.q())})});
 df(String,'\xE5',function(x,y){return this.q()['\xE5'](x,y)});
-df(String,'\xE7',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,x);});
+df(String,'\xE7',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,x)});
 df(String,'\xE8',function(x){return (this.f(x)||[]).length});
 df(String,'\xE9',function(x){return this.q()['\xE9'](x).q()});
 df(String,'\xEA',function(x){return typeof x==="string"?this==this.w():this+this.slice(0,Math.floor(fb(x,0))%2?this.length:-1).w()});
 df(String,'\xEB',function(x,y){return this.q()['\xEB'](x,y).q()});
 df(String,'\xED',function(x,y){return this.q()['\xED'](id(x)?x.constructor===String?x.q():x:undefined,y).map(function(z){return z instanceof Array?z.q():String(z)}).q()});
-df(String,'\xEE',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]});});
+df(String,'\xEE',function(x){x=fb(x,' ')+'';return this.replace(/[^]/g,function(_,i){return x[i%x.length]})});
 df(String,'\xEF',function(x,y){if(typeof x==="string"&&!/^(?:&&|\|\||\*\*|<<|>>>?|[!=]==?|[+\-*/÷%&|^<=>a-z\xE0-\xF6\xF7-\xFF])$/g.test(x))x=x.q();return this.q()['\xEF'](fb(x,function(a,b){return a+b}),fb(y,function(a,b){return a+b}))});
 df(String,'\xF0',function(x,y){var a=[],m;x=regexify(x,y?'gi':'g');for(var i=0;i<this.length;i++){x.lastIndex=i;m=x.exec(this);if(m&&m.index==i)a.push(i)}return a});
 df(String,'\xF1',function(x){return this.q()['\xF1'](x).q()});
@@ -139,10 +139,10 @@ df(String,'\xFB',function(x,y){return this.pad(x,y,0)});
 
 df(Array,'a',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).lastIndexOf(true):this.lastIndexOf(x)});
 df(Array,'b',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).indexOf(true):this.indexOf(x)});
-df(Array,'c',function(x){if(id(x))return this.concat(x);var f=[];for(var i of this){if(i instanceof Array)for(var j of i.c())f.push(j);else f.push(i);}return f});
+df(Array,'c',function(x){if(id(x))return this.concat(x);var f=[];for(var i of this){if(i instanceof Array)for(var j of i.c())f.push(j);else f.push(i)}return f});
 df(Array,'c',function(x,y){if(x===0)return this;var f=function(q){if(q instanceof Array)q=q.c(x-1);return q},a=this.slice(),r=[];if(x instanceof Array)return a.concat(x);if(["string","function"].includes(typeof x))f=functify(x,y);for(var i=0;i<a.length;i++)r=r.concat(f(a[i],fb(y,i),a));return r});
 df(Array,'d',function(x,y){x=fb(x,function(y){return!!y});x=functify(x,y);return this.some(function(a,b,c){return x(a,fb(y,b),c)})});
-df(Array,'e',function(x,y){if(x instanceof Array){return this.length===x.length&&this.every(function(a,b){return a instanceof Array?a.e(x[b]):a==x[b]})}else{x=fb(x,function(y){return!!y});x=functify(x,y);return this.every(function(a,b,c){return x(a,fb(y,b),c)})}});
+df(Array,'e',function(x,y){if(x instanceof Array)return this.length===x.length&&this.every(function(a,b){return a instanceof Array?a.e(x[b]):a==x[b]});else{x=fb(x,function(y){return!!y});x=functify(x,y);return this.every(function(a,b,c){return x(a,fb(y,b),c)})}});
 df(Array,'f',function(x,y){if(x instanceof Array){y=fb(y,0)%3;if(y===2)return this.filter(function(q){var a=x.indexOf(q);if(~a)x.splice(a,1);return~a});else if(y===1)return this.filter(function(q,i,a){return~x.indexOf(q)&&a.indexOf(q)===i});else return this.filter(function(q){return~x.indexOf(q)})}x=fb(x,function(y){return!!y});x=functify(x,y);return this.filter(function(a,b,c){return x(a,fb(y,b),c)})});
 df(Array,'g',function(){for(var a=this,i=0,x,y,p,c;x=arguments[i],typeof x==="number";i++)x=pm(x,a.length),p=a,c=x,a=a[x];if(x instanceof Array)if (typeof arguments[i+1]==="function"||typeof arguments[i+1]==="string"){for(var f=functify(arguments[i+1],arguments[i+2]),j=0;j<x.length;j++)this[x[j]]=f(this[x[j]],x[j]);return this}else return x.map(function(j){return a.g(j)});else if(["string","function"].includes(typeof x)){y=arguments[i+1],x=functify(x,y);if(i===0)return x(this,y);p[c]=x(a,y);return this}if(i===0)return a[0];return a});
 df(Array,'h',function(x,y){var l=this.length,z;if(!id(y))y=x,x=0;if(typeof x!=="number"&&typeof y==="number")z=x,x=y,y=z;x=pm(x,l);this[x]=y;return this});
@@ -176,18 +176,18 @@ df(Array,'\xE8',function(x,y){return this.f(x,y).length});
 df(Array,'\xE9',function(x){var r=[],l=this.length,i=l;for(x=pm(-fb(x,1),l);i--;x++)r.push(this[x%l]);return r});
 df(Array,'\xEA',function(x){return typeof x==="string"?str(this)===str(this.slice().w()):this.concat(this.slice(0,Math.floor(fb(x,0))%2?this.length:-1).w())});
 df(Array,'\xEB',function(x,y){x=fb(x,2);y=fb(y,0);return this.slice(y).filter(function(a,b){return b%x==0})});
-df(Array,'\xEC',function(x){if(typeof x==="string")x=x.q();x=fb(x,10);return this.reduce(function(a,b){return x instanceof Array?a*x.length+x.indexOf(b):a*x+parseFloat(b)},0)});
+df(Array,'\xEC',function(){var n,c,d,A=[].slice.apply(arguments),e=0;if(is(A[0],String)&&!isMethodOrOp(A[0]))A[0]=A[0].q();if(is(A[0],Array)){c=A.shift().map(String);e=1;n=this.reduce(function(a,b){var g=c.indexOf(String(b));if(g<0)return NaN;return a*c.length+g},0)}else{e=typeof A[0]==="number";c=e?A.shift()||10:10;n=this.reduce(function(a,b){return a*c+parseFloat(b)},0)}if(e&&is(A[0],[Number,String,Array])&&!isMethodOrOp(A[0])){d=A.shift()}if(is(A[0],[Function,String])){var x=A.shift(),y=A.shift(),f=functify(x,y);n=f(n,y).ì(fb(d,c))}else if(id(d)){n=n.ì(d)}return n});
 df(Array,'\xED',function(x,y){var i=0,z;if(!(x instanceof Array)){if(y instanceof Array)z=y,y=x,x=z;else for(y=x,x=[];i<this.length;i++)x[i]=i}y=functify(fb(y,function(a,b){return[a,b]}),0);return this.map(function(a,b,c){return y(a,x[b],c)})});
-df(Array,'\xEE',function(x){x=fb(x,[0]);return this.map(function(_,i){return x[i%x.length]});});
+df(Array,'\xEE',function(x){x=fb(x,[0]);return this.map(function(_,i){return x[i%x.length]})});
 df(Array,'\xEF',function(x,y){var z,r=[],i,j;if(!(x instanceof Array)){if(y instanceof Array)z=y,y=x,x=z;else y=x,x=this.slice()}y=functify(fb(y,function(a,b){return[a,b]}),0);for(i=0;i<this.length;i++)for(j=0;j<x.length;j++)r.push(y(this[i],x[j],i*x.length+j));return r});
 df(Array,'\xF0',function(x,y){x=fb(x,Boolean);if(x instanceof Array)y=x,x=function(a){return y.includes(a)};x=functify(x,y);for(var a=[],i=0;i<this.length;i++)if(x(this[i],fb(y,i),this))a.push(i);return a});
 df(Array,'\xF1',function(x,y){x=functify(fb(x,function(z){return z}),y);return this.map(function(a,i){return{v:a,k:x(a,fb(y,i))}}).sort(function(a,b){return(a.k>b.k)-(a.k<b.k)}).map(function(a){return a.v})});
-df(Array,'\xF2',function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){if(x>0)for(;i<this.length;i+=x)a.push(this.slice(i,i+x));else if(x<0)for(i=this.length;i>0;i+=x)a.unshift(this.slice(Math.max(i+x,0),i));}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)&&a.push([])}return a;});
-df(Array,'\xF3',function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i++)a[i%x]=a[i%x]||[],a[i%x].push(this[i]);}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)||a.push([])}return a;});
-df(Array,'\xF4',function(x,y){if(this.length===0)return[];x=functify(fb(x,function(z){return!z}),y);var a=[],i=0;for(a.push([]);i<this.length;i++)x(this[i],fb(y,i),this)?a.push([]):a.g(-1).push(this[i]);return a;});
+df(Array,'\xF2',function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){if(x>0)for(;i<this.length;i+=x)a.push(this.slice(i,i+x));else if(x<0)for(i=this.length;i>0;i+=x)a.unshift(this.slice(Math.max(i+x,0),i))}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)&&a.push([])}return a});
+df(Array,'\xF3',function(x){if(this.length===0)return[];x=fb(x,2);var a=[],i=0;if(typeof x==="number"){for(;i<this.length;i++)a[i%x]=a[i%x]||[],a[i%x].push(this[i])}else{x=functify(fb(x,function(z){return z}),0);for(a.push([this[0]]),i=1;i<this.length;a.g(-1).push(this[i++]))x(this[i-1],this[i],this)||a.push([])}return a});
+df(Array,'\xF4',function(x,y){if(this.length===0)return[];x=functify(fb(x,function(z){return!z}),y);var a=[],i=0;for(a.push([]);i<this.length;i++)x(this[i],fb(y,i),this)?a.push([]):a.g(-1).push(this[i]);return a});
 df(Array,'\xF6',function(x){if(!id(x))return this[Math.random()*this.length|0];if(typeof x==="function")return this.filter(x)['\xF6']();var b=[];if(isNaN(x))for(var a=this.slice();a.length>0;)b.push(a.splice(Math.random()*a.length|0,1)[0]);else for(var i=+x;i>0;i--)b.push(this[Math.random()*this.length|0]);return b});
 df(Array,'\xF8',function(x){if(!id(x))return false;if(!(x instanceof Array))x=[x];return this.some(function(a){return x.includes(a)})});
-df(Array,'pad',function(x,y,a){var z,q=this.map(function(c){return c instanceof Array?c:String(c)});if(!id(x))x=" ";if(!id(y)){if(typeof x==="number")y=x,x=" ";else y=q.reduce(function(p,c){return p.w(c.length)},0);}if(typeof x==="number"&&typeof y!=="number")z=x,x=y,y=z;return q.map(function(z){return z.pad(x,y,a)})});
+df(Array,'pad',function(x,y,a){var z,q=this.map(function(c){return c instanceof Array?c:String(c)});if(!id(x))x=" ";if(!id(y)){if(typeof x==="number")y=x,x=" ";else y=q.reduce(function(p,c){return p.w(c.length)},0)}if(typeof x==="number"&&typeof y!=="number")z=x,x=y,y=z;return q.map(function(z){return z.pad(x,y,a)})});
 df(Array,'\xF9',function(x,y){return this.pad(x,y,1)});
 df(Array,'\xFA',function(x,y){return this.pad(x,y,-1)});
 df(Array,'\xFB',function(x,y){return this.pad(x,y,0)});
@@ -203,7 +203,7 @@ df(Number,'g',function(x,y){if(["function"].includes(typeof x))return functify(x
 df(Number,'h',function(x){x=fb(x,1);return this.toPrecision(x)});
 df(Number,'i',function(x){return Japt.intervals[Japt.intervals.length]=setInterval(x,this)});
 df(Number,'j',function(x){if(id(x))return this.y(x)==1;var n=+this;if(n===2)return true;if(n%1||n<2||n%2===0)return false;for(var i=3,s=Math.sqrt(n);i<=s;i+=2)if(n%i===0)return false;return true});
-df(Number,'k',function(){var n=+this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x;}return f});
+df(Number,'k',function(){var n=+this,r,f=[],x,d=1<n;while(d){r=Math.sqrt(n);x=2;if(n%x){x=3;while(n%x&&((x+=2)<r));}f.push(x=x>r?n:x);d=(x!=n);n/=x}return f});
 df(Number,'l',function(){var n=Math.trunc(this),x=Math.trunc(this);if(n<1)return 1;while(--n)x*=n;return x});
 df(Number,'m',function(){return[].reduce.call(arguments,function(x,y){return Math.min(x,y)},this)});
 df(Number,'n',function(x){x=fb(x,0);return x-this});
@@ -211,7 +211,8 @@ df(Number,'o',function(x,y,f,s){var q;if(typeof x=="function")f=x,x=undefined;if
 df(Number,'p',function(x){x=fb(x,2);return Math.pow(this,x)});
 df(Number,'q',function(x){x=fb(x,2);return Math.pow(this,1/x)});
 df(Number,'r',function(x){x=fb(x,1);return Math.round(this/x)*x});
-df(Number,'s',function(x,y){if(typeof x==="function"||(typeof x==="string"&&(id(y)?/^!?.$/.test(x):x.length===1)))return Number(functify(x,y)(this.s(),y));if(typeof x==="string")x=x.q();if(x instanceof Array)return this['\xEC'](x).q();x=fb(x,10);return this.toString(x)});
+df(Number,'s',function(){var n,b,A=[].slice.apply(arguments);if(is(A[0],String)&&!isMethodOrOp(A[0]))A[0]=A[0].q();if(is(A[0],Array))n=this.ì(b=A.shift()).q();else if(is(A[0],Number))n=this.toString(b=A.shift());else
+n=this.toString();if(is(A[0],[Function,String])){var x=A.shift(),y=A.shift(),f=functify(x,y);n=f(n,y).n(b)}return n});
 df(Number,'t',function(x){return Japt.intervals[Japt.intervals.length]=setTimeout(x,this)});
 df(Number,'u',function(x){return pm(this,fb(x,2))});
 df(Number,'v',function(x){x=fb(x,2);return x==0||this%x===0?1:0});
@@ -223,7 +224,9 @@ df(Number,'\xE0',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0
 df(Number,'\xE1',function(x){var n=Math.trunc(this);x=Math.trunc(fb(x,0));if(x<0||n<0)return 0;if(x===0)return n.l();return n["\xE0"]()*x.l()});
 df(Number,'\xE2',function(x){if(this%1)return[];var n=Math.abs(this);var a=[];for(var i=1;i<Math.sqrt(n);++i)if(n%i===0)a.push(i,n/i);if(i*i===n)a.push(i);a.n();if(x)a.pop();return a});
 df(Number,'\xE7',function(x){x=fb(x," ")+"";return x.p(+this)});
-df(Number,'\xEC',function(x,y){if(typeof x==="function"||(typeof x==="string"&&(id(y)?/^!?.$/.test(x):x.length===1))){var z=functify(x,y)(this['\xEC'](),y);if(z instanceof Array)z=z['\xEC']();return Number(z)}if(typeof x==="string")x=x.q();if(x instanceof Array)return this['\xEC'](x.length).m(function(y){return x[y]});var n=Math.trunc(this);x=Math.floor(fb(x,10));if(x===1){if(n<0)return Array(-n).fill(-1);else return Array(n).fill(1)}if(x>0){if(x===1){if(n<0)return(-n).o()['\xE7'](-1);else return n.o()['\xE7'](1);}else{for(var a=[];n!=0;n=Math.trunc(n/x))a.unshift(n%x);return a;}}else if(x<0){if(x===-1){return(n>0?n*2-1:-n*2).o()['\xEE']([1,0]);}else{x=-x;for(var a=[];n!=0;n=Math.trunc(n<0?-(n-x+1)/x:-n/x))a.unshift(pm(n,x));return a;}}else return[];});
+df(Number,'\xEC',function(){var n,b,a,A=[].slice.apply(arguments);if(is(A[0],String)&&!isMethodOrOp(A[0]))A[0]=A[0].q();if(is(A[0],Array)){b=A.shift();n=this.ì(b.length).m(function(y){return b[y]})}else{b=Math.trunc(is(A[0],Number)?A.shift()||10:10);n=Math.trunc(this);if(b>0){if(b===1){if(n<0)n=(-n).o().ç(-1);else
+n=n.o().ç(1)}else{for(a=[];n!==0;n=Math.trunc(n/b))a.unshift(n%b);n=a}}else if(b<0){if(b===-1)return(n>0?n*2-1:-n*2).o().î([1,0]);else{b*=-1;for(a=[];n!=0;n=Math.trunc(n<0?-(n-b+1)/b:-n/b))a.unshift(pm(n,b));n=a}}else
+n=[]}if(is(A[0],[Function,String])){var x=A.shift(),y=A.shift(),f=functify(x,y),z=f(n,y);if(z instanceof Array)z=z.ì(b);n=Number(z)}return n});
 df(Number,'\xEE',function(x){return" ".p(+this)['\xEE'](x)});
 df(Number,'\xF2',function(x,y,f){return this.o(x,y,f,1)});
 df(Number,'\xF3',function(x,y,f){return this.o(x,y,f,2)});
@@ -233,16 +236,16 @@ df(Number,'\xF6',function(x){if(!id(x))return Math.floor(Math.random()*this);ret
 
 // Shorter Date properties. All but k accept an argument: 0 = get, 1 = set, 2 = getUTC, and 3 = setUTC.
 function ts(x){return["get","set","getUTC","setUTC"][x||0]}
-df(Date,'a',function(x,y){return this[ts(x||0)+"Milliseconds"](y||0)});
-df(Date,'b',function(x,y){return this[ts(x||0)+"Seconds"](y||0)});
-df(Date,'c',function(x,y){return this[ts(x||0)+"Minutes"](y||0)});
-df(Date,'d',function(x,y){return this[ts(x||0)+"Hours"](y||0)});
-df(Date,'e',function(x,y){return this[ts(x||0)+"Day"](y||0)});
-df(Date,'f',function(x,y){return this[ts(x||0)+"Date"](y||0)});
-df(Date,'g',function(x,y){return this[ts(x||0)+"Month"](y||0)});
-df(Date,'h',function(x,y){return this[ts(x||0)+"Year"](y||0)}); // Note: getYear() and setYear() do not have UTC partners
-df(Date,'i',function(x,y){return this[ts(x||0)+"FullYear"](y||0)});
-df(Date,'j',function(x,y){return this[ts(x||0)+"Time"](y||0)}); // Note: getTime() and setTime() do not have UTC partners
+df(Date,'a',function(x,y){return this[ts(x)+"Milliseconds"](y||0)});
+df(Date,'b',function(x,y){return this[ts(x)+"Seconds"](y||0)});
+df(Date,'c',function(x,y){return this[ts(x)+"Minutes"](y||0)});
+df(Date,'d',function(x,y){return this[ts(x)+"Hours"](y||0)});
+df(Date,'e',function(x,y){return this[ts(x)+"Day"](y||0)});
+df(Date,'f',function(x,y){return this[ts(x)+"Date"](y||0)});
+df(Date,'g',function(x,y){return this[ts(x)+"Month"](y||0)});
+df(Date,'h',function(x,y){return this[ts(x)+"Year"](y||0)}); // Note: getYear() and setYear() do not have UTC partners
+df(Date,'i',function(x,y){return this[ts(x)+"FullYear"](y||0)});
+df(Date,'j',function(x,y){return this[ts(x)+"Time"](y||0)}); // Note: getTime() and setTime() do not have UTC partners
 df(Date,'k',function(){return this.getTimezoneOffset()});
 
 // Ds accepts one argument that controls how the string is formatted. Some formats may not work on some browsers.
@@ -263,12 +266,12 @@ df(Date,'x',function(){noFunc('D.x')});
 df(Date,'y',function(){noFunc('D.y')});
 df(Date,'z',function(){noFunc('D.z')});
 
-function bij(a,b){var s="";a=Math.floor(a);b=fb(b,10);if(b%1||b<2)return s;if(a<0)s="-",a=~a;var c=0,x=1;while(a>=x){c++;a-=x;x*=b;}for(var i=0;i<c;i++){s=(a%b)+s;a=Math.floor(a/b);}return s;}
+function bij(a,b){var s="";a=Math.floor(a);b=fb(b,10);if(b%1||b<2)return s;if(a<0)s="-",a=~a;var c=0,x=1;while(a>=x){c++;a-=x;x*=b}for(var i=0;i<c;i++){s=(a%b)+s;a=Math.floor(a/b)}return s}
 
-df(Function,'a',function(x,y){x=fb(x,function(q){return q});var s=0;if(isNaN(x))x=functify(x,y);else s=Number(x),x=function(q){return q};for(var i=0;i<1e8;++i){var j=x(i+s,fb(y,i));if(this(j,i))return j;}});
-df(Function,'b',function(x,y){x=fb(x,function(q){return q});var s=0;if(isNaN(x))x=functify(x,y);else s=Number(x),x=function(q){return q};for(var i=0;i<1e8;++i){j=x(bij(i+s,10),fb(y,i));if(this(j,i))return j;}});
-df(Function,'c',function(x,y){x=fb(x,function(q){return q});var s=0;if(isNaN(x))x=functify(x,y);else s=Number(x),x=function(q){return q};for(var i=0,I=0;i<1e8;i=-i-(i>-1),I++){var j=x(i+s,fb(y,I));if(this(j,I))return j;}});
-df(Function,'f',function(x,y){x=fb(x,function(q){return q});var s=0;if(isNaN(x))x=functify(x,y);else s=Number(x),x=function(q){return q};for(var i=0;i<1e8;++i){var j=x(i+s,fb(y,i));if(!this(j,i))return j;}});
+df(Function,'a',function(x,y){x=fb(x,function(q){return q});var s=0;if(isNaN(x))x=functify(x,y);else s=Number(x),x=function(q){return q};for(var i=0;i<1e8;++i){var j=x(i+s,fb(y,i));if(this(j,i))return j}});
+df(Function,'b',function(x,y){x=fb(x,function(q){return q});var s=0;if(isNaN(x))x=functify(x,y);else s=Number(x),x=function(q){return q};for(var i=0;i<1e8;++i){j=x(bij(i+s,10),fb(y,i));if(this(j,i))return j}});
+df(Function,'c',function(x,y){x=fb(x,function(q){return q});var s=0;if(isNaN(x))x=functify(x,y);else s=Number(x),x=function(q){return q};for(var i=0,I=0;i<1e8;i=-i-(i>-1),I++){var j=x(i+s,fb(y,I));if(this(j,I))return j}});
+df(Function,'f',function(x,y){x=fb(x,function(q){return q});var s=0;if(isNaN(x))x=functify(x,y);else s=Number(x),x=function(q){return q};for(var i=0;i<1e8;++i){var j=x(i+s,fb(y,i));if(!this(j,i))return j}});
 df(Function,'g',function(n,a){if(n instanceof Array){var z=a;a=n;n=z}n=fb(n,U);a=fb(a,[0,1]);for(var i=a.length;i<=n;++i)a.push(this(fb(a.g(-1),-1),i,clone(a)));return a.g(n)});
 df(Function,'h',function(n,a){if(n instanceof Array){var z=a;a=n;n=z}n=fb(n,U);a=fb(a,[0,1]);for(var i=a.length;i<=n;++i)a.push(this(fb(a.g(-1),-1),i,clone(a)));return a.t(0,n)});
 

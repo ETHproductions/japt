@@ -85,6 +85,11 @@ Completed:
 1.4.6  A.ã(f?) -> all subslices
 1.4.6  A.c(f) -> A.m(f), but flatten the result
 1.4.6  A.c(n) -> Flatten n levels
+1.4.6  S.n/A.ì(n,n) -> convert from base n1 to base n2
+1.4.6  S.n/A.ì(n,f) -> convert from base n, apply, convert back to base n
+1.4.6  S.n/A.ì(n,n,f) -> convert from base n1, apply, convert to base n2
+1.4.6  N.s/ì(n,f) -> convert to base n, apply, convert back from base n
+1.4.6  S.ü(f?) -> group by value
 
 
 2.0a0  Clean up code
@@ -105,10 +110,6 @@ Completed:
 
 
 Planned:
-1.4.6  S.n/A.ì(n,n) -> convert from base n1 to base n2
-1.4.6  S.n/A.ì(n,f) -> convert from base n, apply, convert back to base n
-1.4.6  S.n/A.ì(n,n,f) -> convert from base n1, apply, convert to base n2
-1.4.6  N.s/ì(n,f) -> convert to base n, apply, convert back from base n
 1.4.6  A.n(s) -> sort the items in A by their alphabetical order in s
 1.4.6  A.n(a) -> sort A by the order the items appear in a?
 1.4.6  A.ð(?) -> keys/indices (like Jelly's `J`)

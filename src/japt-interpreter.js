@@ -136,6 +136,7 @@ df(String,'pad',function(x,y,a){var s=String(this),z;if(/\n/.test(s))return s.q(
 df(String,'\xF9',function(x,y){return this.pad(x,y,1)});
 df(String,'\xFA',function(x,y){return this.pad(x,y,-1)});
 df(String,'\xFB',function(x,y){return this.pad(x,y,0)});
+df(String,'\xFC',function(x,y){return this.q()['\xFC'](x,y).m(function(a){return a.q()})});
 
 df(Array,'a',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).lastIndexOf(true):this.lastIndexOf(x)});
 df(Array,'b',function(x,y){if(id(y))x=functify(x,y);return typeof x=="function"?this.map(function(a,b,c){return!!x(a,fb(y,b),c)}).indexOf(true):this.indexOf(x)});

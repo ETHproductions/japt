@@ -776,6 +776,9 @@ df(String.prototype, {
 	û: function (x, y) {
 		return this.pad(x, y, 0);
 	},
+	ü: function (x, y) {
+		return this.q().ü(x, y).map(function(a) { return a.q(); });
+	},
 });
 
 df(Array.prototype, {

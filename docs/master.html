@@ -414,6 +414,10 @@
 <p>Maps each item in `this` through `f`.</p>
 <h3>`.n(f)`</h3>
 <p>Sorts `this` by passing each pair of items through `f`. If `f(x,y)&lt;0`, `x` is sorted to the left; if `f(x,y)>0`, `y` is sorted to the left.</p>
+<h3>`.n(s?)`</h3>
+<p>Sorts `this` lexicographically by alphabet `s`. `["aa","ab","b","ca","cab"]n"cba" -> ["ca","cab","b","ab",aa"]`</p>
+<h3>`.n(a)`</h3>
+<p>Sorts `this` by the order of items in `a`. `[0,3,6,9]n[8,6,7,5,3,0,9] -> [6,3,0,9]`</p>
 <h3>`.o(n=1)`</h3>
 <p>Removes the last `n` items in `this` and returns them.</p>
 <h3>`.o(f)`</h3>

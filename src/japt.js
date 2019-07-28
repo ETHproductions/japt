@@ -949,8 +949,27 @@ df(Array.prototype, {
 		return this.map(x);
 	},
 	n: function (x) {
-		x = functify2(fb(x, function(x, y) { return (x > y) - (x < y); }), true);
-		return this.sort(x);
+		var f;
+		if (typeof x === "function" || isMethodOrOp(x)) {
+			f = functify2(x, true);
+		}
+		else if (typeof x === "string") {
+			f = function(y, z) {
+				for (var i = 0; i < y.length; i++) {
+					if (z.length === i) return 1;
+					var d = Math.sign(x.indexOf(y[i]) - x.indexOf(z[i]));
+					if (d !== 0) return d;
+				}
+				return -1;
+			};
+		}
+		else if (x instanceof Array) {
+			f = function(y, z) { return x.indexOf(y) - x.indexOf(z); };
+		}
+		else {
+			f = function(y, z) { return (y > z) - (y < z); };
+		}
+		return this.slice().sort(f);
 	},
 	o: function (x, y) {
 		if (typeof x === "number") {

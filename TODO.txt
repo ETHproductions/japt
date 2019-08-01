@@ -92,6 +92,9 @@ Completed:
 1.4.6  S.ü(f?) -> group by value
 1.4.6  A.n(s) -> sort the items in A by their alphabetical order in s
 1.4.6  A.n(a) -> sort A by the order the items appear in a
+1.4.6  A.ð(n) -> keys/indices (like Jelly's `J`)
+1.4.6  F.i(n) -> n'th integer that returns truthily to F
+1.4.6  F.j(n) -> first n integers that return truthily to F
 
 
 2.0a0  Clean up code
@@ -112,8 +115,6 @@ Completed:
 
 
 Planned:
-1.4.6  A.ð(?) -> keys/indices (like Jelly's `J`)
-1.4.6  F.?(n) -> first n integers that return truthily to F
 
 1.4.?  A.ù(n) -> if A contains a string or array, right-align each to length n; else, right-align A to length n with 0's
 1.4.?  A.ù(n,a=[0]) -> right-align A to n items with filler a

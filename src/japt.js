@@ -1900,6 +1900,33 @@ df(Function.prototype, {
 			a.push(j);
 		}
 		return a.t(0,n);
+	},
+	i: function (n, s) {
+		n = Number(n) || 0;
+		s = Number(s) || 0;
+		if (n < 0) return s;
+		
+		for(var i = 0; i < 1e8; ++i ) {
+			if (this(i + s, i)) {
+				if (n <= 0)
+					return i + s;
+				n -= 1;
+			}
+		}
+	},
+	j: function (n, s) {
+		var a = [];
+		n = Number(fb(n, 10)) || 0;
+		s = Number(s) || 0;
+		if (n <= 0) return a;
+		
+		for(var i = 0; i < 1e8; ++i ) {
+			if (this(i + s, i)) {
+				a.push(i + s);
+				if (a.length >= n)
+					return a;
+			}
+		}
 	}
 });
 

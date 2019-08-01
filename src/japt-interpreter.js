@@ -275,6 +275,8 @@ df(Function,'c',function(x,y){x=fb(x,function(q){return q});var s=0;if(isNaN(x))
 df(Function,'f',function(x,y){x=fb(x,function(q){return q});var s=0;if(isNaN(x))x=functify(x,y);else s=Number(x),x=function(q){return q};for(var i=0;i<1e8;++i){var j=x(i+s,fb(y,i));if(!this(j,i))return j}});
 df(Function,'g',function(n,a){if(n instanceof Array){var z=a;a=n;n=z}n=fb(n,U);a=fb(a,[0,1]);for(var i=a.length;i<=n;++i)a.push(this(fb(a.g(-1),-1),i,clone(a)));return a.g(n)});
 df(Function,'h',function(n,a){if(n instanceof Array){var z=a;a=n;n=z}n=fb(n,U);a=fb(a,[0,1]);for(var i=a.length;i<=n;++i)a.push(this(fb(a.g(-1),-1),i,clone(a)));return a.t(0,n)});
+df(Function,'i',function(n,s){n=+n||0;s=+s||0;if(n<0)return s;for(var i=0;i<1e8;++i)if(this(i+s,i)&&n--<=0)return i+s});
+df(Function,'j',function(n,s){n=+fb(n,10)||0,s=+s||0;if(n<=0)return[];for(var a=[],i=0;i<1e8;++i)if(this(i+s,i)&&a.push(i+s)>=n)return a});
 
 df(Object,'\xFF',function(){if(!isnode)alert(this);return this instanceof Number?+this:this instanceof String?""+this:this});
 

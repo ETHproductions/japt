@@ -1278,6 +1278,9 @@ df(Array.prototype, {
 			y = x;
 			x = function(a) { return y.includes(a); };
 		}
+		else if (is(x, Number)) {
+			return this.map(function (_, i) { return i; });
+		}
 		else
 			x = functify2(x, y);
 		var a = [];

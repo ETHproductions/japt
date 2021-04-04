@@ -1953,6 +1953,9 @@ Date.p = Date.parse;
 
 // Shorter Math properties
 Math.a = Math.atan2;
+Math.b = function(x, y) {
+	Math.log(x) / Math.log(y);
+}
 
 // Fibonacci
 Math.g = function (n) {
